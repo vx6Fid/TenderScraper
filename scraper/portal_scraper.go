@@ -7,7 +7,7 @@ import (
 	"github.com/vx6fid/tender-scraper/scraper/nav"
 )
 
-// ScrapeTenders dispatches to the relevant scraping function based on user choice.
+// ScrapeTenders dispatches to the relevant scraping function
 func ScrapeTenders(baseURL string, choice int) {
 	u, err := url.Parse(baseURL)
 	if err != nil {
@@ -15,10 +15,8 @@ func ScrapeTenders(baseURL string, choice int) {
 		return
 	}
 
-	// Create collector for the nav functions to use
 	c := NewCollector(u.Host)
 
-	// Dispatch to the appropriate handler - they handle everything from here
 	switch choice {
 	case 1:
 		nav.ScrapeSearch(c, baseURL)

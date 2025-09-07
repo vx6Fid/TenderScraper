@@ -114,3 +114,12 @@ type Tender struct {
 		Address string
 	}
 }
+
+// Tender Links holds one scraped record
+type TenderLinks struct {
+	Serial       string
+	Title        string
+	Organisation string
+	ClosingDate  string
+	Link         string
+}

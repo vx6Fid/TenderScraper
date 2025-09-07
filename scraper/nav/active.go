@@ -1,10 +1,14 @@
 package nav
 
 import (
+	"encoding/csv"
 	"fmt"
 	"log"
+	"net/url"
 	"os"
 	"path/filepath"
+	"regexp"
+	"strconv"
 	"strings"
 	"time"
 
@@ -21,6 +25,12 @@ type TenderScraper struct {
 	sessionEstablished bool
 	resultsFound       bool
 	activeTendersURL   string
+	totalTenders       int
+	scrapedTenders     int
+	currentPage        int
+	nextButtonURL      string
+	csvFile            *os.File
+	csvWriter          *csv.Writer
 }
 
 // NewTenderScraper initializes a new scraper instance.
@@ -31,12 +41,34 @@ func NewTenderScraper(c *colly.Collector, baseURL string) *TenderScraper {
 		collector:        c,
 		baseURL:          baseURL,
 		activeTendersURL: baseURL + "?page=FrontEndLatestActiveTenders&service=page",
+		currentPage:      1,
 	}
 }
 
 // Main entry point to start the scraping process
 func (ts *TenderScraper) ScrapeActiveTenders() error {
 	log.Println("Starting tender scraping process with correct session flow.")
+
+	// open CSV
+	file, err := os.Create("tenders.csv")
+	if err != nil {
+		return fmt.Errorf("failed to create CSV file: %w", err)
+	}
+	ts.csvFile = file
+	ts.csvWriter = csv.NewWriter(file)
+
+	// write header
+	ts.csvWriter.Write([]string{"Serial Number", "Title", "Organisation", "Closing Date", "Link"})
+	ts.csvWriter.Flush()
+
+	defer func() {
+		if ts.csvWriter != nil {
+			ts.csvWriter.Flush()
+		}
+		if ts.csvFile != nil {
+			ts.csvFile.Close()
+		}
+	}()
 
 	// STEP 1: Click on Active Tenders link to get captcha form
 	log.Printf("STEP 1: Clicking Active Tenders link: %s", ts.activeTendersURL)
@@ -69,7 +101,47 @@ func (ts *TenderScraper) ScrapeActiveTenders() error {
 		return fmt.Errorf("no tender results found after establishing session")
 	}
 
-	log.Println("Scraping completed successfully!")
+	// STEP 4: Handle pagination - keep clicking "Next" until no more pages
+	log.Println("STEP 4: Starting pagination process...")
+	if err := ts.handlePagination(); err != nil {
+		return fmt.Errorf("pagination failed: %w", err)
+	}
+
+	log.Printf("Scraping completed successfully! Total tenders scraped: %d/%d", ts.scrapedTenders, ts.totalTenders)
+	return nil
+}
+
+// handlePagination processes all pages by clicking Next button
+func (ts *TenderScraper) handlePagination() error {
+	for ts.nextButtonURL != "" {
+		// stop if scraped enough tenders
+		if ts.totalTenders > 0 && ts.scrapedTenders >= ts.totalTenders {
+			log.Printf("All %d tenders scraped, stopping pagination", ts.scrapedTenders)
+			break
+		}
+
+		log.Printf("PAGE %d: Clicking Next button: %s", ts.currentPage+1, ts.nextButtonURL)
+
+		// Small delay between page requests
+		time.Sleep(500 * time.Millisecond)
+
+		// Visit the next page
+		if err := ts.collector.Visit(ts.nextButtonURL); err != nil {
+			log.Printf("ERROR: Failed to visit next page: %v", err)
+			break
+		}
+
+		ts.currentPage++
+
+		// Log progress
+		if ts.totalTenders > 0 {
+			progress := float64(ts.scrapedTenders) / float64(ts.totalTenders) * 100
+			log.Printf("Progress: %d/%d tenders (%.1f%%) - Page %d completed",
+				ts.scrapedTenders, ts.totalTenders, progress, ts.currentPage)
+		}
+	}
+
+	log.Printf("Pagination completed! Processed %d pages, scraped %d tenders", ts.currentPage, ts.scrapedTenders)
 	return nil
 }
 
@@ -83,6 +155,8 @@ func (ts *TenderScraper) setupCaptchaHandlers() {
 // setupTenderHandlers configures handlers for tender scraping phase
 func (ts *TenderScraper) setupTenderHandlers() {
 	ts.collector.OnHTML("table#table", ts.handleTenderTable)
+	ts.collector.OnHTML("a#loadNext", ts.handleNextButton)
+	ts.collector.OnHTML("span:contains('Total records:')", ts.handleTotalRecords)
 	ts.collector.OnError(ts.handleError)
 }
 
@@ -106,7 +180,7 @@ func (ts *TenderScraper) handleError(r *colly.Response, err error) {
 
 // handleCaptchaForm processes the initial captcha form (Step 1)
 func (ts *TenderScraper) handleCaptchaForm(e *colly.HTMLElement) {
-	ts.saveFile("debug", "Before Calling Captcha", e.Response.Body)
+	// ts.saveFile("debug", "Before Calling Captcha", e.Response.Body)
 	if ts.captchaSolved {
 		return
 	}
@@ -140,11 +214,10 @@ func (ts *TenderScraper) handleCaptchaForm(e *colly.HTMLElement) {
 	ts.submitCaptchaForm(e, captchaSolution)
 }
 
-// Need to Work here
 // submitCaptchaForm submits the captcha to establish session
 func (ts *TenderScraper) submitCaptchaForm(e *colly.HTMLElement, captchaSolution string) {
 	// Save the full response body for debugging
-	ts.saveFile("debug", "CaptchaForm.html", e.Response.Body)
+	// ts.saveFile("debug", "CaptchaForm.html", e.Response.Body)
 
 	// Parse the entire response body to find all form fields
 	doc, err := goquery.NewDocumentFromReader(strings.NewReader(string(e.Response.Body)))
@@ -157,7 +230,6 @@ func (ts *TenderScraper) submitCaptchaForm(e *colly.HTMLElement, captchaSolution
 	log.Println("Collecting form fields from LatestActiveTenders form:")
 
 	// Find inputs specifically within the LatestActiveTenders form
-	// Looking at the HTML, the inputs are directly inside the form and also in hidden divs
 	doc.Find("form#LatestActiveTenders").Each(func(_ int, form *goquery.Selection) {
 		form.Find("input[name]").Each(func(_ int, s *goquery.Selection) {
 			name, _ := s.Attr("name")
@@ -171,20 +243,16 @@ func (ts *TenderScraper) submitCaptchaForm(e *colly.HTMLElement, captchaSolution
 		})
 	})
 
-	// If that didn't work, try a more direct approach - get ALL inputs and filter by form context
+	// If that didn't work, try a more direct approach
 	if len(formData) < 5 {
 		log.Println("Form-specific search failed, trying broader search...")
 
-		// Get all inputs in the document that should belong to the captcha form
 		doc.Find("input[name]").Each(func(_ int, s *goquery.Selection) {
 			name, _ := s.Attr("name")
 			value, _ := s.Attr("value")
 			inputType, _ := s.Attr("type")
 
-			// Include inputs that are likely part of the captcha form
-			// Exclude the WebBorder form inputs
 			if name != "" && name != "domainUrl" {
-				// Skip if this input belongs to WebBorder form
 				if s.Closest("form#WebBorder_0").Length() == 0 {
 					formData[name] = value
 					log.Printf("  [BROAD-%s] %s = %s", inputType, name, value)
@@ -236,13 +304,13 @@ func (ts *TenderScraper) handleCaptchaResponse(r *colly.Response) {
 
 	if hasError {
 		log.Printf("ERROR: Captcha was rejected by server (Status: %d)", r.StatusCode)
-		_ = ts.saveFile("debug", "step1_captcha_rejected.html", r.Body)
+		// _ = ts.saveFile("debug", "step1_captcha_rejected.html", r.Body)
 		return
 	}
 
 	if stillHasCaptcha {
 		log.Printf("WARNING: Server still showing captcha - may have been incorrect (Status: %d)", r.StatusCode)
-		_ = ts.saveFile("debug", "step1_captcha_still_showing.html", r.Body)
+		// _ = ts.saveFile("debug", "step1_captcha_still_showing.html", r.Body)
 		return
 	}
 
@@ -261,26 +329,69 @@ func (ts *TenderScraper) handleCaptchaResponse(r *colly.Response) {
 	}
 
 	ts.captchaSolved = true
-	// ts.sessionEstablished = true
-	_ = ts.saveFile("results", "step1_captcha_success.html", r.Body)
+	// _ = ts.saveFile("results", "step1_captcha_success.html", r.Body)
 }
 
 // handleTenderTable processes the tender results table (Step 3)
 func (ts *TenderScraper) handleTenderTable(e *colly.HTMLElement) {
-	log.Printf("STEP 3: Found tender table! Parsing results... (Status: %d)", e.Response.StatusCode)
+	log.Printf("PAGE %d: Found tender table! Parsing results... (Status: %d)", ts.currentPage, e.Response.StatusCode)
 	ts.resultsFound = true
 	ts.sessionEstablished = true
 	ts.parseTenders(e)
 }
 
+// Test it for a small number of tenders to see it stops after scraping whole page
+func (ts *TenderScraper) handleNextButton(e *colly.HTMLElement) {
+	href := e.Attr("href")
+	if href == "" {
+		ts.nextButtonURL = ""
+		log.Printf("PAGE %d: No more Next button found - reached last page", ts.currentPage)
+		return
+	}
+
+	base, err := url.Parse(e.Request.URL.String())
+	if err != nil {
+		log.Printf("ERROR: Failed to parse base URL: %v", err)
+		ts.nextButtonURL = href
+		return
+	}
+
+	rel, err := url.Parse(href)
+	if err != nil {
+		log.Printf("ERROR: Failed to parse href: %v", err)
+		ts.nextButtonURL = href
+		return
+	}
+
+	ts.nextButtonURL = base.ResolveReference(rel).String()
+	log.Printf("PAGE %d: Next button found: %s", ts.currentPage, ts.nextButtonURL)
+}
+
+// handleTotalRecords extracts the total records count
+func (ts *TenderScraper) handleTotalRecords(e *colly.HTMLElement) {
+	text := e.Text
+	// Extract number from "Total records: 8174"
+	re := regexp.MustCompile(`Total records:\s*(\d+)`)
+	matches := re.FindStringSubmatch(text)
+	if len(matches) > 1 {
+		if total, err := strconv.Atoi(matches[1]); err == nil {
+			if ts.totalTenders == 0 { // Only set on first page
+				ts.totalTenders = total
+				log.Printf("Total records found: %d", ts.totalTenders)
+			}
+		}
+	}
+}
+
 // parseTenders parses tender data from HTML element
 func (ts *TenderScraper) parseTenders(e *colly.HTMLElement) {
-	log.Println("Parsing tender data from table element...")
-	var tendersFound int
-	ts.saveFile("debug", "LastStep.html", []byte(e.Text)) //  2nd Check Point
+	log.Printf("PAGE %d: Parsing tender data from table element...", ts.currentPage)
+	var tendersFoundOnPage int
+	// ts.saveFile("debug", fmt.Sprintf("Page_%d.html", ts.currentPage), []byte(e.Response.Body))
 
 	e.DOM.Find("tr.even, tr.odd").Each(func(i int, s *goquery.Selection) {
-		tendersFound++
+		tendersFoundOnPage++
+		ts.scrapedTenders++
 		cells := s.Find("td")
 
 		if cells.Length() >= 6 {
@@ -295,43 +406,42 @@ func (ts *TenderScraper) parseTenders(e *colly.HTMLElement) {
 
 			organisation := strings.TrimSpace(cells.Eq(5).Text())
 
-			log.Printf("  Tender %d: '%s' | Org: '%s' | Closes: '%s' | Link: %s",
-				tendersFound, title, organisation, closingDate, href)
+			// Print tender details to screen
+			// fmt.Printf("TENDER #%d (Page %d, Item %d):\n", ts.scrapedTenders, ts.currentPage, tendersFoundOnPage)
+			// fmt.Printf("  Title: %s\n", title)
+			// fmt.Printf("  Organization: %s\n", organisation)
+			// fmt.Printf("  Closing Date: %s\n", closingDate)
+			// fmt.Printf("  Link: %s\n", href)
+			// fmt.Println("  " + strings.Repeat("-", 50))
+
+			fullLink := href
+			if href != "" {
+				base, err := url.Parse(ts.baseURL)
+				if err == nil {
+					rel, err := url.Parse(href)
+					if err == nil {
+						fullLink = base.ResolveReference(rel).String()
+					}
+				}
+			}
+			if err := ts.csvWriter.Write([]string{
+				strconv.Itoa(ts.scrapedTenders),
+				title,
+				organisation,
+				closingDate,
+				fullLink,
+			}); err != nil {
+				log.Printf("ERROR: Failed to write CSV row: %v", err)
+			}
+
+			log.Printf("  Tender %d (Page %d): '%s' ", ts.scrapedTenders, ts.currentPage, title)
 		}
+
 	})
 
-	log.Printf("Successfully parsed %d tenders", tendersFound)
-}
+	ts.csvWriter.Flush()
 
-// parseTendersFromHTML parses tender data from HTML string
-func (ts *TenderScraper) parseTendersFromHTML(htmlStr string) {
-	doc, err := goquery.NewDocumentFromReader(strings.NewReader(htmlStr))
-	if err != nil {
-		log.Printf("Error parsing HTML: %v", err)
-		return
-	}
-
-	log.Println("Parsing tender data from HTML string...")
-	var tendersFound int
-
-	doc.Find("table#table tr.even, table#table tr.odd").Each(func(i int, s *goquery.Selection) {
-		tendersFound++
-		cells := s.Find("td")
-
-		if cells.Length() >= 6 {
-			closingDate := strings.TrimSpace(cells.Eq(2).Text())
-			title := strings.TrimSpace(cells.Eq(4).Find("a").Text())
-			organisation := strings.TrimSpace(cells.Eq(5).Text())
-
-			log.Printf("  Tender %d: '%s' | Org: '%s' | Closes: '%s'",
-				tendersFound, title, organisation, closingDate)
-		}
-	})
-
-	if tendersFound > 0 {
-		ts.resultsFound = true
-		log.Printf("Successfully parsed %d tenders from HTML", tendersFound)
-	}
+	log.Printf("PAGE %d: Successfully parsed %d tenders", ts.currentPage, tendersFoundOnPage)
 }
 
 // saveFile utility function

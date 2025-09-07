@@ -19,10 +19,19 @@ type Tender struct {
 		AllowTwoStageBidding               bool
 	}
 
-	PaymentInstruments []string
+	PaymentInstruments struct {
+		Offline struct {
+			SerialNo       string
+			InstrumentType string
+		}
+		Online struct {
+			SerialNo       string
+			InstrumentType string
+		}
+	}
 
 	CoversInformation []struct {
-		CoverNo      int
+		CoverNo      string
 		CoverType    string
 		Description  string
 		DocumentType string
@@ -79,20 +88,23 @@ type Tender struct {
 	}
 
 	TenderDocuments []struct {
-		DocumentName   string
-		Description    string
-		DocumentSizeKB float64
-	}
-
-	WorkItemDocuments []struct {
-		DocumentType   string
-		DocumentName   string
-		Description    string
-		DocumentSizeKB float64
+		WorkItemDocuments []struct {
+			SerialNo       string
+			DocumentType   string
+			DocumentName   string
+			Description    string
+			DocumentSizeKB float64
+		}
+		NITDocuments []struct {
+			SerialNo       string
+			DocumentName   string
+			Description    string
+			DocumentSizeKB float64
+		}
 	}
 
 	Corrigenda []struct {
-		SerialNo int
+		SerialNo string
 		Title    string
 		Type     string // Enum-like, but open-ended
 	}

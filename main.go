@@ -1,38 +1,32 @@
 package main
 
 import (
-	"fmt"
-	"os"
+	"log"
 
 	"github.com/vx6fid/tender-scraper/scraper"
+	"github.com/vx6fid/tender-scraper/scraper/nav"
 )
 
 func main() {
-	// Base URLs
-	urls := []string{
-		"https://eproc.rajasthan.gov.in/nicgep/app",
+	log.Println("Starting Rajasthan Tender Scraper")
+
+	// Create collector
+	// baseURL := "https://eproc.rajasthan.gov.in/nicgep/app"
+	// c := scraper.NewCollector("eproc.rajasthan.gov.in")
+
+	// baseURL := "https://coalindiatenders.nic.in/nicgep/app"
+	// c := scraper.NewCollector("coalindiatenders.nic.in")
+
+	// Uttar Pradesh
+	baseURL := "https://etender.up.nic.in/nicgep/app"
+	c := scraper.NewCollector("etender.up.nic.in")
+
+	// Create and run scraper
+	tenderScraper := nav.NewTenderScraper(c, baseURL)
+
+	if err := tenderScraper.ScrapeActiveTenders(); err != nil {
+		log.Fatalf("Scraping failed: %v", err)
 	}
 
-	fmt.Println("--- Tender Scraper Initialized ---")
-	fmt.Println("Choose Option:")
-	fmt.Println("1. Search Tenders")
-	fmt.Println("2. Active Tenders")
-	fmt.Println("3. Corrigendum")
-	fmt.Println("4. Exit")
-
-	fmt.Println("Enter choice:")
-	var choice int
-	fmt.Scanln(&choice)
-
-	if choice == 4 {
-		fmt.Println("Exiting...")
-		os.Exit(0)
-	} else if choice < 1 || choice > 3 {
-		fmt.Println("Invalid choice")
-		os.Exit(1)
-	}
-
-	for _, url := range urls {
-		scraper.ScrapeTenders(url, choice)
-	}
+	log.Println("Scraping completed successfully")
 }

@@ -2,7 +2,9 @@ package nav
 
 import (
 	"fmt"
+	"log"
 	"os"
+	"path/filepath"
 	"strings"
 	"time"
 
@@ -11,254 +13,338 @@ import (
 	"github.com/vx6fid/tender-scraper/scraper/captcha"
 )
 
-// Global flag to avoid duplicate navigation
-var visitedActive bool
+// TenderScraper holds the state and configuration for the scraping process.
+type TenderScraper struct {
+	collector          *colly.Collector
+	baseURL            string
+	captchaSolved      bool
+	sessionEstablished bool
+	resultsFound       bool
+	activeTendersURL   string
+}
 
-// ScrapeActiveTenders - Main function that navigates to Active Tenders page
-func ScrapeActiveTenders(c *colly.Collector, baseURL string) {
-	fmt.Printf("[%s] Starting Active Tenders navigation\n", baseURL)
+// NewTenderScraper initializes a new scraper instance.
+func NewTenderScraper(c *colly.Collector, baseURL string) *TenderScraper {
+	c.AllowURLRevisit = true
 
-	// Handle navigation to Active Tenders page
-	c.OnHTML("a", func(e *colly.HTMLElement) {
-		if visitedActive {
-			return // skip redundant click
-		}
-		linkText := strings.TrimSpace(e.Attr("title"))
-		if linkText == "" {
-			linkText = strings.TrimSpace(e.Text)
-		}
-		if strings.EqualFold(linkText, "Active Tenders") ||
-			strings.Contains(strings.ToLower(linkText), "active tender") {
-			visitedActive = true
-			link := e.Request.AbsoluteURL(e.Attr("href"))
-			fmt.Printf("Visiting Active Tenders link: %s\n", link)
-			if err := e.Request.Visit(link); err != nil {
-				fmt.Printf("Error visiting Active Tenders page: %v\n", err)
-			}
-			// Remove this handler so it doesn't fire again
-			c.OnHTMLDetach("a")
-		}
-	})
-
-	// Handle the Active Tenders form
-	c.OnHTML("form#LatestActiveTenders", func(e *colly.HTMLElement) {
-		fmt.Println("Reached Active Tenders form. Processing form...")
-		ProcessActiveTendersForm(e)
-	})
-
-	// Handle tender list results - this should catch the results after form submission
-	c.OnHTML("tr.odd, tr.even", func(e *colly.HTMLElement) {
-		fmt.Println("Found tender row, processing...")
-		cols := e.DOM.Find("td")
-
-		if cols.Length() >= 7 { // Ensure we have enough columns
-			// published := strings.TrimSpace(cols.Eq(1).Text())
-			closing := strings.TrimSpace(cols.Eq(2).Text())
-			// opening   := strings.TrimSpace(cols.Eq(3).Text())
-			title := strings.TrimSpace(cols.Eq(4).Find("a").Text())
-			link := e.Request.AbsoluteURL(cols.Eq(4).Find("a").AttrOr("href", ""))
-			org := strings.TrimSpace(cols.Eq(5).Text())
-			value := strings.TrimSpace(cols.Eq(6).Text())
-
-			fmt.Printf("Title: %s\nLink: %s\nClosing: %s\nOrg: %s\nValue: %s\n\n",
-				title, link, closing, org, value)
-		}
-	})
-
-	// Save HTML response for debugging
-	c.OnResponse(func(r *colly.Response) {
-		fmt.Printf("Visited: %s (Status: %d)\n", r.Request.URL, r.StatusCode)
-
-		// Save HTML to file for debugging if it contains tender results
-		if strings.Contains(string(r.Body), "Active Tenders") ||
-			strings.Contains(string(r.Body), "tr class=\"odd\"") ||
-			strings.Contains(string(r.Body), "tr class=\"even\"") {
-
-			filename := fmt.Sprintf("debug_response_%d.html", time.Now().Unix())
-			if err := os.WriteFile(filename, r.Body, 0644); err != nil {
-				fmt.Printf("Error saving debug file: %v\n", err)
-			} else {
-				fmt.Printf("Debug HTML saved to: %s\n", filename)
-			}
-		}
-	})
-
-	// Handle any errors
-	c.OnError(func(r *colly.Response, err error) {
-		fmt.Printf("Error visiting %s: %v (Status: %d)\n", r.Request.URL, err, r.StatusCode)
-		// Save error response for debugging
-		if r.Body != nil {
-			filename := fmt.Sprintf("debug_error_%d.html", time.Now().Unix())
-			if writeErr := os.WriteFile(filename, r.Body, 0644); writeErr != nil {
-				fmt.Printf("Error saving error debug file: %v\n", writeErr)
-			} else {
-				fmt.Printf("Error response saved to: %s\n", filename)
-			}
-		}
-	})
-
-	if err := c.Visit(baseURL); err != nil {
-		fmt.Printf("Error visiting base URL: %v\n", err)
+	return &TenderScraper{
+		collector:        c,
+		baseURL:          baseURL,
+		activeTendersURL: baseURL + "?page=FrontEndLatestActiveTenders&service=page",
 	}
 }
 
-// ProcessActiveTendersForm - Handle captcha + form submission
-func ProcessActiveTendersForm(e *colly.HTMLElement) {
-	fmt.Println("=== PROCESSING ACTIVE TENDERS FORM ===")
-	fmt.Printf("Form URL: %s\n", e.Request.URL)
+// Main entry point to start the scraping process
+func (ts *TenderScraper) ScrapeActiveTenders() error {
+	log.Println("Starting tender scraping process with correct session flow.")
 
-	// Try to find captcha image - check multiple possible locations
-	var captchaImg string
+	// STEP 1: Click on Active Tenders link to get captcha form
+	log.Printf("STEP 1: Clicking Active Tenders link: %s", ts.activeTendersURL)
+	ts.setupCaptchaHandlers()
 
-	// First try: direct child of form
-	captchaImg = e.DOM.Find("img#captchaImage").AttrOr("src", "")
-	if captchaImg == "" {
-		// Second try: anywhere within the form
-		captchaImg = e.DOM.Find("img[id*='captcha'], img[src*='captcha']").AttrOr("src", "")
-	}
-	if captchaImg == "" {
-		// Third try: parent container
-		captchaImg = e.DOM.Parent().Find("img#captchaImage, img[id*='captcha']").AttrOr("src", "")
-	}
-	if captchaImg == "" {
-		// Fourth try: siblings or nearby elements
-		captchaImg = e.DOM.Parent().Parent().Find("img[id*='captcha'], img[src*='captcha']").AttrOr("src", "")
+	if err := ts.collector.Visit(ts.activeTendersURL); err != nil {
+		return fmt.Errorf("failed to visit active tenders page for captcha: %w", err)
 	}
 
-	if captchaImg == "" {
-		fmt.Println("ERROR: Could not find captcha image in form")
-		debugFormImages(e)
-		return
+	if !ts.captchaSolved {
+		return fmt.Errorf("failed to solve captcha in step 1")
 	}
 
-	fmt.Printf("Captcha image found: %s (len=%d)\n", captchaImg, len(captchaImg))
-
-	// Convert relative URL to absolute if needed
-	if strings.HasPrefix(captchaImg, "/") {
-		captchaImg = e.Request.AbsoluteURL(captchaImg)
-	}
-
-	// Solve captcha
-	captchaSolution, err := captcha.ManualCaptchaSolver(captchaImg)
-	if err != nil {
-		fmt.Printf("Error solving captcha: %v\n", err)
-		return
-	}
-	fmt.Printf("Captcha solved: %s\n", captchaSolution)
-
-	// Submit form with solution
-	submitActiveTendersForm(e, captchaSolution)
-}
-
-func submitActiveTendersForm(e *colly.HTMLElement, captchaSolution string) {
-	formData := make(map[string]string)
-
-	// Extract all input fields (hidden + text)
-	e.ForEach("input", func(_ int, input *colly.HTMLElement) {
-		name := input.Attr("name")
-		value := input.Attr("value")
-		inputType := strings.ToLower(input.Attr("type"))
-		if name != "" && inputType != "submit" {
-			formData[name] = value
-			fmt.Printf("Form field: %s = %s (type: %s)\n", name, value, inputType)
-		}
-	})
-
-	// Handle select elements too
-	e.ForEach("select", func(_ int, sel *colly.HTMLElement) {
-		name := sel.Attr("name")
-		if name != "" {
-			// Get selected option value
-			selectedValue := sel.DOM.Find("option[selected]").AttrOr("value", "")
-			if selectedValue == "" {
-				// Get first option value if none selected
-				selectedValue = sel.DOM.Find("option").First().AttrOr("value", "")
-			}
-			formData[name] = selectedValue
-			fmt.Printf("Select field: %s = %s\n", name, selectedValue)
-		}
-	})
-
-	// Set required fields
-	formData["captchaText"] = captchaSolution
-
-	// Set empty values for search (to get all tenders)
-	if _, exists := formData["TenderId"]; !exists {
-		formData["TenderId"] = ""
-	}
-	if _, exists := formData["TenderTitle"]; !exists {
-		formData["TenderTitle"] = ""
-	}
-
-	// Set submit button value
-	formData["Submit"] = "Search"
-
-	// Build absolute action URL
-	actionURL := e.Attr("action")
-	if actionURL == "" {
-		actionURL = e.Request.URL.String()
-	} else {
-		actionURL = e.Request.AbsoluteURL(actionURL)
-	}
-
-	fmt.Printf("Submitting to: %s\n", actionURL)
-	fmt.Printf("Form data: %+v\n", formData)
-
-	// Add a small delay before submission
+	// STEP 2: Wait for session to be established
+	log.Println("STEP 2: Captcha solved, waiting for session establishment...")
 	time.Sleep(1 * time.Second)
 
-	// Do POST submission
-	if err := e.Request.Post(actionURL, formData); err != nil {
-		fmt.Printf("Error submitting form: %v\n", err)
+	// STEP 3: Click Active Tenders link AGAIN with established session
+	log.Printf("STEP 3: Clicking Active Tenders link again with session: %s", ts.activeTendersURL)
+
+	// Clear handlers and setup for tender parsing
+	ts.clearHandlers()
+	ts.setupTenderHandlers()
+
+	if err := ts.collector.Visit(ts.activeTendersURL); err != nil {
+		return fmt.Errorf("failed to visit active tenders page with session: %w", err)
+	}
+
+	if !ts.resultsFound {
+		return fmt.Errorf("no tender results found after establishing session")
+	}
+
+	log.Println("Scraping completed successfully!")
+	return nil
+}
+
+// setupCaptchaHandlers configures handlers for captcha solving phase
+func (ts *TenderScraper) setupCaptchaHandlers() {
+	ts.collector.OnHTML("form#LatestActiveTenders", ts.handleCaptchaForm)
+	ts.collector.OnResponse(ts.handleCaptchaResponse)
+	ts.collector.OnError(ts.handleError)
+}
+
+// setupTenderHandlers configures handlers for tender scraping phase
+func (ts *TenderScraper) setupTenderHandlers() {
+	ts.collector.OnHTML("table#table", ts.handleTenderTable)
+	ts.collector.OnError(ts.handleError)
+}
+
+// clearHandlers removes all existing handlers
+func (ts *TenderScraper) clearHandlers() {
+	oldCollector := ts.collector
+	ts.collector = ts.collector.Clone()
+
+	// Copy cookies from old collector for baseURL
+	cookies := oldCollector.Cookies(ts.baseURL)
+	if len(cookies) > 0 {
+		ts.collector.SetCookies(ts.baseURL, cookies)
+	}
+}
+
+// handleError handles errors during scraping
+func (ts *TenderScraper) handleError(r *colly.Response, err error) {
+	log.Printf("ERROR: Request failed - URL: %s, Status: %d, Error: %v",
+		r.Request.URL, r.StatusCode, err)
+}
+
+// handleCaptchaForm processes the initial captcha form (Step 1)
+func (ts *TenderScraper) handleCaptchaForm(e *colly.HTMLElement) {
+	ts.saveFile("debug", "Before Calling Captcha", e.Response.Body)
+	if ts.captchaSolved {
+		return
+	}
+
+	log.Printf("STEP 1: Found captcha form, processing... (Status: %d)", e.Response.StatusCode)
+
+	// Find captcha image
+	captchaImgSrc, _ := e.DOM.Find("img#captchaImage").Attr("src")
+	if captchaImgSrc == "" {
+		captchaImgSrc = e.DOM.Find("img[id*='captcha'], img[src*='captcha']").AttrOr("src", "")
+	}
+	if captchaImgSrc == "" {
+		captchaImgSrc = e.DOM.Parent().Find("img#captchaImage, img[id*='captcha']").AttrOr("src", "")
+	}
+
+	if captchaImgSrc == "" {
+		log.Println("ERROR: Could not find captcha image")
+		return
+	}
+
+	log.Println("Captcha image found, solving...")
+
+	// Solve captcha
+	captchaSolution, err := captcha.ManualCaptchaSolver(captchaImgSrc)
+	if err != nil {
+		log.Printf("ERROR: Captcha solving failed: %v", err)
+		return
+	}
+
+	log.Printf("Captcha solved: %s", captchaSolution)
+	ts.submitCaptchaForm(e, captchaSolution)
+}
+
+// Need to Work here
+// submitCaptchaForm submits the captcha to establish session
+func (ts *TenderScraper) submitCaptchaForm(e *colly.HTMLElement, captchaSolution string) {
+	// Save the full response body for debugging
+	ts.saveFile("debug", "CaptchaForm.html", e.Response.Body)
+
+	// Parse the entire response body to find all form fields
+	doc, err := goquery.NewDocumentFromReader(strings.NewReader(string(e.Response.Body)))
+	if err != nil {
+		log.Printf("ERROR: Failed to parse response body: %v", err)
+		return
+	}
+
+	formData := make(map[string]string)
+	log.Println("Collecting form fields from LatestActiveTenders form:")
+
+	// Find inputs specifically within the LatestActiveTenders form
+	// Looking at the HTML, the inputs are directly inside the form and also in hidden divs
+	doc.Find("form#LatestActiveTenders").Each(func(_ int, form *goquery.Selection) {
+		form.Find("input[name]").Each(func(_ int, s *goquery.Selection) {
+			name, _ := s.Attr("name")
+			value, _ := s.Attr("value")
+			inputType, _ := s.Attr("type")
+
+			if name != "" {
+				formData[name] = value
+				log.Printf("  [%s] %s = %s", inputType, name, value)
+			}
+		})
+	})
+
+	// If that didn't work, try a more direct approach - get ALL inputs and filter by form context
+	if len(formData) < 5 {
+		log.Println("Form-specific search failed, trying broader search...")
+
+		// Get all inputs in the document that should belong to the captcha form
+		doc.Find("input[name]").Each(func(_ int, s *goquery.Selection) {
+			name, _ := s.Attr("name")
+			value, _ := s.Attr("value")
+			inputType, _ := s.Attr("type")
+
+			// Include inputs that are likely part of the captcha form
+			// Exclude the WebBorder form inputs
+			if name != "" && name != "domainUrl" {
+				// Skip if this input belongs to WebBorder form
+				if s.Closest("form#WebBorder_0").Length() == 0 {
+					formData[name] = value
+					log.Printf("  [BROAD-%s] %s = %s", inputType, name, value)
+				}
+			}
+		})
+	}
+
+	// Override/add the required fields for captcha submission
+	formData["captchaText"] = captchaSolution
+	formData["Submit"] = "Search"
+
+	log.Printf("Submitting captcha form to: %s", ts.baseURL)
+	log.Printf("Form data has %d fields total", len(formData))
+
+	// Log all form data being submitted
+	log.Println("Final form data being submitted:")
+	for key, value := range formData {
+		if len(value) > 50 {
+			log.Printf("  %s = %s... [truncated]", key, value[:50])
+		} else {
+			log.Printf("  %s = %s", key, value)
+		}
+	}
+
+	if err := e.Request.Post(ts.baseURL, formData); err != nil {
+		log.Printf("ERROR: Failed to submit captcha form: %v", err)
+	}
+}
+
+// handleCaptchaResponse processes response after captcha submission
+func (ts *TenderScraper) handleCaptchaResponse(r *colly.Response) {
+	log.Printf("STEP 1: Processing captcha response - URL: %s, Method: %s, Status: %d",
+		r.Request.URL, r.Request.Method, r.StatusCode)
+
+	if ts.captchaSolved || r.Request.Method != "POST" {
+		return
+	}
+
+	bodyStr := string(r.Body)
+
+	// Check if captcha was successful
+	hasError := strings.Contains(bodyStr, "Invalid input request") ||
+		strings.Contains(bodyStr, "incorrect") ||
+		strings.Contains(bodyStr, "wrong")
+
+	stillHasCaptcha := strings.Contains(bodyStr, "captchaImage") ||
+		strings.Contains(bodyStr, "captchaText")
+
+	if hasError {
+		log.Printf("ERROR: Captcha was rejected by server (Status: %d)", r.StatusCode)
+		_ = ts.saveFile("debug", "step1_captcha_rejected.html", r.Body)
+		return
+	}
+
+	if stillHasCaptcha {
+		log.Printf("WARNING: Server still showing captcha - may have been incorrect (Status: %d)", r.StatusCode)
+		_ = ts.saveFile("debug", "step1_captcha_still_showing.html", r.Body)
+		return
+	}
+
+	// If we reach here, captcha was likely successful
+	log.Printf("SUCCESS: Captcha appears to have been accepted! (Status: %d)", r.StatusCode)
+	log.Println("Session should now be established with cookies")
+
+	// Log cookies for debugging
+	if cookies := ts.collector.Cookies(r.Request.URL.String()); len(cookies) > 0 {
+		log.Printf("Session cookies received: %d cookies", len(cookies))
+		for _, cookie := range cookies {
+			log.Printf("  Cookie: %s = %s", cookie.Name, cookie.Value)
+		}
 	} else {
-		fmt.Println("Form submitted successfully!")
+		log.Println("WARNING: No cookies received after captcha submission")
+	}
+
+	ts.captchaSolved = true
+	// ts.sessionEstablished = true
+	_ = ts.saveFile("results", "step1_captcha_success.html", r.Body)
+}
+
+// handleTenderTable processes the tender results table (Step 3)
+func (ts *TenderScraper) handleTenderTable(e *colly.HTMLElement) {
+	log.Printf("STEP 3: Found tender table! Parsing results... (Status: %d)", e.Response.StatusCode)
+	ts.resultsFound = true
+	ts.sessionEstablished = true
+	ts.parseTenders(e)
+}
+
+// parseTenders parses tender data from HTML element
+func (ts *TenderScraper) parseTenders(e *colly.HTMLElement) {
+	log.Println("Parsing tender data from table element...")
+	var tendersFound int
+	ts.saveFile("debug", "LastStep.html", []byte(e.Text)) //  2nd Check Point
+
+	e.DOM.Find("tr.even, tr.odd").Each(func(i int, s *goquery.Selection) {
+		tendersFound++
+		cells := s.Find("td")
+
+		if cells.Length() >= 6 {
+			closingDate := strings.TrimSpace(cells.Eq(2).Text())
+
+			linkTag := cells.Eq(4).Find("a")
+			title := strings.TrimSpace(linkTag.Text())
+			href, exists := linkTag.Attr("href")
+			if !exists {
+				href = "" // no link present
+			}
+
+			organisation := strings.TrimSpace(cells.Eq(5).Text())
+
+			log.Printf("  Tender %d: '%s' | Org: '%s' | Closes: '%s' | Link: %s",
+				tendersFound, title, organisation, closingDate, href)
+		}
+	})
+
+	log.Printf("Successfully parsed %d tenders", tendersFound)
+}
+
+// parseTendersFromHTML parses tender data from HTML string
+func (ts *TenderScraper) parseTendersFromHTML(htmlStr string) {
+	doc, err := goquery.NewDocumentFromReader(strings.NewReader(htmlStr))
+	if err != nil {
+		log.Printf("Error parsing HTML: %v", err)
+		return
+	}
+
+	log.Println("Parsing tender data from HTML string...")
+	var tendersFound int
+
+	doc.Find("table#table tr.even, table#table tr.odd").Each(func(i int, s *goquery.Selection) {
+		tendersFound++
+		cells := s.Find("td")
+
+		if cells.Length() >= 6 {
+			closingDate := strings.TrimSpace(cells.Eq(2).Text())
+			title := strings.TrimSpace(cells.Eq(4).Find("a").Text())
+			organisation := strings.TrimSpace(cells.Eq(5).Text())
+
+			log.Printf("  Tender %d: '%s' | Org: '%s' | Closes: '%s'",
+				tendersFound, title, organisation, closingDate)
+		}
+	})
+
+	if tendersFound > 0 {
+		ts.resultsFound = true
+		log.Printf("Successfully parsed %d tenders from HTML", tendersFound)
 	}
 }
 
-// debugFormImages - Helper function to debug image detection issues
-func debugFormImages(e *colly.HTMLElement) {
-	fmt.Println("=== FORM DEBUG INFO ===")
-	fmt.Printf("Form ID: %s\n", e.Attr("id"))
-	fmt.Printf("Form action: %s\n", e.Attr("action"))
-	fmt.Printf("Form method: %s\n", e.Attr("method"))
-
-	// Check form content
-	fmt.Println("Form HTML snippet:")
-	html, _ := e.DOM.Html()
-	fmt.Printf("%s\n", truncateString(html, 500))
-
-	fmt.Println("All images in form:")
-	e.ForEach("img", func(i int, img *colly.HTMLElement) {
-		src := img.Attr("src")
-		id := img.Attr("id")
-		class := img.Attr("class")
-		fmt.Printf("  [%d] src='%s' id='%s' class='%s' alt='%s'\n",
-			i, truncateString(src, 80), id, class, img.Attr("alt"))
-	})
-
-	fmt.Println("All images in parent container:")
-	e.DOM.Parent().Find("img").Each(func(i int, sel *goquery.Selection) {
-		src, _ := sel.Attr("src")
-		id, _ := sel.Attr("id")
-		class, _ := sel.Attr("class")
-		alt, _ := sel.Attr("alt")
-		fmt.Printf("  [parent-%d] src='%s' id='%s' class='%s' alt='%s'\n",
-			i, truncateString(src, 80), id, class, alt)
-	})
-
-	fmt.Println("All input fields:")
-	e.ForEach("input", func(i int, input *colly.HTMLElement) {
-		name := input.Attr("name")
-		value := input.Attr("value")
-		inputType := input.Attr("type")
-		fmt.Printf("  [%d] name='%s' value='%s' type='%s'\n", i, name, value, inputType)
-	})
-}
-
-// truncateString - Helper function to truncate strings for display
-func truncateString(s string, maxLen int) string {
-	if len(s) <= maxLen {
-		return s
+// saveFile utility function
+func (ts *TenderScraper) saveFile(dir, filename string, body []byte) error {
+	if err := os.MkdirAll(dir, 0755); err != nil {
+		return fmt.Errorf("could not create directory %s: %w", dir, err)
 	}
-	return s[:maxLen] + "..."
+
+	fullPath := filepath.Join(dir, filename)
+	if err := os.WriteFile(fullPath, body, 0644); err != nil {
+		return fmt.Errorf("could not write file %s: %w", fullPath, err)
+	}
+
+	log.Printf("Saved: %s", fullPath)
+	return nil
 }

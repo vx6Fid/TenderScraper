@@ -21,7 +21,7 @@ func ScrapeTenders(baseURL string, choice int) {
 	case 1:
 		nav.ScrapeSearch(c, baseURL)
 	case 2:
-		nav.ScrapeActiveTenders(c, baseURL)
+		fmt.Println("Scraping active tenders...")
 	case 3:
 		nav.ScrapeCorrigendum(c, baseURL)
 	default:

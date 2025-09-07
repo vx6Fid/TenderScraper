@@ -5,6 +5,7 @@ import (
 	"encoding/base64"
 	"path/filepath"
 	"time"
+
 	// "encoding/base64"
 	"fmt"
 	"os"
@@ -17,12 +18,10 @@ import (
 
 // ManualCaptchaSolver displays the captcha image to the user and prompts for input
 func ManualCaptchaSolver(captchaImageData string) (string, error) {
-	// func ManualCaptchaSolver(imagePath string) (string, error) {
 	fmt.Println("=== CAPTCHA SOLVER ===")
 
 	// Extract base64 data (remove data:image/png;base64, prefix if present)
 	base64Data := captchaImageData
-	fmt.Println("Base64 Data:", base64Data)
 	if strings.HasPrefix(captchaImageData, "data:image/") {
 		parts := strings.Split(captchaImageData, ",")
 		if len(parts) > 1 {

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/vx6fid/tender-scraper/scraper"
@@ -10,22 +11,42 @@ import (
 func main() {
 	log.Println("Starting Rajasthan Tender Scraper")
 
-	// Create collector
-	// baseURL := "https://eproc.rajasthan.gov.in/nicgep/app"
-	// c := scraper.NewCollector("eproc.rajasthan.gov.in")
+	// baseURLs := []string{
+	// 	"https://etenders.gov.in/eprocure/app",
+	// 	"https://coalindiatenders.nic.in/nicgep/app",
+	// 	"https://iocletenders.nic.in/nicgep/app",
+	// 	"https://cpcletenders.nic.in/nicgep/app",
+	// 	"https://eprocurebel.co.in/nicgep/app",
+	// 	"https://eprocurentpc.nic.in/nicgep/app",
+	// 	"https://eprocuregsl.nic.in/nicgep/app",
+	// 	"https://eprocurehsl.nic.in/nicgep/app",
+	// 	"https://eprocuremdl.nic.in/nicgep/app",
+	// 	"https://www.eprocuremidhani.nic.in/nicgep/app",
+	// 	"https://eprocuregrse.co.in/nicgep/app",
+	// 	"https://eprocurebhel.co.in/nicgep/app",
+	// }
 
-	// baseURL := "https://coalindiatenders.nic.in/nicgep/app"
-	// c := scraper.NewCollector("coalindiatenders.nic.in")
+	fmt.Println("Scrape Tender links or tender data--")
+	fmt.Println("1.Tender links")
+	fmt.Println("2.Tender data")
+	var choice int
+	fmt.Scan(&choice)
 
-	// Uttar Pradesh
-	baseURL := "https://etender.up.nic.in/nicgep/app"
-	c := scraper.NewCollector("etender.up.nic.in")
+	if choice == 1 {
+		// Uttar Pradesh
+		baseURL := "https://etender.up.nic.in/nicgep/app"
+		c := scraper.NewCollector("etender.up.nic.in")
 
-	// Create and run scraper
-	tenderScraper := nav.NewTenderScraper(c, baseURL)
+		// Create and run scraper
+		tenderScraper := nav.NewTenderScraper(c, baseURL)
 
-	if err := tenderScraper.ScrapeActiveTenders(); err != nil {
-		log.Fatalf("Scraping failed: %v", err)
+		if err := tenderScraper.ScrapeActiveTenders(); err != nil {
+			log.Fatalf("Scraping failed: %v", err)
+		}
+	} else if choice == 2 {
+
+	} else {
+		fmt.Println("Invalid choice")
 	}
 
 	log.Println("Scraping completed successfully")

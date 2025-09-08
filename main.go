@@ -6,6 +6,7 @@ import (
 
 	"github.com/vx6fid/tender-scraper/scraper"
 	"github.com/vx6fid/tender-scraper/scraper/nav"
+	"github.com/vx6fid/tender-scraper/session"
 )
 
 func main() {
@@ -32,19 +33,35 @@ func main() {
 	var choice int
 	fmt.Scan(&choice)
 
+	baseURL := "https://etender.up.nic.in/nicgep/app"
+	domain := "etender.up.nic.in"
+
 	if choice == 1 {
 		// Uttar Pradesh
-		baseURL := "https://etender.up.nic.in/nicgep/app"
-		c := scraper.NewCollector("etender.up.nic.in")
 
-		// Create and run scraper
-		tenderScraper := nav.NewTenderScraper(c, baseURL)
+		sess := session.NewSession(baseURL)
 
-		if err := tenderScraper.ScrapeActiveTenders(); err != nil {
+		if err := sess.EstablishSession(); err != nil {
+			log.Fatalf("failed to establish session: %v", err)
+		}
+
+		scraper := nav.NewTenderScraper(sess, domain)
+		if err := scraper.ScrapeActiveTenders(); err != nil {
 			log.Fatalf("Scraping failed: %v", err)
 		}
+
 	} else if choice == 2 {
 
+		sess := session.NewSession(baseURL)
+
+		if err := sess.EstablishSession(); err != nil {
+			log.Fatalf("failed to establish session: %v", err)
+		}
+
+		scraper := scraper.NewTenderDataScraper(sess, domain, "UttarPradesh")
+		if err := scraper.ExtractTenderData(); err != nil {
+			log.Fatalf("Scraping failed: %v", err)
+		}
 	} else {
 		fmt.Println("Invalid choice")
 	}

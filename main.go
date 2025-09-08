@@ -46,6 +46,7 @@ func main() {
 		}
 
 		scraper := nav.NewTenderScraper(sess, domain)
+
 		if err := scraper.ScrapeActiveTenders(); err != nil {
 			log.Fatalf("Scraping failed: %v", err)
 		}

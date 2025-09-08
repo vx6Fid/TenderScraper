@@ -49,8 +49,9 @@ func NewTenderScraper(sess *session.Session, domain string) *TenderScraper {
 func (ts *TenderScraper) ScrapeActiveTenders() error {
 	log.Println("Starting tender scraping process with correct session flow.")
 
-	// open CSV
-	file, err := os.Create("tenders.csv")
+	// open CSV, save file to TenderLinks folder
+	// Need to change name here
+	file, err := os.Create("TenderLinks/tenders.csv")
 	if err != nil {
 		return fmt.Errorf("failed to create CSV file: %w", err)
 	}

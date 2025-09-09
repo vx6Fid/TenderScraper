@@ -1,0 +1,30 @@
+2025/09/09 14:19:30 Starting tender scraping process with correct session flow.
+2025/09/09 14:19:30 STEP 1: Clicking Active Tenders link with session: https://eprocuregrse.co.in/nicgep/app?page=FrontEndLatestActiveTenders&service=page
+2025/09/09 14:19:33 PAGE 1: Found tender table! Parsing results... (Status: 200)
+2025/09/09 14:19:33 PAGE 1: Parsing tender data from table element...
+2025/09/09 14:19:33   Tender 1 (Page 1): '[CSB/NC/ARV/LT/IMP/DYNAMIC POSITIONING SYS/ET-3203]' 
+2025/09/09 14:19:33   Tender 2 (Page 1): '[SCC/RM/LT/VESSEL CONSTRUCTION/045/ET-3211]' 
+2025/09/09 14:19:33   Tender 3 (Page 1): '[NCM/RKS/IMP/ND/LT/Seismic/ ORV/ET-3254]' 
+2025/09/09 14:19:33   Tender 4 (Page 1): '[CSB/PK/MPV/IMP/ST/Loading Computer/124/ET-3262]' 
+2025/09/09 14:19:33   Tender 5 (Page 1): '[CSB/OT (ND)/PKS/ORV/Marine CCTV System/RA-3268]' 
+2025/09/09 14:19:33   Tender 6 (Page 1): '[CSB/OT (ND)/PKS/ORV/Satellite TV System/RA-3269]' 
+2025/09/09 14:19:33   Tender 7 (Page 1): '[SCC/NK/NIC/OT(P)/RENO RNC/107/RA-3272]' 
+2025/09/09 14:19:33   Tender 8 (Page 1): '[SCC/AKD/OT(Web)/SOLID BALLAST/112/ET-3275]' 
+2025/09/09 14:19:33   Tender 9 (Page 1): '[SCC/AKD/OT(Web)/AL SEATS/070/ET-3278]' 
+2025/09/09 14:19:33   Tender 10 (Page 1): '[CSB/PK/MPV/IMP/ST/Sludge Pump/134/ET-3277]' 
+2025/09/09 14:19:33 PAGE 1: Successfully parsed 10 tenders
+2025/09/09 14:19:33 PAGE 1: Next button found: https://eprocuregrse.co.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:19:33 Total records found: 14
+2025/09/09 14:19:33 STEP 2: Starting pagination process...
+2025/09/09 14:19:33 PAGE 2: Clicking Next button: https://eprocuregrse.co.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:19:35 PAGE 1: Found tender table! Parsing results... (Status: 200)
+2025/09/09 14:19:35 PAGE 1: Parsing tender data from table element...
+2025/09/09 14:19:35   Tender 11 (Page 1): '[SCC/NK/NIC/OT(P)/BLK-FAB OUT/103/RA-3279]' 
+2025/09/09 14:19:35   Tender 12 (Page 1): '[SCC/AS/NIC/OT/Printing Activity/121/ET-3280]' 
+2025/09/09 14:19:35   Tender 13 (Page 1): '[SCC/KKC/LT/BLASTING OUTSIEDE GRSE/ET-3282]' 
+2025/09/09 14:19:35   Tender 14 (Page 1): '[SCC/DC/NIC/ST/Construction of ASV/120/ET-3283]' 
+2025/09/09 14:19:35 PAGE 1: Successfully parsed 4 tenders
+2025/09/09 14:19:35 Progress: 14/14 tenders (100.0%) - Page 2 completed
+2025/09/09 14:19:35 All 14 tenders scraped, stopping pagination
+2025/09/09 14:19:35 Pagination completed! Processed 2 pages, scraped 14 tenders
+2025/09/09 14:19:35 Scraping completed successfully! Total tenders scraped: 14/14

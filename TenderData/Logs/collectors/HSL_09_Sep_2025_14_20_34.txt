@@ -1,0 +1,47 @@
+2025/09/09 14:20:34 Starting tender scraping process with correct session flow.
+2025/09/09 14:20:34 STEP 1: Clicking Active Tenders link with session: https://eprocurehsl.nic.in/nicgep/app?page=FrontEndLatestActiveTenders&service=page
+2025/09/09 14:20:36 PAGE 1: Found tender table! Parsing results... (Status: 200)
+2025/09/09 14:20:36 PAGE 1: Parsing tender data from table element...
+2025/09/09 14:20:36   Tender 1 (Page 1): '[Procurement ogf Bulb flat]' 
+2025/09/09 14:20:36   Tender 2 (Page 1): '[Rate Contract for Mobile Services for CUG Mobile Connections for a period of 02 (two) years with option to extend for another 01 (one) year]' 
+2025/09/09 14:20:36   Tender 3 (Page 1): '[Supply, Installatio, commissioing of Marine Emergency Diesel Generator along with control panel   for ORV Sagar kanya ]' 
+2025/09/09 14:20:36   Tender 4 (Page 1): '[Supply, Installation and Commissioning of Anchor windlass for ORV Sagar kanya]' 
+2025/09/09 14:20:36   Tender 5 (Page 1): '[Refurbishment of Submarine office and Site Office for Shipbuilding at Outfit Jetty]' 
+2025/09/09 14:20:36   Tender 6 (Page 1): '[Hiring of 2 Portable AC units for INS SHAKTI ]' 
+2025/09/09 14:20:36   Tender 7 (Page 1): '[Rate Contract for empanelment of Advertisement Agency for publishing various types of advertisement of HSL for a period of 02 years, extendable for one more year]' 
+2025/09/09 14:20:36   Tender 8 (Page 1): '[Facelift of L and W Workshop Offices, Toilets and EKM Documentation Room of Submarine Division for MRLC]' 
+2025/09/09 14:20:36   Tender 9 (Page 1): '[Serviceability Checks of the Complete System ORV Sagar Kanya]' 
+2025/09/09 14:20:36   Tender 10 (Page 1): '[FABRICATION, ERECTION, CONSOLIDATION, WELDING, SURVEY AND PRESSURE TESTING OF STERN TUBE BLOCK OF FSS]' 
+2025/09/09 14:20:36 PAGE 1: Successfully parsed 10 tenders
+2025/09/09 14:20:36 PAGE 1: Next button found: https://eprocurehsl.nic.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:20:36 Total records found: 25
+2025/09/09 14:20:36 STEP 2: Starting pagination process...
+2025/09/09 14:20:36 PAGE 2: Clicking Next button: https://eprocurehsl.nic.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:20:39 PAGE 1: Found tender table! Parsing results... (Status: 200)
+2025/09/09 14:20:39 PAGE 1: Parsing tender data from table element...
+2025/09/09 14:20:39   Tender 11 (Page 1): '[Analysis of Lub Oil, Coolant, Hydraulic oil and Portable water on INS JAMUNA ]' 
+2025/09/09 14:20:39   Tender 12 (Page 1): '[EMERGENCY CABLE CONNECTORS for SRC PROJECT SR-22040 ]' 
+2025/09/09 14:20:39   Tender 13 (Page 1): '[Procurement of 3 phase Energy meter for Hull shop critical machines]' 
+2025/09/09 14:20:39   Tender 14 (Page 1): '[Procurement of anodes for MRLC of INS Sindhu vijay]' 
+2025/09/09 14:20:39   Tender 15 (Page 1): '[REQUEST FOR EXPRESSION OF INTEREST FOR SHORT LISTING EXPERIENCED FIRMS FOR PARTIAL OFFLOADING OF REFIT WORKPACKAGE]' 
+2025/09/09 14:20:39   Tender 16 (Page 1): '[Procurement of Pilot lamps, Contactors etc for ORV Sagar Kanya]' 
+2025/09/09 14:20:39   Tender 17 (Page 1): '[Procurement of HP and LP Pressure Controls of Domestic Fridge and Main AC for  ORV Sagar Kanya ]' 
+2025/09/09 14:20:39   Tender 18 (Page 1): '[Procurement of Electrical items of PM AC Panel on ORV Sagar Kanya ]' 
+2025/09/09 14:20:39   Tender 19 (Page 1): '[Construction of New Car shed and Repair works to existing Material Storage sheds and connected other miscellaneous Civil works in Varuna Park Open areas]' 
+2025/09/09 14:20:39   Tender 20 (Page 1): '[Renovation of Submarine Office at EKM Pipe shop]' 
+2025/09/09 14:20:39 PAGE 1: Successfully parsed 10 tenders
+2025/09/09 14:20:39 PAGE 1: Next button found: https://eprocurehsl.nic.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:20:39 Progress: 20/25 tenders (80.0%) - Page 2 completed
+2025/09/09 14:20:39 PAGE 3: Clicking Next button: https://eprocurehsl.nic.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:20:42 PAGE 2: Found tender table! Parsing results... (Status: 200)
+2025/09/09 14:20:42 PAGE 2: Parsing tender data from table element...
+2025/09/09 14:20:42   Tender 21 (Page 2): '[Procurement of Rolon make SPL mechanical seal type Single Cartridge for SRC Maintenance]' 
+2025/09/09 14:20:42   Tender 22 (Page 2): '[PROCUREMENT OF SPONGE RUBBER PACKING FOR MFV MATSYA DARSHINI.]' 
+2025/09/09 14:20:42   Tender 23 (Page 2): '[Procurement of Rubber packings, SS Butterfly bolts and nuts, SS Mess grid and MS Angles on ORV Sagar Kanya]' 
+2025/09/09 14:20:42   Tender 24 (Page 2): '[Procurement of PVC Coated Fire retardant Awning Cloth -VC11191]' 
+2025/09/09 14:20:42   Tender 25 (Page 2): '[Supply of IS2062 E250BR STEEL PLATES]' 
+2025/09/09 14:20:42 PAGE 2: Successfully parsed 5 tenders
+2025/09/09 14:20:42 Progress: 25/25 tenders (100.0%) - Page 3 completed
+2025/09/09 14:20:42 All 25 tenders scraped, stopping pagination
+2025/09/09 14:20:42 Pagination completed! Processed 3 pages, scraped 25 tenders
+2025/09/09 14:20:42 Scraping completed successfully! Total tenders scraped: 25/25

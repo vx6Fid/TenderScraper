@@ -1,9 +1,10 @@
 package captcha
 
 import (
-	"bufio"
 	"encoding/base64"
+	"log"
 	"path/filepath"
+	"sync"
 	"time"
 
 	// "encoding/base64"
@@ -14,11 +15,18 @@ import (
 	// "path/filepath"
 	"runtime"
 	"strings"
+
+	api2captcha "github.com/2captcha/2captcha-go"
+)
+
+var (
+	captchaLock sync.Mutex
+	lastSolve   time.Time
 )
 
 // ManualCaptchaSolver displays the captcha image to the user and prompts for input
-func ManualCaptchaSolver(captchaImageData string) (string, error) {
-	fmt.Println("=== CAPTCHA SOLVER ===")
+func ManualCaptchaSolver(captchaImageData string, logger *log.Logger) (string, error) {
+	logger.Println("=== CAPTCHA SOLVER ===")
 
 	// Extract base64 data (remove data:image/png;base64, prefix if present)
 	base64Data := captchaImageData
@@ -35,7 +43,7 @@ func ManualCaptchaSolver(captchaImageData string) (string, error) {
 		return "", fmt.Errorf("failed to decode base64 image: %v", err)
 	}
 
-	// // Create temporary file for the image
+	// Create temporary file for the image
 	tmpDir := os.TempDir()
 	timestamp := time.Now().Unix()
 	imagePath := filepath.Join(tmpDir, fmt.Sprintf("captcha_%d.png", timestamp))
@@ -45,46 +53,88 @@ func ManualCaptchaSolver(captchaImageData string) (string, error) {
 	if err != nil {
 		return "", fmt.Errorf("failed to create image file: %v", err)
 	}
+	// Clean up temporary file
+	defer func() {
+		if removeErr := os.Remove(imagePath); removeErr != nil {
+			logger.Printf("Warning: Could not remove temporary file %s: %v\n", imagePath, removeErr)
+		}
+	}()
 	defer file.Close()
 
 	if _, err := file.Write(imageData); err != nil {
 		return "", fmt.Errorf("failed to write image data: %v", err)
 	}
 
-	fmt.Printf("Captcha image saved to: %s\n", imagePath)
+	logger.Printf("Captcha image saved to: %s\n", imagePath)
 
 	// Try to open the image automatically
-	if err := openImage(imagePath); err != nil {
-		fmt.Printf("Could not open image automatically: %v\n", err)
-		fmt.Printf("Please manually open: %s\n", imagePath)
-	} else {
-		fmt.Println("Captcha image opened in default viewer.")
-	}
+	// if err := openImage(imagePath); err != nil {
+	// 	fmt.Printf("Could not open image automatically: %v\n", err)
+	// 	fmt.Printf("Please manually open: %s\n", imagePath)
+	// } else {
+	// 	fmt.Println("Captcha image opened in default viewer.")
+	// }
 
 	// Prompt user for captcha input
-	fmt.Print("\nPlease look at the captcha image and enter the text you see: ")
+	// fmt.Print("\nPlease look at the captcha image and enter the text you see: ")
 
-	reader := bufio.NewReader(os.Stdin)
-	input, err := reader.ReadString('\n')
-	if err != nil {
-		return "", fmt.Errorf("failed to read user input: %v", err)
+	// reader := bufio.NewReader(os.Stdin)
+	// input, err := reader.ReadString('\n')
+	// if err != nil {
+	// 	return "", fmt.Errorf("failed to read user input: %v", err)
+	// }
+
+	APIKey := os.Getenv("CAPTCHA_API_KEY")
+	if APIKey == "" {
+		return "", fmt.Errorf("CAPTCHA_API_KEY environment variable not set")
 	}
 
-	// Clean up the input
-	solution := strings.TrimSpace(input)
+	client := api2captcha.NewClient(APIKey)
 
-	// Clean up temporary file
-	defer func() {
-		if removeErr := os.Remove(imagePath); removeErr != nil {
-			fmt.Printf("Warning: Could not remove temporary file %s: %v\n", imagePath, removeErr)
+	cap := api2captcha.Normal{
+		File: imagePath,
+	}
+
+	captchaLock.Lock()
+	wait := time.Duration(0)
+	if !lastSolve.IsZero() {
+		elapsed := time.Since(lastSolve)
+		if elapsed < 5*time.Second {
+			wait = 5*time.Second - elapsed
 		}
-	}()
+	}
+	captchaLock.Unlock()
+
+	if wait > 0 {
+		time.Sleep(wait)
+	}
+
+	captchaLock.Lock()
+	lastSolve = time.Now()
+	captchaLock.Unlock()
+
+	logger.Println("Sending captcha to API...")
+	solution, _, err := client.Solve(cap.ToRequest())
+	if err != nil {
+		switch err {
+		case api2captcha.ErrTimeout:
+			return "", fmt.Errorf("[captcha] API Timeout")
+		case api2captcha.ErrApi:
+			return "", fmt.Errorf("[captcha] API error")
+		case api2captcha.ErrNetwork:
+			return "", fmt.Errorf("[captcha] Network error")
+		default:
+			return "", fmt.Errorf("[captcha] Unknown error: %v", err)
+		}
+	}
+
+	logger.Println("Captcha solution received:", solution)
 
 	if solution == "" {
 		return "", fmt.Errorf("empty captcha solution provided")
 	}
 
-	fmt.Printf("Captcha solution received: '%s'\n", solution)
+	logger.Printf("Captcha solution received: '%s'\n", solution)
 	return solution, nil
 }
 
@@ -121,56 +171,4 @@ func openImage(imagePath string) error {
 
 	// Start the command without waiting for it to finish
 	return cmd.Start()
-}
-
-// ValidateCaptchaInput performs basic validation on captcha input
-func ValidateCaptchaInput(input string) bool {
-	// Remove whitespace
-	input = strings.TrimSpace(input)
-
-	// Check if empty
-	if input == "" {
-		return false
-	}
-
-	// Check length (most captchas are 4-8 characters)
-	if len(input) < 3 || len(input) > 10 {
-		fmt.Printf("Warning: Captcha length (%d) seems unusual. Are you sure?\n", len(input))
-	}
-
-	return true
-}
-
-// GetCaptchaWithRetry allows the user to retry if they make a mistake
-func GetCaptchaWithRetry(captchaImageData string, maxRetries int) (string, error) {
-	for attempt := 1; attempt <= maxRetries; attempt++ {
-		fmt.Printf("\n=== Captcha Attempt %d of %d ===\n", attempt, maxRetries)
-
-		solution, err := ManualCaptchaSolver(captchaImageData)
-		if err != nil {
-			fmt.Printf("Error: %v\n", err)
-			continue
-		}
-
-		if !ValidateCaptchaInput(solution) {
-			fmt.Println("Invalid input. Please try again.")
-			continue
-		}
-
-		// Ask for confirmation
-		fmt.Printf("You entered: '%s'. Is this correct? (y/n): ", solution)
-		reader := bufio.NewReader(os.Stdin)
-		confirm, _ := reader.ReadString('\n')
-		confirm = strings.ToLower(strings.TrimSpace(confirm))
-
-		if confirm == "y" || confirm == "yes" {
-			return solution, nil
-		}
-
-		if attempt < maxRetries {
-			fmt.Println("Let's try again...")
-		}
-	}
-
-	return "", fmt.Errorf("exceeded maximum retry attempts (%d)", maxRetries)
 }

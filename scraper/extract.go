@@ -32,12 +32,15 @@ func NewTenderDataScraper(sess *session.Session, domain string, state string) *T
 
 // csvSinks groups structured CSV writers
 type csvSinks struct {
-	basicW  *csv.Writer
-	payW    *csv.Writer
-	coversW *csv.Writer
-	feeW    *csv.Writer
-	emdW    *csv.Writer
-	workW   *csv.Writer
+	basicW    *csv.Writer
+	payW      *csv.Writer
+	coversW   *csv.Writer
+	feeW      *csv.Writer
+	emdW      *csv.Writer
+	workW     *csv.Writer
+	critW     *csv.Writer
+	docsNitW  *csv.Writer
+	docsWorkW *csv.Writer
 }
 
 // setupStructuredCSVs creates files under out/ and writes headers.
@@ -86,6 +89,40 @@ func (ts *TenderDataScraper) setupStructuredCSVs() (csvSinks, func(), error) {
 		_ = emdFile.Close()
 		return csvSinks{}, nil, fmt.Errorf("failed to create work_item_details.csv: %w", err)
 	}
+	critFile, err := os.Create(filepath.Join("out", "critical_dates.csv"))
+	if err != nil {
+		_ = basicFile.Close()
+		_ = payFile.Close()
+		_ = coversFile.Close()
+		_ = feeFile.Close()
+		_ = emdFile.Close()
+		_ = workFile.Close()
+		return csvSinks{}, nil, fmt.Errorf("failed to create critical_dates.csv: %w", err)
+	}
+	docsNitFile, err := os.Create(filepath.Join("out", "tender_documents_nit.csv"))
+	if err != nil {
+		_ = basicFile.Close()
+		_ = payFile.Close()
+		_ = coversFile.Close()
+		_ = feeFile.Close()
+		_ = emdFile.Close()
+		_ = workFile.Close()
+		_ = critFile.Close()
+		return csvSinks{}, nil, fmt.Errorf("failed to create tender_documents_nit.csv: %w", err)
+	}
+	docsWorkFile, err := os.Create(filepath.Join("out", "tender_documents_workitem.csv"))
+	if err != nil {
+		_ = basicFile.Close()
+		_ = payFile.Close()
+		_ = coversFile.Close()
+		_ = feeFile.Close()
+		_ = emdFile.Close()
+		_ = workFile.Close()
+		_ = critFile.Close()
+		_ = docsNitFile.Close()
+		return csvSinks{}, nil, fmt.Errorf("failed to create tender_documents_workitem.csv: %w", err)
+	}
+	
 
 	basicW := csv.NewWriter(basicFile)
 	payW := csv.NewWriter(payFile)
@@ -93,6 +130,9 @@ func (ts *TenderDataScraper) setupStructuredCSVs() (csvSinks, func(), error) {
 	feeW := csv.NewWriter(feeFile)
 	emdW := csv.NewWriter(emdFile)
 	workW := csv.NewWriter(workFile)
+	critW := csv.NewWriter(critFile)
+	docsNitW := csv.NewWriter(docsNitFile)
+	docsWorkW := csv.NewWriter(docsWorkFile)
 
 	if err := basicW.Write([]string{
 		"Serial Number",
@@ -121,6 +161,9 @@ func (ts *TenderDataScraper) setupStructuredCSVs() (csvSinks, func(), error) {
 		_ = feeFile.Close()
 		_ = emdFile.Close()
 		_ = workFile.Close()
+		_ = critFile.Close()
+		_ = docsNitFile.Close()
+		_ = docsWorkFile.Close()
 		return csvSinks{}, nil, fmt.Errorf("failed to write basic_details header: %w", err)
 	}
 
@@ -137,6 +180,9 @@ func (ts *TenderDataScraper) setupStructuredCSVs() (csvSinks, func(), error) {
 		_ = feeFile.Close()
 		_ = emdFile.Close()
 		_ = workFile.Close()
+		_ = critFile.Close()
+		_ = docsNitFile.Close()
+		_ = docsWorkFile.Close()
 		return csvSinks{}, nil, fmt.Errorf("failed to write payment_instruments header: %w", err)
 	}
 
@@ -154,6 +200,9 @@ func (ts *TenderDataScraper) setupStructuredCSVs() (csvSinks, func(), error) {
 		_ = feeFile.Close()
 		_ = emdFile.Close()
 		_ = workFile.Close()
+		_ = critFile.Close()
+		_ = docsNitFile.Close()
+		_ = docsWorkFile.Close()
 		return csvSinks{}, nil, fmt.Errorf("failed to write cover_details header: %w", err)
 	}
 
@@ -172,6 +221,9 @@ func (ts *TenderDataScraper) setupStructuredCSVs() (csvSinks, func(), error) {
 		_ = feeFile.Close()
 		_ = emdFile.Close()
 		_ = workFile.Close()
+		_ = critFile.Close()
+		_ = docsNitFile.Close()
+		_ = docsWorkFile.Close()
 		return csvSinks{}, nil, fmt.Errorf("failed to write tender_fee_details header: %w", err)
 	}
 
@@ -191,6 +243,9 @@ func (ts *TenderDataScraper) setupStructuredCSVs() (csvSinks, func(), error) {
 		_ = feeFile.Close()
 		_ = emdFile.Close()
 		_ = workFile.Close()
+		_ = critFile.Close()
+		_ = docsNitFile.Close()
+		_ = docsWorkFile.Close()
 		return csvSinks{}, nil, fmt.Errorf("failed to write emd_fee_details header: %w", err)
 	}
 
@@ -222,7 +277,57 @@ func (ts *TenderDataScraper) setupStructuredCSVs() (csvSinks, func(), error) {
 		_ = feeFile.Close()
 		_ = emdFile.Close()
 		_ = workFile.Close()
+		_ = critFile.Close()
+		_ = docsNitFile.Close()
+		_ = docsWorkFile.Close()
 		return csvSinks{}, nil, fmt.Errorf("failed to write work_item_details header: %w", err)
+	}
+
+	if err := critW.Write([]string{
+		"Serial Number",
+		"Tender ID",
+		"PublishedDate",
+		"BidOpeningDate",
+		"DocumentDownloadStartDate",
+		"DocumentDownloadEndDate",
+		"ClarificationStartDate",
+		"ClarificationEndDate",
+		"BidSubmissionStartDate",
+		"BidSubmissionEndDate",
+	}); err != nil {
+		_ = basicFile.Close()
+		_ = payFile.Close()
+		_ = coversFile.Close()
+		_ = feeFile.Close()
+		_ = emdFile.Close()
+		_ = workFile.Close()
+		_ = critFile.Close()
+		_ = docsNitFile.Close()
+		_ = docsWorkFile.Close()
+		return csvSinks{}, nil, fmt.Errorf("failed to write critical_dates header: %w", err)
+	}
+
+	if err := docsNitW.Write([]string{
+		"Serial Number",
+		"Tender ID",
+		"S.No",
+		"Document Name",
+		"Description",
+		"Document Size (KB)",
+	}); err != nil {
+		return csvSinks{}, nil, fmt.Errorf("failed to write tender_documents_nit header: %w", err)
+	}
+
+	if err := docsWorkW.Write([]string{
+		"Serial Number",
+		"Tender ID",
+		"S.No",
+		"Document Type",
+		"Document Name",
+		"Description",
+		"Document Size (KB)",
+	}); err != nil {
+		return csvSinks{}, nil, fmt.Errorf("failed to write tender_documents_workitem header: %w", err)
 	}
 
 	closer := func() {
@@ -232,15 +337,20 @@ func (ts *TenderDataScraper) setupStructuredCSVs() (csvSinks, func(), error) {
 		feeW.Flush()
 		emdW.Flush()
 		workW.Flush()
+		critW.Flush()
+		docsNitW.Flush()
+		docsWorkW.Flush()
 		_ = basicFile.Close()
 		_ = payFile.Close()
 		_ = coversFile.Close()
 		_ = feeFile.Close()
 		_ = emdFile.Close()
 		_ = workFile.Close()
+		_ = critFile.Close()
+		// nit/work files closed by their writers' underlying files when program exits; best-effort flush above
 	}
 
-	return csvSinks{basicW: basicW, payW: payW, coversW: coversW, feeW: feeW, emdW: emdW, workW: workW}, closer, nil
+	return csvSinks{basicW: basicW, payW: payW, coversW: coversW, feeW: feeW, emdW: emdW, workW: workW, critW: critW, docsNitW: docsNitW, docsWorkW: docsWorkW}, closer, nil
 }
 
 // write helpers for structured CSVs
@@ -278,6 +388,29 @@ func (s csvSinks) writeWorkItem(serial, tenderID string, wi workItemParsed) {
 	s.workW.Flush()
 }
 
+// local parsed holder for Critical Dates
+type criticalDatesParsed struct {
+	PublishedDate             string
+	BidOpeningDate            string
+	DocumentDownloadStartDate string
+	DocumentDownloadEndDate   string
+	ClarificationStartDate    *string
+	ClarificationEndDate      *string
+	BidSubmissionStartDate    string
+	BidSubmissionEndDate      string
+}
+
+func (s csvSinks) writeCriticalDates(serial, tenderID string, cd criticalDatesParsed) {
+	val := func(p *string) string {
+		if p == nil {
+			return ""
+		}
+		return *p
+	}
+	_ = s.critW.Write([]string{serial, tenderID, cd.PublishedDate, cd.BidOpeningDate, cd.DocumentDownloadStartDate, cd.DocumentDownloadEndDate, val(cd.ClarificationStartDate), val(cd.ClarificationEndDate), cd.BidSubmissionStartDate, cd.BidSubmissionEndDate})
+	s.critW.Flush()
+}
+
 // ephemeral parsed holder for Work/Item(s)
 type workItemParsed struct {
 	Title                   string
@@ -298,6 +431,36 @@ type workItemParsed struct {
 	BidOpeningPlace         string
 	ShouldAllowNDA          string
 	AllowPreferentialBidder string
+}
+
+func (s csvSinks) writeNitDocs(serial, tenderID string, items []nitDocParsed) {
+	for _, d := range items {
+		_ = s.docsNitW.Write([]string{serial, tenderID, d.SerialNo, d.DocumentName, d.Description, d.DocumentSizeKB})
+	}
+	s.docsNitW.Flush()
+}
+
+func (s csvSinks) writeWorkItemDocs(serial, tenderID string, items []workDocParsed) {
+	for _, d := range items {
+		_ = s.docsWorkW.Write([]string{serial, tenderID, d.SerialNo, d.DocumentType, d.DocumentName, d.Description, d.DocumentSizeKB})
+	}
+	s.docsWorkW.Flush()
+}
+
+// local parsed holders for documents
+type nitDocParsed struct {
+	SerialNo       string
+	DocumentName   string
+	Description    string
+	DocumentSizeKB string
+}
+
+type workDocParsed struct {
+	SerialNo       string
+	DocumentType   string
+	DocumentName   string
+	Description    string
+	DocumentSizeKB string
 }
 
 func (ts *TenderDataScraper) ExtractTenderData() error {
@@ -400,6 +563,10 @@ func (ts *TenderDataScraper) ExtractTenderData() error {
 		paymentOffline := make([]utils.PaymentInstrument, 0, 4)
 		covers := make([]utils.CoverInformation, 0, 8)
 
+		// Tender Documents containers
+		nitDocs := make([]nitDocParsed, 0, 4)
+		workDocs := make([]workDocParsed, 0, 4)
+
 		// Tender Fee Details
 		totalFee := ""
 		tenderFee := ""
@@ -417,6 +584,9 @@ func (ts *TenderDataScraper) ExtractTenderData() error {
 
 		// Work/Item(s) details holder
 		work := workItemParsed{}
+
+		// Critical Dates holder
+		critical := criticalDatesParsed{}
 
 		// Follow both "View Tender Details" and "View More Details" anchors
 		c.OnHTML("a", func(e *colly.HTMLElement) {
@@ -510,6 +680,48 @@ func (ts *TenderDataScraper) ExtractTenderData() error {
 			})
 		})
 
+		// Parse Tender Documents - NIT table (search by nested context header and inner table rows)
+		c.OnHTML("td.section_head", func(e *colly.HTMLElement) {
+			head := strings.ToLower(strings.TrimSpace(e.DOM.Text()))
+			if strings.Contains(head, "tender documents") {
+				parent := e.DOM.Closest("table")
+				// NIT table may have id="table" inside field
+				parent.Find("table#table").Find("tr").Each(func(_ int, s *goquery.Selection) {
+					// skip header with caption
+					if s.Find("td.caption").Length() > 0 {
+						return
+					}
+					tds := s.Find("td")
+					if tds.Length() >= 4 {
+						sn := strings.TrimSpace(tds.Eq(0).Text())
+						name := strings.TrimSpace(tds.Eq(1).Text())
+						desc := strings.TrimSpace(tds.Eq(2).Text())
+						size := strings.TrimSpace(tds.Eq(3).Text())
+						if sn != "" && name != "" {
+							nitDocs = append(nitDocs, nitDocParsed{SerialNo: sn, DocumentName: name, Description: desc, DocumentSizeKB: size})
+						}
+					}
+				})
+				// Work Item Documents table id="workItemDocumenttable"
+				parent.Find("table#workItemDocumenttable").Find("tr").Each(func(_ int, s *goquery.Selection) {
+					if s.Find("td.caption").Length() > 0 {
+						return
+					}
+					tds := s.Find("td")
+					if tds.Length() >= 5 {
+						sn := strings.TrimSpace(tds.Eq(0).Text())
+						typeTxt := strings.TrimSpace(tds.Eq(1).Text())
+						name := strings.TrimSpace(tds.Eq(2).Text())
+						desc := strings.TrimSpace(tds.Eq(3).Text())
+						size := strings.TrimSpace(tds.Eq(4).Text())
+						if sn != "" && (name != "" || typeTxt != "") {
+							workDocs = append(workDocs, workDocParsed{SerialNo: sn, DocumentType: typeTxt, DocumentName: name, Description: desc, DocumentSizeKB: size})
+						}
+					}
+				})
+			}
+		})
+
 		// Parse Tender Fee Details block
 		c.OnHTML("td.section_head", func(e *colly.HTMLElement) {
 			head := strings.ToLower(strings.TrimSpace(e.DOM.Text()))
@@ -575,6 +787,43 @@ func (ts *TenderDataScraper) ExtractTenderData() error {
 			}
 		})
 
+		// Parse Critical Dates block
+		c.OnHTML("td.section_head", func(e *colly.HTMLElement) {
+			head := strings.ToLower(strings.TrimSpace(e.DOM.Text()))
+			if strings.Contains(head, "critical dates") {
+				parentTable := e.DOM.Closest("table")
+				parentTable.Find("tr").Each(func(_ int, s *goquery.Selection) {
+					cap := strings.ToLower(strings.TrimSpace(s.Find("td.caption").First().Text()))
+					valField := s.Find("td.field_text").First()
+					val := strings.TrimSpace(valField.Text())
+					switch cap {
+					case "published date":
+						critical.PublishedDate = val
+					case "bid opening date":
+						critical.BidOpeningDate = val
+					case "document download start date":
+						critical.DocumentDownloadStartDate = val
+					case "document download end date":
+						critical.DocumentDownloadEndDate = val
+					case "clarification start date":
+						clarificationStartDate := strings.TrimSpace(val)
+						if clarificationStartDate != "" && !strings.EqualFold(clarificationStartDate, "na") {
+							critical.ClarificationStartDate = &clarificationStartDate
+						}
+					case "clarification end date":
+						clarificationEndDate := strings.TrimSpace(val)
+						if clarificationEndDate != "" && !strings.EqualFold(clarificationEndDate, "na") {
+							critical.ClarificationEndDate = &clarificationEndDate
+						}
+					case "bid submission start date":
+						critical.BidSubmissionStartDate = val
+					case "bid submission end date":
+						critical.BidSubmissionEndDate = val
+					}
+				})
+			}
+		})
+
 		// Parse Work/Item(s) table
 		c.OnHTML("td.section_head", func(e *colly.HTMLElement) {
 			head := strings.ToLower(strings.TrimSpace(e.DOM.Text()))
@@ -621,6 +870,43 @@ func (ts *TenderDataScraper) ExtractTenderData() error {
 						work.ShouldAllowNDA = strings.TrimSpace(val)
 					case "allow preferential bidder":
 						work.AllowPreferentialBidder = strings.TrimSpace(val)
+					}
+				})
+			}
+		})
+
+		// Parse Critical Dates table
+		c.OnHTML("td.section_head", func(e *colly.HTMLElement) {
+			head := strings.ToLower(strings.TrimSpace(e.DOM.Text()))
+			if strings.Contains(head, "critical dates") {
+				parentTable := e.DOM.Closest("table")
+				parentTable.Find("tr").Each(func(_ int, s *goquery.Selection) {
+					cells := s.Find("td")
+					if cells.Length() >= 2 {
+						cap := strings.ToLower(strings.TrimSpace(cells.Eq(0).Text()))
+						val := strings.TrimSpace(cells.Eq(1).Text())
+						switch cap {
+						case "publish date":
+							critical.PublishedDate = val
+						case "bid opening date":
+							critical.BidOpeningDate = val
+						case "document download / sale start date":
+							critical.DocumentDownloadStartDate = val
+						case "document download / sale end date":
+							critical.DocumentDownloadEndDate = val
+						case "clarification start date":
+							if v := strings.TrimSpace(val); v != "" && !strings.EqualFold(v, "na") {
+								critical.ClarificationStartDate = &v
+							}
+						case "clarification end date":
+							if v := strings.TrimSpace(val); v != "" && !strings.EqualFold(v, "na") {
+								critical.ClarificationEndDate = &v
+							}
+						case "bid submission start date":
+							critical.BidSubmissionStartDate = val
+						case "bid submission end date":
+							critical.BidSubmissionEndDate = val
+						}
 					}
 				})
 			}
@@ -679,6 +965,9 @@ func (ts *TenderDataScraper) ExtractTenderData() error {
 		sinks.writeTenderFee(serial, tenderID, totalFee, tenderFee, feePayableTo, feePayableAt, tenderFeeExemptionAllowed)
 		sinks.writeEmd(serial, tenderID, emdAmount, emdExemptionAllowed, emdFeeType, emdPercentage, emdPayableTo, emdPayableAt)
 		sinks.writeWorkItem(serial, tenderID, work)
+		sinks.writeCriticalDates(serial, tenderID, critical)
+		sinks.writeNitDocs(serial, tenderID, nitDocs)
+		sinks.writeWorkItemDocs(serial, tenderID, workDocs)
 
 		// JSONL record using utils.Tender
 		tender := utils.Tender{}
@@ -758,6 +1047,68 @@ func (ts *TenderDataScraper) ExtractTenderData() error {
 		tender.WorkItemDetails.BidOpeningPlace = work.BidOpeningPlace
 		tender.WorkItemDetails.ShouldAllowNDATender = strings.EqualFold(strings.TrimSpace(work.ShouldAllowNDA), "yes")
 		tender.WorkItemDetails.AllowPreferentialBidder = strings.EqualFold(strings.TrimSpace(work.AllowPreferentialBidder), "yes")
+
+		// Critical Dates JSON mapping
+		tender.CriticalDates.PublishedDate = critical.PublishedDate
+		tender.CriticalDates.BidOpeningDate = critical.BidOpeningDate
+		tender.CriticalDates.DocumentDownloadStartDate = critical.DocumentDownloadStartDate
+		tender.CriticalDates.DocumentDownloadEndDate = critical.DocumentDownloadEndDate
+		tender.CriticalDates.ClarificationStartDate = critical.ClarificationStartDate
+		tender.CriticalDates.ClarificationEndDate = critical.ClarificationEndDate
+		tender.CriticalDates.BidSubmissionStartDate = critical.BidSubmissionStartDate
+		tender.CriticalDates.BidSubmissionEndDate = critical.BidSubmissionEndDate
+
+		// Tender Documents JSON mapping
+		if len(nitDocs) > 0 || len(workDocs) > 0 {
+			entry := struct {
+				WorkItemDocuments []struct {
+					SerialNo       string
+					DocumentType   string
+					DocumentName   string
+					Description    string
+					DocumentSizeKB float64
+				}
+				NITDocuments []struct {
+					SerialNo       string
+					DocumentName   string
+					Description    string
+					DocumentSizeKB float64
+				}
+			}{}
+			for _, d := range workDocs {
+				entry.WorkItemDocuments = append(entry.WorkItemDocuments, struct {
+					SerialNo       string
+					DocumentType   string
+					DocumentName   string
+					Description    string
+					DocumentSizeKB float64
+				}{SerialNo: d.SerialNo, DocumentType: d.DocumentType, DocumentName: d.DocumentName, Description: d.Description, DocumentSizeKB: parseAmountToFloat(d.DocumentSizeKB)})
+			}
+			for _, d := range nitDocs {
+				entry.NITDocuments = append(entry.NITDocuments, struct {
+					SerialNo       string
+					DocumentName   string
+					Description    string
+					DocumentSizeKB float64
+				}{SerialNo: d.SerialNo, DocumentName: d.DocumentName, Description: d.Description, DocumentSizeKB: parseAmountToFloat(d.DocumentSizeKB)})
+			}
+			// append single combined entry to TenderDocuments slice
+			tender.TenderDocuments = append(tender.TenderDocuments, struct {
+				WorkItemDocuments []struct {
+					SerialNo       string
+					DocumentType   string
+					DocumentName   string
+					Description    string
+					DocumentSizeKB float64
+				}
+				NITDocuments []struct {
+					SerialNo       string
+					DocumentName   string
+					Description    string
+					DocumentSizeKB float64
+				}
+			}{WorkItemDocuments: entry.WorkItemDocuments, NITDocuments: entry.NITDocuments})
+		}
 
 		if err := utils.AppendJSONL("out/tenders.jsonl", tender); err != nil {
 			log.Printf("[%s] failed to append JSONL: %v", serial, err)

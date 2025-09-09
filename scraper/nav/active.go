@@ -233,7 +233,8 @@ func (ts *TenderScraper) parseTenders(e *colly.HTMLElement) {
 	var tendersFoundOnPage int
 	// ts.saveFile("debug", fmt.Sprintf("Page_%d.html", ts.currentPage), []byte(e.Response.Body))
 
-	e.DOM.Find("tr.even, tr.odd").Each(func(i int, s *goquery.Selection) {
+	// e.DOM.Find("tr.even, tr.odd").Each(func(i int, s *goquery.Selection) {
+	e.DOM.Find(`tr[id^="informal"]`).Each(func(i int, s *goquery.Selection) {
 		tendersFoundOnPage++
 		ts.scrapedTenders++
 		cells := s.Find("td")

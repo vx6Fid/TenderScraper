@@ -1,7 +1,9 @@
 package utils
 
 import (
+	"bufio"
 	"encoding/csv"
+	"encoding/json"
 	"os"
 )
 
@@ -48,4 +50,37 @@ func SaveToCSV(tenders []Tender, filename string) error {
 	}
 
 	return nil
+}
+
+// AppendJSONL appends a single struct value as one JSON line to filename.
+// It creates the file and parent directories if they do not exist.
+func AppendJSONL(filename string, v interface{}) error {
+	if err := os.MkdirAll(dirname(filename), 0755); err != nil {
+		return err
+	}
+	f, err := os.OpenFile(filename, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0644)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+
+	bw := bufio.NewWriter(f)
+	enc := json.NewEncoder(bw)
+	if err := enc.Encode(v); err != nil {
+		return err
+	}
+	return bw.Flush()
+}
+
+func dirname(path string) string {
+	last := -1
+	for i := 0; i < len(path); i++ {
+		if path[i] == '/' {
+			last = i
+		}
+	}
+	if last <= 0 {
+		return "."
+	}
+	return path[:last]
 }

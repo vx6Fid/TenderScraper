@@ -35,22 +35,11 @@ type Tender struct {
 	}
 
 	PaymentInstruments struct {
-		Offline struct {
-			SerialNo       string
-			InstrumentType string
-		}
-		Online struct {
-			SerialNo       string
-			InstrumentType string
-		}
+		Offline []PaymentInstrument
+		Online  []PaymentInstrument
 	}
 
-	CoversInformation []struct {
-		CoverNo      string
-		CoverType    string
-		Description  string
-		DocumentType string
-	}
+	CoversInformation []CoverInformation
 
 	TenderFeeDetails struct {
 		TotalFee                  float64
@@ -128,6 +117,18 @@ type Tender struct {
 		Name    string
 		Address string
 	}
+}
+
+type PaymentInstrument struct {
+	SerialNo       string
+	InstrumentType string
+}
+
+type CoverInformation struct {
+	CoverNo      string
+	CoverType    string
+	Description  string
+	DocumentType string
 }
 
 // Tender Links holds one scraped record

@@ -1,0 +1,21 @@
+2025/09/09 20:12:57 Starting tender scraping process with correct session flow.
+2025/09/09 20:12:57 STEP 1: Clicking Active Tenders link with session: https://www.eprocuremidhani.nic.in/nicgep/app?page=FrontEndLatestActiveTenders&service=page
+2025/09/09 20:12:59 PAGE 1: Found tender table! Parsing results... (Status: 200)
+2025/09/09 20:12:59 PAGE 1: Parsing tender data from table element...
+2025/09/09 20:12:59   Tender 1 (Page 1): '[One Time job contract for Dismantling, fabrication and erection of fumes suction duct of EAF 5T]' 
+2025/09/09 20:12:59   Tender 2 (Page 1): '[Providing and laying PCC for LPG yard and Hydrogen plant, MIDHANI.]' 
+2025/09/09 20:12:59   Tender 3 (Page 1): '[Waterjet Cutting of Titanium Alloy Material]' 
+2025/09/09 20:12:59   Tender 4 (Page 1): '[Machining of IN100 Dies for Shakti Engine Discs Isothermal Forging]' 
+2025/09/09 20:12:59   Tender 5 (Page 1): '[PROCUREMENT OF SPINDLE AND BEARING SEGMENTS]' 
+2025/09/09 20:12:59   Tender 6 (Page 1): '[PROCUREMENT OF LI-ION BATTERIES FOR EVIDENT MAKE VANTA MOBILE XRF]' 
+2025/09/09 20:12:59   Tender 7 (Page 1): '[Construction of structural stair cases and walkway platforms for MS- II , CRM and MS-III, MIDHANI]' 
+2025/09/09 20:12:59   Tender 8 (Page 1): '[Machining of Martensitic Stainless Steel Ring]' 
+2025/09/09 20:12:59   Tender 9 (Page 1): '[MACHINING OF SUPERALLOY RINGS]' 
+2025/09/09 20:12:59   Tender 10 (Page 1): '[Grinding and Polishing Nickel Alloy Plates]' 
+2025/09/09 20:12:59 PAGE 1: Successfully parsed 10 tenders
+2025/09/09 20:12:59 PAGE 1: Next button found: https://www.eprocuremidhani.nic.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 20:12:59 Total records found: 10
+2025/09/09 20:12:59 STEP 2: Starting pagination process...
+2025/09/09 20:12:59 All 10 tenders scraped, stopping pagination
+2025/09/09 20:12:59 Pagination completed! Processed 1 pages, scraped 10 tenders
+2025/09/09 20:12:59 Scraping completed successfully! Total tenders scraped: 10/10

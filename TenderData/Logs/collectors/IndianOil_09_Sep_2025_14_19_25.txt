@@ -1,0 +1,372 @@
+2025/09/09 14:19:25 Starting tender scraping process with correct session flow.
+2025/09/09 14:19:25 STEP 1: Clicking Active Tenders link with session: https://iocletenders.nic.in/nicgep/app?page=FrontEndLatestActiveTenders&service=page
+2025/09/09 14:19:28 PAGE 1: Found tender table! Parsing results... (Status: 200)
+2025/09/09 14:19:28 PAGE 1: Parsing tender data from table element...
+2025/09/09 14:19:28   Tender 1 (Page 1): '[Contract for Inspection, refurbishment and dynamic balancing of Rotor of steam turbine of Naphtha feed pump 68-P 13A/B of Offsite unit at Panipat Naphtha Cracker, Panipat.    ]' 
+2025/09/09 14:19:28   Tender 2 (Page 1): '[DRE025S075 Liningup agency for overhauling of Geysers and installation of prefilter at the inlet of Geysers]' 
+2025/09/09 14:19:28   Tender 3 (Page 1): '[Miscellaneous hot and cold jobs for  DCU SAD and any unplanned Shutdown at DR.]' 
+2025/09/09 14:19:28   Tender 4 (Page 1): '[Operation of Mobile Medical Units (MMUs) in the vicinity of Digboi Refinery Under CSR Indian Oil Arogyam]' 
+2025/09/09 14:19:28   Tender 5 (Page 1): '[DRE125B093 EXPRESSION OF INTEREST (EOI) FOR  PROCESSING FLUE GAS PRODUCED AT DIGBOI REFINERY FOR CARBON CAPTURE AND UTILIZATION.]' 
+2025/09/09 14:19:28   Tender 6 (Page 1): '[nnual Rate Contract (ARC) for up keeping of electrical earthing system at Digboi Refinery Township and Raw water intake and treatment plant Nazirating Digboi.]' 
+2025/09/09 14:19:28   Tender 7 (Page 1): '[DRE225B091 Annual Rate Contract for various insulation and refractory works at IOCL  Digboi Refinery]' 
+2025/09/09 14:19:28   Tender 8 (Page 1): '[Providing	Security and	Allied	Services	at Indane Bottling Plant, VIZAG]' 
+2025/09/09 14:19:28   Tender 9 (Page 1): '[TAPSO/ENG/LT/01/25-26]' 
+2025/09/09 14:19:28   Tender 10 (Page 1): '[Rate Contract for Transportation of  High Density Ammonium Nitrate Melt for the Sector RCFL Mumbai, to Bulk explosives for a period of 2 years after placement of AOC/AOW (tentative period January 2026 to December 2027)]' 
+2025/09/09 14:19:28 PAGE 1: Successfully parsed 10 tenders
+2025/09/09 14:19:28 PAGE 1: Next button found: https://iocletenders.nic.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:19:28 Total records found: 230
+2025/09/09 14:19:28 STEP 2: Starting pagination process...
+2025/09/09 14:19:28 PAGE 2: Clicking Next button: https://iocletenders.nic.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:19:30 PAGE 1: Found tender table! Parsing results... (Status: 200)
+2025/09/09 14:19:30 PAGE 1: Parsing tender data from table element...
+2025/09/09 14:19:30   Tender 11 (Page 1): '[Construction Tanker Offloading Facility at ONGC CTF Ankleshwar Gujarat.]' 
+2025/09/09 14:19:30   Tender 12 (Page 1): '[Disposal of Below Utility Material (BSPE/ PEPS)]' 
+2025/09/09 14:19:30   Tender 13 (Page 1): '[Construction of HMT platform and foot-over bridge at Polymer  Terminal PPMC Panipat ]' 
+2025/09/09 14:19:30   Tender 14 (Page 1): '[Outright Sale of Spent Catalyst at  Bongaigaon Refinery]' 
+2025/09/09 14:19:30   Tender 15 (Page 1): '[Supply of Auto-switch cutting tool for DCU-2 Coke Cutting ]' 
+2025/09/09 14:19:30   Tender 16 (Page 1): '[Lining up Linde Engineering India Private Limited for licensor services in HGU PSA]' 
+2025/09/09 14:19:30   Tender 17 (Page 1): '[RATE CONTRACT FOR SUPPLY AND APPLICATION OF PERLITE INSULATION AND REFRACTORY JOBS IN BONGAIGAON REFINERY  IOCL]' 
+2025/09/09 14:19:30   Tender 18 (Page 1): '[Piling, Civil and Structural Works along with associated area development and enabling Works for interconnection Pipe Rack (Package-2) for capacity expansion (to 9.00 MMTPA) Project of Barauni Refinery of Indian Oil Corporation Limited at Barauni]' 
+2025/09/09 14:19:30   Tender 19 (Page 1): '[ARC FOR REWINDING AND REPAIRING OF LT MOTORS OF BARAUNI REFINERY.]' 
+2025/09/09 14:19:30   Tender 20 (Page 1): '[ARC for repair and maintenance of Civil and PH Works at Barauni Refinery Township (Part-A and B).]' 
+2025/09/09 14:19:30 PAGE 1: Successfully parsed 10 tenders
+2025/09/09 14:19:30 PAGE 1: Next button found: https://iocletenders.nic.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:19:30 Progress: 20/230 tenders (8.7%) - Page 2 completed
+2025/09/09 14:19:30 PAGE 3: Clicking Next button: https://iocletenders.nic.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:19:33 PAGE 2: Found tender table! Parsing results... (Status: 200)
+2025/09/09 14:19:33 PAGE 2: Parsing tender data from table element...
+2025/09/09 14:19:33   Tender 21 (Page 2): '[Repair and maintenance of the damaged drains along the railway track in gantry area at Barauni Refinery.]' 
+2025/09/09 14:19:33   Tender 22 (Page 2): '[Contract for Security and Allied Services at Khunti Terminal, Jharkhand from DGR Sponsored Agencies ]' 
+2025/09/09 14:19:33   Tender 23 (Page 2): '[Transportation of Bulk Petroleum Product ATF by Top Loading Tank Trucks Ex Barauni Terminal ]' 
+2025/09/09 14:19:33   Tender 24 (Page 2): '[Decorative beautification and other allied Works of BSO building reception, Patna.]' 
+2025/09/09 14:19:33   Tender 25 (Page 2): '[Providing Security and Allied Services at Banka LPG Bottling Plant BY DGR SPONSORED AGENCIES ONLY ]' 
+2025/09/09 14:19:33   Tender 26 (Page 2): '[OFC laying works and liaison works in selected sections of BKPL, HMRBPL and PHBPL under following Groups in ERPL Jurisdiction Gr A PMBPL (CH. Ex Patna)13 Km  BKPL (CH. Ex Barauni)-31 Km BKPL (CH. Ex Barauni) 36 Km Total 80 Km]' 
+2025/09/09 14:19:33   Tender 27 (Page 2): '[OFC laying works and liaison works in selected sections of BKPL, HMRBPL and PHBPL under following Groups in ERPL Jurisdiction Gr C BKPL (CH. Ex Barauni) Total 115 Km]' 
+2025/09/09 14:19:33   Tender 28 (Page 2): '[OFC laying works and liaison works in selected sections of BKPL, HMRBPL and PHBPL under following Groups in ERPL Jurisdiction Gr D BKPL (CH. Ex Barauni) Total 108.95 Km]' 
+2025/09/09 14:19:33   Tender 29 (Page 2): '[OFC laying works and liaison works in selected sections of BKPL, HMRBPL and PHBPL under following Groups in ERPL Jurisdiction Gr E BKPL (CH. Ex Barauni) Total 107.45 Km]' 
+2025/09/09 14:19:33   Tender 30 (Page 2): '[OFC laying works and liaison works in selected sections of BKPL, HMRBPL and PHBPL under following Groups in ERPL Jurisdiction Gr G PHBPL (CH. Ex Haldia) 109.31 km BKPL-HQ Barauni , PHBPL Barauni and BPS Barauni Interconnection 1.6 Km,Total 110.91 Km]' 
+2025/09/09 14:19:33 PAGE 2: Successfully parsed 10 tenders
+2025/09/09 14:19:33 PAGE 2: Next button found: https://iocletenders.nic.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:19:33 Progress: 30/230 tenders (13.0%) - Page 3 completed
+2025/09/09 14:19:33 PAGE 4: Clicking Next button: https://iocletenders.nic.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:19:36 PAGE 3: Found tender table! Parsing results... (Status: 200)
+2025/09/09 14:19:36 PAGE 3: Parsing tender data from table element...
+2025/09/09 14:19:36   Tender 31 (Page 3): '[ROAD TRANSPORTATION OF BULK PETROLEUM PRODUCTS BY BOTTOM LOADING TANK TRUCKS - MS / HSD / BRANDED FUELS EX. KHUNTI TERMINAL UNDER BIHAR STATE OFFICE]' 
+2025/09/09 14:19:36   Tender 32 (Page 3): '[Construction of new A site Retail Outlet with facilities like Sales Building, Canopy, Paver block driveway and other allied civil and electrical works WITHIN 5 KMS OF DONBOK SERVICE STATION (IOCL)TOWARDS, LAITYNGKOT ON NH 206, MEGHALAYA]' 
+2025/09/09 14:19:36   Tender 33 (Page 3): '[CONSTRUCTION OF NEW A SITE RETAIL OUTLET WITH FACILITIES LIKE SALES BUILDING, CANOPY, PAVER BLOCK DRIVEWAY AND OTHER ALLIED CIVIL AND ELECTRICAL WORKS BETWEEN KM STONE 35 AND KM STONE 41 ON NH 6 (NEW) OR, NH 44 (OLD) ON SHILLONG- SILCHAR ROAD]' 
+2025/09/09 14:19:36   Tender 34 (Page 3): '[Cutting and Transportation of 2 X 100 MT above ground Bullet from Haldwani BP to Silchar BP and re-fabrication, erection, installation, commissioning of 2X100 MT LPG Storage vessels at Silchar Bottling Plant, Indian Oil Corporation Limited.]' 
+2025/09/09 14:19:36   Tender 35 (Page 3): '[OSO ENGG-Construction of New A Site RO with facilities like Sales Building, Paver block Canopy, Driveway and other allied civil and electrical works at location From Parjang Chhak to Badajhara on NH-53, District Mayurbhanj under Bhubaneswar DO]' 
+2025/09/09 14:19:36   Tender 36 (Page 3): '[Construction of General Civil Works like dismantling RCC foundation, Brick, PCC etc, Excavation, PCC, Reinforcement, Shuttering, RCC, Backfilling, Finishing Works, etc. for installation of 2X100 MT above ground Bullet at Silchar BP, Assam]' 
+2025/09/09 14:19:36   Tender 37 (Page 3): '[Construction of NewA Site RO with facilities like Sales Building Paver block Canopy Driveway and other allied civil and electrical works at location WITHIN 10 KM FROM GOVT PRIMARY SCHOOL JHUMPURA TOWARDS ROURKELA ON NH143 of Sambalpur Divisional Offi]' 
+2025/09/09 14:19:36   Tender 38 (Page 3): '[Development of new A site Retail Outlet at BHABANIPUR TO PATHSALA on NH31 Village Niz Bhabanipur Dist Bajali Assam under Guwahati DO]' 
+2025/09/09 14:19:36   Tender 39 (Page 3): '[Development of New A site RO at location BETWEEN KASHIKOTRA SIDLI HIGH SCHOOL IN KASHIKOTRA AND BHUTAN MORH IN SAMTHAIBARI ON NH 27 RHS WHILE GOING FROM BONGAIGAON TO SRIRAMPUR Dist CHIRANG ASSAM]' 
+2025/09/09 14:19:36   Tender 40 (Page 3): '[Construction of New A Site Retail Outlet with facilities like Sales Building Paver block Canopy Driveway and other allied civil electrical works at Location CHAKAPADA ON TIKKABALLI CHAKAPADA ROAD District Kandhamal under Bhubaneswar Divisional Offi]' 
+2025/09/09 14:19:36 PAGE 3: Successfully parsed 10 tenders
+2025/09/09 14:19:36 PAGE 3: Next button found: https://iocletenders.nic.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:19:36 Progress: 40/230 tenders (17.4%) - Page 4 completed
+2025/09/09 14:19:36 PAGE 5: Clicking Next button: https://iocletenders.nic.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:19:38 PAGE 4: Found tender table! Parsing results... (Status: 200)
+2025/09/09 14:19:38 PAGE 4: Parsing tender data from table element...
+2025/09/09 14:19:38   Tender 41 (Page 4): '[Construction of New A Site RO with facilities like Sales Building, Paver block, Canopy, Driveway and other allied civil and electrical works at location From Gopinathpur to Nuagada on NH-16 on LHS towards Visakhapatnam Dist Khordha under Bhubanesw]' 
+2025/09/09 14:19:38   Tender 42 (Page 4): '[PROVISION OF PRE-FABRICATED PANEL INSULATION ON COKE DRUMS DURING ONLINE CONDITION IN DCU UNIT AT GUWAHATI REFINERY]' 
+2025/09/09 14:19:38   Tender 43 (Page 4): '[SUPPLY AND APPLICATION OF POLYMER BASED SEALING SYSTEM ON ANNULAR PLATE PROJECTION OF TANKS AT IOCL GUWAHATI REFINERY]' 
+2025/09/09 14:19:38   Tender 44 (Page 4): '[MODIFICATION OF EXISTING CUPBOARDS AND MODULAR KITCHEN INCLUDING ALLIED CIVIL WORKS IN STAFF QUARTERS OF GUWAHATI REFINERY TOWNSHIP SECTOR-1,2 AND 3]' 
+2025/09/09 14:19:38   Tender 45 (Page 4): '[CIVIL WORKS FOR PROVIDING MONKEY CAGE TO PROTECT WATER  TANKS OF GUWAHATI REFINERY TOWNSHIP SECTOR-2]' 
+2025/09/09 14:19:38   Tender 46 (Page 4): '[SERVOXPERT BRANDING WORKS UNDER GUJARAT STATE OFFICE]' 
+2025/09/09 14:19:38   Tender 47 (Page 4): '[Development of Apna Ghar Facilities at M/s Pramukhraj Petroleum under Surat East RSA of Surat Divisional Office of Gujarat State Office]' 
+2025/09/09 14:19:38   Tender 48 (Page 4): '[Fixing of louvers in doors of substations at Haldia Refinery]' 
+2025/09/09 14:19:38   Tender 49 (Page 4): '[Lining up of a Power Trading Agency for Evacuation of 30 MW Renewable Energy (RE) Power on Round the Clock (RTC) Basis Generated from Indian Oil NTPC Green Energy Pvt Ltd (INGEL) to 132 KV Grid Power Intake at IOCL Haldia Refinery using Inter State T]' 
+2025/09/09 14:19:38   Tender 50 (Page 4): '[Civil interior and renovation jobs along with Electrical works inside Type-IV and V Quarters in Haldia Refinery Township (Phase-IX), (Part A and Part B)]' 
+2025/09/09 14:19:38 PAGE 4: Successfully parsed 10 tenders
+2025/09/09 14:19:38 PAGE 4: Next button found: https://iocletenders.nic.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:19:38 Progress: 50/230 tenders (21.7%) - Page 5 completed
+2025/09/09 14:19:38 PAGE 6: Clicking Next button: https://iocletenders.nic.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:19:41 PAGE 5: Found tender table! Parsing results... (Status: 200)
+2025/09/09 14:19:41 PAGE 5: Parsing tender data from table element...
+2025/09/09 14:19:41   Tender 51 (Page 5): '[Repair and modification works of false ceiling in Haldia Refinery]' 
+2025/09/09 14:19:41   Tender 52 (Page 5): '[Construction of New Drain Facilities of CDW-II Unit (from CDW-II unit to ETP) at IOCL Haldia Refinery]' 
+2025/09/09 14:19:41   Tender 53 (Page 5): '[Development of existing Storage Yard near BS-VI and DYIP Guard Pond area, Haldia Refinery]' 
+2025/09/09 14:19:41   Tender 54 (Page 5): '[Repair painting and water proofing of existing buildings at Haldia Refinery]' 
+2025/09/09 14:19:41   Tender 55 (Page 5): '[MECHANICAL ENABLING JOBS RELATED TO PRU PROJECT]' 
+2025/09/09 14:19:41   Tender 56 (Page 5): '[Works for Operation and Maintenance of Electrical Equipments at Indian Oil Cryogenics Dindori Nashik as per Scope of Work and Tender Terms and Conditions]' 
+2025/09/09 14:19:41   Tender 57 (Page 5): '[Civil and Allied Works for New Cryogenics Plant Dindori Nashik as per Scope of Work and Tender Terms and Conditions]' 
+2025/09/09 14:19:41   Tender 58 (Page 5): '[Replacement of Door of Administrative Building, Teaching Block and Shakti Hostel at IiPM Complex, Gurugram]' 
+2025/09/09 14:19:41   Tender 59 (Page 5): '[Repair and Renovation of Washrooms and Other Miscellaneous Works at CBTC Building, IiPM Gurugram]' 
+2025/09/09 14:19:41   Tender 60 (Page 5): '[Supply of Goyen make GT Spares at IOCL Gujarat Refinery]' 
+2025/09/09 14:19:41 PAGE 5: Successfully parsed 10 tenders
+2025/09/09 14:19:41 PAGE 5: Next button found: https://iocletenders.nic.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:19:41 Progress: 60/230 tenders (26.1%) - Page 6 completed
+2025/09/09 14:19:41 PAGE 7: Clicking Next button: https://iocletenders.nic.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:19:44 PAGE 6: Found tender table! Parsing results... (Status: 200)
+2025/09/09 14:19:44 PAGE 6: Parsing tender data from table element...
+2025/09/09 14:19:44   Tender 61 (Page 6): '[Supply of Laser Diode]' 
+2025/09/09 14:19:44   Tender 62 (Page 6): '[1st Perpetual Enlistment of LED Manufacturers for supply of LED Products to IOCL approved Contractors / Vendors against tender Ref- HCC/ENG-16/PT-45/23-24]' 
+2025/09/09 14:19:44   Tender 63 (Page 6): '[Expression of Interest (EOI) for empanelment of Creative Agencies]' 
+2025/09/09 14:19:44   Tender 64 (Page 6): '[Expression of Interest (EOI) for Empanelment of Media Agencies]' 
+2025/09/09 14:19:44   Tender 65 (Page 6): '[Procurement of Additive Package Either ST 1742 or ST1613 or ST 1599 or ST 1790]' 
+2025/09/09 14:19:44   Tender 66 (Page 6): '[Civil Works at Umiam Bottling Plant Project]' 
+2025/09/09 14:19:44   Tender 67 (Page 6): '[DEALERS EOI SAGAR DEPOT]' 
+2025/09/09 14:19:44   Tender 68 (Page 6): '[PUBLIC EOI FOR Induction OF ADDITIONAL TT at JAYANT DEPOT under Existing Contract]' 
+2025/09/09 14:19:44   Tender 69 (Page 6): '[Limited EOI for TT Induction at KORBA TERMINAL]' 
+2025/09/09 14:19:44   Tender 70 (Page 6): '[RMRM255019]' 
+2025/09/09 14:19:44 PAGE 6: Successfully parsed 10 tenders
+2025/09/09 14:19:44 PAGE 6: Next button found: https://iocletenders.nic.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:19:44 Progress: 70/230 tenders (30.4%) - Page 7 completed
+2025/09/09 14:19:44 PAGE 8: Clicking Next button: https://iocletenders.nic.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:19:46 PAGE 7: Found tender table! Parsing results... (Status: 200)
+2025/09/09 14:19:46 PAGE 7: Parsing tender data from table element...
+2025/09/09 14:19:46   Tender 71 (Page 7): '[Services for refurbishment/repair/residual life assessment of GT-1 (Frame-V) Load Gear Box.]' 
+2025/09/09 14:19:46   Tender 72 (Page 7): '[Site services for Liquid Firing Revival in GT#2 at Mathura Refinery via OEM M/s BGGTS on Single Tender Proprietary basis.]' 
+2025/09/09 14:19:46   Tender 73 (Page 7): '[Mark Vie control system]' 
+2025/09/09 14:19:46   Tender 74 (Page 7): '[Agency lining-up for Outright Sale of Spent Catalyst containing precious metal platinum.]' 
+2025/09/09 14:19:46   Tender 75 (Page 7): '[EOI for transport tender ex Akola Depot]' 
+2025/09/09 14:19:46   Tender 76 (Page 7): '[EOI for transport tender ex Vasco /ZIAVPL Goa]' 
+2025/09/09 14:19:46   Tender 77 (Page 7): '[TRANSPORTATION OF BULK PETROLEUM PRODUCTS BY TOP LOADING TANK TRUCKS Ex. Jalandhar Terminal]' 
+2025/09/09 14:19:46   Tender 78 (Page 7): '[BULK PROPANE TRANSPORTATION CONTRACT BY ROAD FROM KANDLA GUJRAT TO RASTRIYA ISPAT NIGAM LIMITED, LALGANJ, RAEBARELI UNDER UTTAR PRADESH STATE OFFICE 1]' 
+2025/09/09 14:19:46   Tender 79 (Page 7): '[Provision of main isolation valves after liquid ROVs in MSV replacement of valves and allied works at Loni Bottling Plant.]' 
+2025/09/09 14:19:46   Tender 80 (Page 7): '[Development of A site RO within 4 kms from Green Valley International School, Jamalpur on left hand side of SH-12 (Hansi Tosham road) while going from Hansi to Tosham under Hisar Divisional Office of Delhi and Haryana State Office.]' 
+2025/09/09 14:19:46 PAGE 7: Successfully parsed 10 tenders
+2025/09/09 14:19:46 PAGE 7: Next button found: https://iocletenders.nic.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:19:46 Progress: 80/230 tenders (34.8%) - Page 8 completed
+2025/09/09 14:19:46 PAGE 9: Clicking Next button: https://iocletenders.nic.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:19:49 PAGE 8: Found tender table! Parsing results... (Status: 200)
+2025/09/09 14:19:49 PAGE 8: Parsing tender data from table element...
+2025/09/09 14:19:49   Tender 81 (Page 8): '[Development of A site Retail outlet at upto 6 km from intersection of NH709 (Rohtak Panipat road) with NH 352 (Rohtak Jind road) towards Jind on left hand side on NH 352 Rohtak outer bypass under Hisar Divisional Office of DSO.]' 
+2025/09/09 14:19:49   Tender 82 (Page 8): '[Development of A site Retail outlet within 3 KM from Government senior secondary school, Kinana on RHS of NH-352 Rohtak-Jind road while going from Kinana towards Jind, District- Jind under Hisar Divisional Office of Delhi and Haryana State Office	]' 
+2025/09/09 14:19:49   Tender 83 (Page 8): '[MnC/NR/UPSO1/ENG/LT-127/25-26	]' 
+2025/09/09 14:19:49   Tender 84 (Page 8): '[MnC/NR/UPSO1/ENG/LT-128/25-26]' 
+2025/09/09 14:19:49   Tender 85 (Page 8): '[MnC/NR/UPSO1/ENG/LT-130/25-26]' 
+2025/09/09 14:19:49   Tender 86 (Page 8): '[MnC/NR/UPSO1/ENG/LT-131/25-26]' 
+2025/09/09 14:19:49   Tender 87 (Page 8): '[Construction of new A site Retail Outlet with facilities like Sales Building, Canopy, Paver block driveway and other allied civil and electrical works at location On NH-44 OLD NH-2 Between KM Stone 72 TO 76 RHS while going from Delhi to Mathur]' 
+2025/09/09 14:19:49   Tender 88 (Page 8): '[Construction of new A site Retail Outlet ]' 
+2025/09/09 14:19:49   Tender 89 (Page 8): '[Construction of new A site Retail Outlet with facilities like Sales Building, Paver block driveway and other allied civil electrical works at location between KM stone 80 and KM stone 82 on SH 101 Malpura Kishengarh road, district Tonk, Ajmer DO]' 
+2025/09/09 14:19:49   Tender 90 (Page 8): '[Apna Ghar Facilities at RO M/s Satya Shiv Petroleum, Distt. Fatehpur, under Kanpur Divisional Office of UPSO-I.]' 
+2025/09/09 14:19:49 PAGE 8: Successfully parsed 10 tenders
+2025/09/09 14:19:49 PAGE 8: Next button found: https://iocletenders.nic.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:19:49 Progress: 90/230 tenders (39.1%) - Page 9 completed
+2025/09/09 14:19:49 PAGE 10: Clicking Next button: https://iocletenders.nic.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:19:52 PAGE 9: Found tender table! Parsing results... (Status: 200)
+2025/09/09 14:19:52 PAGE 9: Parsing tender data from table element...
+2025/09/09 14:19:52   Tender 91 (Page 9): '[Development of A Site RO at between KM stone 85 TO KM STONE 92 ON SH02 at Village Phagi Uttar, Tehsil PHAGI Distt Jaipur SRMP 14 under Jaipur DO of Rajasthan State Office.]' 
+2025/09/09 14:19:52   Tender 92 (Page 9): '[Development of A Site RO at between KM stone145 TO KM stone 149 ON SH83 at Village Mangluna Tehsil Nechwa, Distt Sikar SRMP 304 under Jaipur DO of Rajasthan State Office.]' 
+2025/09/09 14:19:52   Tender 93 (Page 9): '[Construction of A site RO at  From Jamalpur Chowk to Delhi Public School _Pataudi on RHS while moving from Gurgaon to Rewari on NH-352W Gurgaon-Pataudi-Rewari Road Not Below Flyover at District Gurgaon, State Haryana under Gurgaon DO of DSO]' 
+2025/09/09 14:19:52   Tender 94 (Page 9): '[Construction of new A site Retail Outlet with facilities like Sales Building, Canopy, Paver block driveway and allied civil and electrical works at location  From KM Stone 60 to 64 on RHS Side NH248 A going from Gurgaon to Firozpur Zhikra dist Mewat]' 
+2025/09/09 14:19:52   Tender 95 (Page 9): '[Development of A site RO at Location Between Litani Mod and Kamal Petro HPCL RO at Gaibpur on Right Hand Side Towards Hissar on N 52 AMBALA RAJGARH ROAD District Hissar under Hisar Divisional Office of Delhi and Haryana State Office]' 
+2025/09/09 14:19:52   Tender 96 (Page 9): '[Development of A site RO upto 3Kms from HPC RO MS Rajbir Singh Filling Station at Chang towards Bhiwani on SH 16A Bhiwani Meham Road District Bhiwani under Hisar Divisional Office of Delhi and Haryana State Office]' 
+2025/09/09 14:19:52   Tender 97 (Page 9): '[Development of A site Retail outlet Between Km Stone 248 and 250 towards Patiala on Left Hand Side on NH 52 NARWANA PATIALA ROAD District Jind under Hisar Divisional Office of Delhi and Haryana State Office]' 
+2025/09/09 14:19:52   Tender 98 (Page 9): '[Development of A site Retail Outlet from KM Stone 417 to 427 on NH352 OLD NH71 on Right Hand Side going from Jhajjar to NH48 at Distt Rewari under Gurgaon Divisional Office of Delhi and Haryana State Office]' 
+2025/09/09 14:19:52   Tender 99 (Page 9): '[Development Of New A Site RO, At Location Noorpora, Between KM Stone No 259 n 262, On LHS Of NH-44 While Travelling From Jammu To Srinagar, NH-44, Tehsil-Awantipora, Dist-Pulwama, JnK UT Under Jammu DO Of IOCL Punjab State Office]' 
+2025/09/09 14:19:52   Tender 100 (Page 9): '[Annual Rate Contract for Environment Management Services, Horticulture and Civil Works at NRPL Una for period of Two Years]' 
+2025/09/09 14:19:52 PAGE 9: Successfully parsed 10 tenders
+2025/09/09 14:19:52 PAGE 9: Next button found: https://iocletenders.nic.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:19:52 Progress: 100/230 tenders (43.5%) - Page 10 completed
+2025/09/09 14:19:52 PAGE 11: Clicking Next button: https://iocletenders.nic.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:19:54 PAGE 10: Found tender table! Parsing results... (Status: 200)
+2025/09/09 14:19:54 PAGE 10: Parsing tender data from table element...
+2025/09/09 14:19:54   Tender 101 (Page 10): '[Realignment of 3.1 KM Length of 10.75 inch OD KRNPL from KRNPL Km  Ch.142.080- 145.180 across Major Perennial Ganga River through Single  Horizontal Directional Drilling methodology of Intersection Technique and  Associated Works]' 
+2025/09/09 14:19:54   Tender 102 (Page 10): '[Realignment of 1 KM Long 12.75 inch OD PAJPL from PAJPL Ch.49.000-50.000 KM across Humkhad Nala through Single HDD Methodology]' 
+2025/09/09 14:19:54   Tender 103 (Page 10): '[Comprehensive AMC service for Biometric Access Control System installed at all NRPL locations]' 
+2025/09/09 14:19:54   Tender 104 (Page 10): '[CONSTRUCTION OF 01 (ONE) BOREWELL AT LPG MARKETING TERMINAL PARADIP]' 
+2025/09/09 14:19:54   Tender 105 (Page 10): '[Procurement of DHDT full charge catalyst for IOCL Paradip Refinery.]' 
+2025/09/09 14:19:54   Tender 106 (Page 10): '[Procurement of 12 beds of CCRU PSA Adsorbent for IOCL Paradip Refinery, Paradip.]' 
+2025/09/09 14:19:54   Tender 107 (Page 10): '[Supply of spares procurement of catalyst syringe 072/073-fd-113 in pp unit]' 
+2025/09/09 14:19:54   Tender 108 (Page 10): '[Procurement of Adsorbent for Make-up Gas Dryer and Butane Dryer for Butamer Unit at Paradip Refinery.]' 
+2025/09/09 14:19:54   Tender 109 (Page 10): '[Procurement of ROG compressor spares Procurement at IOCL Paradip Refinery]' 
+2025/09/09 14:19:54   Tender 110 (Page 10): '[Procurement of spares for AVU compressors 9070-010-K-003A/B at IOCL Paradip Refinery]' 
+2025/09/09 14:19:54 PAGE 10: Successfully parsed 10 tenders
+2025/09/09 14:19:54 PAGE 10: Next button found: https://iocletenders.nic.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:19:54 Progress: 110/230 tenders (47.8%) - Page 11 completed
+2025/09/09 14:19:54 PAGE 12: Clicking Next button: https://iocletenders.nic.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:19:57 PAGE 11: Found tender table! Parsing results... (Status: 200)
+2025/09/09 14:19:57 PAGE 11: Parsing tender data from table element...
+2025/09/09 14:19:57   Tender 111 (Page 11): '[Strengthening of Lightning protection system for all Substations and SRRs of Paradip Refinery]' 
+2025/09/09 14:19:57   Tender 112 (Page 11): '[Short shutdown jobs such as IBR, CIBI, etc.at CPP, Paradip Refinery, Paradip, Odisha.]' 
+2025/09/09 14:19:57   Tender 113 (Page 11): '[Procurement of Offgas Chloride treater Adsorbent along with inert balls for Ethylene Recovery unit at Paradip Refinery]' 
+2025/09/09 14:19:57   Tender 114 (Page 11): '[Comprehensive Operation and Maintenance of 5 MW Solar Photovoltaic (SPV) Plant at IOCL Rawra]' 
+2025/09/09 14:19:57   Tender 115 (Page 11): '[Annual Rate Contract for Civil and Other Miscellaneous Maintenance works at WRPL Beawar and Sendra station]' 
+2025/09/09 14:19:57   Tender 116 (Page 11): '[Maintenance and Operation of Offshore Terminal and facilities at Gulf of Kutch off Salaya Vadinar]' 
+2025/09/09 14:19:57   Tender 117 (Page 11): '[Construction of City Gate Station in Salem GA]' 
+2025/09/09 14:19:57   Tender 118 (Page 11): '[Design, supply, testing and commissioning IT Hardware SCADA, Control System and LDS and Upgradation of LDS System under MPPL Conversion Project]' 
+2025/09/09 14:19:57   Tender 119 (Page 11): '[Laying of Mainline, HDD and other associated works for 18 inch KJPPL and 12.75 inch Beawar to Lasariya section near Beawar and 22 inch MPPL near Mohanpura (Jaipur) for change of service of existing Mundra-Panipat pipeline from crude to product]' 
+2025/09/09 14:19:57   Tender 120 (Page 11): '[RE-ROUTING OF EXISTING LUCKNOW ATF PIPELINE ]' 
+2025/09/09 14:19:57 PAGE 11: Successfully parsed 10 tenders
+2025/09/09 14:19:57 PAGE 11: Next button found: https://iocletenders.nic.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:19:57 Progress: 120/230 tenders (52.2%) - Page 12 completed
+2025/09/09 14:19:57 PAGE 13: Clicking Next button: https://iocletenders.nic.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:20:00 PAGE 12: Found tender table! Parsing results... (Status: 200)
+2025/09/09 14:20:00 PAGE 12: Parsing tender data from table element...
+2025/09/09 14:20:00   Tender 121 (Page 12): '[Combined Station Works including Civil, Mechanical, Electrical, Telecom and Instrumentation works for Group-1 (Panipat, Rewari) under service conversion of existing Mundra Panipat pipeline from crude oil to product service project]' 
+2025/09/09 14:20:00   Tender 122 (Page 12): '[Combined Station Works including Civil, Mechanical, Electrical, Telecom  and Instrumentation works for Group-2 (Sanganer, Jaipur, Ramsar, Lasariya, Beawar, Kot, Abu Road), under service conversion of existing Mundra Panipat pipeline from crude oil ]' 
+2025/09/09 14:20:00   Tender 123 (Page 12): '[Combined Station Works including Civil, Mechanical, Electrical, Telecom and Instrumentation works for Group-3 (Sidhpur, Radhanpur, Churwa, Kandla) under service conversion of existing Mundra Panipat pipeline from crude oil to product service project]' 
+2025/09/09 14:20:00   Tender 124 (Page 12): '[Odorants for CGD GA locations ]' 
+2025/09/09 14:20:00   Tender 125 (Page 12): '[PROCUREMENT OF ENZYMENS FOR 2G ETHANOL PLANT AT PANIPAT REFINERY]' 
+2025/09/09 14:20:00   Tender 126 (Page 12): '[Annual Rate Contract for repairing of mixer rotor assembly of extruder installed in HDPE unit of IOCL, PNC]' 
+2025/09/09 14:20:00   Tender 127 (Page 12): '[DUIKER MAKE PILOT IGNITER]' 
+2025/09/09 14:20:00   Tender 128 (Page 12): '[Annual Maintenance Contract for providing Technical Advisory Services of OEM Ms Kobe Steel Ltd for Inspection/Overhaulin]' 
+2025/09/09 14:20:00   Tender 129 (Page 12): '[Mechanical, Civil and electrical Works for construction of Naphtha tanks 2 nos at PNC,Panipat Refinery and Petrochemical complex.]' 
+2025/09/09 14:20:00   Tender 130 (Page 12): '[LSTK Works]' 
+2025/09/09 14:20:00 PAGE 12: Successfully parsed 10 tenders
+2025/09/09 14:20:00 PAGE 12: Next button found: https://iocletenders.nic.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:20:00 Progress: 130/230 tenders (56.5%) - Page 13 completed
+2025/09/09 14:20:00 PAGE 14: Clicking Next button: https://iocletenders.nic.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:20:02 PAGE 13: Found tender table! Parsing results... (Status: 200)
+2025/09/09 14:20:02 PAGE 13: Parsing tender data from table element...
+2025/09/09 14:20:02   Tender 131 (Page 13): '[RPRC252252 Repair and HSB of RFCCU OWGC Compressor Rotor installed at Panipat Refinery]' 
+2025/09/09 14:20:02   Tender 132 (Page 13): '[Procurement of 8800KG of PP Catalyst]' 
+2025/09/09 14:20:02   Tender 133 (Page 13): '[RPRC255260 Rate contract for System-1  Optimization and Machinery Diagnostic systems at  Panipat Refinery and Petrochemical complex]' 
+2025/09/09 14:20:02   Tender 134 (Page 13): '[Procurement of 4000 KG of HDPE Catalyst]' 
+2025/09/09 14:20:02   Tender 135 (Page 13): '[SUPPLY OF ROTOFORMER SPARES]' 
+2025/09/09 14:20:02   Tender 136 (Page 13): '[SUPPLY OF Marubeni Make CTA/PTA Drier Spares and Rotary Vacuum Filter Spares ]' 
+2025/09/09 14:20:02   Tender 137 (Page 13): '[PROCUREMENT OF BUSS MAKE EVAPORATOR SPARES]' 
+2025/09/09 14:20:02   Tender 138 (Page 13): '[Procurement of 70 MT of Licowax PED 191]' 
+2025/09/09 14:20:02   Tender 139 (Page 13): '[RPRC254267 Inspection, salvaging and Dynamic Balancing of 1st ,2nd and 3rd Stage rotor assembly of Air Compressor (Tag No 37-KA-CF-511C, Compressor Model No. C55 MX3) of UCR Unit at Panipat Refinery.]' 
+2025/09/09 14:20:02   Tender 140 (Page 13): '[Structural platform, Equipment, Piping activities of FCC including CRLPGTU and miscellaneous piping works for INDMAX Unit at Panipat Refinery (P-25 Project Work), Panipat Refinery]' 
+2025/09/09 14:20:02 PAGE 13: Successfully parsed 10 tenders
+2025/09/09 14:20:02 PAGE 13: Next button found: https://iocletenders.nic.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:20:02 Progress: 140/230 tenders (60.9%) - Page 14 completed
+2025/09/09 14:20:02 PAGE 15: Clicking Next button: https://iocletenders.nic.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:20:05 PAGE 14: Found tender table! Parsing results... (Status: 200)
+2025/09/09 14:20:05 PAGE 14: Parsing tender data from table element...
+2025/09/09 14:20:05   Tender 141 (Page 14): '[CDO/NFR/2025-26/01]' 
+2025/09/09 14:20:05   Tender 142 (Page 14): '[PSO/LPG-O/BHAT/SECURITY/25-27 ]' 
+2025/09/09 14:20:05   Tender 143 (Page 14): '[PSO/LEH/LPG/BATTERY/01]' 
+2025/09/09 14:20:05   Tender 144 (Page 14): '[Raze and Rebuild of A site RO- M R Filling Station, Amritsar under Amritsar DO PSO]' 
+2025/09/09 14:20:05   Tender 145 (Page 14): '[EPCC 01 Tender for HDPE UNIT AND ASSOCIATED WORKS for Naphtha Cracker Expansion (Phase II) And New Ethylene Propylene Derivative Project on LSTK Basis]' 
+2025/09/09 14:20:05   Tender 146 (Page 14): '[VRU Package for IOCL Barauni Refinery]' 
+2025/09/09 14:20:05   Tender 147 (Page 14): '[DM WATER PACKAGE]' 
+2025/09/09 14:20:05   Tender 148 (Page 14): '[Supply of CORIOLIS FLOWMETER]' 
+2025/09/09 14:20:05   Tender 149 (Page 14): '[LT/B885-078-PM-T-9801/1001 - COKE DRUM REPLACEMENT, ALLIED MODERNIZATION AND PIPING WORKS IN DELAYED COKER UNIT OF PANIPAT REFINERY AT IOCL, PANIPAT ]' 
+2025/09/09 14:20:05   Tender 150 (Page 14): '[SUPPLY OF CENTRIFUGAL PUMPS - LOT 4]' 
+2025/09/09 14:20:05 PAGE 14: Successfully parsed 10 tenders
+2025/09/09 14:20:05 PAGE 14: Next button found: https://iocletenders.nic.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:20:05 Progress: 150/230 tenders (65.2%) - Page 15 completed
+2025/09/09 14:20:05 PAGE 16: Clicking Next button: https://iocletenders.nic.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:20:08 PAGE 15: Found tender table! Parsing results... (Status: 200)
+2025/09/09 14:20:08 PAGE 15: Parsing tender data from table element...
+2025/09/09 14:20:08   Tender 151 (Page 15): '[SUPPLY OF SKID BASED AIR PACKAGE SYSTEM]' 
+2025/09/09 14:20:08   Tender 152 (Page 15): '[COMPOSITE WORKS - II]' 
+2025/09/09 14:20:08   Tender 153 (Page 15): '[SUPPLY OF BATTERY CHARGER SYSTEM]' 
+2025/09/09 14:20:08   Tender 154 (Page 15): '[Supply of Ultrasonic Flow Meter for PP Unit]' 
+2025/09/09 14:20:08   Tender 155 (Page 15): '[Supply of FIBER OPTIC CABLES]' 
+2025/09/09 14:20:08   Tender 156 (Page 15): '[CROSS COUNTRY PIPELINE WORKS FOR DR 1.0 EXPANSION PROJECT OF IOCL DIGBOI REFINERY]' 
+2025/09/09 14:20:08   Tender 157 (Page 15): '[SUPPLY OF BUTTERFLY VALVE]' 
+2025/09/09 14:20:08   Tender 158 (Page 15): '[SUPPLY OF JUNCTION BOXES, CABLE GLANDS AND PLUGS]' 
+2025/09/09 14:20:08   Tender 159 (Page 15): '[SUPPLY OF PIG LAUNCHER AND RECEIVER]' 
+2025/09/09 14:20:08   Tender 160 (Page 15): '[Supply of Pressure Safety Valve Lot 2 for PP AND CDW Unit]' 
+2025/09/09 14:20:08 PAGE 15: Successfully parsed 10 tenders
+2025/09/09 14:20:08 PAGE 15: Next button found: https://iocletenders.nic.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:20:08 Progress: 160/230 tenders (69.6%) - Page 16 completed
+2025/09/09 14:20:08 PAGE 17: Clicking Next button: https://iocletenders.nic.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:20:11 PAGE 16: Found tender table! Parsing results... (Status: 200)
+2025/09/09 14:20:11 PAGE 16: Parsing tender data from table element...
+2025/09/09 14:20:11   Tender 161 (Page 16): '[SUPPLY OF TANK MIXER (JET)]' 
+2025/09/09 14:20:11   Tender 162 (Page 16): '[SUPPLY OF SIGHT GLASS ]' 
+2025/09/09 14:20:11   Tender 163 (Page 16): '[SELECTION OF LEADER AND FORMATION OF CONSORTIUM FOR INTEGRATED ALL RISK PACKAGE INSURANCE POLICY FOR INDIAN OIL CORPORATION LIMITED FOR THE PERIOD FROM 01.10.2025 TO 30.09.2026.]' 
+2025/09/09 14:20:11   Tender 164 (Page 16): '[SUPPLY OF GUIDED WAVE RADAR LEVEL TRANSMITTERS]' 
+2025/09/09 14:20:11   Tender 165 (Page 16): '[SUPPLY OF HOT WATER SYSTEM PACKAGE]' 
+2025/09/09 14:20:11   Tender 166 (Page 16): '[SUPPLY OF MAGNETIC LEVEL GAUGES]' 
+2025/09/09 14:20:11   Tender 167 (Page 16): '[PIPING AND MECHANICAL WORKS OF AVU, DCU AND O AND U FOR DR 1.0 EXPANSION PROJECT AT IOCL DIGBOI REFINERY]' 
+2025/09/09 14:20:11   Tender 168 (Page 16): '[SUPPLY OF UPS SYSTEM]' 
+2025/09/09 14:20:11   Tender 169 (Page 16): '[SUPPLY OF TRAPS AND ASSEMBLIES]' 
+2025/09/09 14:20:11   Tender 170 (Page 16): '[Expression of Interest for Setup of RPC CFBC boilers on Build, Own and Operate Basis for a Period of 20 years at Paradip Refinery of IOCL.]' 
+2025/09/09 14:20:11 PAGE 16: Successfully parsed 10 tenders
+2025/09/09 14:20:11 PAGE 16: Next button found: https://iocletenders.nic.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:20:11 Progress: 170/230 tenders (73.9%) - Page 17 completed
+2025/09/09 14:20:11 PAGE 18: Clicking Next button: https://iocletenders.nic.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:20:15 PAGE 17: Found tender table! Parsing results... (Status: 200)
+2025/09/09 14:20:15 PAGE 17: Parsing tender data from table element...
+2025/09/09 14:20:15   Tender 171 (Page 17): '[SUPPLY OF NETWORK PANEL and ACCESSORIES ]' 
+2025/09/09 14:20:15   Tender 172 (Page 17): '[SUPPLY OF MAGNETIC FLOWMETER]' 
+2025/09/09 14:20:15   Tender 173 (Page 17): '[SUPPLY OF PRE INSULATED TUBE]' 
+2025/09/09 14:20:15   Tender 174 (Page 17): '[HIGH MAST LIGHTING SYSTEM]' 
+2025/09/09 14:20:15   Tender 175 (Page 17): '[RECIRCULATION COMPRESSOR]' 
+2025/09/09 14:20:15   Tender 176 (Page 17): '[SUPPLY OF STRAINERS]' 
+2025/09/09 14:20:15   Tender 177 (Page 17): '[SUPPLY OF MV SWITCHBOARDS]' 
+2025/09/09 14:20:15   Tender 178 (Page 17): '[Supply of Primary Supports for PP and CDW Unit]' 
+2025/09/09 14:20:15   Tender 179 (Page 17): '[SUPPLY OF ICSS (PLC) GTF AND OFFSITE]' 
+2025/09/09 14:20:15   Tender 180 (Page 17): '[Supply of Breather Valves ]' 
+2025/09/09 14:20:15 PAGE 17: Successfully parsed 10 tenders
+2025/09/09 14:20:15 PAGE 17: Next button found: https://iocletenders.nic.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:20:15 Progress: 180/230 tenders (78.3%) - Page 18 completed
+2025/09/09 14:20:15 PAGE 19: Clicking Next button: https://iocletenders.nic.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:20:18 PAGE 18: Found tender table! Parsing results... (Status: 200)
+2025/09/09 14:20:18 PAGE 18: Parsing tender data from table element...
+2025/09/09 14:20:18   Tender 181 (Page 18): '[Supply of Sample Filters for PP Unit]' 
+2025/09/09 14:20:18   Tender 182 (Page 18): '[VALVES WITH MECHANICAL INTERLOCK FOR PP UNIT]' 
+2025/09/09 14:20:18   Tender 183 (Page 18): '[All Risk Comprehensive Project Insurance of Upcoming Projects for Refineries Division of Indian Oil Corporation Limited]' 
+2025/09/09 14:20:18   Tender 184 (Page 18): '[Hiring of DGR Security Agency for DGR Security Services for various locations under RHQ in different offices/residences etc. in Delhi.]' 
+2025/09/09 14:20:18   Tender 185 (Page 18): '[Procurement of Enterprise Wide Unlimited License Agreement for Oracle Software Products from Ms Oracle India Private Limited for the period of 5 years]' 
+2025/09/09 14:20:18   Tender 186 (Page 18): '[new civil foundation of poles]' 
+2025/09/09 14:20:18   Tender 187 (Page 18): '[indoor Air purification Unit integrated with Photobioreactor]' 
+2025/09/09 14:20:18   Tender 188 (Page 18): '[Security and Allied Services at Chittorgarh Terminal]' 
+2025/09/09 14:20:18   Tender 189 (Page 18): '[Limited Expression of Interest for Bulk POL Transport Tank Truck Induction at Jodhpur Terminal]' 
+2025/09/09 14:20:18   Tender 190 (Page 18): '[Perpetual Empanelment of contractors for Execution of various types  AND nature of Engineering works under Tamil Nadu State Office under Category-I (0-100 Lacs)   Category- II (100-200 lacs)- Empanelment for II nd year]' 
+2025/09/09 14:20:18 PAGE 18: Successfully parsed 10 tenders
+2025/09/09 14:20:18 PAGE 18: Next button found: https://iocletenders.nic.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:20:18 Progress: 190/230 tenders (82.6%) - Page 19 completed
+2025/09/09 14:20:18 PAGE 20: Clicking Next button: https://iocletenders.nic.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:20:21 PAGE 19: Found tender table! Parsing results... (Status: 200)
+2025/09/09 14:20:21 PAGE 19: Parsing tender data from table element...
+2025/09/09 14:20:21   Tender 191 (Page 19): '[Mechanical works including supply, engineering, fabrication, erection, installation, commissioning, arranging TPI for  3 nos of 15 MT Mounded storage vessels and 2 nos of 200KL Fire water tanks, allied pipelines and fittings, hydrant pipeline, safe]' 
+2025/09/09 14:20:21   Tender 192 (Page 19): '[DEVELOPMENT OF NEW A SITE RO ]' 
+2025/09/09 14:20:21   Tender 193 (Page 19): '[DEVELOPMENT OF NEW A SITE RO NARIMANAM TO PILLALI SNO 714A KOTTARAKUDI VILLAGE NAGAPATTINAM TALUK NAGAPATTINAM DISTRICT TRICHY DIVISIONAL OFFICE UNDER TAMIL NADU STATE OFFICE]' 
+2025/09/09 14:20:21   Tender 194 (Page 19): '[DEVELOPMENT OF A SITE RO AT SETC SHENCOTTAI TENKASI ROAD NH 744 AT TENKASI DISTRICT MADURAI DIVISIONAL OFFICE UNDER TAMIL NADU STATE OFFICE]' 
+2025/09/09 14:20:21   Tender 195 (Page 19): '[DEVELOPMENT OF NEW A SITE RO AT SETC TIRUNELVELI, TIRUNELVELI DIST, MADURAI DIVISIONAL OFFICE UNDER TAMIL NADU STATE OFFICE]' 
+2025/09/09 14:20:21   Tender 196 (Page 19): '[DEVELOPMENT OF NEW A SITE RO AT TNFDC THENGAPATTINAM, KANYAKUMARI DIST, MADURAI DIVISIONAL OFFICE, TAMIL NADU STATE OFFICE]' 
+2025/09/09 14:20:21   Tender 197 (Page 19): '[Modernization of A site RO with facilities like Sales Building, Canopy, Paver block driveway and other allied civil and electrical works at Fortune Service Station, Udayamperoor, Ernakulam Dist, Kerala State under Cochin Divisional Office under Keral]' 
+2025/09/09 14:20:21   Tender 198 (Page 19): '[RESITEMENT OF M/s MAJOR MAHESHWARI ENTERPRISES at MUGALIVAKKAM, CHENNAI CITY UNDER CHENNAI DIVISIONAL OFFICE UNDER TAMIL NADU STATE OFFICE]' 
+2025/09/09 14:20:21   Tender 199 (Page 19): '[DEVELOPMENT OF NEW A SITE RETAIL OUTLET ]' 
+2025/09/09 14:20:21   Tender 200 (Page 19): '[DEVELOPMENT OF NEW A SITE RO AT AYYAKOLATHUR SRIPERUMPUDUR TO SENGADU ON SH57 KANCHIPURAM RSA UNDER CHENNAI DIVISIONAL OFFICE UNDER TAMIL NADU STATE OFFICE]' 
+2025/09/09 14:20:21 PAGE 19: Successfully parsed 10 tenders
+2025/09/09 14:20:21 PAGE 19: Next button found: https://iocletenders.nic.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:20:21 Progress: 200/230 tenders (87.0%) - Page 20 completed
+2025/09/09 14:20:21 PAGE 21: Clicking Next button: https://iocletenders.nic.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:20:23 PAGE 20: Found tender table! Parsing results... (Status: 200)
+2025/09/09 14:20:23 PAGE 20: Parsing tender data from table element...
+2025/09/09 14:20:23   Tender 201 (Page 20): '[Construction of New A Site KSK from Mattammel Auditorium, Allapra to Vadayampady Post Office on Perumbavoor TO Puthenkurish Road (Outside Municipal Limits), Ernakulam Dist. for Cochin Divisional Office under Kerala State Office.]' 
+2025/09/09 14:20:23   Tender 202 (Page 20): '[ConstructionofNewASiteRO]' 
+2025/09/09 14:20:23   Tender 203 (Page 20): '[DEVELOPMENT OF NEW A SITE RO AT KARUR TOWN-3, SANAPIRATTI VILLAGE, KARUR TALUK, KARUR DIST, SALEM DIVISIONAL OFFICE, TAMIL NADU STATE OFFICE.]' 
+2025/09/09 14:20:23   Tender 204 (Page 20): '[Contract for Security and Allied Services at Damtal AFS in BPI-I from DGR Sponsored Security Agencies]' 
+2025/09/09 14:20:23   Tender 205 (Page 20): '[Limited Expression of Interest for Bulk POL Transport Tank Truck Induction at Meerut Terminal]' 
+2025/09/09 14:20:23   Tender 206 (Page 20): '[CONTRACT FOR SECURITY AND ALLIED SERVICES AT UPSO-2 OFFICE, IOCL COLONY, SECTOR-39, NOIDA AND FTL LAND, SECTOR-62, NOIDA FROM DGR SPONSORED AGENCIES]' 
+2025/09/09 14:20:23   Tender 207 (Page 20): '[DDO/RS/LT/25-26/01]' 
+2025/09/09 14:20:23   Tender 208 (Page 20): '[ RCC/NR/UPSO-2/LPG/LT-01/25-26]' 
+2025/09/09 14:20:23   Tender 209 (Page 20): '[CONTRACT FOR SECURITY SERVICES AT HALDWANI BOTTLING PLANT FROM DGR SPONSORED AGENCIES CONTRACT FOR SECURITY SERVICES AT HALDWANI BP]' 
+2025/09/09 14:20:23   Tender 210 (Page 20): '[UPSO-II/LONI BP/ KPCL SAC SPARES /25-26/ST/04]' 
+2025/09/09 14:20:23 PAGE 20: Successfully parsed 10 tenders
+2025/09/09 14:20:23 PAGE 20: Next button found: https://iocletenders.nic.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:20:23 Progress: 210/230 tenders (91.3%) - Page 21 completed
+2025/09/09 14:20:23 PAGE 22: Clicking Next button: https://iocletenders.nic.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:20:26 PAGE 21: Found tender table! Parsing results... (Status: 200)
+2025/09/09 14:20:26 PAGE 21: Parsing tender data from table element...
+2025/09/09 14:20:26   Tender 211 (Page 21): '[SUPPLY INSTALLATION  TESTING  COMMISSIONING OF HIGH MASTS LIGHTING FIXTURES CABLING AND ALLIED WORKS for transfer of 4  number of Hight Mast Tower from Haldwani BP to Shahjahanpur BP]' 
+2025/09/09 14:20:26   Tender 212 (Page 21): '[DISMANTLING OF EXISTING FIRE ENGINES, PUMPS, ALLIED ACCESSORIES AND INSTALLATION OF NEW FIRE ENGINES, PUMPS AND OTHER ALLIED JOBS ETC. FOR COMMISSIONING NEW FIRE ENGINES PUMPS AS PER THE ADVICE OF THE OEM AT IOCL LPG BOTTLING PLANT, PATTIKALAN]' 
+2025/09/09 14:20:26   Tender 213 (Page 21): '[security services haridwar BP]' 
+2025/09/09 14:20:26   Tender 214 (Page 21): '[Annual Rate Contract for providing civil maintenance work at WRPL Jaipur station and TSP (Transmix Separator Plant)]' 
+2025/09/09 14:20:26   Tender 215 (Page 21): '[Non-Comprehensive AMC of Yaskawa make VFDs installed at WRPL-Jaipur]' 
+2025/09/09 14:20:26   Tender 216 (Page 21): '[Solvent free epoxy coating on culvert piping support at WRPL Mundra]' 
+2025/09/09 14:20:26   Tender 217 (Page 21): '[AUTOMATION WORKS FOR CONVERSION OF TWO BAYS FROM TOP TO BOTTOM LOADING AT CHANDRAPUR DEPOT UNDER MAHARASHTRA STATE OFFICE]' 
+2025/09/09 14:20:26   Tender 218 (Page 21): '[DEVELOPMENT OF NEW A SITE RO WITHIN 5 KM ON  EITHER SIDE FROM GOVT HIGH SCHOOL KENDAI ON NH130 BILAPSUR AMBIKAPUR  ROAD ADVT LOC 231_2023 UNDER RAIPUR DIVISIONAL OFFICE OF MADHYA  PRADESH STATE OFFICE]' 
+2025/09/09 14:20:26   Tender 219 (Page 21): '[DEVELOPMENT OF NEW A SITE RO AT LOCATION WITHIN 2 KM ON EITHER SIDE FROM YATRI PRATIKSHALAYA KASHICHUWA ON NH49 RAIGARH KHARSIYA ROAD DIST RAIGARH SRMP 26_2023 UNDER RAIPUR DIVISIONAL OFFICE OF MADHYA PRADESH STATE OFFICE ]' 
+2025/09/09 14:20:26   Tender 220 (Page 21): '[Revamping of Plant Internal Roads at Vadodara LPG Terminal, Dumad Under Gujarat State Office]' 
+2025/09/09 14:20:26 PAGE 21: Successfully parsed 10 tenders
+2025/09/09 14:20:26 PAGE 21: Next button found: https://iocletenders.nic.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:20:26 Progress: 220/230 tenders (95.7%) - Page 22 completed
+2025/09/09 14:20:26 PAGE 23: Clicking Next button: https://iocletenders.nic.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:20:29 PAGE 22: Found tender table! Parsing results... (Status: 200)
+2025/09/09 14:20:29 PAGE 22: Parsing tender data from table element...
+2025/09/09 14:20:29   Tender 221 (Page 22): '[Development of Apna Ghar Facilities at Soham Petroleum under Surat East RSA of Surat Divisional Office of Gujarat State Office]' 
+2025/09/09 14:20:29   Tender 222 (Page 22): '[Development of new A site retail outlet at Ambetha Between Gandevi Char Rasta to NH 48 junction via Ambetha on SH 179 Taluka Gandevi District Navsari under Surat Divisional Office of Gujarat State Office]' 
+2025/09/09 14:20:29   Tender 223 (Page 22): '[Development of new A site retail outlet at Kerala (within 4 Km from  Rojmal Primary School towards Gadhada on Gadhada-Rojmal Highway), Taluka-Gadhada, District-Botad under Rajkot Divisional Office of Gujarat State Office]' 
+2025/09/09 14:20:29   Tender 224 (Page 22): '[Development of Apna Ghar Facilities at Siddharth Petroleum under Baroda South RSA of Surat Divisional Office of Gujarat State Office]' 
+2025/09/09 14:20:29   Tender 225 (Page 22): '[RATE CONTRACT FOR FABRICATION OF 10KL 20KL 50KL 70KL HORIZONTAL TANKS FOR DIVISIONAL OFFICES UNDER MAHARASHTRA STATE OFFICE]' 
+2025/09/09 14:20:29   Tender 226 (Page 22): '[MECHANICAL WORKS FOR CONVERSION OF TWO BAYS FROM TOP TO BOTTOM LOADING AT CHANDRAPUR DEPOT UNDER MAHARASHTRA STATE OFFICE]' 
+2025/09/09 14:20:29   Tender 227 (Page 22): '[Development of A site Retail Outlet at From Wadala Bahiroba to Babhulwedhe Towards Newasa on Pune Aurangabad NH Dist Ahmednagar under Maharashtra State Office]' 
+2025/09/09 14:20:29   Tender 228 (Page 22): '[Engineering, Procurement, Construction, Liasioning EPC inclusive of 2 Year warranty of 385 KWp OnGrid Roof Mounted Captive Solar Power Project at Indian Oil Lube Blending Plant Taloja Maharashtra]' 
+2025/09/09 14:20:29   Tender 229 (Page 22): '[DEVELOPMENT OF NEW A SITE RO AT LOCATION WITHIN 2 KM FROM AADARSH AANGANWADI KENDRA BADI UNNAI ON THANDLA PETLAWAD STATE HIGHWAY UNDER INDORE DIVISIONAL OFFICE OF MADHYA PRADESH STATE OFFICE]' 
+2025/09/09 14:20:29   Tender 230 (Page 22): '[DEVELOPMENT OF NEW A SITE RO AT LOCATION WITHIN 1 KM FROM BILDA GRAM PANCHAYAT OFFICE ON TANDA GANDHWANI STATE HIGHWAY ON LEFT HAND SIDE WHILE GOING TO GANDHWANI FROM TANDA UNDER INDORE DIVISIONAL OFFICE OF MADHYA PRADESH STATE OFFICE]' 
+2025/09/09 14:20:29 PAGE 22: Successfully parsed 10 tenders
+2025/09/09 14:20:29 Progress: 230/230 tenders (100.0%) - Page 23 completed
+2025/09/09 14:20:29 All 230 tenders scraped, stopping pagination
+2025/09/09 14:20:29 Pagination completed! Processed 23 pages, scraped 230 tenders
+2025/09/09 14:20:29 Scraping completed successfully! Total tenders scraped: 230/230

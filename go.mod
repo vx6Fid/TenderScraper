@@ -3,8 +3,10 @@ module github.com/vx6fid/tender-scraper
 go 1.24.6
 
 require (
+	github.com/2captcha/2captcha-go v1.1.10
 	github.com/PuerkitoBio/goquery v1.10.2
 	github.com/gocolly/colly/v2 v2.2.0
+	github.com/joho/godotenv v1.5.1
 )
 
 require (

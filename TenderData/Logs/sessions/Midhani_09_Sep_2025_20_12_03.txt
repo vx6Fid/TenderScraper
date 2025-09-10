@@ -1,0 +1,51 @@
+2025/09/09 20:12:03 STEP 1: Starting captcha/session flow: https://www.eprocuremidhani.nic.in/nicgep/app?page=FrontEndLatestActiveTenders&service=page
+2025/09/09 20:12:03 [request] GET https://www.eprocuremidhani.nic.in/nicgep/app?page=FrontEndLatestActiveTenders&service=page
+2025/09/09 20:12:05 [response] https://www.eprocuremidhani.nic.in/nicgep/app?page=FrontEndLatestActiveTenders&service=page | 200 | 30146 bytes
+2025/09/09 20:12:05 [captcha] response handler: GET | https://www.eprocuremidhani.nic.in/nicgep/app?page=FrontEndLatestActiveTenders&service=page | 200
+2025/09/09 20:12:05 [captcha] found form (status 200) at https://www.eprocuremidhani.nic.in/nicgep/app?page=FrontEndLatestActiveTenders&service=page
+2025/09/09 20:12:05 [captcha] find table in document
+2025/09/09 20:12:05 [captcha] found form (status 200) at https://www.eprocuremidhani.nic.in/nicgep/app?page=FrontEndLatestActiveTenders&service=page
+2025/09/09 20:12:05 [captcha] image found!
+2025/09/09 20:12:05 === CAPTCHA SOLVER ===
+2025/09/09 20:12:05 Captcha image saved to: /tmp/captcha_1757428925.png
+2025/09/09 20:12:05 Sending captcha to API...
+2025/09/09 20:12:27 Captcha solution received: rrudkp
+2025/09/09 20:12:27 Captcha solution received: 'rrudkp'
+2025/09/09 20:12:27 Warning: Could not remove temporary file /tmp/captcha_1757428925.png: remove /tmp/captcha_1757428925.png: no such file or directory
+2025/09/09 20:12:27 [captcha] solved: rrudkp
+2025/09/09 20:12:27 [captcha] submitting form with 17 fields
+2025/09/09 20:12:27 [request] POST https://www.eprocuremidhani.nic.in/nicgep/app
+2025/09/09 20:12:29 [response] https://www.eprocuremidhani.nic.in/nicgep/app | 200 | 30570 bytes
+2025/09/09 20:12:29 [captcha] response handler: POST | https://www.eprocuremidhani.nic.in/nicgep/app | 200
+2025/09/09 20:12:29 [captcha] found form (status 200) at https://www.eprocuremidhani.nic.in/nicgep/app
+2025/09/09 20:12:29 [captcha] find table in document
+2025/09/09 20:12:29 [captcha] found form (status 200) at https://www.eprocuremidhani.nic.in/nicgep/app
+2025/09/09 20:12:29 [captcha] image found!
+2025/09/09 20:12:29 === CAPTCHA SOLVER ===
+2025/09/09 20:12:29 Captcha image saved to: /tmp/captcha_1757428949.png
+2025/09/09 20:12:29 Sending captcha to API...
+2025/09/09 20:12:40 Captcha solution received: yph8h7
+2025/09/09 20:12:40 Captcha solution received: 'yph8h7'
+2025/09/09 20:12:40 [captcha] solved: yph8h7
+2025/09/09 20:12:40 [captcha] submitting form with 17 fields
+2025/09/09 20:12:40 [request] POST https://www.eprocuremidhani.nic.in/nicgep/app
+2025/09/09 20:12:43 [response] https://www.eprocuremidhani.nic.in/nicgep/app | 200 | 30636 bytes
+2025/09/09 20:12:43 [captcha] response handler: POST | https://www.eprocuremidhani.nic.in/nicgep/app | 200
+2025/09/09 20:12:43 [captcha] found form (status 200) at https://www.eprocuremidhani.nic.in/nicgep/app
+2025/09/09 20:12:43 [captcha] find table in document
+2025/09/09 20:12:43 [captcha] found form (status 200) at https://www.eprocuremidhani.nic.in/nicgep/app
+2025/09/09 20:12:43 [captcha] image found!
+2025/09/09 20:12:43 === CAPTCHA SOLVER ===
+2025/09/09 20:12:43 Captcha image saved to: /tmp/captcha_1757428963.png
+2025/09/09 20:12:43 Sending captcha to API...
+2025/09/09 20:12:54 Captcha solution received: rXvCKd
+2025/09/09 20:12:54 Captcha solution received: 'rXvCKd'
+2025/09/09 20:12:54 [captcha] solved: rXvCKd
+2025/09/09 20:12:54 [captcha] submitting form with 17 fields
+2025/09/09 20:12:54 [request] POST https://www.eprocuremidhani.nic.in/nicgep/app
+2025/09/09 20:12:56 [response] https://www.eprocuremidhani.nic.in/nicgep/app | 200 | 51392 bytes
+2025/09/09 20:12:56 [captcha] response handler: POST | https://www.eprocuremidhani.nic.in/nicgep/app | 200
+2025/09/09 20:12:56 [captcha] found form (status 200) at https://www.eprocuremidhani.nic.in/nicgep/app
+2025/09/09 20:12:56 [captcha] find table in document
+2025/09/09 20:12:56 [captcha] tender list table found, skipping captcha
+2025/09/09 20:12:57 Session established: 1 cookies

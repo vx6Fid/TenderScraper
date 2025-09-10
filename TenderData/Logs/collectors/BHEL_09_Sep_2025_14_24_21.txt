@@ -1,0 +1,493 @@
+2025/09/09 14:24:21 Starting tender scraping process with correct session flow.
+2025/09/09 14:24:21 STEP 1: Clicking Active Tenders link with session: https://eprocurebhel.co.in/nicgep/app?page=FrontEndLatestActiveTenders&service=page
+2025/09/09 14:24:23 PAGE 1: Found tender table! Parsing results... (Status: 200)
+2025/09/09 14:24:23 PAGE 1: Parsing tender data from table element...
+2025/09/09 14:24:23   Tender 1 (Page 1): '[Hydraulic Shearing Machine.]' 
+2025/09/09 14:24:23   Tender 2 (Page 1): '[Balance Civil, Structural and Architectural works for entire Power Block Area (T-Yard to FGD up to Chimney Raft) at 1x800 MW NTPC Sipat, Chhattisgarh.]' 
+2025/09/09 14:24:23   Tender 3 (Page 1): '[K6A1Y22622-BREATHER FOR DCGB]' 
+2025/09/09 14:24:23   Tender 4 (Page 1): '[Providing 2 Nos 20MT or above capacity Tower Crane on monthly rental basis at BHEL-PSER 2X800 MW Lara super thermal power plant project, Stage II, Raigarh, Chhattisgarh]' 
+2025/09/09 14:24:23   Tender 5 (Page 1): '[	 Transformer Lamination Cut to Length Line]' 
+2025/09/09 14:24:23   Tender 6 (Page 1): '[Supply of Pallet Spares for BFW Machines]' 
+2025/09/09 14:24:23   Tender 7 (Page 1): '[Supply of 400 kV and Below Ratings Bus Post Insulators for various Powergrid projects]' 
+2025/09/09 14:24:23   Tender 8 (Page 1): '[350 Ton Aero Caster System]' 
+2025/09/09 14:24:23   Tender 9 (Page 1): '[CRGO Electrical Steel Slitting Line Machine ]' 
+2025/09/09 14:24:23   Tender 10 (Page 1): '[Tender Enquiry for entering into a Contract for Fabrication and Supply of Pressure Part Items and dispatch to respective project sites.]' 
+2025/09/09 14:24:23 PAGE 1: Successfully parsed 10 tenders
+2025/09/09 14:24:23 PAGE 1: Next button found: https://eprocurebhel.co.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:24:23 Total records found: 303
+2025/09/09 14:24:23 STEP 2: Starting pagination process...
+2025/09/09 14:24:23 PAGE 2: Clicking Next button: https://eprocurebhel.co.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:24:26 PAGE 1: Found tender table! Parsing results... (Status: 200)
+2025/09/09 14:24:26 PAGE 1: Parsing tender data from table element...
+2025/09/09 14:24:26   Tender 11 (Page 1): '[SUPPLY OF Z-AXIS GUIDE WAYS AND BALL SCREW]' 
+2025/09/09 14:24:26   Tender 12 (Page 1): '[Civil Structural and Architectural works of Transformer Yard, Power House Building etc and BOP1 at  2x660 MW MAHAGENCO KORADI PROJECT]' 
+2025/09/09 14:24:26   Tender 13 (Page 1): '[E/ E211/2025/1450/Y1]' 
+2025/09/09 14:24:26   Tender 14 (Page 1): '[E/E242/2024/2039/Q/1 Temperature Control Valve]' 
+2025/09/09 14:24:26   Tender 15 (Page 1): '[ETC WORKS OF 765KV AIS PGCIL RAICHUR EXTN. SUBSTATION]' 
+2025/09/09 14:24:26   Tender 16 (Page 1): '[Procurement of COMPLETE ASSEMBLY OF HYDRAULIC TURNING MOTOR]' 
+2025/09/09 14:24:26   Tender 17 (Page 1): '[Supply of 13.5MW SFC System for 65 MW, 11 KV Motor for GSECL Kadana HEP ]' 
+2025/09/09 14:24:26   Tender 18 (Page 1): '[Supply, Installation, Commissioning and Training of Automated Test equipment with PC for mounting bases ]' 
+2025/09/09 14:24:26   Tender 19 (Page 1): '[D/ 6580/5/0667D1]' 
+2025/09/09 14:24:26   Tender 20 (Page 1): '[WELDING ELECTRODE E307-15]' 
+2025/09/09 14:24:26 PAGE 1: Successfully parsed 10 tenders
+2025/09/09 14:24:26 PAGE 1: Next button found: https://eprocurebhel.co.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:24:26 Progress: 20/303 tenders (6.6%) - Page 2 completed
+2025/09/09 14:24:26 PAGE 3: Clicking Next button: https://eprocurebhel.co.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:24:28 PAGE 2: Found tender table! Parsing results... (Status: 200)
+2025/09/09 14:24:28 PAGE 2: Parsing tender data from table element...
+2025/09/09 14:24:28   Tender 21 (Page 2): '[Supply of UPS and Battery to THDCIL VISHNUGAD PIPALKOTI HEP 4X111MW]' 
+2025/09/09 14:24:28   Tender 22 (Page 2): '[Repairs and maintenance of sewerage Line from ETH area to D14 Quarters at BHEL Township, BAP, Ranipet]' 
+2025/09/09 14:24:28   Tender 23 (Page 2): '[K6D1Y22850- G G Greasing System	]' 
+2025/09/09 14:24:28   Tender 24 (Page 2): '[STELLITING AND MACHINING]' 
+2025/09/09 14:24:28   Tender 25 (Page 2): '[NIT for Transportation of 800MW TG Stators by Road from BHEL Haridwar to Raipur, Sipat, Singrauli and Mirzapur Project Sites on Point-To-Point Basis]' 
+2025/09/09 14:24:28   Tender 26 (Page 2): '[UKME000035 - SBC MODULE FOR BCU]' 
+2025/09/09 14:24:28   Tender 27 (Page 2): '[Domestic Open Tender Enq. No. E/E211/2025/1692H1 / PROCUREMENT OF SLOT WEDGE(s)]' 
+2025/09/09 14:24:28   Tender 28 (Page 2): '[E/E243/2025/1615/Q/1 for Temperature Control Valve]' 
+2025/09/09 14:24:28   Tender 29 (Page 2): '[K6A1Y60579-MILL HANDLING SYSTEM]' 
+2025/09/09 14:24:28   Tender 30 (Page 2): '[Machining and Stelliting and Coating of items.]' 
+2025/09/09 14:24:28 PAGE 2: Successfully parsed 10 tenders
+2025/09/09 14:24:28 PAGE 2: Next button found: https://eprocurebhel.co.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:24:28 Progress: 30/303 tenders (9.9%) - Page 3 completed
+2025/09/09 14:24:28 PAGE 4: Clicking Next button: https://eprocurebhel.co.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:24:31 PAGE 3: Found tender table! Parsing results... (Status: 200)
+2025/09/09 14:24:31 PAGE 3: Parsing tender data from table element...
+2025/09/09 14:24:31   Tender 31 (Page 3): '[TRACK UPPER HOIST]' 
+2025/09/09 14:24:31   Tender 32 (Page 3): '[FF/SC/25077/202501601]' 
+2025/09/09 14:24:31   Tender 33 (Page 3): '[ELECTRICAL ENERGY (IN KWH) ]' 
+2025/09/09 14:24:31   Tender 34 (Page 3): '[CLOSING UNIT TO DRG. NO. 35211001919-V00 REV.02]' 
+2025/09/09 14:24:31   Tender 35 (Page 3): '[51489/B9AYS00146/GALVANIZATION OF PIPE AND FITTING ]' 
+2025/09/09 14:24:31   Tender 36 (Page 3): '[STELLITING AND MACHINING ]' 
+2025/09/09 14:24:31   Tender 37 (Page 3): '[Supply of spares for existing thermal Ovens.]' 
+2025/09/09 14:24:31   Tender 38 (Page 3): '[E/E243/2025/1634/Q/1 for Temperature Control Valve]' 
+2025/09/09 14:24:31   Tender 39 (Page 3): '[PROCUREMENT OF CABLE-GLANDS]' 
+2025/09/09 14:24:31   Tender 40 (Page 3): '[	Finalization of Rate Contract for supply of Superior Kerosene Oil (SKO) as per tender requirement.]' 
+2025/09/09 14:24:31 PAGE 3: Successfully parsed 10 tenders
+2025/09/09 14:24:31 PAGE 3: Next button found: https://eprocurebhel.co.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:24:31 Progress: 40/303 tenders (13.2%) - Page 4 completed
+2025/09/09 14:24:31 PAGE 5: Clicking Next button: https://eprocurebhel.co.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:24:34 PAGE 4: Found tender table! Parsing results... (Status: 200)
+2025/09/09 14:24:34 PAGE 4: Parsing tender data from table element...
+2025/09/09 14:24:34   Tender 41 (Page 4): '[B9AYS00151/HYB9/TC-SC/TRIPPING DEVICE]' 
+2025/09/09 14:24:34   Tender 42 (Page 4): '[Rate Contract (One Year) for RADAR (Non-Contact) TYPE LEVEL TRANSMITTERS]' 
+2025/09/09 14:24:34   Tender 43 (Page 4): '[Supply of High Tensile Fasteners]' 
+2025/09/09 14:24:34   Tender 44 (Page 4): '[K6D1Y90474-PGB BEARINGS]' 
+2025/09/09 14:24:34   Tender 45 (Page 4): '[LGX/ RC /E- 00502]' 
+2025/09/09 14:24:34   Tender 46 (Page 4): '[Rate contract for Bare Copper Strips]' 
+2025/09/09 14:24:34   Tender 47 (Page 4): '[FF/SC/25079/202501721]' 
+2025/09/09 14:24:34   Tender 48 (Page 4): '[LORRY AS PER TENDER SPECIFICATION]' 
+2025/09/09 14:24:34   Tender 49 (Page 4): '[DA0659446305 Patchcord-cat6A Cat7 1m grey boot yellow]' 
+2025/09/09 14:24:34   Tender 50 (Page 4): '[D6A1Y35339]' 
+2025/09/09 14:24:34 PAGE 4: Successfully parsed 10 tenders
+2025/09/09 14:24:34 PAGE 4: Next button found: https://eprocurebhel.co.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:24:34 Progress: 50/303 tenders (16.5%) - Page 5 completed
+2025/09/09 14:24:34 PAGE 6: Clicking Next button: https://eprocurebhel.co.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:24:36 PAGE 5: Found tender table! Parsing results... (Status: 200)
+2025/09/09 14:24:36 PAGE 5: Parsing tender data from table element...
+2025/09/09 14:24:36   Tender 51 (Page 5): '[MACHINING OF ITEMS WITH BHEL MATERIAL]' 
+2025/09/09 14:24:36   Tender 52 (Page 5): '[Transportation and Safe delivery of consignments up to 3000 kg by road on Fast Cargo basis for a period of One Year]' 
+2025/09/09 14:24:36   Tender 53 (Page 5): '[Rigid Strut Assembly]' 
+2025/09/09 14:24:36   Tender 54 (Page 5): '[E-306-25-0066-62-1	]' 
+2025/09/09 14:24:36   Tender 55 (Page 5): '[E2553021 FABRICATION OF MIV OUTLET PIPE AND MAN HOLE COVER]' 
+2025/09/09 14:24:36   Tender 56 (Page 5): '[E5153150R IM3601 VENTILATOR DE AND NDE IN SETS]' 
+2025/09/09 14:24:36   Tender 57 (Page 5): '[E1653075]' 
+2025/09/09 14:24:36   Tender 58 (Page 5): '[Supply EC of 3D RADAR Type Level Transmitter for Coal Bunker Level Transmitter]' 
+2025/09/09 14:24:36   Tender 59 (Page 5): '[E2553022 FLANGE ASSY (FABRICATED)]' 
+2025/09/09 14:24:36   Tender 60 (Page 5): '[Elevator for 2X800 MW NTPC LARA TPP STAGE II EPC]' 
+2025/09/09 14:24:36 PAGE 5: Successfully parsed 10 tenders
+2025/09/09 14:24:36 PAGE 5: Next button found: https://eprocurebhel.co.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:24:36 Progress: 60/303 tenders (19.8%) - Page 6 completed
+2025/09/09 14:24:36 PAGE 7: Clicking Next button: https://eprocurebhel.co.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:24:40 PAGE 6: Found tender table! Parsing results... (Status: 200)
+2025/09/09 14:24:40 PAGE 6: Parsing tender data from table element...
+2025/09/09 14:24:40   Tender 61 (Page 6): '[TSI SYSTEM SUPPLY AND COMMISSIONING OF RUNGTA SONS]' 
+2025/09/09 14:24:40   Tender 62 (Page 6): '[E2553023 FABRICATION OF SPIRAL TEST CYLINDER	]' 
+2025/09/09 14:24:40   Tender 63 (Page 6): '[MED_CMM_25_26_006]' 
+2025/09/09 14:24:40   Tender 64 (Page 6): '[Procurement of Valves and accessories]' 
+2025/09/09 14:24:40   Tender 65 (Page 6): '[E5253064 BEARING]' 
+2025/09/09 14:24:40   Tender 66 (Page 6): '[Forging for Nimonic Sealing Ring, U-ring and Packing Ring ]' 
+2025/09/09 14:24:40   Tender 67 (Page 6): '[E4653094]' 
+2025/09/09 14:24:40   Tender 68 (Page 6): '[Framework agreement for Assistance required in Logistics]' 
+2025/09/09 14:24:40   Tender 69 (Page 6): '[BHE/PW/SOX/PTRU/ SCAFFOLDING/195]' 
+2025/09/09 14:24:40   Tender 70 (Page 6): '[ARC-MM014 LSR and Premier LSR]' 
+2025/09/09 14:24:40 PAGE 6: Successfully parsed 10 tenders
+2025/09/09 14:24:40 PAGE 6: Next button found: https://eprocurebhel.co.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:24:40 Progress: 70/303 tenders (23.1%) - Page 7 completed
+2025/09/09 14:24:40 PAGE 8: Clicking Next button: https://eprocurebhel.co.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:24:42 PAGE 7: Found tender table! Parsing results... (Status: 200)
+2025/09/09 14:24:42 PAGE 7: Parsing tender data from table element...
+2025/09/09 14:24:42   Tender 71 (Page 7): '[K6D1Y20374-MOTOR FOR DYNAMIC CLASSIFIER]' 
+2025/09/09 14:24:42   Tender 72 (Page 7): '[E5353038 SPARES FOR UNIVERSAL MILLING HEADS SUPPLIED BY M/S 99MNHANCE INDUSTRIAL SERVICES PVT LTD]' 
+2025/09/09 14:24:42   Tender 73 (Page 7): '[Superstructure 1400 HP]' 
+2025/09/09 14:24:42   Tender 74 (Page 7): '[P6A1Y43134-PNEUMATIC HAND TOOLS]' 
+2025/09/09 14:24:42   Tender 75 (Page 7): '[AMC of 30 MT and 60 MT Electronics  Weigh Bridge]' 
+2025/09/09 14:24:42   Tender 76 (Page 7): '[E3353035 GEAR BOX (ITEM CODE-5800214) and MOTOR FLANGE (ITEM CODE-6559507)]' 
+2025/09/09 14:24:42   Tender 77 (Page 7): '[PIPE]' 
+2025/09/09 14:24:42   Tender 78 (Page 7): '[Complete Machining including color matching of IP Outer Casing]' 
+2025/09/09 14:24:42   Tender 79 (Page 7): '[Rate contract for purchase of Enameled and Polyester film backed mica paper taped covered rectangular copper wire]' 
+2025/09/09 14:24:42   Tender 80 (Page 7): '[Supply of seamless tubes to specification UNSN07740]' 
+2025/09/09 14:24:42 PAGE 7: Successfully parsed 10 tenders
+2025/09/09 14:24:42 PAGE 7: Next button found: https://eprocurebhel.co.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:24:42 Progress: 80/303 tenders (26.4%) - Page 8 completed
+2025/09/09 14:24:42 PAGE 9: Clicking Next button: https://eprocurebhel.co.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:24:45 PAGE 8: Found tender table! Parsing results... (Status: 200)
+2025/09/09 14:24:45 PAGE 8: Parsing tender data from table element...
+2025/09/09 14:24:45   Tender 81 (Page 8): '[WELDING ELECTRODE HOLDER - 600 AMPS]' 
+2025/09/09 14:24:45   Tender 82 (Page 8): '[1.ALPHACOUNT DILUENT 20 LTR, 2. ALPHACOUNT CLEANER 1 LTR, 3. ALPHACOUNT LYSE 500 ML, 4. OZOCLEAN 4 x 100 ML]' 
+2025/09/09 14:24:45   Tender 83 (Page 8): '[BUPIVACAIN (0.5 PERCENT HEAVY) (4ML/AMP)]' 
+2025/09/09 14:24:45   Tender 84 (Page 8): '[SACUBITROL 24 MG PLUS VALSARTAN 26 MG TABLET]' 
+2025/09/09 14:24:45   Tender 85 (Page 8): '[Survey work for rail track alignment in proposed new facility creation for Vande Bharat Trainset]' 
+2025/09/09 14:24:45   Tender 86 (Page 8): '[E4353043 INTERLOCK ARM]' 
+2025/09/09 14:24:45   Tender 87 (Page 8): '[Supply, installation, testing, commissioning and maintenance of CCTV system for a period of 5 years on Financial Lease (Rental and Guarantee) followed by CAMC for 2 years (6th and 7th Year) basis in BHEL BAP Ranipet]' 
+2025/09/09 14:24:45   Tender 88 (Page 8): '[BHE/PW/SOX/PTRU/ SCAFFOLDING/196 ]' 
+2025/09/09 14:24:45   Tender 89 (Page 8): '[Enquiry for High Temperature Creep Extensometer]' 
+2025/09/09 14:24:45   Tender 90 (Page 8): '[SAFETY BELT]' 
+2025/09/09 14:24:45 PAGE 8: Successfully parsed 10 tenders
+2025/09/09 14:24:45 PAGE 8: Next button found: https://eprocurebhel.co.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:24:45 Progress: 90/303 tenders (29.7%) - Page 9 completed
+2025/09/09 14:24:45 PAGE 10: Clicking Next button: https://eprocurebhel.co.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:24:48 PAGE 9: Found tender table! Parsing results... (Status: 200)
+2025/09/09 14:24:48 PAGE 9: Parsing tender data from table element...
+2025/09/09 14:24:48   Tender 91 (Page 9): '[Various types of BYPASS and PRV TUBE Machining for TOA valve Assy. ENVTA4605]' 
+2025/09/09 14:24:48   Tender 92 (Page 9): '[ADMIRALTY BRASS U TUBES]' 
+2025/09/09 14:24:48   Tender 93 (Page 9): '[MACHINING OF ITEMS WITH BHEL MATERIAL ]' 
+2025/09/09 14:24:48   Tender 94 (Page 9): '[E1653077]' 
+2025/09/09 14:24:48   Tender 95 (Page 9): '[ECU Test Rig for 2 KW LCS]' 
+2025/09/09 14:24:48   Tender 96 (Page 9): '[BORESIGHT CAMERA]' 
+2025/09/09 14:24:48   Tender 97 (Page 9): '[E5953028, RATE CONTRACT FOR TA4502 7 TYPE INSULATION ITEMs]' 
+2025/09/09 14:24:48   Tender 98 (Page 9): '[E-19250072]' 
+2025/09/09 14:24:48   Tender 99 (Page 9): '[Supply Electrical Accessories]' 
+2025/09/09 14:24:48   Tender 100 (Page 9): '[E6A1Y42463 ENQUIRY FOR PRESSURE GAGUES]' 
+2025/09/09 14:24:48 PAGE 9: Successfully parsed 10 tenders
+2025/09/09 14:24:48 PAGE 9: Next button found: https://eprocurebhel.co.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:24:48 Progress: 100/303 tenders (33.0%) - Page 10 completed
+2025/09/09 14:24:48 PAGE 11: Clicking Next button: https://eprocurebhel.co.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:24:51 PAGE 10: Found tender table! Parsing results... (Status: 200)
+2025/09/09 14:24:51 PAGE 10: Parsing tender data from table element...
+2025/09/09 14:24:51   Tender 101 (Page 10): '[Supply and Supervision of ETC of Circuit Breakers for PGCIL HVDC Nagpur project]' 
+2025/09/09 14:24:51   Tender 102 (Page 10): '[BHE/PW/PUR/TLPRT-ENB-SHED/3155]' 
+2025/09/09 14:24:51   Tender 103 (Page 10): '[K6D1Y83156- Mill Motor Coupling and PGB Internals]' 
+2025/09/09 14:24:51   Tender 104 (Page 10): '[FABRICATED SIDE TOP COVER TOP COVER COOLER HOUSING AND AIR INLET HOUSING ASSEMBLIES]' 
+2025/09/09 14:24:51   Tender 105 (Page 10): '[E5153171- IM3601- STATOR AND ROTOR CLAMPING RING LASER CUT]' 
+2025/09/09 14:24:51   Tender 106 (Page 10): '[HYDRAULIC CYLINDER. etc..]' 
+2025/09/09 14:24:51   Tender 107 (Page 10): '[BMG of Castings Steel, Bowl Mill, Supercritical and Stainless-Steel Castings]' 
+2025/09/09 14:24:51   Tender 108 (Page 10): '[CTC Bending Tool]' 
+2025/09/09 14:24:51   Tender 109 (Page 10): '[Transportation of consignments from BHEL Trichy and sub-vendor works located within 60km radius from BHEL Trichy to APL Raigarh, APL Raipur, NTPC Singrauli, MEL Mahan and NTPC Sipat Project Sites by engaging Long Bed Mechanical Vehicles]' 
+2025/09/09 14:24:51   Tender 110 (Page 10): '[Marking of Steel Castings]' 
+2025/09/09 14:24:51 PAGE 10: Successfully parsed 10 tenders
+2025/09/09 14:24:51 PAGE 10: Next button found: https://eprocurebhel.co.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:24:51 Progress: 110/303 tenders (36.3%) - Page 11 completed
+2025/09/09 14:24:51 PAGE 12: Clicking Next button: https://eprocurebhel.co.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:24:53 PAGE 11: Found tender table! Parsing results... (Status: 200)
+2025/09/09 14:24:53 PAGE 11: Parsing tender data from table element...
+2025/09/09 14:24:53   Tender 111 (Page 11): '[Oil Vacuum Filling Equipment]' 
+2025/09/09 14:24:53   Tender 112 (Page 11): '[TILTING PAD THRUST BEARING]' 
+2025/09/09 14:24:53   Tender 113 (Page 11): '[SUPPLY OF SPARE PARTS (WIRE ROPE) FOR 80MT CRAWLER CRANE, MAKE- FUSHUN, MODEL - QUY80B (M/C SL. NO.-1027) DEPLOYED AT BHEL-PSER 1X660MW SAGARDIGHI EXTN. PROJECT SITE, WEST BENGAL]' 
+2025/09/09 14:24:53   Tender 114 (Page 11): '[24250008 PROPELLER FAN ]' 
+2025/09/09 14:24:53   Tender 115 (Page 11): '[Couplers and Clamps for Hose Pressing Equipment]' 
+2025/09/09 14:24:53   Tender 116 (Page 11): '[For entering in to Rate Contract for supply of Wooden Packing Boxes ]' 
+2025/09/09 14:24:53   Tender 117 (Page 11): '[STG and Aux, Boiler and Aux, Power Cycle Piping, ESP and Aux, CW Piping, LP Piping (including Common System LP Piping), Raw Water/Yard Piping, DG Sets and FDPS, including common areas of 2x800 MW DVC Koderma TPP STAGE-II]' 
+2025/09/09 14:24:53   Tender 118 (Page 11): '[Complete Machining of LP inner casing with BHEL material]' 
+2025/09/09 14:24:53   Tender 119 (Page 11): '[Rate contract for tiling and internal painting of township quarters including toilet renovation]' 
+2025/09/09 14:24:53   Tender 120 (Page 11): '[Hydraulic Pulling Cylinders]' 
+2025/09/09 14:24:53 PAGE 11: Successfully parsed 10 tenders
+2025/09/09 14:24:53 PAGE 11: Next button found: https://eprocurebhel.co.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:24:53 Progress: 120/303 tenders (39.6%) - Page 12 completed
+2025/09/09 14:24:53 PAGE 13: Clicking Next button: https://eprocurebhel.co.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:24:56 PAGE 12: Found tender table! Parsing results... (Status: 200)
+2025/09/09 14:24:56 PAGE 12: Parsing tender data from table element...
+2025/09/09 14:24:56   Tender 121 (Page 12): '[LOWER SCREW FEEDER]' 
+2025/09/09 14:24:56   Tender 122 (Page 12): '[Rate contract of DA0659557835 2 LED BACKLIT MONITOR   DA0659557827 22 LED BACKLIT MONITOR AND DA0659558645 32 LED BACKLIT MONITOR]' 
+2025/09/09 14:24:56   Tender 123 (Page 12): '[P6A1Y43140--ELECTRICAL HAND TOOLS ]' 
+2025/09/09 14:24:56   Tender 124 (Page 12): '[Supply and Supervision of Testing of Current Transformers for PGCIL HVDC-Nagpur project]' 
+2025/09/09 14:24:56   Tender 125 (Page 12): '[E4353039]' 
+2025/09/09 14:24:56   Tender 126 (Page 12): '[Rate contract for Electrical concealed wiring including all necessary wall chipping, fitment of all necessary switchgears and accessories and civil works]' 
+2025/09/09 14:24:56   Tender 127 (Page 12): '[Supply of seamless pipes UNS N07740 ]' 
+2025/09/09 14:24:56   Tender 128 (Page 12): '[Spares for XRD Equipment]' 
+2025/09/09 14:24:56   Tender 129 (Page 12): '[C7A1Y66304_Control Cables KCIL]' 
+2025/09/09 14:24:56   Tender 130 (Page 12): '[C7A1Y66309_Signal Cables KCIL]' 
+2025/09/09 14:24:56 PAGE 12: Successfully parsed 10 tenders
+2025/09/09 14:24:56 PAGE 12: Next button found: https://eprocurebhel.co.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:24:56 Progress: 130/303 tenders (42.9%) - Page 13 completed
+2025/09/09 14:24:56 PAGE 14: Clicking Next button: https://eprocurebhel.co.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:24:59 PAGE 13: Found tender table! Parsing results... (Status: 200)
+2025/09/09 14:24:59 PAGE 13: Parsing tender data from table element...
+2025/09/09 14:24:59   Tender 131 (Page 13): '[MSPGCL 1X660 MW- Customer training program at siemens, Gurgaon (India) works for 1 batch -6 person]' 
+2025/09/09 14:24:59   Tender 132 (Page 13): '[Repair of Worn Out / Damaged Mould Boxes.]' 
+2025/09/09 14:24:59   Tender 133 (Page 13): '[ANGE000062]' 
+2025/09/09 14:24:59   Tender 134 (Page 13): '[ANGE000064]' 
+2025/09/09 14:24:59   Tender 135 (Page 13): '[POWER SUPPLY MODULE]' 
+2025/09/09 14:24:59   Tender 136 (Page 13): '[AMC FOR SMT PICK PLACE M/cs of SAProdn Make JUKI JAPAN Model KE 2080L Qty 3 Nos KE 2010L KE2020L  KE2060L  Qty - 1 No each ]' 
+2025/09/09 14:24:59   Tender 137 (Page 13): '[FF/SC/P25028/202501301]' 
+2025/09/09 14:24:59   Tender 138 (Page 13): '[CWP SHAFT KODERMA AND SINGRAULI]' 
+2025/09/09 14:24:59   Tender 139 (Page 13): '[2 x 800 MW DVC KODERMA STPP PHASE-II- Compressed Air System]' 
+2025/09/09 14:24:59   Tender 140 (Page 13): '[ANGE000065]' 
+2025/09/09 14:24:59 PAGE 13: Successfully parsed 10 tenders
+2025/09/09 14:24:59 PAGE 13: Next button found: https://eprocurebhel.co.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:24:59 Progress: 140/303 tenders (46.2%) - Page 14 completed
+2025/09/09 14:24:59 PAGE 15: Clicking Next button: https://eprocurebhel.co.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:25:01 PAGE 14: Found tender table! Parsing results... (Status: 200)
+2025/09/09 14:25:01 PAGE 14: Parsing tender data from table element...
+2025/09/09 14:25:01   Tender 141 (Page 14): '[Supply of seamless pipes UNS N06617]' 
+2025/09/09 14:25:01   Tender 142 (Page 14): '[Laying of 250 MM Sewer Line for DABG Expansion Project Phase-III at BHEL-Haridwar]' 
+2025/09/09 14:25:01   Tender 143 (Page 14): '[E-19250047]' 
+2025/09/09 14:25:01   Tender 144 (Page 14): '[BHE/PW/PUR/NTPRT-LS CONSULTANCY/3154]' 
+2025/09/09 14:25:01   Tender 145 (Page 14): '[P6A1Y43057 -EXTRA LONG DRILL AND TREPANNING CUTTER]' 
+2025/09/09 14:25:01   Tender 146 (Page 14): '[CKGE001407]' 
+2025/09/09 14:25:01   Tender 147 (Page 14): '[BI METALIC TERMINAL CONNECTOR FOR OIP BUSHING FOR TWIN ACSR MOOSE CONDUCTOR TO DRG 34993050007 REV04 TO STYLE JS9006280380 ]' 
+2025/09/09 14:25:01   Tender 148 (Page 14): '[SUPPLY OF MISC PUMP HORIZONTAL AND VERTICAL FOR NTPC LARA STPS STAGE-II AND NTPC SINGRAULI TPP]' 
+2025/09/09 14:25:01   Tender 149 (Page 14): '[Fabrication of Stator Frame]' 
+2025/09/09 14:25:01   Tender 150 (Page 14): '[Various types of GLAND BUSH Machining for TOA valve Assy FAVTA4612.]' 
+2025/09/09 14:25:01 PAGE 14: Successfully parsed 10 tenders
+2025/09/09 14:25:01 PAGE 14: Next button found: https://eprocurebhel.co.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:25:01 Progress: 150/303 tenders (49.5%) - Page 15 completed
+2025/09/09 14:25:01 PAGE 16: Clicking Next button: https://eprocurebhel.co.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:25:04 PAGE 15: Found tender table! Parsing results... (Status: 200)
+2025/09/09 14:25:04 PAGE 15: Parsing tender data from table element...
+2025/09/09 14:25:04   Tender 151 (Page 15): '[Supply of Manpower for Mechanical works in Steam Turbine Test Plant for 2025-26]' 
+2025/09/09 14:25:04   Tender 152 (Page 15): '[Misc Civil works for VIP rooms at Trishul Guest House in BHEL Township, Haridwar]' 
+2025/09/09 14:25:04   Tender 153 (Page 15): '[Blade Vibration Monitoring system]' 
+2025/09/09 14:25:04   Tender 154 (Page 15): '[SUPPLY OF GOLIMUMAB SOLUTION]' 
+2025/09/09 14:25:04   Tender 155 (Page 15): '[Supply of Fasteners GVFST1]' 
+2025/09/09 14:25:04   Tender 156 (Page 15): '[SUPPLY OF JAKOB COMPRESSION SPRINGS]' 
+2025/09/09 14:25:04   Tender 157 (Page 15): '[TAB DAPAMAC 10]' 
+2025/09/09 14:25:04   Tender 158 (Page 15): '[FF/SC/25081/202501751]' 
+2025/09/09 14:25:04   Tender 159 (Page 15): '[OEM SPARES FOR  VANKOS and COMPANY MAKE HYDRAULIC JACK]' 
+2025/09/09 14:25:04   Tender 160 (Page 15): '[Major Overhauling of 20.05 MW GTG 1 Generator at IOCL Haldia Refinery]' 
+2025/09/09 14:25:04 PAGE 15: Successfully parsed 10 tenders
+2025/09/09 14:25:04 PAGE 15: Next button found: https://eprocurebhel.co.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:25:04 Progress: 160/303 tenders (52.8%) - Page 16 completed
+2025/09/09 14:25:04 PAGE 17: Clicking Next button: https://eprocurebhel.co.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:25:07 PAGE 16: Found tender table! Parsing results... (Status: 200)
+2025/09/09 14:25:07 PAGE 16: Parsing tender data from table element...
+2025/09/09 14:25:07   Tender 161 (Page 16): '[E5253068 SHAFT SEAL]' 
+2025/09/09 14:25:07   Tender 162 (Page 16): '[Procurement of  CN9075903049 CBL PTFE GREY 600V 1C 0.597SQMM]' 
+2025/09/09 14:25:07   Tender 163 (Page 16): '[AZELASTINE HCL 140 MCG PLUS FLUTICASONE 50MCG NASAL SPRAY 140 PLUS 50MCG INH]' 
+2025/09/09 14:25:07   Tender 164 (Page 16): '[SUPPLY OF MEDICINES]' 
+2025/09/09 14:25:07   Tender 165 (Page 16): '[Hiring of Security Services]' 
+2025/09/09 14:25:07   Tender 166 (Page 16): '[E3353038 Spares for Mitsubishi make wire cut EDM]' 
+2025/09/09 14:25:07   Tender 167 (Page 16): '[3159-Contract for Housekeeping Service at 2x660MW Koradi Project for 03 Months]' 
+2025/09/09 14:25:07   Tender 168 (Page 16): '[Supply of LRB insulation wool to MEL MAHAN PROJECT SITE]' 
+2025/09/09 14:25:07   Tender 169 (Page 16): '[MTL/TW/25/01/001]' 
+2025/09/09 14:25:07   Tender 170 (Page 16): '[B COMPLEX PLUS ZINC CAP/TAB]' 
+2025/09/09 14:25:07 PAGE 16: Successfully parsed 10 tenders
+2025/09/09 14:25:07 PAGE 16: Next button found: https://eprocurebhel.co.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:25:07 Progress: 170/303 tenders (56.1%) - Page 17 completed
+2025/09/09 14:25:07 PAGE 18: Clicking Next button: https://eprocurebhel.co.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:25:09 PAGE 17: Found tender table! Parsing results... (Status: 200)
+2025/09/09 14:25:09 PAGE 17: Parsing tender data from table element...
+2025/09/09 14:25:09   Tender 171 (Page 17): '[ Procurement of 3D AND 2D ANIMATION SOFTWARE  FOR OTS]' 
+2025/09/09 14:25:09   Tender 172 (Page 17): '[LACTIC ACID BACILLUS PLUS B. COMPLEX CAP]' 
+2025/09/09 14:25:09   Tender 173 (Page 17): '[Supply of Lenord Bauer make spares]' 
+2025/09/09 14:25:09   Tender 174 (Page 17): '[FOHS PACKAGE PAINTING AND INSULATION WORK]' 
+2025/09/09 14:25:09   Tender 175 (Page 17): '[MESALAZINE 1.2GM (5-AMINO SALICYLIC ACID) TAB]' 
+2025/09/09 14:25:09   Tender 176 (Page 17): '[VITAMIN B COMPLEX WITH VIT B12 TAB]' 
+2025/09/09 14:25:09   Tender 177 (Page 17): '[NRJE000143]' 
+2025/09/09 14:25:09   Tender 178 (Page 17): '[Rate Contract for Supply of Name Plates]' 
+2025/09/09 14:25:09   Tender 179 (Page 17): '[Micrometric Telescope]' 
+2025/09/09 14:25:09   Tender 180 (Page 17): '[Krom Schroder-Honeywell make Gas Burner etc-11 Items]' 
+2025/09/09 14:25:09 PAGE 17: Successfully parsed 10 tenders
+2025/09/09 14:25:09 PAGE 17: Next button found: https://eprocurebhel.co.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:25:09 Progress: 180/303 tenders (59.4%) - Page 18 completed
+2025/09/09 14:25:09 PAGE 19: Clicking Next button: https://eprocurebhel.co.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:25:12 PAGE 18: Found tender table! Parsing results... (Status: 200)
+2025/09/09 14:25:12 PAGE 18: Parsing tender data from table element...
+2025/09/09 14:25:12   Tender 181 (Page 18): '[SUPPLY OF SILICON RUBBER ROD]' 
+2025/09/09 14:25:12   Tender 182 (Page 18): '[Works contract for manufacturing activities at LMM Shop, BHEL Jhansi]' 
+2025/09/09 14:25:12   Tender 183 (Page 18): '[SHIELD N INSULATION ITEMS]' 
+2025/09/09 14:25:12   Tender 184 (Page 18): '[SUPPLY OF EJECTOR ASLY WITH SILENCER ]' 
+2025/09/09 14:25:12   Tender 185 (Page 18): '[DIA 320 TWIN ROLLER ASSLY]' 
+2025/09/09 14:25:12   Tender 186 (Page 18): '[ANGE000066]' 
+2025/09/09 14:25:12   Tender 187 (Page 18): '[Miscellaneous tiling and aluminium work inside factory area]' 
+2025/09/09 14:25:12   Tender 188 (Page 18): '[SUPPLY OF NITRILE RUBBER CORD]' 
+2025/09/09 14:25:12   Tender 189 (Page 18): '[ANGE000067]' 
+2025/09/09 14:25:12   Tender 190 (Page 18): '[Rate contract for supply of LS Box, Transmitter Cover and S-Hook]' 
+2025/09/09 14:25:12 PAGE 18: Successfully parsed 10 tenders
+2025/09/09 14:25:12 PAGE 18: Next button found: https://eprocurebhel.co.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:25:12 Progress: 190/303 tenders (62.7%) - Page 19 completed
+2025/09/09 14:25:12 PAGE 20: Clicking Next button: https://eprocurebhel.co.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:25:14 PAGE 19: Found tender table! Parsing results... (Status: 200)
+2025/09/09 14:25:14 PAGE 19: Parsing tender data from table element...
+2025/09/09 14:25:14   Tender 191 (Page 19): '[Fabrication and supply of Column, Auto weld and General Fabrication for DVC Raghunathpur Projects with Vendors Material (OVM)]' 
+2025/09/09 14:25:14   Tender 192 (Page 19): '[E54250026 REV-01 ]' 
+2025/09/09 14:25:14   Tender 193 (Page 19): '[E4653097/ RC for CONTACTORS and ADD ON ITEMS (14 ITEMS)	]' 
+2025/09/09 14:25:14   Tender 194 (Page 19): '[KETOCONAZOLE (2PERCENT) CREAM (30GM/TUBE)]' 
+2025/09/09 14:25:14   Tender 195 (Page 19): '[Enquiry for CAN/Modbus TCP Slave-Converter]' 
+2025/09/09 14:25:14   Tender 196 (Page 19): '[TCX/TW/25/13]' 
+2025/09/09 14:25:14   Tender 197 (Page 19): '[Hiring the HSE services by safety officer for the 525 TPD standby SRU Project, IOCL Paradip, Odisha.]' 
+2025/09/09 14:25:14   Tender 198 (Page 19): '[FF/SC/25082/202500992]' 
+2025/09/09 14:25:14   Tender 199 (Page 19): '[PRIME AND BOND (DENTAL ADHESIVE LIQUID) 4 TO 4.5 ML]' 
+2025/09/09 14:25:14   Tender 200 (Page 19): '[RATE CONTRACT FOR PROCUREMENT OF FRP TUBE]' 
+2025/09/09 14:25:14 PAGE 19: Successfully parsed 10 tenders
+2025/09/09 14:25:14 PAGE 19: Next button found: https://eprocurebhel.co.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:25:14 Progress: 200/303 tenders (66.0%) - Page 20 completed
+2025/09/09 14:25:14 PAGE 21: Clicking Next button: https://eprocurebhel.co.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:25:17 PAGE 20: Found tender table! Parsing results... (Status: 200)
+2025/09/09 14:25:17 PAGE 20: Parsing tender data from table element...
+2025/09/09 14:25:17   Tender 201 (Page 20): '[E5153174 RATE CONTRACT FOR SUPPLY OF TM4605/TM4601 EARTHING CABLE ASSY ]' 
+2025/09/09 14:25:17   Tender 202 (Page 20): '[B7B1Y36834]' 
+2025/09/09 14:25:17   Tender 203 (Page 20): '[ANGE000068]' 
+2025/09/09 14:25:17   Tender 204 (Page 20): '[ANGE000069]' 
+2025/09/09 14:25:17   Tender 205 (Page 20): '[MPI machine]' 
+2025/09/09 14:25:17   Tender 206 (Page 20): '[HDL DIRECT (WITH CALIBRATOR (R1 120ML PLUS R2 40ML)]' 
+2025/09/09 14:25:17   Tender 207 (Page 20): '[Renovation of office cabins, enclosures, partitions, windows etc. inside factory area]' 
+2025/09/09 14:25:17   Tender 208 (Page 20): '[SPARE PARTS FOR NOX ANALYSER]' 
+2025/09/09 14:25:17   Tender 209 (Page 20): '[ANGE000070]' 
+2025/09/09 14:25:17   Tender 210 (Page 20): '[OTI/WTI/RTD]' 
+2025/09/09 14:25:17 PAGE 20: Successfully parsed 10 tenders
+2025/09/09 14:25:17 PAGE 20: Next button found: https://eprocurebhel.co.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:25:17 Progress: 210/303 tenders (69.3%) - Page 21 completed
+2025/09/09 14:25:17 PAGE 22: Clicking Next button: https://eprocurebhel.co.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:25:20 PAGE 21: Found tender table! Parsing results... (Status: 200)
+2025/09/09 14:25:20 PAGE 21: Parsing tender data from table element...
+2025/09/09 14:25:20   Tender 211 (Page 21): '[HYDROXYPROPYL METHYLCELLULOSE 0.3 PERCENT TUBE]' 
+2025/09/09 14:25:20   Tender 212 (Page 21): '[WINDING WIRE FLAT FL CU FO 13 CR SIZE 4 X 2 BARE  AND  4.23X2.23 MM INSULATED TO 4TMS096099ALT02]' 
+2025/09/09 14:25:20   Tender 213 (Page 21): '[Works Contract for Engaging an Exclusive Agency for Conical Rolling of Hopper sections of Adani Mirzapur and NTPC LARA]' 
+2025/09/09 14:25:20   Tender 214 (Page 21): '[3 KVA UPS with battery]' 
+2025/09/09 14:25:20   Tender 215 (Page 21): '[Various types of BUSHING Machining for QCNRV Valve Assy. ENVQN4569.]' 
+2025/09/09 14:25:20   Tender 216 (Page 21): '[JAW1 FOR 9E ROTOR BLADE STG789]' 
+2025/09/09 14:25:20   Tender 217 (Page 21): '[ONLY MACHINING OF DABG ITEMS]' 
+2025/09/09 14:25:20   Tender 218 (Page 21): '[MASS FLOW CONTROLLER]' 
+2025/09/09 14:25:20   Tender 219 (Page 21): '[Supply of PAS System for VB_4Sets]' 
+2025/09/09 14:25:20   Tender 220 (Page 21): '[SPUN COVER TO DRG 34772350000 REV 05 ITEM 01 AND TO ST 626466 DIA 565 PAINT SHADE RAL 7032]' 
+2025/09/09 14:25:20 PAGE 21: Successfully parsed 10 tenders
+2025/09/09 14:25:20 PAGE 21: Next button found: https://eprocurebhel.co.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:25:20 Progress: 220/303 tenders (72.6%) - Page 22 completed
+2025/09/09 14:25:20 PAGE 23: Clicking Next button: https://eprocurebhel.co.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:25:23 PAGE 22: Found tender table! Parsing results... (Status: 200)
+2025/09/09 14:25:23 PAGE 22: Parsing tender data from table element...
+2025/09/09 14:25:23   Tender 221 (Page 22): '[NINTEDANIB 100MG TAB]' 
+2025/09/09 14:25:23   Tender 222 (Page 22): '[E5253069 BEARING]' 
+2025/09/09 14:25:23   Tender 223 (Page 22): '[Supply of Al tubes for 2x800 MW DVC Koderma TPS Phase-II	]' 
+2025/09/09 14:25:23   Tender 224 (Page 22): '[THYROXINE 25MCG TABLETS]' 
+2025/09/09 14:25:23   Tender 225 (Page 22): '[SUPPLY OF INSERT AND PLUG]' 
+2025/09/09 14:25:23   Tender 226 (Page 22): '[Rate contract for supply of Coniferous timber packing cases small plain and large plain]' 
+2025/09/09 14:25:23   Tender 227 (Page 22): '[SUPPLY OF HOSE FLEXIBLE METAL 6 INCH CL300 SS]' 
+2025/09/09 14:25:23   Tender 228 (Page 22): '[E4653069R FOR RC CURRENT TRANSFORMER (2 TYPES)]' 
+2025/09/09 14:25:23   Tender 229 (Page 22): '[SAME001640]' 
+2025/09/09 14:25:23   Tender 230 (Page 22): '[SAME001641]' 
+2025/09/09 14:25:23 PAGE 22: Successfully parsed 10 tenders
+2025/09/09 14:25:23 PAGE 22: Next button found: https://eprocurebhel.co.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:25:23 Progress: 230/303 tenders (75.9%) - Page 23 completed
+2025/09/09 14:25:23 PAGE 24: Clicking Next button: https://eprocurebhel.co.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:25:26 PAGE 23: Found tender table! Parsing results... (Status: 200)
+2025/09/09 14:25:26 PAGE 23: Parsing tender data from table element...
+2025/09/09 14:25:26   Tender 231 (Page 23): '[RATE CONTRACT FOR 2 YEARS FOR THE SUPPLY OF JOURNAL PRESSURE SPRINGS]' 
+2025/09/09 14:25:26   Tender 232 (Page 23): '[SAME001642]' 
+2025/09/09 14:25:26   Tender 233 (Page 23): '[E-RC-304-25-0154-61-1]' 
+2025/09/09 14:25:26   Tender 234 (Page 23): '[Clamping Fixtures for Compressor Test Facility]' 
+2025/09/09 14:25:26   Tender 235 (Page 23): '[TB screw connection 1.5 - 10 sqmm, BLACK]' 
+2025/09/09 14:25:26   Tender 236 (Page 23): '[Two Year Framework Agreement with Studios for Photography, Videography, Live Streaming and allied services required by BHEL in Delhi NCR]' 
+2025/09/09 14:25:26   Tender 237 (Page 23): '[RATE CONTRACT FOR PROCUREMENT OF FRP ROD]' 
+2025/09/09 14:25:26   Tender 238 (Page 23): '[FLOW SWITCH AS PER THE DRAWING NO 34661950080 REV02]' 
+2025/09/09 14:25:26   Tender 239 (Page 23): '[GLYCOPYRROLATE 9MCG PLUS FORMOTEROL 4.8 MCG PLUS BUDESONIDE 160 MCG 120 MDI INHALER]' 
+2025/09/09 14:25:26   Tender 240 (Page 23): '[Procurement of CS Rounds to the specification SA105]' 
+2025/09/09 14:25:26 PAGE 23: Successfully parsed 10 tenders
+2025/09/09 14:25:26 PAGE 23: Next button found: https://eprocurebhel.co.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:25:26 Progress: 240/303 tenders (79.2%) - Page 24 completed
+2025/09/09 14:25:26 PAGE 25: Clicking Next button: https://eprocurebhel.co.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:25:30 PAGE 24: Found tender table! Parsing results... (Status: 200)
+2025/09/09 14:25:30 PAGE 24: Parsing tender data from table element...
+2025/09/09 14:25:30   Tender 241 (Page 24): '[ANTIOXIDANTS CAPSULES]' 
+2025/09/09 14:25:30   Tender 242 (Page 24): '[Cleaning and civil repair works of main drainage line from main check post to Srinivasa theater and connected branch lines in Township area]' 
+2025/09/09 14:25:30   Tender 243 (Page 24): '[ACEBROPHYLLINE 100MG TABLET]' 
+2025/09/09 14:25:30   Tender 244 (Page 24): '[Spares for Gel Timer (Make - LAMY)]' 
+2025/09/09 14:25:30   Tender 245 (Page 24): '[Manufacturing of Sidebar components]' 
+2025/09/09 14:25:30   Tender 246 (Page 24): '[CKGE001408]' 
+2025/09/09 14:25:30   Tender 247 (Page 24): '[Refilling of Liquid N2 Gas as per purchase specification SCR-CS-002 Rev 00]' 
+2025/09/09 14:25:30   Tender 248 (Page 24): '[E24250011 PROPELLER FAN]' 
+2025/09/09 14:25:30   Tender 249 (Page 24): '[Contact Disc Machined R68 L, Q67 and Q64]' 
+2025/09/09 14:25:30   Tender 250 (Page 24): '[CENTRIFUGE FILTRATION SYSTEM]' 
+2025/09/09 14:25:30 PAGE 24: Successfully parsed 10 tenders
+2025/09/09 14:25:30 PAGE 24: Next button found: https://eprocurebhel.co.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:25:30 Progress: 250/303 tenders (82.5%) - Page 25 completed
+2025/09/09 14:25:30 PAGE 26: Clicking Next button: https://eprocurebhel.co.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:25:36 PAGE 25: Found tender table! Parsing results... (Status: 200)
+2025/09/09 14:25:36 PAGE 25: Parsing tender data from table element...
+2025/09/09 14:25:36   Tender 251 (Page 25): '[CKGE001409]' 
+2025/09/09 14:25:36   Tender 252 (Page 25): '[Civil Renovation Works to be carried out at Community Center auditorium in Phase1]' 
+2025/09/09 14:25:36   Tender 253 (Page 25): '[Repair and modification of acoustic treatment and various civil work at cultural hall and repairing of canopy at north side of block 3 inside factory area.]' 
+2025/09/09 14:25:36   Tender 254 (Page 25): '[Complete machining of miscellaneous ST components with BHEL materials]' 
+2025/09/09 14:25:36   Tender 255 (Page 25): '[SELF ADHERENT SOFT SILICONE FOAM DRESSING SIZE 12.5 CM X 12.5 CM]' 
+2025/09/09 14:25:36   Tender 256 (Page 25): '[Various types of GLAND FLANGE Machining for QCNRV Assy.ENVQN4621.]' 
+2025/09/09 14:25:36   Tender 257 (Page 25): '[FAVSV4625 - Safety Valve Components Machining]' 
+2025/09/09 14:25:36   Tender 258 (Page 25): '[SELF ADHERENT SOFT SILICONE FOAM DRESSING SIZE 15 CM X 20 CM]' 
+2025/09/09 14:25:36   Tender 259 (Page 25): '[FF/SC/25083/202501811]' 
+2025/09/09 14:25:36   Tender 260 (Page 25): '[FF/SC/P25029/202501781]' 
+2025/09/09 14:25:36 PAGE 25: Successfully parsed 10 tenders
+2025/09/09 14:25:36 PAGE 25: Next button found: https://eprocurebhel.co.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:25:36 Progress: 260/303 tenders (85.8%) - Page 26 completed
+2025/09/09 14:25:36 PAGE 27: Clicking Next button: https://eprocurebhel.co.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:25:39 PAGE 26: Found tender table! Parsing results... (Status: 200)
+2025/09/09 14:25:39 PAGE 26: Parsing tender data from table element...
+2025/09/09 14:25:39   Tender 261 (Page 26): '[FF/SC/P25030/202501791]' 
+2025/09/09 14:25:39   Tender 262 (Page 26): '[FF/SC/P25031/202501801]' 
+2025/09/09 14:25:39   Tender 263 (Page 26): '[Supply of MS casing as per BHEL drawings]' 
+2025/09/09 14:25:39   Tender 264 (Page 26): '[S9AYS00005 Coupling Cover Assembly]' 
+2025/09/09 14:25:39   Tender 265 (Page 26): '[SELF ADHERENT SOFT SILICONE FOAM DRESSING SIZE 7.5 CM X 7.5 CM]' 
+2025/09/09 14:25:39   Tender 266 (Page 26): '[E/243/2025/1696/G1]' 
+2025/09/09 14:25:39   Tender 267 (Page 26): '[SELF ADHERENT SOFT SILICONE FOAM DRESSING SIZE 10 CM X 10 CM]' 
+2025/09/09 14:25:39   Tender 268 (Page 26): '[WELDING WORKS OF PUMPS COMPONENTS AND FABRICATION OF PUMPS INTEGRAL TUBING]' 
+2025/09/09 14:25:39   Tender 269 (Page 26): '[E-306-25-0076-62-1]' 
+2025/09/09 14:25:39   Tender 270 (Page 26): '[WATER INJECTION CHECK VALVE]' 
+2025/09/09 14:25:39 PAGE 26: Successfully parsed 10 tenders
+2025/09/09 14:25:39 PAGE 26: Next button found: https://eprocurebhel.co.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:25:39 Progress: 270/303 tenders (89.1%) - Page 27 completed
+2025/09/09 14:25:39 PAGE 28: Clicking Next button: https://eprocurebhel.co.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:25:42 PAGE 27: Found tender table! Parsing results... (Status: 200)
+2025/09/09 14:25:42 PAGE 27: Parsing tender data from table element...
+2025/09/09 14:25:42   Tender 271 (Page 27): '[E-306-25-0077-62-1]' 
+2025/09/09 14:25:42   Tender 272 (Page 27): '[CREPE PAPER COVERED COPPER CABLE ]' 
+2025/09/09 14:25:42   Tender 273 (Page 27): '[MACHINING OF ITEMS WITH BHEL MATERIAL ]' 
+2025/09/09 14:25:42   Tender 274 (Page 27): '[MACHINING OF ITEMS WITH BHEL MATERIAL ]' 
+2025/09/09 14:25:42   Tender 275 (Page 27): '[NKBE001456-EC-LT-3WEEKS	]' 
+2025/09/09 14:25:42   Tender 276 (Page 27): '[Procurement of DA0659558259 Workstation Windows 10 on Rate contract basis ]' 
+2025/09/09 14:25:42   Tender 277 (Page 27): '[CMC of Biochemistry analyzer]' 
+2025/09/09 14:25:42   Tender 278 (Page 27): '[Various types of BYPASS and PRV TUBE Machining for TOA Assy ENVTA4624]' 
+2025/09/09 14:25:42   Tender 279 (Page 27): '[PRESSURE RELIEF VALVE]' 
+2025/09/09 14:25:42   Tender 280 (Page 27): '[Complete machining of Cylindrical Pins with BHEL materials]' 
+2025/09/09 14:25:42 PAGE 27: Successfully parsed 10 tenders
+2025/09/09 14:25:42 PAGE 27: Next button found: https://eprocurebhel.co.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:25:42 Progress: 280/303 tenders (92.4%) - Page 28 completed
+2025/09/09 14:25:42 PAGE 29: Clicking Next button: https://eprocurebhel.co.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:25:45 PAGE 28: Found tender table! Parsing results... (Status: 200)
+2025/09/09 14:25:45 PAGE 28: Parsing tender data from table element...
+2025/09/09 14:25:45   Tender 281 (Page 28): '[E/ E211/2025/0889/Y2]' 
+2025/09/09 14:25:45   Tender 282 (Page 28): '[F0AYX00008-CW SUMP MODEL STUDIES]' 
+2025/09/09 14:25:45   Tender 283 (Page 28): '[Complete machining of Fasteners with BHEL material]' 
+2025/09/09 14:25:45   Tender 284 (Page 28): '[E18250008 RC for RIP Bushings]' 
+2025/09/09 14:25:45   Tender 285 (Page 28): '[Repairing of existing internal road in BHEL RnD township]' 
+2025/09/09 14:25:45   Tender 286 (Page 28): '[Refractory Melting operations in FP FY 2025-26]' 
+2025/09/09 14:25:45   Tender 287 (Page 28): '[R134A Gas in tonner - Gases]' 
+2025/09/09 14:25:45   Tender 288 (Page 28): '[Foundation Bolts ]' 
+2025/09/09 14:25:45   Tender 289 (Page 28): '[DENTAL DEVITALISER (3GM TO 15GM/PK) (WITHOUT ARSENIC)]' 
+2025/09/09 14:25:45   Tender 290 (Page 28): '[E5953030, OA7002AZ FAN ASSY (M/CD) TO DRG NO 24304511007 V00 REV04]' 
+2025/09/09 14:25:45 PAGE 28: Successfully parsed 10 tenders
+2025/09/09 14:25:45 PAGE 28: Next button found: https://eprocurebhel.co.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:25:45 Progress: 290/303 tenders (95.7%) - Page 29 completed
+2025/09/09 14:25:45 PAGE 30: Clicking Next button: https://eprocurebhel.co.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:25:47 PAGE 29: Found tender table! Parsing results... (Status: 200)
+2025/09/09 14:25:47 PAGE 29: Parsing tender data from table element...
+2025/09/09 14:25:47   Tender 291 (Page 29): '[SILICON GASKET]' 
+2025/09/09 14:25:47   Tender 292 (Page 29): '[KRYNIC0083- Supply of LVS to Rahughat HEP]' 
+2025/09/09 14:25:47   Tender 293 (Page 29): '[WEX/TW/25/13]' 
+2025/09/09 14:25:47   Tender 294 (Page 29): '[RECONDITIONING OF 3X120TR CHILLER PLANT]' 
+2025/09/09 14:25:47   Tender 295 (Page 29): '[SUPPLY OF COMP. SET OF PNEU.CONT-GP-130C-535A/O1D]' 
+2025/09/09 14:25:47   Tender 296 (Page 29): '[Supply of seamless pipes]' 
+2025/09/09 14:25:47   Tender 297 (Page 29): '[BODY ROUGH-V756 Machining for TOA valve Assy,ENVTA4619]' 
+2025/09/09 14:25:47   Tender 298 (Page 29): '[PLUG STRT BNT TRIAX UG CLAMP]' 
+2025/09/09 14:25:47   Tender 299 (Page 29): '[DC LINK CAPACITOR]' 
+2025/09/09 14:25:47   Tender 300 (Page 29): '[Supply of Inconel SUPERNI 625 Forging]' 
+2025/09/09 14:25:47 PAGE 29: Successfully parsed 10 tenders
+2025/09/09 14:25:47 PAGE 29: Next button found: https://eprocurebhel.co.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:25:47 Progress: 300/303 tenders (99.0%) - Page 30 completed
+2025/09/09 14:25:47 PAGE 31: Clicking Next button: https://eprocurebhel.co.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveTenders&service=direct&session=T
+2025/09/09 14:25:50 PAGE 30: Found tender table! Parsing results... (Status: 200)
+2025/09/09 14:25:50 PAGE 30: Parsing tender data from table element...
+2025/09/09 14:25:50   Tender 301 (Page 30): '[DIENOGEST 2MG TABLET]' 
+2025/09/09 14:25:50   Tender 302 (Page 30): '[MCB 4A 2P 240VAC/24VDC 10/1KA C-Char]' 
+2025/09/09 14:25:50   Tender 303 (Page 30): '[RATE CONTRACT FOR TRANSPORTATION OF VARIOUS BHEL SITE, PLANT MATERIAL]' 
+2025/09/09 14:25:50 PAGE 30: Successfully parsed 3 tenders
+2025/09/09 14:25:50 Progress: 303/303 tenders (100.0%) - Page 31 completed
+2025/09/09 14:25:50 All 303 tenders scraped, stopping pagination
+2025/09/09 14:25:50 Pagination completed! Processed 31 pages, scraped 303 tenders
+2025/09/09 14:25:50 Scraping completed successfully! Total tenders scraped: 303/303

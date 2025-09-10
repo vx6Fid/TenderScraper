@@ -1,5 +1,13 @@
 package utils
 
+import "time"
+
+type URLS struct {
+	BaseURL string
+	State   string
+	Domain  string
+}
+
 // Shared Types
 type Tender struct {
 	BasicDetails struct {
@@ -17,6 +25,13 @@ type Tender struct {
 		IsMultiCurrencyAllowedForBOQ       bool
 		IsMultiCurrencyAllowedForFee       bool
 		AllowTwoStageBidding               bool
+	}
+
+	Information struct {
+		Website   string
+		Link      string // tender link
+		CreatedAt time.Time
+		UpdatedAt time.Time
 	}
 
 	PaymentInstruments struct {

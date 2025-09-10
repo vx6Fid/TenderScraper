@@ -1,0 +1,16 @@
+2025/09/09 14:19:23 Starting tender scraping process with correct session flow.
+2025/09/09 14:19:23 STEP 1: Clicking Active Tenders link with session: https://www.eprocuremidhani.nic.in/nicgep/app?page=FrontEndLatestActiveTenders&service=page
+2025/09/09 14:19:25 PAGE 1: Found tender table! Parsing results... (Status: 200)
+2025/09/09 14:19:25 PAGE 1: Parsing tender data from table element...
+2025/09/09 14:19:25   Tender 1 (Page 1): '[One Time job contract for Dismantling, fabrication and erection of fumes suction duct of EAF 5T]' 
+2025/09/09 14:19:25   Tender 2 (Page 1): '[Providing and laying PCC for LPG yard and Hydrogen plant, MIDHANI.]' 
+2025/09/09 14:19:25   Tender 3 (Page 1): '[Waterjet Cutting of Titanium Alloy Material]' 
+2025/09/09 14:19:25   Tender 4 (Page 1): '[Machining of IN100 Dies for Shakti Engine Discs Isothermal Forging]' 
+2025/09/09 14:19:25   Tender 5 (Page 1): '[PROCUREMENT OF SPINDLE AND BEARING SEGMENTS]' 
+2025/09/09 14:19:25   Tender 6 (Page 1): '[PROCUREMENT OF LI-ION BATTERIES FOR EVIDENT MAKE VANTA MOBILE XRF]' 
+2025/09/09 14:19:25   Tender 7 (Page 1): '[Construction of structural stair cases and walkway platforms for MS- II , CRM and MS-III, MIDHANI]' 
+2025/09/09 14:19:25   Tender 8 (Page 1): '[Machining of Martensitic Stainless Steel Ring]' 
+2025/09/09 14:19:25 PAGE 1: Successfully parsed 8 tenders
+2025/09/09 14:19:25 STEP 2: Starting pagination process...
+2025/09/09 14:19:25 Pagination completed! Processed 1 pages, scraped 8 tenders
+2025/09/09 14:19:25 Scraping completed successfully! Total tenders scraped: 8/0

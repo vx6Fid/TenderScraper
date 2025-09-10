@@ -1,0 +1,37 @@
+2025/09/09 14:18:41 STEP 1: Starting captcha/session flow: https://cpcletenders.nic.in/nicgep/app?page=FrontEndLatestActiveTenders&service=page
+2025/09/09 14:18:41 [request] GET https://cpcletenders.nic.in/nicgep/app?page=FrontEndLatestActiveTenders&service=page
+2025/09/09 14:18:44 [response] https://cpcletenders.nic.in/nicgep/app?page=FrontEndLatestActiveTenders&service=page | 200 | 31797 bytes
+2025/09/09 14:18:44 [captcha] response handler: GET | https://cpcletenders.nic.in/nicgep/app?page=FrontEndLatestActiveTenders&service=page | 200
+2025/09/09 14:18:44 [captcha] found form (status 200) at https://cpcletenders.nic.in/nicgep/app?page=FrontEndLatestActiveTenders&service=page
+2025/09/09 14:18:44 [captcha] find table in document
+2025/09/09 14:18:44 [captcha] found form (status 200) at https://cpcletenders.nic.in/nicgep/app?page=FrontEndLatestActiveTenders&service=page
+2025/09/09 14:18:44 [captcha] image found!
+2025/09/09 14:18:44 === CAPTCHA SOLVER ===
+2025/09/09 14:18:44 Captcha image saved to: /tmp/captcha_1757407724.png
+2025/09/09 14:18:49 Sending captcha to API...
+2025/09/09 14:19:11 Captcha solution received: 541DZ5
+2025/09/09 14:19:11 Captcha solution received: '541DZ5'
+2025/09/09 14:19:11 Warning: Could not remove temporary file /tmp/captcha_1757407724.png: remove /tmp/captcha_1757407724.png: no such file or directory
+2025/09/09 14:19:11 [captcha] solved: 541DZ5
+2025/09/09 14:19:11 [captcha] submitting form with 17 fields
+2025/09/09 14:19:11 [request] POST https://cpcletenders.nic.in/nicgep/app
+2025/09/09 14:19:13 [response] https://cpcletenders.nic.in/nicgep/app | 200 | 32337 bytes
+2025/09/09 14:19:13 [captcha] response handler: POST | https://cpcletenders.nic.in/nicgep/app | 200
+2025/09/09 14:19:13 [captcha] found form (status 200) at https://cpcletenders.nic.in/nicgep/app
+2025/09/09 14:19:13 [captcha] find table in document
+2025/09/09 14:19:13 [captcha] found form (status 200) at https://cpcletenders.nic.in/nicgep/app
+2025/09/09 14:19:13 [captcha] image found!
+2025/09/09 14:19:13 === CAPTCHA SOLVER ===
+2025/09/09 14:19:13 Captcha image saved to: /tmp/captcha_1757407753.png
+2025/09/09 14:19:17 Sending captcha to API...
+2025/09/09 14:19:38 Captcha solution received: B6vEx1
+2025/09/09 14:19:38 Captcha solution received: 'B6vEx1'
+2025/09/09 14:19:38 [captcha] solved: B6vEx1
+2025/09/09 14:19:38 [captcha] submitting form with 17 fields
+2025/09/09 14:19:38 [request] POST https://cpcletenders.nic.in/nicgep/app
+2025/09/09 14:19:40 [response] https://cpcletenders.nic.in/nicgep/app | 200 | 53985 bytes
+2025/09/09 14:19:40 [captcha] response handler: POST | https://cpcletenders.nic.in/nicgep/app | 200
+2025/09/09 14:19:40 [captcha] found form (status 200) at https://cpcletenders.nic.in/nicgep/app
+2025/09/09 14:19:40 [captcha] find table in document
+2025/09/09 14:19:40 [captcha] tender list table found, skipping captcha
+2025/09/09 14:19:40 Session established: 1 cookies

@@ -1,0 +1,168 @@
+2025/09/09 14:18:41 STEP 1: Starting captcha/session flow: https://eprocurebel.co.in/nicgep/app?page=FrontEndLatestActiveTenders&service=page
+2025/09/09 14:18:41 [request] GET https://eprocurebel.co.in/nicgep/app?page=FrontEndLatestActiveTenders&service=page
+2025/09/09 14:18:44 [response] https://eprocurebel.co.in/nicgep/app?page=FrontEndLatestActiveTenders&service=page | 200 | 30068 bytes
+2025/09/09 14:18:44 [captcha] response handler: GET | https://eprocurebel.co.in/nicgep/app?page=FrontEndLatestActiveTenders&service=page | 200
+2025/09/09 14:18:44 [captcha] found form (status 200) at https://eprocurebel.co.in/nicgep/app?page=FrontEndLatestActiveTenders&service=page
+2025/09/09 14:18:44 [captcha] find table in document
+2025/09/09 14:18:44 [captcha] found form (status 200) at https://eprocurebel.co.in/nicgep/app?page=FrontEndLatestActiveTenders&service=page
+2025/09/09 14:18:44 [captcha] image found!
+2025/09/09 14:18:44 === CAPTCHA SOLVER ===
+2025/09/09 14:18:44 Captcha image saved to: /tmp/captcha_1757407724.png
+2025/09/09 14:18:49 Sending captcha to API...
+2025/09/09 14:20:13 Captcha solution received: 5:4jDZ5
+2025/09/09 14:20:13 Captcha solution received: '5:4jDZ5'
+2025/09/09 14:20:13 Warning: Could not remove temporary file /tmp/captcha_1757407724.png: remove /tmp/captcha_1757407724.png: no such file or directory
+2025/09/09 14:20:13 [captcha] solved: 5:4jDZ5
+2025/09/09 14:20:13 [captcha] submitting form with 17 fields
+2025/09/09 14:20:13 [request] POST https://eprocurebel.co.in/nicgep/app
+2025/09/09 14:20:16 [response] https://eprocurebel.co.in/nicgep/app | 200 | 30692 bytes
+2025/09/09 14:20:16 [captcha] response handler: POST | https://eprocurebel.co.in/nicgep/app | 200
+2025/09/09 14:20:16 [captcha] found form (status 200) at https://eprocurebel.co.in/nicgep/app
+2025/09/09 14:20:16 [captcha] find table in document
+2025/09/09 14:20:16 [captcha] found form (status 200) at https://eprocurebel.co.in/nicgep/app
+2025/09/09 14:20:16 [captcha] image found!
+2025/09/09 14:20:16 === CAPTCHA SOLVER ===
+2025/09/09 14:20:16 Captcha image saved to: /tmp/captcha_1757407816.png
+2025/09/09 14:20:16 Sending captcha to API...
+2025/09/09 14:20:37 Captcha solution received: 6KhkAt
+2025/09/09 14:20:37 Captcha solution received: '6KhkAt'
+2025/09/09 14:20:37 [captcha] solved: 6KhkAt
+2025/09/09 14:20:37 [captcha] submitting form with 17 fields
+2025/09/09 14:20:37 [request] POST https://eprocurebel.co.in/nicgep/app
+2025/09/09 14:20:39 [response] https://eprocurebel.co.in/nicgep/app | 200 | 52597 bytes
+2025/09/09 14:20:39 [captcha] response handler: POST | https://eprocurebel.co.in/nicgep/app | 200
+2025/09/09 14:20:39 [captcha] found form (status 200) at https://eprocurebel.co.in/nicgep/app
+2025/09/09 14:20:39 [captcha] find table in document
+2025/09/09 14:20:39 [captcha] tender list table found, skipping captcha
+2025/09/09 14:20:40 Session established: 1 cookies
+4:19:35 [captcha] find table in document
+2025/09/09 14:19:35 [captcha] found form (status 200) at https://eprocurebhel.co.in/nicgep/app
+2025/09/09 14:19:35 [captcha] image found!
+2025/09/09 14:19:35 === CAPTCHA SOLVER ===
+2025/09/09 14:19:35 Captcha image saved to: /tmp/captcha_1757407775.png
+2025/09/09 14:19:40 Sending captcha to API...
+2025/09/09 14:19:50 Captcha solution received: a6ta36
+2025/09/09 14:19:50 Captcha solution received: 'a6ta36'
+2025/09/09 14:19:50 [captcha] solved: a6ta36
+2025/09/09 14:19:50 [captcha] submitting form with 17 fields
+2025/09/09 14:19:50 [request] POST https://eprocurebhel.co.in/nicgep/app
+2025/09/09 14:19:53 [response] https://eprocurebhel.co.in/nicgep/app | 200 | 32717 bytes
+2025/09/09 14:19:53 [captcha] response handler: POST | https://eprocurebhel.co.in/nicgep/app | 200
+2025/09/09 14:19:53 [captcha] found form (status 200) at https://eprocurebhel.co.in/nicgep/app
+2025/09/09 14:19:53 [captcha] find table in document
+2025/09/09 14:19:53 [captcha] found form (status 200) at https://eprocurebhel.co.in/nicgep/app
+2025/09/09 14:19:53 [captcha] image found!
+2025/09/09 14:19:53 === CAPTCHA SOLVER ===
+2025/09/09 14:19:53 Captcha image saved to: /tmp/captcha_1757407793.png
+2025/09/09 14:19:58 Sending captcha to API...
+2025/09/09 14:20:19 Captcha solution received: 8xs5d8
+2025/09/09 14:20:19 Captcha solution received: '8xs5d8'
+2025/09/09 14:20:19 Warning: Could not remove temporary file /tmp/captcha_1757407793.png: remove /tmp/captcha_1757407793.png: no such file or directory
+2025/09/09 14:20:19 [captcha] solved: 8xs5d8
+2025/09/09 14:20:19 [captcha] submitting form with 17 fields
+2025/09/09 14:20:19 [request] POST https://eprocurebhel.co.in/nicgep/app
+2025/09/09 14:20:21 [response] https://eprocurebhel.co.in/nicgep/app | 200 | 32935 bytes
+2025/09/09 14:20:21 [captcha] response handler: POST | https://eprocurebhel.co.in/nicgep/app | 200
+2025/09/09 14:20:21 [captcha] found form (status 200) at https://eprocurebhel.co.in/nicgep/app
+2025/09/09 14:20:21 [captcha] find table in document
+2025/09/09 14:20:21 [captcha] found form (status 200) at https://eprocurebhel.co.in/nicgep/app
+2025/09/09 14:20:21 [captcha] image found!
+2025/09/09 14:20:21 === CAPTCHA SOLVER ===
+2025/09/09 14:20:21 Captcha image saved to: /tmp/captcha_1757407821.png
+2025/09/09 14:20:26 Sending captcha to API...
+2025/09/09 14:20:58 Captcha solution received: v6R4UZ
+2025/09/09 14:20:58 Captcha solution received: 'v6R4UZ'
+2025/09/09 14:20:58 Warning: Could not remove temporary file /tmp/captcha_1757407821.png: remove /tmp/captcha_1757407821.png: no such file or directory
+2025/09/09 14:20:58 [captcha] solved: v6R4UZ
+2025/09/09 14:20:58 [captcha] submitting form with 17 fields
+2025/09/09 14:20:58 [request] POST https://eprocurebhel.co.in/nicgep/app
+2025/09/09 14:21:00 [response] https://eprocurebhel.co.in/nicgep/app | 200 | 32741 bytes
+2025/09/09 14:21:00 [captcha] response handler: POST | https://eprocurebhel.co.in/nicgep/app | 200
+2025/09/09 14:21:00 [captcha] found form (status 200) at https://eprocurebhel.co.in/nicgep/app
+2025/09/09 14:21:00 [captcha] find table in document
+2025/09/09 14:21:00 [captcha] found form (status 200) at https://eprocurebhel.co.in/nicgep/app
+2025/09/09 14:21:00 [captcha] image found!
+2025/09/09 14:21:00 === CAPTCHA SOLVER ===
+2025/09/09 14:21:00 Captcha image saved to: /tmp/captcha_1757407860.png
+2025/09/09 14:21:04 Sending captcha to API...
+2025/09/09 14:21:15 Captcha solution received: phzhf6
+2025/09/09 14:21:15 Captcha solution received: 'phzhf6'
+2025/09/09 14:21:15 [captcha] solved: phzhf6
+2025/09/09 14:21:15 [captcha] submitting form with 17 fields
+2025/09/09 14:21:15 [request] POST https://eprocurebhel.co.in/nicgep/app
+2025/09/09 14:21:18 [response] https://eprocurebhel.co.in/nicgep/app | 200 | 32753 bytes
+2025/09/09 14:21:18 [captcha] response handler: POST | https://eprocurebhel.co.in/nicgep/app | 200
+2025/09/09 14:21:18 [captcha] found form (status 200) at https://eprocurebhel.co.in/nicgep/app
+2025/09/09 14:21:18 [captcha] find table in document
+2025/09/09 14:21:18 [captcha] found form (status 200) at https://eprocurebhel.co.in/nicgep/app
+2025/09/09 14:21:18 [captcha] image found!
+2025/09/09 14:21:18 === CAPTCHA SOLVER ===
+2025/09/09 14:21:18 Captcha image saved to: /tmp/captcha_1757407878.png
+2025/09/09 14:21:18 Sending captcha to API...
+2025/09/09 14:21:40 Captcha solution received: d56CAY
+2025/09/09 14:21:40 Captcha solution received: 'd56CAY'
+2025/09/09 14:21:40 [captcha] solved: d56CAY
+2025/09/09 14:21:40 [captcha] submitting form with 17 fields
+2025/09/09 14:21:40 [request] POST https://eprocurebhel.co.in/nicgep/app
+2025/09/09 14:21:47 [response] https://eprocurebhel.co.in/nicgep/app | 200 | 32787 bytes
+2025/09/09 14:21:47 [captcha] response handler: POST | https://eprocurebhel.co.in/nicgep/app | 200
+2025/09/09 14:21:47 [captcha] found form (status 200) at https://eprocurebhel.co.in/nicgep/app
+2025/09/09 14:21:47 [captcha] find table in document
+2025/09/09 14:21:47 [captcha] found form (status 200) at https://eprocurebhel.co.in/nicgep/app
+2025/09/09 14:21:47 [captcha] image found!
+2025/09/09 14:21:47 === CAPTCHA SOLVER ===
+2025/09/09 14:21:47 Captcha image saved to: /tmp/captcha_1757407907.png
+2025/09/09 14:21:47 Sending captcha to API...
+2025/09/09 14:22:19 Captcha solution received: uyPF3h
+2025/09/09 14:22:19 Captcha solution received: 'uyPF3h'
+2025/09/09 14:22:19 [captcha] solved: uyPF3h
+2025/09/09 14:22:19 [captcha] submitting form with 17 fields
+2025/09/09 14:22:19 [request] POST https://eprocurebhel.co.in/nicgep/app
+2025/09/09 14:22:22 [response] https://eprocurebhel.co.in/nicgep/app | 200 | 32783 bytes
+2025/09/09 14:22:22 [captcha] response handler: POST | https://eprocurebhel.co.in/nicgep/app | 200
+2025/09/09 14:22:22 [captcha] found form (status 200) at https://eprocurebhel.co.in/nicgep/app
+2025/09/09 14:22:22 [captcha] find table in document
+2025/09/09 14:22:22 [captcha] found form (status 200) at https://eprocurebhel.co.in/nicgep/app
+2025/09/09 14:22:22 [captcha] image found!
+2025/09/09 14:22:22 === CAPTCHA SOLVER ===
+2025/09/09 14:22:22 Captcha image saved to: /tmp/captcha_1757407942.png
+2025/09/09 14:22:22 Sending captcha to API...
+2025/09/09 14:22:43 Captcha solution received: i1jUKB
+2025/09/09 14:22:43 Captcha solution received: 'i1jUKB'
+2025/09/09 14:22:43 [captcha] solved: i1jUKB
+2025/09/09 14:22:43 [captcha] submitting form with 17 fields
+2025/09/09 14:22:43 [request] POST https://eprocurebhel.co.in/nicgep/app
+2025/09/09 14:22:51 [response] https://eprocurebhel.co.in/nicgep/app | 200 | 32757 bytes
+2025/09/09 14:22:51 [captcha] response handler: POST | https://eprocurebhel.co.in/nicgep/app | 200
+2025/09/09 14:22:51 [captcha] found form (status 200) at https://eprocurebhel.co.in/nicgep/app
+2025/09/09 14:22:51 [captcha] find table in document
+2025/09/09 14:22:51 [captcha] found form (status 200) at https://eprocurebhel.co.in/nicgep/app
+2025/09/09 14:22:51 [captcha] image found!
+2025/09/09 14:22:51 === CAPTCHA SOLVER ===
+2025/09/09 14:22:51 Captcha image saved to: /tmp/captcha_1757407971.png
+2025/09/09 14:22:51 Sending captcha to API...
+2025/09/09 14:23:43 Captcha solution received: ZTKDv5
+2025/09/09 14:23:43 Captcha solution received: 'ZTKDv5'
+2025/09/09 14:23:43 [captcha] solved: ZTKDv5
+2025/09/09 14:23:43 [captcha] submitting form with 17 fields
+2025/09/09 14:23:43 [request] POST https://eprocurebhel.co.in/nicgep/app
+2025/09/09 14:23:45 [response] https://eprocurebhel.co.in/nicgep/app | 200 | 32721 bytes
+2025/09/09 14:23:45 [captcha] response handler: POST | https://eprocurebhel.co.in/nicgep/app | 200
+2025/09/09 14:23:45 [captcha] found form (status 200) at https://eprocurebhel.co.in/nicgep/app
+2025/09/09 14:23:45 [captcha] find table in document
+2025/09/09 14:23:45 [captcha] found form (status 200) at https://eprocurebhel.co.in/nicgep/app
+2025/09/09 14:23:45 [captcha] image found!
+2025/09/09 14:23:45 === CAPTCHA SOLVER ===
+2025/09/09 14:23:45 Captcha image saved to: /tmp/captcha_1757408025.png
+2025/09/09 14:23:45 Sending captcha to API...
+2025/09/09 14:24:18 Captcha solution received: 354Y8D
+2025/09/09 14:24:18 Captcha solution received: '354Y8D'
+2025/09/09 14:24:18 [captcha] solved: 354Y8D
+2025/09/09 14:24:18 [captcha] submitting form with 17 fields
+2025/09/09 14:24:18 [request] POST https://eprocurebhel.co.in/nicgep/app
+2025/09/09 14:24:20 [response] https://eprocurebhel.co.in/nicgep/app | 200 | 54592 bytes
+2025/09/09 14:24:20 [captcha] response handler: POST | https://eprocurebhel.co.in/nicgep/app | 200
+2025/09/09 14:24:20 [captcha] found form (status 200) at https://eprocurebhel.co.in/nicgep/app
+2025/09/09 14:24:20 [captcha] find table in document
+2025/09/09 14:24:20 [captcha] tender list table found, skipping captcha
+2025/09/09 14:24:21 Session established: 1 cookies

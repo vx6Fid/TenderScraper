@@ -1,7 +1,6 @@
 package extract
 
 import (
-	"fmt"
 	"regexp"
 	"strings"
 
@@ -27,6 +26,8 @@ func (tp *TenderParser) SetupHandlers(c *colly.Collector, data *TenderData) {
 	tp.setupEMDFeeHandler(c, data)
 	tp.setupCriticalDatesHandler(c, data)
 	tp.setupWorkItemHandler(c, data)
+	tp.setupCorrigendumHandler(c, data)
+	tp.setupCorrigendumDetailHandler(c, data)
 	tp.setupTenderInvitingAuthorityHandler(c, data)
 	tp.setupFallbackHandler(c, data)
 }
@@ -566,7 +567,7 @@ func (tp *TenderParser) setupTenderInvitingAuthorityHandler(c *colly.Collector, 
 					cap := strings.ToLower(strings.TrimSpace(cells.Eq(0).Text()))
 					cap = strings.TrimSuffix(cap, ":") // handle "Name:"
 					val := strings.TrimSpace(cells.Eq(1).Text())
-					fmt.Println("TenderInvitingAuthority: ", cap, val)
+					// fmt.Println("TenderInvitingAuthority: ", cap, val)
 					switch cap {
 					case "name":
 						if data.TenderInvitingAuthority.Name == "" {
@@ -600,4 +601,123 @@ func (tp *TenderParser) setupFallbackHandler(c *colly.Collector, data *TenderDat
 			}
 		}
 	})
+}
+
+// setupCorrigendumHandler parses corrigendum list and follows links
+func (tp *TenderParser) setupCorrigendumHandler(c *colly.Collector, data *TenderData) {
+	c.OnHTML("td.section_head", func(e *colly.HTMLElement) {
+		head := strings.ToLower(strings.TrimSpace(e.Text))
+		if !strings.Contains(head, "corrigendum") {
+			return
+		}
+
+		parent := e.DOM.Closest("table")
+		parent.Find("tr").Each(func(_ int, s *goquery.Selection) {
+			if s.HasClass("list_header") {
+				return
+			}
+			tds := s.Find("td")
+			if tds.Length() >= 4 && !s.HasClass("list_header") {
+				rawLink := tds.Eq(3).Find("a").AttrOr("href", "")
+				absLink := ""
+				if rawLink != "" {
+					absLink = e.Request.AbsoluteURL(rawLink)
+				}
+
+				corr := utils.Corrigendum{
+					SerialNo: strings.TrimSpace(tds.Eq(0).Text()),
+					Title:    strings.TrimSpace(tds.Eq(1).Text()),
+					Type:     strings.TrimSpace(tds.Eq(2).Text()),
+					ViewLink: absLink,
+				}
+				data.Corrigendum = append(data.Corrigendum, corr)
+
+				if absLink != "" {
+					e.Request.Visit(absLink)
+				}
+			}
+		})
+	})
+}
+
+func (tp *TenderParser) setupCorrigendumDetailHandler(c *colly.Collector, data *TenderData) {
+	c.OnHTML("table.list_table", func(e *colly.HTMLElement) {
+		// Detect corrigendum type from the info table
+		corrType := ""
+		e.DOM.Closest("table.page_border").Find("tr.td_caption").Each(func(_ int, s *goquery.Selection) {
+			if strings.Contains(strings.ToLower(s.Text()), "corrigendum type") {
+				corrType = strings.TrimSpace(s.Find("td").Last().Text())
+			}
+		})
+
+		if corrType == "" {
+			return // cannot proceed if we don't know type
+		}
+
+		if strings.EqualFold(corrType, "Other") {
+			// Handle "Other" -> parse rows under #corrDoctable
+			if id, _ := e.DOM.Attr("id"); id == "corrDoctable" {
+				e.DOM.Find("tr").Each(func(_ int, tr *goquery.Selection) {
+					if tr.HasClass("td_caption") {
+						return
+					}
+					tds := tr.Find("td")
+					if tds.Length() < 6 {
+						return
+					}
+					link := tds.Eq(4).Find("a").AttrOr("href", "")
+					absLink := e.Request.AbsoluteURL(link)
+
+					detail := utils.CorrigendumDetail{
+						CorrigendumNo:  strings.TrimSpace(tds.Eq(0).Text()),
+						Title:          strings.TrimSpace(tds.Eq(1).Text()),
+						Description:    strings.TrimSpace(tds.Eq(2).Text()),
+						PublishedDate:  strings.TrimSpace(tds.Eq(3).Text()),
+						DocumentName:   strings.TrimSpace(tds.Eq(4).Text()),
+						DocumentLink:   absLink,
+						DocumentSizeKB: strings.TrimSpace(tds.Eq(5).Text()),
+					}
+					tp.attachDetailToParent(data, e.Request.URL.String(), detail)
+				})
+			}
+
+		} else if strings.EqualFold(corrType, "Date") {
+			// Handle "Date" -> must skip Critical Dates tables
+			firstCell := strings.ToLower(strings.TrimSpace(e.DOM.Find("tr").First().Text()))
+			if strings.Contains(firstCell, "critical dates") {
+				return // skip
+			}
+			e.DOM.Find("tr").Each(func(_ int, tr *goquery.Selection) {
+				if tr.HasClass("td_caption") {
+					return
+				}
+				tds := tr.Find("td")
+				if tds.Length() < 5 {
+					return
+				}
+				link := tds.Eq(3).Find("a").AttrOr("href", "")
+				absLink := e.Request.AbsoluteURL(link)
+
+				detail := utils.CorrigendumDetail{
+					Title:          strings.TrimSpace(tds.Eq(0).Text()),
+					Description:    strings.TrimSpace(tds.Eq(1).Text()),
+					PublishedDate:  strings.TrimSpace(tds.Eq(2).Text()),
+					DocumentName:   strings.TrimSpace(tds.Eq(3).Text()),
+					DocumentLink:   absLink,
+					DocumentSizeKB: strings.TrimSpace(tds.Eq(4).Text()),
+				}
+				tp.attachDetailToParent(data, e.Request.URL.String(), detail)
+			})
+		}
+	})
+}
+
+// attachDetailToParent finds the right Corrigendum struct and appends the detail
+func (tp *TenderParser) attachDetailToParent(data *TenderData, pageURL string, detail utils.CorrigendumDetail) {
+	for i := range data.Corrigendum {
+		if data.Corrigendum[i].ViewLink == pageURL {
+			data.Corrigendum[i].Details = append(data.Corrigendum[i].Details, detail)
+			break
+		}
+	}
 }

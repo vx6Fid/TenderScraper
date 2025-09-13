@@ -7,6 +7,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"time"
 
 	"github.com/gocolly/colly/v2"
 	"github.com/vx6fid/tender-scraper/session"
@@ -16,18 +17,22 @@ import (
 type TenderDataScraper struct {
 	collector        *colly.Collector
 	activeTendersURL string
-	csvManager       *CSVManager
-	parser           *TenderParser
+	// csvManager       *CSVManager
+	parser  *TenderParser
+	state   string
+	runDate string
 }
 
-func NewTenderDataScraper(sess *session.Session, domain string, state string) *TenderDataScraper {
+func NewTenderDataScraper(sess *session.Session, domain string, state string, runDate string) *TenderDataScraper {
 	collector := sess.NewCollector(domain)
 
 	return &TenderDataScraper{
 		collector:        collector,
 		activeTendersURL: sess.ActiveTendersURL,
-		csvManager:       NewCSVManager(),
-		parser:           NewTenderParser(),
+		// csvManager:       NewCSVManager(),
+		parser:  NewTenderParser(),
+		state:   state,
+		runDate: runDate,
 	}
 }
 
@@ -41,11 +46,11 @@ func (ts *TenderDataScraper) ExtractTenderData() error {
 	}
 
 	// Setup output files
-	mainWriter, sinks, cleanup, err := ts.setupOutputFiles()
-	if err != nil {
-		return err
-	}
-	defer cleanup()
+	// sinks, cleanup, err := ts.setupOutputFiles()
+	// if err != nil {
+	// 	return err
+	// }
+	// defer cleanup()
 
 	// Process each tender
 	for i := 1; i < len(rows); i++ {
@@ -72,7 +77,7 @@ func (ts *TenderDataScraper) ExtractTenderData() error {
 		}
 
 		// Write to all output formats
-		if err := ts.writeOutputs(mainWriter, sinks, tenderInput, tenderData); err != nil {
+		if err := ts.writeOutputs(tenderData); err != nil {
 			log.Printf("[%s] failed to write outputs: %v", tenderInput.Serial, err)
 		}
 	}
@@ -82,7 +87,9 @@ func (ts *TenderDataScraper) ExtractTenderData() error {
 }
 
 func (ts *TenderDataScraper) loadInputCSV() ([][]string, error) {
-	inputPath := filepath.Join("TenderData/Links", "MDL_Links.csv")
+	fileName := fmt.Sprintf("%s_Links.csv", ts.state)
+	filePath := fmt.Sprintf("TenderData/Links/%s", ts.runDate)
+	inputPath := filepath.Join(filePath, fileName)
 	inFile, err := os.Open(inputPath)
 	if err != nil {
 		return nil, fmt.Errorf("failed to open links CSV at %s: %w", inputPath, err)
@@ -101,34 +108,34 @@ func (ts *TenderDataScraper) loadInputCSV() ([][]string, error) {
 	return rows, nil
 }
 
-func (ts *TenderDataScraper) setupOutputFiles() (*csv.Writer, *CSVSinks, func(), error) {
-	// Main CSV file
-	outFile, err := os.Create("tenders.csv")
-	if err != nil {
-		return nil, nil, nil, fmt.Errorf("failed to create output CSV: %w", err)
-	}
+// func (ts *TenderDataScraper) setupOutputFiles() (*CSVSinks, func(), error) {
+// Main CSV file
+// outFile, err := os.Create("tenders.csv")
+// if err != nil {
+// 	return nil, nil, nil, fmt.Errorf("failed to create output CSV: %w", err)
+// }
 
-	mainWriter := csv.NewWriter(outFile)
-	if err := ts.csvManager.WriteMainHeader(mainWriter); err != nil {
-		outFile.Close()
-		return nil, nil, nil, err
-	}
+// mainWriter := csv.NewWriter(outFile)
+// if err := ts.csvManager.WriteMainHeader(mainWriter); err != nil {
+// 	outFile.Close()
+// 	return nil, nil, nil, err
+// }
 
-	// Structured CSV files
-	sinks, sinkCleanup, err := ts.csvManager.SetupStructuredCSVs()
-	if err != nil {
-		outFile.Close()
-		return nil, nil, nil, err
-	}
+// Structured CSV files
+// sinks, sinkCleanup, err := ts.csvManager.SetupStructuredCSVs()
+// if err != nil {
+// 	// outFile.Close()
+// 	return nil, nil, err
+// }
 
-	cleanup := func() {
-		mainWriter.Flush()
-		sinkCleanup()
-		outFile.Close()
-	}
+// cleanup := func() {
+// 	// mainWriter.Flush()
+// 	sinkCleanup()
+// 	// outFile.Close()
+// }
 
-	return mainWriter, sinks, cleanup, nil
-}
+// return sinks, cleanup, nil
+// }
 
 func (ts *TenderDataScraper) extractSingleTender(input TenderInput) (*TenderData, error) {
 	c := ts.collector.Clone()
@@ -151,25 +158,32 @@ func (ts *TenderDataScraper) extractSingleTender(input TenderInput) (*TenderData
 	return tenderData, nil
 }
 
-func (ts *TenderDataScraper) writeOutputs(mainWriter *csv.Writer, sinks *CSVSinks, input TenderInput, data *TenderData) error {
+func (ts *TenderDataScraper) writeOutputs(data *TenderData) error {
 	// Write to main CSV
-	if err := ts.csvManager.WriteMainRow(mainWriter, input, data); err != nil {
-		return fmt.Errorf("failed to write main CSV: %w", err)
-	}
+	// if err := ts.csvManager.WriteMainRow(mainWriter, input, data); err != nil {
+	// return fmt.Errorf("failed to write main CSV: %w", err)
+	// }
 
 	// Write to structured CSVs
-	ts.csvManager.WriteStructuredCSVs(sinks, input, data)
+	// ts.csvManager.WriteStructuredCSVs(sinks, input, data)
 
 	// Write to JSONL
-	tender := ts.convertToUtilsTender(input, data)
-	if err := utils.AppendJSONL("out/tenders.jsonl", tender); err != nil {
+	tender := ts.convertToUtilsTender(data)
+	dateStr := time.Now().Format("02_Jan_2006")
+	dir := filepath.Join("TenderData/Tenders", dateStr)
+	if err := os.MkdirAll(dir, 0755); err != nil {
+		return fmt.Errorf("failed to create output directory: %w", err)
+	}
+
+	fileName := filepath.Join(dir, "tender.jsonl")
+	if err := utils.AppendJSONL(fileName, tender); err != nil {
 		return fmt.Errorf("failed to append JSONL: %w", err)
 	}
 
 	return nil
 }
 
-func (ts *TenderDataScraper) convertToUtilsTender(input TenderInput, data *TenderData) utils.Tender {
+func (ts *TenderDataScraper) convertToUtilsTender(data *TenderData) utils.Tender {
 	tender := utils.Tender{}
 
 	// Map basic details
@@ -231,6 +245,7 @@ func (ts *TenderDataScraper) convertToUtilsTender(input TenderInput, data *Tende
 	// Map Tender Inviting Authority
 	tender.TenderInvitingAuthority.Name = data.TenderInvitingAuthority.Name
 	tender.TenderInvitingAuthority.Address = data.TenderInvitingAuthority.Address
+	tender.Corrigenda = data.Corrigendum
 
 	return tender
 }

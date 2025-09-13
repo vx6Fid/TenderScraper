@@ -65,13 +65,16 @@ func (ts *TenderScraper) ScrapeActiveTenders() error {
 
 	ts.logger.Println("Starting tender scraping process with correct session flow.")
 
+	dateStr := time.Now().Format("02_Jan_2006")
+	dir := filepath.Join("TenderData/Links", dateStr)
+	if err := os.MkdirAll(dir, 0755); err != nil {
+		return fmt.Errorf("failed to create output directory: %w", err)
+	}
+
+	fileName := fmt.Sprintf("%s_Links.csv", ts.state)
+	filePath := filepath.Join(dir, fileName)
 	// open CSV, save file to TenderLinks folder
-	fileName := fmt.Sprintf(
-		"TenderData/Links/%sLinks_%s.csv",
-		ts.state,
-		time.Now().Format("02_Jan_2006_15_04_05"),
-	)
-	file, err := os.Create(fileName)
+	file, err := os.Create(filePath)
 	if err != nil {
 		return fmt.Errorf("failed to create CSV file: %w", err)
 	}

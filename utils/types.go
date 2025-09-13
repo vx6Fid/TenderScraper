@@ -8,6 +8,24 @@ type URLS struct {
 	Domain  string
 }
 
+type CorrigendumDetail struct {
+	CorrigendumNo  string
+	Title          string
+	Description    string
+	PublishedDate  string
+	DocumentName   string
+	DocumentLink   string
+	DocumentSizeKB string
+}
+
+type Corrigendum struct {
+	SerialNo string
+	Title    string
+	Type     string
+	ViewLink string
+	Details  []CorrigendumDetail
+}
+
 // Shared Types
 type Tender struct {
 	BasicDetails struct {
@@ -107,11 +125,7 @@ type Tender struct {
 		}
 	}
 
-	Corrigenda []struct {
-		SerialNo string
-		Title    string
-		Type     string // Enum-like, but open-ended
-	}
+	Corrigenda []Corrigendum
 
 	TenderInvitingAuthority struct {
 		Name    string

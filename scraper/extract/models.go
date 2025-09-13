@@ -115,4 +115,5 @@ type TenderData struct {
 		Name    string
 		Address string
 	}
+	Corrigendum []utils.Corrigendum
 }

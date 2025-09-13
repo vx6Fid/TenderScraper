@@ -88,6 +88,7 @@ type NITDocument struct {
 	DocumentName   string
 	Description    string
 	DocumentSizeKB string
+	Link           string
 }
 
 // WorkDocument represents a work item document
@@ -109,6 +110,7 @@ type TenderData struct {
 	EMDFee                  EMDFeeDetails
 	WorkItem                WorkItemDetails
 	CriticalDates           CriticalDates
+	WorkItemLink            string
 	NITDocuments            []NITDocument
 	WorkDocuments           []WorkDocument
 	TenderInvitingAuthority struct {

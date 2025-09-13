@@ -18,6 +18,22 @@ type CorrigendumDetail struct {
 	DocumentSizeKB string
 }
 
+type WorkItemDocument struct {
+	SerialNo       string
+	DocumentType   string
+	DocumentName   string
+	Description    string
+	DocumentSizeKB float64
+}
+
+type NITDocument struct {
+	SerialNo       string
+	DocumentName   string
+	Description    string
+	DocumentSizeKB float64
+	Link           string // each NIT document has its own link
+}
+
 type Corrigendum struct {
 	SerialNo string
 	Title    string
@@ -109,20 +125,10 @@ type Tender struct {
 		BidSubmissionEndDate      string
 	}
 
-	TenderDocuments []struct {
-		WorkItemDocuments []struct {
-			SerialNo       string
-			DocumentType   string
-			DocumentName   string
-			Description    string
-			DocumentSizeKB float64
-		}
-		NITDocuments []struct {
-			SerialNo       string
-			DocumentName   string
-			Description    string
-			DocumentSizeKB float64
-		}
+	TenderDocument struct {
+		WorkItemLink      string // single link for all work item documents
+		WorkItemDocuments []WorkItemDocument
+		NITDocuments      []NITDocument
 	}
 
 	Corrigenda []Corrigendum

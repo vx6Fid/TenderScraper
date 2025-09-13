@@ -45,13 +45,6 @@ func (ts *TenderDataScraper) ExtractTenderData() error {
 		return err
 	}
 
-	// Setup output files
-	// sinks, cleanup, err := ts.setupOutputFiles()
-	// if err != nil {
-	// 	return err
-	// }
-	// defer cleanup()
-
 	// Process each tender
 	for i := 1; i < len(rows); i++ {
 		row := rows[i]
@@ -67,22 +60,22 @@ func (ts *TenderDataScraper) ExtractTenderData() error {
 			Link:         strings.TrimSpace(row[4]),
 		}
 
-		log.Printf("Processing tender %s: %s", tenderInput.Serial, tenderInput.Title)
+		log.Printf("[%s] Processing tender: %s", ts.state, tenderInput.Title)
 
 		// Extract tender data
 		tenderData, err := ts.extractSingleTender(tenderInput)
 		if err != nil {
-			log.Printf("[%s] extraction failed: %v", tenderInput.Serial, err)
+			log.Printf("[%s_%s] extraction failed: %v", ts.state, tenderInput.Serial, err)
 			continue
 		}
 
 		// Write to all output formats
 		if err := ts.writeOutputs(tenderData); err != nil {
-			log.Printf("[%s] failed to write outputs: %v", tenderInput.Serial, err)
+			log.Printf("[%s_%s] failed to write outputs: %v", ts.state, tenderInput.Serial, err)
 		}
 	}
 
-	log.Println("Tender data extraction completed.")
+	log.Printf("[%s] Tender data extraction completed.\n", ts.state)
 	return nil
 }
 
@@ -108,35 +101,6 @@ func (ts *TenderDataScraper) loadInputCSV() ([][]string, error) {
 	return rows, nil
 }
 
-// func (ts *TenderDataScraper) setupOutputFiles() (*CSVSinks, func(), error) {
-// Main CSV file
-// outFile, err := os.Create("tenders.csv")
-// if err != nil {
-// 	return nil, nil, nil, fmt.Errorf("failed to create output CSV: %w", err)
-// }
-
-// mainWriter := csv.NewWriter(outFile)
-// if err := ts.csvManager.WriteMainHeader(mainWriter); err != nil {
-// 	outFile.Close()
-// 	return nil, nil, nil, err
-// }
-
-// Structured CSV files
-// sinks, sinkCleanup, err := ts.csvManager.SetupStructuredCSVs()
-// if err != nil {
-// 	// outFile.Close()
-// 	return nil, nil, err
-// }
-
-// cleanup := func() {
-// 	// mainWriter.Flush()
-// 	sinkCleanup()
-// 	// outFile.Close()
-// }
-
-// return sinks, cleanup, nil
-// }
-
 func (ts *TenderDataScraper) extractSingleTender(input TenderInput) (*TenderData, error) {
 	c := ts.collector.Clone()
 	cookies := ts.collector.Cookies(ts.activeTendersURL)
@@ -159,14 +123,6 @@ func (ts *TenderDataScraper) extractSingleTender(input TenderInput) (*TenderData
 }
 
 func (ts *TenderDataScraper) writeOutputs(data *TenderData) error {
-	// Write to main CSV
-	// if err := ts.csvManager.WriteMainRow(mainWriter, input, data); err != nil {
-	// return fmt.Errorf("failed to write main CSV: %w", err)
-	// }
-
-	// Write to structured CSVs
-	// ts.csvManager.WriteStructuredCSVs(sinks, input, data)
-
 	// Write to JSONL
 	tender := ts.convertToUtilsTender(data)
 	dateStr := time.Now().Format("02_Jan_2006")

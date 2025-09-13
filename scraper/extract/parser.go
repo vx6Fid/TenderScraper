@@ -1,6 +1,7 @@
 package extract
 
 import (
+	"html"
 	"regexp"
 	"strings"
 
@@ -198,7 +199,7 @@ func (tp *TenderParser) setupCoverDetailsHandler(c *colly.Collector, data *Tende
 	})
 }
 
-// setupTenderDocumentsHandler parses tender documents - FIXED
+// setupTenderDocumentsHandler parses tender documents
 func (tp *TenderParser) setupTenderDocumentsHandler(c *colly.Collector, data *TenderData) {
 	c.OnHTML("td.section_head", func(e *colly.HTMLElement) {
 		head := strings.ToLower(strings.TrimSpace(e.DOM.Text()))
@@ -623,12 +624,13 @@ func (tp *TenderParser) setupCorrigendumHandler(c *colly.Collector, data *Tender
 				if rawLink != "" {
 					absLink = e.Request.AbsoluteURL(rawLink)
 				}
+				cleanURL := html.UnescapeString(absLink)
 
 				corr := utils.Corrigendum{
 					SerialNo: strings.TrimSpace(tds.Eq(0).Text()),
 					Title:    strings.TrimSpace(tds.Eq(1).Text()),
 					Type:     strings.TrimSpace(tds.Eq(2).Text()),
-					ViewLink: absLink,
+					ViewLink: cleanURL,
 				}
 				data.Corrigendum = append(data.Corrigendum, corr)
 
@@ -667,6 +669,7 @@ func (tp *TenderParser) setupCorrigendumDetailHandler(c *colly.Collector, data *
 					}
 					link := tds.Eq(4).Find("a").AttrOr("href", "")
 					absLink := e.Request.AbsoluteURL(link)
+					cleanURL := html.UnescapeString(absLink)
 
 					detail := utils.CorrigendumDetail{
 						CorrigendumNo:  strings.TrimSpace(tds.Eq(0).Text()),
@@ -674,7 +677,7 @@ func (tp *TenderParser) setupCorrigendumDetailHandler(c *colly.Collector, data *
 						Description:    strings.TrimSpace(tds.Eq(2).Text()),
 						PublishedDate:  strings.TrimSpace(tds.Eq(3).Text()),
 						DocumentName:   strings.TrimSpace(tds.Eq(4).Text()),
-						DocumentLink:   absLink,
+						DocumentLink:   cleanURL,
 						DocumentSizeKB: strings.TrimSpace(tds.Eq(5).Text()),
 					}
 					tp.attachDetailToParent(data, e.Request.URL.String(), detail)
@@ -697,13 +700,14 @@ func (tp *TenderParser) setupCorrigendumDetailHandler(c *colly.Collector, data *
 				}
 				link := tds.Eq(3).Find("a").AttrOr("href", "")
 				absLink := e.Request.AbsoluteURL(link)
+				cleanURL := html.UnescapeString(absLink)
 
 				detail := utils.CorrigendumDetail{
 					Title:          strings.TrimSpace(tds.Eq(0).Text()),
 					Description:    strings.TrimSpace(tds.Eq(1).Text()),
 					PublishedDate:  strings.TrimSpace(tds.Eq(2).Text()),
 					DocumentName:   strings.TrimSpace(tds.Eq(3).Text()),
-					DocumentLink:   absLink,
+					DocumentLink:   cleanURL,
 					DocumentSizeKB: strings.TrimSpace(tds.Eq(4).Text()),
 				}
 				tp.attachDetailToParent(data, e.Request.URL.String(), detail)

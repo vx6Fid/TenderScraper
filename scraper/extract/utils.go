@@ -72,6 +72,7 @@ func (ts *TenderDataScraper) mapWorkItemDetails(tender *utils.Tender, data *Tend
 func (ts *TenderDataScraper) mapTenderDocuments(tender *utils.Tender, data *TenderData) {
 	if len(data.NITDocuments) > 0 || len(data.WorkDocuments) > 0 {
 		entry := struct {
+			WorkItemLink      string
 			WorkItemDocuments []struct {
 				SerialNo       string
 				DocumentType   string
@@ -84,6 +85,7 @@ func (ts *TenderDataScraper) mapTenderDocuments(tender *utils.Tender, data *Tend
 				DocumentName   string
 				Description    string
 				DocumentSizeKB float64
+				Link           string
 			}
 		}{}
 
@@ -109,32 +111,48 @@ func (ts *TenderDataScraper) mapTenderDocuments(tender *utils.Tender, data *Tend
 				DocumentName   string
 				Description    string
 				DocumentSizeKB float64
+				Link           string
 			}{
 				SerialNo:       d.SerialNo,
 				DocumentName:   d.DocumentName,
 				Description:    d.Description,
 				DocumentSizeKB: parseAmountToFloat(d.DocumentSizeKB),
+				Link:           d.Link,
 			})
 		}
 
 		// Append single combined entry to TenderDocuments slice
-		tender.TenderDocuments = append(tender.TenderDocuments, struct {
-			WorkItemDocuments []struct {
-				SerialNo       string
-				DocumentType   string
-				DocumentName   string
-				Description    string
-				DocumentSizeKB float64
+		if len(data.NITDocuments) > 0 || len(data.WorkDocuments) > 0 {
+
+			// Convert WorkDocuments
+			workDocs := make([]utils.WorkItemDocument, 0, len(data.WorkDocuments))
+			for _, d := range data.WorkDocuments {
+				workDocs = append(workDocs, utils.WorkItemDocument{
+					SerialNo:       d.SerialNo,
+					DocumentType:   d.DocumentType,
+					DocumentName:   d.DocumentName,
+					Description:    d.Description,
+					DocumentSizeKB: parseAmountToFloat(d.DocumentSizeKB),
+				})
 			}
-			NITDocuments []struct {
-				SerialNo       string
-				DocumentName   string
-				Description    string
-				DocumentSizeKB float64
+
+			// Convert NITDocuments
+			nitDocs := make([]utils.NITDocument, 0, len(data.NITDocuments))
+			for _, d := range data.NITDocuments {
+				nitDocs = append(nitDocs, utils.NITDocument{
+					SerialNo:       d.SerialNo,
+					DocumentName:   d.DocumentName,
+					Description:    d.Description,
+					DocumentSizeKB: parseAmountToFloat(d.DocumentSizeKB),
+					Link:           d.Link,
+				})
 			}
-		}{
-			WorkItemDocuments: entry.WorkItemDocuments,
-			NITDocuments:      entry.NITDocuments,
-		})
+
+			// Assign directly to the TenderDocument field
+			tender.TenderDocument.WorkItemLink = data.WorkItemLink // single link for all work item documents
+			tender.TenderDocument.WorkItemDocuments = workDocs
+			tender.TenderDocument.NITDocuments = nitDocs
+		}
+
 	}
 }

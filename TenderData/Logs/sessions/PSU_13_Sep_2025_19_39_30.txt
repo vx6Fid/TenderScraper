@@ -1,0 +1,36 @@
+2025/09/13 19:39:30 STEP 1: Starting captcha/session flow: https://etenders.gov.in/eprocure/app?page=FrontEndLatestActiveTenders&service=page
+2025/09/13 19:39:30 [request] GET https://etenders.gov.in/eprocure/app?page=FrontEndLatestActiveTenders&service=page
+2025/09/13 19:39:32 [response] https://etenders.gov.in/eprocure/app?page=FrontEndLatestActiveTenders&service=page | 200 | 32558 bytes
+2025/09/13 19:39:32 [captcha] response handler: GET | https://etenders.gov.in/eprocure/app?page=FrontEndLatestActiveTenders&service=page | 200
+2025/09/13 19:39:32 [captcha] found form (status 200) at https://etenders.gov.in/eprocure/app?page=FrontEndLatestActiveTenders&service=page
+2025/09/13 19:39:32 [captcha] find table in document
+2025/09/13 19:39:32 [captcha] found form (status 200) at https://etenders.gov.in/eprocure/app?page=FrontEndLatestActiveTenders&service=page
+2025/09/13 19:39:32 [captcha] image found!
+2025/09/13 19:39:32 === CAPTCHA SOLVER ===
+2025/09/13 19:39:32 Captcha image saved to: /tmp/captcha_1757772572.png
+2025/09/13 19:39:32 Sending captcha to API...
+2025/09/13 19:39:54 Captcha solution received: VKJ8KZ
+2025/09/13 19:39:54 Captcha solution received: 'VKJ8KZ'
+2025/09/13 19:39:54 [captcha] solved: VKJ8KZ
+2025/09/13 19:39:54 [captcha] submitting form with 17 fields
+2025/09/13 19:39:54 [request] POST https://etenders.gov.in/eprocure/app
+2025/09/13 19:39:56 [response] https://etenders.gov.in/eprocure/app | 200 | 33048 bytes
+2025/09/13 19:39:56 [captcha] response handler: POST | https://etenders.gov.in/eprocure/app | 200
+2025/09/13 19:39:56 [captcha] found form (status 200) at https://etenders.gov.in/eprocure/app
+2025/09/13 19:39:56 [captcha] find table in document
+2025/09/13 19:39:56 [captcha] found form (status 200) at https://etenders.gov.in/eprocure/app
+2025/09/13 19:39:56 [captcha] image found!
+2025/09/13 19:39:56 === CAPTCHA SOLVER ===
+2025/09/13 19:39:56 Captcha image saved to: /tmp/captcha_1757772596.png
+2025/09/13 19:39:56 Sending captcha to API...
+2025/09/13 19:40:18 Captcha solution received: 4KxdS1
+2025/09/13 19:40:18 Captcha solution received: '4KxdS1'
+2025/09/13 19:40:18 [captcha] solved: 4KxdS1
+2025/09/13 19:40:18 [captcha] submitting form with 17 fields
+2025/09/13 19:40:18 [request] POST https://etenders.gov.in/eprocure/app
+2025/09/13 19:40:21 [response] https://etenders.gov.in/eprocure/app | 200 | 57686 bytes
+2025/09/13 19:40:21 [captcha] response handler: POST | https://etenders.gov.in/eprocure/app | 200
+2025/09/13 19:40:21 [captcha] found form (status 200) at https://etenders.gov.in/eprocure/app
+2025/09/13 19:40:21 [captcha] find table in document
+2025/09/13 19:40:21 [captcha] tender list table found, skipping captcha
+2025/09/13 19:40:22 Session established: 1 cookies

@@ -4,7 +4,9 @@ import (
 	"bufio"
 	"encoding/csv"
 	"encoding/json"
+	"log"
 	"os"
+	"sort"
 )
 
 func SaveToFile(content []byte, filename string) error {
@@ -83,4 +85,50 @@ func dirname(path string) string {
 		return "."
 	}
 	return path[:last]
+}
+
+func CalculateOptimalWorkers(totalJobs int) int {
+	switch {
+	case totalJobs <= 50:
+		return 1
+	case totalJobs <= 200:
+		return 5
+	case totalJobs <= 500:
+		return 8
+	case totalJobs <= 1000:
+		return 12
+	default:
+		return 15
+	}
+}
+
+// function to get the last created folder name in TenderDate/Links
+func GetRunDate() string {
+	dirPath := "TenderData/Links"
+
+	entries, err := os.ReadDir(dirPath)
+	if err != nil {
+		log.Printf("Error reading directory: %v", err)
+		return ""
+	}
+
+	var names []string
+	for _, entry := range entries {
+		if entry.IsDir() {
+			names = append(names, entry.Name())
+		}
+	}
+
+	if len(names) == 0 {
+		return ""
+	}
+
+	sort.Strings(names)
+	return names[len(names)-1] // last in sorted order
+}
+
+func EstimateJobCount(state string, runDate string) int {
+	// Implement your logic here to estimate the job count based on state and runDate
+	// This is just a placeholder implementation
+	return 12
 }

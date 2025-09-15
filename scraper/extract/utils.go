@@ -1,12 +1,26 @@
 package extract
 
 import (
+	"encoding/json"
+	"os"
 	"regexp"
 	"strconv"
 	"strings"
 
 	"github.com/vx6fid/tender-scraper/utils"
 )
+
+// WriteJSONLToFile encodes v as JSON and appends it to an already-open file
+func WriteJSONLToFile(file *os.File, v interface{}) error {
+	data, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+
+	// Append newline explicitly (JSONL = one JSON per line)
+	_, err = file.Write(append(data, '\n'))
+	return err
+}
 
 // parseAmountToFloat converts strings like "1,40,000" or "13,30,00,000" to 140000.0 etc.
 func parseAmountToFloat(amount string) float64 {
@@ -25,7 +39,7 @@ func parseAmountToFloat(amount string) float64 {
 }
 
 // Helper methods for mapping data structures
-func (ts *TenderDataScraper) mapWorkItemDetails(tender *utils.Tender, data *TenderData) {
+func (ds *DataScraper) mapWorkItemDetails(tender *utils.Tender, data *TenderData) {
 	tender.WorkItemDetails.Title = data.WorkItem.Title
 	tender.WorkItemDetails.Description = data.WorkItem.Description
 	tender.WorkItemDetails.NDAOrPreQualification = data.WorkItem.PreQualification
@@ -69,7 +83,7 @@ func (ts *TenderDataScraper) mapWorkItemDetails(tender *utils.Tender, data *Tend
 	tender.WorkItemDetails.AllowPreferentialBidder = strings.EqualFold(strings.TrimSpace(data.WorkItem.AllowPreferentialBidder), "yes")
 }
 
-func (ts *TenderDataScraper) mapTenderDocuments(tender *utils.Tender, data *TenderData) {
+func (ds *DataScraper) mapTenderDocuments(tender *utils.Tender, data *TenderData) {
 	if len(data.NITDocuments) > 0 || len(data.WorkDocuments) > 0 {
 		entry := struct {
 			WorkItemLink      string

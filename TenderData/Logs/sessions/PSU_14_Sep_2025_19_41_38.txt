@@ -1,0 +1,11 @@
+2025/09/14 19:41:38 STEP 1: Starting captcha/session flow: https://etenders.gov.in/eprocure/app?page=FrontEndLatestActiveTenders&service=page
+2025/09/14 19:41:38 [request] GET https://etenders.gov.in/eprocure/app?page=FrontEndLatestActiveTenders&service=page
+2025/09/14 19:41:40 [response] https://etenders.gov.in/eprocure/app?page=FrontEndLatestActiveTenders&service=page | 200 | 32656 bytes
+2025/09/14 19:41:40 [captcha] response handler: GET | https://etenders.gov.in/eprocure/app?page=FrontEndLatestActiveTenders&service=page | 200
+2025/09/14 19:41:40 [captcha] found form (status 200) at https://etenders.gov.in/eprocure/app?page=FrontEndLatestActiveTenders&service=page
+2025/09/14 19:41:40 [captcha] find table in document
+2025/09/14 19:41:40 [captcha] found form (status 200) at https://etenders.gov.in/eprocure/app?page=FrontEndLatestActiveTenders&service=page
+2025/09/14 19:41:40 [captcha] image found!
+2025/09/14 19:41:40 === CAPTCHA SOLVER ===
+2025/09/14 19:41:40 Captcha image saved to: /tmp/captcha_1757859100.png
+2025/09/14 19:41:42 Sending captcha to API...

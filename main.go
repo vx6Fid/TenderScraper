@@ -5,7 +5,6 @@ import (
 	"log"
 	"os"
 	"slices"
-	"sort"
 	"sync"
 
 	"github.com/joho/godotenv"
@@ -106,20 +105,19 @@ func main() {
 
 		wg.Wait()
 	case 2:
-		runDate := getRunDate()
+		runDate := utils.GetRunDate()
 		// fmt.Println("RunDate: ", runDate)
 		for _, u := range baseURLs {
-			log.Printf("--- Starting tender data extraction for [%s] ---", u.State)
+			log.Printf("--- Starting concurrent tender extraction for [%s] ---", u.State)
 
-			sess := session.NewSession(u.BaseURL, u.State)
-			if err := sess.EstablishSession(); err != nil {
-				log.Printf("[%s] failed to establish session: %v", u.State, err)
-				continue
-			}
+			// Determine optimal worker count based on expected load
+			totalJobs := utils.EstimateJobCount(u.State, runDate)
+			optimalWorkers := utils.CalculateOptimalWorkers(totalJobs)
 
-			scraper := extract.NewTenderDataScraper(sess, u.Domain, u.State, runDate)
-			if err := scraper.ExtractTenderData(); err != nil {
-				log.Printf("[%s] scraping failed: %v", u.State, err)
+			extractor := extract.NewConcurrentExtractor(u.BaseURL, u.Domain, u.State, runDate, optimalWorkers)
+
+			if err := extractor.ExtractTendersWithMultipleSessions(); err != nil {
+				log.Printf("[%s] concurrent extraction failed: %v", u.State, err)
 				continue
 			}
 
@@ -131,29 +129,4 @@ func main() {
 	}
 
 	log.Println("Scraping completed successfully")
-}
-
-// function to get the last created folder name in TenderDate/Links
-func getRunDate() string {
-	dirPath := "TenderData/Links"
-
-	entries, err := os.ReadDir(dirPath)
-	if err != nil {
-		log.Printf("Error reading directory: %v", err)
-		return ""
-	}
-
-	var names []string
-	for _, entry := range entries {
-		if entry.IsDir() {
-			names = append(names, entry.Name())
-		}
-	}
-
-	if len(names) == 0 {
-		return ""
-	}
-
-	sort.Strings(names)
-	return names[len(names)-1] // last in sorted order
 }

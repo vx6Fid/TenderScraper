@@ -1,13 +1,10 @@
 package extract
 
 import (
-	"encoding/csv"
+	"context"
 	"fmt"
 	"log"
-	"os"
-	"path/filepath"
 	"strings"
-	"sync"
 	"time"
 
 	"github.com/gocolly/colly/v2"
@@ -15,175 +12,150 @@ import (
 	"github.com/vx6fid/tender-scraper/utils"
 )
 
-type TenderDataScraper struct {
-	collector        *colly.Collector
-	activeTendersURL string
-	// csvManager       *CSVManager
-	parser  *TenderParser
+// DataScraper handles individual tender data extraction with its own session
+type DataScraper struct {
+	session *session.Session
+	domain  string
 	state   string
 	runDate string
 }
 
-func NewTenderDataScraper(sess *session.Session, domain string, state string, runDate string) *TenderDataScraper {
-	collector := sess.NewCollector(domain)
-
-	return &TenderDataScraper{
-		collector:        collector,
-		activeTendersURL: sess.ActiveTendersURL,
-		// csvManager:       NewCSVManager(),
-		parser:  NewTenderParser(),
+func NewDataScraper(sess *session.Session, domain, state, runDate string) *DataScraper {
+	return &DataScraper{
+		session: sess,
+		domain:  domain,
 		state:   state,
 		runDate: runDate,
 	}
 }
 
-func (ts *TenderDataScraper) ExtractTenderData() error {
-	log.Println("Starting tender scraping process with correct session flow.")
+// ExtractSingleTender extracts data from a single tender URL
+func (ds *DataScraper) ExtractSingleTender(input TenderInput) (*TenderData, error) {
+	// Create completely fresh collector for this request to avoid state conflicts
+	c := ds.session.NewCollector(ds.domain)
 
-	// Load input CSV
-	rows, err := ts.loadInputCSV()
-	if err != nil {
-		return err
-	}
+	// Configure collector with conservative settings
+	c.SetRequestTimeout(60 * time.Second)
+	c.Limit(&colly.LimitRule{
+		DomainGlob:  "*",
+		Parallelism: 1,
+		Delay:       500 * time.Millisecond, // Increased delay for stability
+	})
 
-	// Channels
-	jobs := make(chan TenderInput)
-	results := make(chan *TenderData)
-	var wg sync.WaitGroup
-	var writerWg sync.WaitGroup
+	// Add realistic headers
+	c.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+	c.OnRequest(func(r *colly.Request) {
+		r.Headers.Set("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8")
+		r.Headers.Set("Accept-Language", "en-US,en;q=0.5")
+		r.Headers.Set("Accept-Encoding", "gzip, deflate")
+		r.Headers.Set("Connection", "keep-alive")
+		r.Headers.Set("Upgrade-Insecure-Requests", "1")
+		r.Headers.Set("Cache-Control", "no-cache")
+	})
 
-	// Writer goroutine (Single writer, avoid file race conditions)
-	writerWg.Add(1)
-	go func() {
-		defer writerWg.Done()
-		for tenderData := range results {
-			// fmt.Printf("[%s] Writing tender data: %s\n", ts.state, tenderData.BasicDetails.TenderID)
-			if err := ts.writeOutputs(tenderData); err != nil {
-				log.Printf("[%s] failed to write outputs: %v", ts.state, err)
-			}
-		}
-	}()
+	// Add error handler for debugging
+	c.OnError(func(r *colly.Response, err error) {
+		log.Printf("[%s] Request error for %s: %v", ds.state, r.Request.URL, err)
+	})
 
-	// Worker pool
-	maxWorkers := 10
-	for range maxWorkers {
-		wg.Add(1)
-		go func(workerID int) {
-			defer wg.Done()
-			for tenderInput := range jobs {
-				// log.Printf("[%s] Worker %d processing tender: %s", ts.state, workerID, tenderInput.Title)
-				tenderData, err := ts.extractSingleTender(tenderInput)
-				if err != nil {
-					log.Printf("[%s_%s] extraction failed: %v", ts.state, tenderInput.Serial, err)
-					continue
-				}
-
-				// Only send to results if extraction was successful
-				select {
-				case results <- tenderData:
-					log.Printf("[%s] Worker %d successfully sent tender %s to results channel", ts.state, workerID, tenderInput.Serial)
-				case <-time.After(5 * time.Second):
-					log.Printf("[%s] Worker %d timeout sending tender %s to results channel", ts.state, workerID, tenderInput.Serial)
-				}
-			}
-		}(i)
-	}
-
-	// Enqueue jobs
-	jobCount := 0
-	for i := 1; i < len(rows); i++ {
-		row := rows[i]
-		if len(row) < 5 {
-			continue
-		}
-		jobs <- TenderInput{
-			Serial:       strings.TrimSpace(row[0]),
-			Title:        strings.TrimSpace(row[1]),
-			Organisation: strings.TrimSpace(row[2]),
-			ClosingDate:  strings.TrimSpace(row[3]),
-			Link:         strings.TrimSpace(row[4]),
-		}
-		jobCount++
-	}
-	close(jobs)
-	log.Printf("[%s] Enqueued %d jobs", ts.state, jobCount)
-
-	// Wait for all workers to complete, then close results channel
-	go func() {
-		wg.Wait()
-		close(results)
-		log.Printf("[%s] All workers completed, results channel closed", ts.state)
-	}()
-
-	// Wait for writer to finish processing all results
-	writerWg.Wait()
-
-	log.Printf("[%s] Tender data extraction completed.\n", ts.state)
-	return nil
-}
-
-func (ts *TenderDataScraper) loadInputCSV() ([][]string, error) {
-	fileName := fmt.Sprintf("%s_Links.csv", ts.state)
-	filePath := fmt.Sprintf("TenderData/Links/%s", ts.runDate)
-	// fmt.Println("FilePath: ", filePath)
-	inputPath := filepath.Join(filePath, fileName)
-	inFile, err := os.Open(inputPath)
-	if err != nil {
-		return nil, fmt.Errorf("failed to open links CSV at %s: %w", inputPath, err)
-	}
-	defer inFile.Close()
-
-	reader := csv.NewReader(inFile)
-	rows, err := reader.ReadAll()
-	if err != nil {
-		return nil, fmt.Errorf("failed to read links CSV: %w", err)
-	}
-	if len(rows) <= 1 {
-		return nil, fmt.Errorf("no data rows found in %s", inputPath)
-	}
-
-	return rows, nil
-}
-
-func (ts *TenderDataScraper) extractSingleTender(input TenderInput) (*TenderData, error) {
-	c := ts.collector.Clone()
-	cookies := ts.collector.Cookies(ts.activeTendersURL)
-	if len(cookies) > 0 {
-		c.SetCookies(ts.activeTendersURL, cookies)
-	}
-
-	// Initialize tender data
+	// Create fresh TenderData for this extraction
 	tenderData := &TenderData{}
 
-	// Setup parser handlers
-	ts.parser.SetupHandlers(c, tenderData)
+	// Create a new parser instance for this extraction to avoid state conflicts
+	parser := NewTenderParser()
+	parser.SetupHandlers(c, tenderData)
 
-	// Visit the tender page
-	if err := c.Visit(input.Link); err != nil {
-		return nil, fmt.Errorf("visit failed: %w", err)
+	// Implement retry logic
+	maxRetries := 3
+	var lastErr error
+
+	for attempt := 1; attempt <= maxRetries; attempt++ {
+		// Reset tender data for retry attempts
+		if attempt > 1 {
+			tenderData = &TenderData{}
+			// Create completely new collector for retry to avoid state issues
+			c = ds.session.NewCollector(ds.domain)
+
+			// Create new parser instance for retry
+			parser = NewTenderParser()
+			parser.SetupHandlers(c, tenderData)
+		}
+
+		// Create context for this attempt
+		ctx := colly.NewContext()
+
+		// Attempt the extraction with timeout
+		visitCtx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
+
+		done := make(chan error, 1)
+		go func() {
+			defer func() {
+				if r := recover(); r != nil {
+					done <- fmt.Errorf("panic during extraction: %v", r)
+				}
+			}()
+			done <- c.Request("GET", input.Link, nil, ctx, nil)
+		}()
+
+		select {
+		case err := <-done:
+			cancel()
+			if err == nil {
+				// Success! Validate that we got some data
+				if ds.validateTenderData(tenderData) {
+					log.Printf("[%s_%s] Successfully extracted tender data", ds.state, input.Serial)
+					return tenderData, nil
+				} else {
+					log.Printf("[%s_%s] Attempt %d: No data extracted, treating as failure",
+						ds.state, input.Serial, attempt)
+					lastErr = fmt.Errorf("no data extracted from %s", input.Link)
+				}
+			} else {
+				lastErr = err
+				log.Printf("[%s_%s] Attempt %d failed: %v", ds.state, input.Serial, attempt, err)
+			}
+		case <-visitCtx.Done():
+			cancel()
+			lastErr = fmt.Errorf("timeout for %s", input.Link)
+			log.Printf("[%s_%s] Attempt %d timeout", ds.state, input.Serial, attempt)
+		}
+
+		// Wait before retry with exponential backoff
+		if attempt < maxRetries {
+			backoffDuration := time.Duration(attempt*attempt) * 3 * time.Second
+			log.Printf("[%s_%s] Retrying in %v...", ds.state, input.Serial, backoffDuration)
+			time.Sleep(backoffDuration)
+		}
 	}
 
-	return tenderData, nil
+	return nil, fmt.Errorf("failed after %d attempts: %w", maxRetries, lastErr)
 }
 
-func (ts *TenderDataScraper) writeOutputs(data *TenderData) error {
-	// Write to JSONL
-	tender := ts.convertToUtilsTender(data)
-	dir := filepath.Join("TenderData/Tenders", ts.runDate)
-	if err := os.MkdirAll(dir, 0755); err != nil {
-		return fmt.Errorf("failed to create output directory: %w", err)
+// validateTenderData checks if meaningful data was extracted
+func (ds *DataScraper) validateTenderData(data *TenderData) bool {
+	if data == nil {
+		return false
 	}
 
-	fileName := filepath.Join(dir, "tender.jsonl")
-	if err := utils.AppendJSONL(fileName, tender); err != nil {
-		return fmt.Errorf("failed to append JSONL: %w", err)
-	}
+	// Check if we have at least some basic details or other meaningful data
+	hasBasicDetails := data.BasicDetails.TenderID != "" ||
+		data.BasicDetails.TenderReferenceNumber != "" ||
+		data.BasicDetails.OrganisationChain != ""
 
-	log.Printf("[%s] wrote tender %s to %s\n", ts.state, data.BasicDetails.TenderID, fileName)
-	return nil
+	hasCriticalDates := data.CriticalDates.PublishedDate != "" ||
+		data.CriticalDates.BidSubmissionEndDate != ""
+
+	hasWorkItem := data.WorkItem.Title != "" ||
+		data.WorkItem.Description != ""
+
+	hasFeeDetails := data.TenderFee.TotalFee != "" ||
+		data.EMDFee.EmdAmount != ""
+
+	return hasBasicDetails || hasCriticalDates || hasWorkItem || hasFeeDetails
 }
 
-func (ts *TenderDataScraper) convertToUtilsTender(data *TenderData) utils.Tender {
+// ConvertToUtilsTender converts internal TenderData to utils.Tender
+func (ds *DataScraper) ConvertToUtilsTender(data *TenderData) utils.Tender {
 	tender := utils.Tender{}
 
 	// Map basic details
@@ -195,6 +167,7 @@ func (ts *TenderDataScraper) convertToUtilsTender(data *TenderData) utils.Tender
 	tender.BasicDetails.FormOfContract = data.BasicDetails.FormOfContract
 	tender.BasicDetails.TenderCategory = data.BasicDetails.TenderCategory
 
+	// Map number of covers
 	if n := strings.TrimSpace(data.BasicDetails.NumberOfCovers); n != "" {
 		switch n {
 		case "1":
@@ -212,7 +185,6 @@ func (ts *TenderDataScraper) convertToUtilsTender(data *TenderData) utils.Tender
 	tender.BasicDetails.AllowTwoStageBidding = strings.EqualFold(strings.TrimSpace(data.BasicDetails.AllowTwoStageBidding), "yes")
 
 	// Map other sections
-	// NEED FIX: Currently pushing all info onto OFFLINE category
 	tender.PaymentInstruments.Offline = data.PaymentInstruments
 	tender.CoversInformation = data.Covers
 
@@ -235,13 +207,13 @@ func (ts *TenderDataScraper) convertToUtilsTender(data *TenderData) utils.Tender
 	tender.EmdFeeDetails.EmdPayableAt = data.EMDFee.EmdPayableAt
 
 	// Map work item details
-	ts.mapWorkItemDetails(&tender, data)
+	ds.mapWorkItemDetails(&tender, data)
 
 	// Map critical dates
 	tender.CriticalDates = data.CriticalDates
 
 	// Map tender documents
-	ts.mapTenderDocuments(&tender, data)
+	ds.mapTenderDocuments(&tender, data)
 
 	// Map Tender Inviting Authority
 	tender.TenderInvitingAuthority.Name = data.TenderInvitingAuthority.Name

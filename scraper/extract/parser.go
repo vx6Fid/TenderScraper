@@ -2,8 +2,10 @@ package extract
 
 import (
 	"html"
+	"log"
 	"regexp"
 	"strings"
+	"time"
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/gocolly/colly/v2"
@@ -18,34 +20,61 @@ func NewTenderParser() *TenderParser {
 
 // SetupHandlers configures all the colly handlers for parsing
 func (tp *TenderParser) SetupHandlers(c *colly.Collector, data *TenderData) {
-	tp.setupNavigationHandler(c)
-	tp.setupBasicDetailsHandler(c, data)
-	tp.setupPaymentInstrumentsHandler(c, data)
-	tp.setupCoverDetailsHandler(c, data)
-	tp.setupTenderDocumentsHandler(c, data)
-	tp.setupTenderFeeHandler(c, data)
-	tp.setupEMDFeeHandler(c, data)
-	tp.setupCriticalDatesHandler(c, data)
-	tp.setupWorkItemHandler(c, data)
-	tp.setupCorrigendumHandler(c, data)
-	tp.setupCorrigendumDetailHandler(c, data)
-	tp.setupTenderInvitingAuthorityHandler(c, data)
-	tp.setupFallbackHandler(c, data)
+
+	// Wrap each setup in a timing log
+	timed := func(name string, fn func()) {
+		start := time.Now()
+		fn()
+		log.Printf("[%s] attached in %v", name, time.Since(start))
+	}
+
+	timed("Navigation", func() { tp.setupNavigationHandler(c, data) })
+	// timed("BasicDetails", func() { tp.setupBasicDetailsHandler(c, data) })
+	// timed("PaymentInstruments", func() { tp.setupPaymentInstrumentsHandler(c, data) })
+	// timed("CoverDetails", func() { tp.setupCoverDetailsHandler(c, data) })
+	// timed("TenderDocuments", func() { tp.setupTenderDocumentsHandler(c, data) })
+	// timed("TenderFee", func() { tp.setupTenderFeeHandler(c, data) })
+	// timed("EMDFee", func() { tp.setupEMDFeeHandler(c, data) })
+	// timed("CriticalDates", func() { tp.setupCriticalDatesHandler(c, data) })
+	// timed("WorkItem", func() { tp.setupWorkItemHandler(c, data) })
+	// timed("Corrigendum", func() { tp.setupCorrigendumHandler(c, data) })
+	// timed("CorrigendumDetail", func() { tp.setupCorrigendumDetailHandler(c, data) })
+	// timed("TenderInvitingAuthority", func() { tp.setupTenderInvitingAuthorityHandler(c, data) })
+	// timed("Fallback", func() { tp.setupFallbackHandler(c, data) })
 }
 
 // setupNavigationHandler handles following tender detail links
-func (tp *TenderParser) setupNavigationHandler(c *colly.Collector) {
+func (tp *TenderParser) setupNavigationHandler(c *colly.Collector, data *TenderData) {
 	c.OnHTML("a", func(e *colly.HTMLElement) {
-		text := strings.TrimSpace(e.Text)
 		titleAttr := strings.TrimSpace(e.Attr("title"))
 		href := e.Attr("href")
-		lowerText := strings.ToLower(text)
 		lowerTitle := strings.ToLower(titleAttr)
 
-		if href != "" && (strings.Contains(lowerText, "view tender details") ||
-			strings.Contains(lowerTitle, "view more details") ||
-			strings.Contains(href, "FrontEndTenderDetails")) {
-			e.Request.Visit(e.Request.AbsoluteURL(href))
+		if href != "" && strings.Contains(lowerTitle, "view more details") {
+			absURL := e.Request.AbsoluteURL(href)
+			log.Printf("[Navigation] Visiting detail page %s", absURL)
+
+			// Disable this handler so we don’t keep firing it
+			c.OnHTMLDetach("a")
+
+			// Attach all detail handlers only now
+			tp.setupBasicDetailsHandler(c, data)
+			tp.setupPaymentInstrumentsHandler(c, data)
+			tp.setupCoverDetailsHandler(c, data)
+			tp.setupTenderDocumentsHandler(c, data)
+			tp.setupTenderFeeHandler(c, data)
+			tp.setupEMDFeeHandler(c, data)
+			tp.setupCriticalDatesHandler(c, data)
+			tp.setupWorkItemHandler(c, data)
+			tp.setupCorrigendumHandler(c, data)
+			// tp.setupCorrigendumDetailHandler(c, data)
+			tp.setupTenderInvitingAuthorityHandler(c, data)
+			tp.setupFallbackHandler(c, data)
+
+			// Visit the detail page
+			if err := e.Request.Visit(absURL); err != nil {
+				log.Printf("[Navigation] Failed to visit %s: %v", absURL, err)
+			}
 		}
 	})
 }
@@ -53,6 +82,7 @@ func (tp *TenderParser) setupNavigationHandler(c *colly.Collector) {
 // setupBasicDetailsHandler parses the Basic Details section
 func (tp *TenderParser) setupBasicDetailsHandler(c *colly.Collector, data *TenderData) {
 	c.OnHTML("table", func(e *colly.HTMLElement) {
+		// start := time.Now()
 		// Detect details page
 		if data.DetailsURL == "" && strings.Contains(strings.ToLower(e.DOM.Text()), "tender details") {
 			data.DetailsURL = e.Request.URL.String()
@@ -63,6 +93,7 @@ func (tp *TenderParser) setupBasicDetailsHandler(c *colly.Collector, data *Tende
 		if sectionHead.Length() > 0 && strings.Contains(strings.ToLower(sectionHead.Text()), "basic details") {
 			tp.parseBasicDetailsRows(e.DOM, &data.BasicDetails)
 		}
+		// log.Printf("Basic details parsing took %v", time.Since(start))
 	})
 }
 
@@ -163,6 +194,7 @@ func (tp *TenderParser) assignBasicDetailValue(label, value string, basic *Basic
 // setupPaymentInstrumentsHandler parses payment instruments
 func (tp *TenderParser) setupPaymentInstrumentsHandler(c *colly.Collector, data *TenderData) {
 	c.OnHTML("table#offlineInstrumentsTableView", func(e *colly.HTMLElement) {
+		// start := time.Now()
 		e.DOM.Find("tr").Each(func(_ int, s *goquery.Selection) {
 			if s.HasClass("caption") {
 				return
@@ -175,12 +207,14 @@ func (tp *TenderParser) setupPaymentInstrumentsHandler(c *colly.Collector, data 
 					utils.PaymentInstrument{SerialNo: serial, InstrumentType: instr})
 			}
 		})
+		// log.Printf("Payment instruments parsing took %v", time.Since(start))
 	})
 }
 
 // setupCoverDetailsHandler parses cover details
 func (tp *TenderParser) setupCoverDetailsHandler(c *colly.Collector, data *TenderData) {
 	c.OnHTML("table#packetTableView", func(e *colly.HTMLElement) {
+		// start := time.Now()
 		e.DOM.Find("tr").Each(func(_ int, s *goquery.Selection) {
 			if s.Find("td.section_head").Length() > 0 || s.Find("td.caption").Length() > 0 {
 				return
@@ -196,12 +230,14 @@ func (tp *TenderParser) setupCoverDetailsHandler(c *colly.Collector, data *Tende
 					DocumentType: docType, Description: desc})
 			}
 		})
+		// log.Printf("Cover details parsing took %v", time.Since(start))
 	})
 }
 
 // setupTenderDocumentsHandler parses tender documents
 func (tp *TenderParser) setupTenderDocumentsHandler(c *colly.Collector, data *TenderData) {
 	c.OnHTML("td.section_head", func(e *colly.HTMLElement) {
+		// start := time.Now()
 		head := strings.ToLower(strings.TrimSpace(e.DOM.Text()))
 		if !strings.Contains(head, "tender documents") {
 			return
@@ -247,6 +283,7 @@ func (tp *TenderParser) setupTenderDocumentsHandler(c *colly.Collector, data *Te
 				}
 			})
 		})
+		// log.Printf("Work documents parsing took %v", time.Since(start))
 	})
 }
 
@@ -271,6 +308,7 @@ func (tp *TenderParser) nitDocExists(docs []NITDocument, d NITDocument) bool {
 // setupTenderFeeHandler parses tender fee details
 func (tp *TenderParser) setupTenderFeeHandler(c *colly.Collector, data *TenderData) {
 	c.OnHTML("td.section_head", func(e *colly.HTMLElement) {
+		// start := time.Now()
 		head := strings.ToLower(strings.TrimSpace(e.DOM.Text()))
 		if strings.Contains(head, "tender fee details") {
 			// Extract total fee from header
@@ -283,7 +321,9 @@ func (tp *TenderParser) setupTenderFeeHandler(c *colly.Collector, data *TenderDa
 				tp.parseTenderFeeRow(s, &data.TenderFee)
 			})
 		}
+		// log.Printf("Tender fee parsing took %v", time.Since(start))
 	})
+
 }
 
 func (tp *TenderParser) parseTenderFeeRow(s *goquery.Selection, fee *TenderFeeDetails) {
@@ -309,6 +349,7 @@ func (tp *TenderParser) parseTenderFeeRow(s *goquery.Selection, fee *TenderFeeDe
 // setupEMDFeeHandler parses EMD fee details
 func (tp *TenderParser) setupEMDFeeHandler(c *colly.Collector, data *TenderData) {
 	c.OnHTML("td.section_head", func(e *colly.HTMLElement) {
+		// start := time.Now()
 		head := strings.ToLower(strings.TrimSpace(e.DOM.Text()))
 		if strings.Contains(head, "emd fee details") {
 			parentTable := e.DOM.Closest("table")
@@ -316,6 +357,7 @@ func (tp *TenderParser) setupEMDFeeHandler(c *colly.Collector, data *TenderData)
 				tp.parseEMDFeeRow(s, &data.EMDFee)
 			})
 		}
+		// log.Printf("EMD fee parsing took %v", time.Since(start))
 	})
 }
 
@@ -351,6 +393,7 @@ func (tp *TenderParser) parseEMDFeeRow(s *goquery.Selection, emd *EMDFeeDetails)
 // setupCriticalDatesHandler parses critical dates - FIXED
 func (tp *TenderParser) setupCriticalDatesHandler(c *colly.Collector, data *TenderData) {
 	c.OnHTML("td.section_head", func(e *colly.HTMLElement) {
+		// start := time.Now()
 		head := strings.ToLower(strings.TrimSpace(e.DOM.Text()))
 		if strings.Contains(head, "critical dates") {
 			parentTable := e.DOM.Closest("table")
@@ -358,6 +401,8 @@ func (tp *TenderParser) setupCriticalDatesHandler(c *colly.Collector, data *Tend
 				tp.parseCriticalDatesRow(s, &data.CriticalDates)
 			})
 		}
+		// end := time.Now()
+		// log.Printf("Parsing critical dates took %v\n", end.Sub(start))
 	})
 }
 
@@ -438,6 +483,7 @@ func (tp *TenderParser) assignCriticalDateValue(cap, val string, cd *CriticalDat
 // setupWorkItemHandler parses work/item details - FIXED
 func (tp *TenderParser) setupWorkItemHandler(c *colly.Collector, data *TenderData) {
 	c.OnHTML("td.section_head", func(e *colly.HTMLElement) {
+		// start := time.Now()
 		head := strings.ToLower(strings.TrimSpace(e.DOM.Text()))
 		if strings.Contains(head, "work /item") {
 			parentTable := e.DOM.Closest("table")
@@ -445,6 +491,8 @@ func (tp *TenderParser) setupWorkItemHandler(c *colly.Collector, data *TenderDat
 				tp.parseWorkItemRow(s, &data.WorkItem)
 			})
 		}
+		// end := time.Now()
+		// log.Printf("Parsing work/item details took %v\n", end.Sub(start))
 	})
 }
 
@@ -559,6 +607,7 @@ func (tp *TenderParser) assignWorkItemValue(cap, val string, work *WorkItemDetai
 // setupTenderInvitingAuthorityHandler parses tender inviting authority
 func (tp *TenderParser) setupTenderInvitingAuthorityHandler(c *colly.Collector, data *TenderData) {
 	c.OnHTML("td.section_head", func(e *colly.HTMLElement) {
+		// start := time.Now()
 		head := strings.ToLower(strings.TrimSpace(e.DOM.Text()))
 		if strings.EqualFold(head, "tender inviting authority") {
 			parentTable := e.DOM.Closest("table")
@@ -583,12 +632,15 @@ func (tp *TenderParser) setupTenderInvitingAuthorityHandler(c *colly.Collector, 
 				}
 			})
 		}
+		// end := time.Now()
+		// log.Printf("Parsing tender inviting authority took %v\n", end.Sub(start))
 	})
 }
 
 // setupFallbackHandler provides regex-based fallback parsing
 func (tp *TenderParser) setupFallbackHandler(c *colly.Collector, data *TenderData) {
 	c.OnResponse(func(r *colly.Response) {
+		// start := time.Now()
 		body := string(r.Body)
 
 		if data.DetailsURL == "" && strings.Contains(strings.ToLower(body), "tender details") {
@@ -601,12 +653,15 @@ func (tp *TenderParser) setupFallbackHandler(c *colly.Collector, data *TenderDat
 				data.BasicDetails.TenderID = strings.TrimSpace(m[3])
 			}
 		}
+		// elapsed := time.Since(start)
+		// log.Printf("[%s] Request took: %s", "UttarPradesh", elapsed)
 	})
 }
 
 // setupCorrigendumHandler parses corrigendum list and follows links
 func (tp *TenderParser) setupCorrigendumHandler(c *colly.Collector, data *TenderData) {
 	c.OnHTML("td.section_head", func(e *colly.HTMLElement) {
+		// start := time.Now()
 		head := strings.ToLower(strings.TrimSpace(e.Text))
 		if !strings.Contains(head, "corrigendum") {
 			return
@@ -618,12 +673,13 @@ func (tp *TenderParser) setupCorrigendumHandler(c *colly.Collector, data *Tender
 				return
 			}
 			tds := s.Find("td")
-			if tds.Length() >= 4 && !s.HasClass("list_header") {
+			if tds.Length() >= 4 {
 				rawLink := tds.Eq(3).Find("a").AttrOr("href", "")
-				absLink := ""
-				if rawLink != "" {
-					absLink = e.Request.AbsoluteURL(rawLink)
+				if rawLink == "" {
+					return
 				}
+
+				absLink := e.Request.AbsoluteURL(rawLink)
 				cleanURL := html.UnescapeString(absLink)
 
 				corr := utils.Corrigendum{
@@ -634,16 +690,29 @@ func (tp *TenderParser) setupCorrigendumHandler(c *colly.Collector, data *Tender
 				}
 				data.Corrigendum = append(data.Corrigendum, corr)
 
-				if absLink != "" {
-					e.Request.Visit(absLink)
+				// Attach detail handler on demand
+				tp.setupCorrigendumDetailHandler(c, data)
+
+				// Visit the detail page
+				if err := e.Request.Visit(cleanURL); err != nil {
+					log.Printf("[Corrigendum] Failed to visit %s: %v", cleanURL, err)
 				}
+
+				// Detach handler to avoid multiple triggers
+				c.OnHTMLDetach("table.list_table")
 			}
 		})
+
+		// elapse := time.Since(start)
+		// if elapse > time.Second {
+		// 	log.Printf("Parsing corrigendum list took %v", elapse)
+		// }
 	})
 }
 
 func (tp *TenderParser) setupCorrigendumDetailHandler(c *colly.Collector, data *TenderData) {
 	c.OnHTML("table.list_table", func(e *colly.HTMLElement) {
+		// start := time.Now()
 		// Detect corrigendum type from the info table
 		corrType := ""
 		e.DOM.Closest("table.page_border").Find("tr.td_caption").Each(func(_ int, s *goquery.Selection) {
@@ -713,6 +782,8 @@ func (tp *TenderParser) setupCorrigendumDetailHandler(c *colly.Collector, data *
 				tp.attachDetailToParent(data, e.Request.URL.String(), detail)
 			})
 		}
+		// end := time.Now()
+		// log.Printf("Parsing corrigendum list took %v\n", end.Sub(start))
 	})
 }
 

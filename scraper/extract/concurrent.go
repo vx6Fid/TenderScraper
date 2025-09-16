@@ -272,7 +272,10 @@ func (ce *ConcurrentExtractor) workerProcess(ws *WorkerSession, jobs <-chan Tend
 		// Add worker-level mutex to prevent concurrent access to session
 		// ws.mu.Lock()
 		// Extract tender data using the worker's dedicated session
+		start := time.Now()
 		tenderData, err := ws.Scraper.ExtractSingleTender(tenderInput)
+		elapsed := time.Since(start)
+		log.Printf("[%s] Worker %d extracted tender %s in %s", ce.state, ws.WorkerID, tenderInput.Serial, elapsed)
 		// ws.mu.Unlock()
 
 		if err != nil {

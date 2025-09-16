@@ -30,62 +30,59 @@ func NewDataScraper(sess *session.Session, domain, state, runDate string) *DataS
 }
 
 // ExtractSingleTender extracts data from a single tender URL
+// ExtractSingleTender extracts data from a single tender URL
 func (ds *DataScraper) ExtractSingleTender(input TenderInput) (*TenderData, error) {
-	// Create completely fresh collector for this request to avoid state conflicts
+	overallStart := time.Now()
+
+	// Create fresh collector for this request
 	c := ds.session.NewCollector(ds.domain)
 
-	// Configure collector with conservative settings
-	c.SetRequestTimeout(60 * time.Second)
+	// Configure collector
+	c.SetRequestTimeout(30 * time.Second)
 	c.Limit(&colly.LimitRule{
 		DomainGlob:  "*",
-		Parallelism: 1,
-		Delay:       500 * time.Millisecond, // Increased delay for stability
+		Parallelism: 3,
+		Delay:       0 * time.Millisecond, // throttle between requests
 	})
 
 	// Add realistic headers
 	c.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
-	c.OnRequest(func(r *colly.Request) {
-		r.Headers.Set("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8")
-		r.Headers.Set("Accept-Language", "en-US,en;q=0.5")
-		r.Headers.Set("Accept-Encoding", "gzip, deflate")
-		r.Headers.Set("Connection", "keep-alive")
-		r.Headers.Set("Upgrade-Insecure-Requests", "1")
-		r.Headers.Set("Cache-Control", "no-cache")
+	// c.OnRequest(func(r *colly.Request) {
+	// 	log.Printf("[Request] -> %s", r.URL.String())
+	// })
+	// c.OnResponse(func(r *colly.Response) {
+	// 	log.Printf("[Response] <- %s (%d bytes)", r.Request.URL.String(), len(r.Body))
+	// })
+	c.OnScraped(func(r *colly.Response) {
+		log.Printf("[Scraped] Finished %s in %v", r.Request.URL.String(), time.Since(overallStart))
 	})
 
-	// Add error handler for debugging
+	// Error handler
 	c.OnError(func(r *colly.Response, err error) {
 		log.Printf("[%s] Request error for %s: %v", ds.state, r.Request.URL, err)
 	})
 
-	// Create fresh TenderData for this extraction
+	// Fresh TenderData
 	tenderData := &TenderData{}
 
-	// Create a new parser instance for this extraction to avoid state conflicts
+	// Setup parser handlers (instrumented version below)
 	parser := NewTenderParser()
 	parser.SetupHandlers(c, tenderData)
 
-	// Implement retry logic
+	// Retry loop
 	maxRetries := 3
 	var lastErr error
-
 	for attempt := 1; attempt <= maxRetries; attempt++ {
-		// Reset tender data for retry attempts
 		if attempt > 1 {
 			tenderData = &TenderData{}
-			// Create completely new collector for retry to avoid state issues
 			c = ds.session.NewCollector(ds.domain)
-
-			// Create new parser instance for retry
 			parser = NewTenderParser()
 			parser.SetupHandlers(c, tenderData)
 		}
 
-		// Create context for this attempt
 		ctx := colly.NewContext()
-
-		// Attempt the extraction with timeout
-		visitCtx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
+		visitCtx, cancel := context.WithTimeout(context.Background(), 50*time.Second)
+		attemptStart := time.Now()
 
 		done := make(chan error, 1)
 		go func() {
@@ -100,27 +97,22 @@ func (ds *DataScraper) ExtractSingleTender(input TenderInput) (*TenderData, erro
 		select {
 		case err := <-done:
 			cancel()
+			log.Printf("[%s_%s] Attempt %d finished in %v", ds.state, input.Serial, attempt, time.Since(attemptStart))
+			if err == nil && ds.validateTenderData(tenderData) {
+				log.Printf("[%s_%s] Successfully extracted tender data in %v", ds.state, input.Serial, time.Since(overallStart))
+				return tenderData, nil
+			}
 			if err == nil {
-				// Success! Validate that we got some data
-				if ds.validateTenderData(tenderData) {
-					log.Printf("[%s_%s] Successfully extracted tender data", ds.state, input.Serial)
-					return tenderData, nil
-				} else {
-					log.Printf("[%s_%s] Attempt %d: No data extracted, treating as failure",
-						ds.state, input.Serial, attempt)
-					lastErr = fmt.Errorf("no data extracted from %s", input.Link)
-				}
+				lastErr = fmt.Errorf("no data extracted from %s", input.Link)
 			} else {
 				lastErr = err
-				log.Printf("[%s_%s] Attempt %d failed: %v", ds.state, input.Serial, attempt, err)
 			}
 		case <-visitCtx.Done():
 			cancel()
 			lastErr = fmt.Errorf("timeout for %s", input.Link)
-			log.Printf("[%s_%s] Attempt %d timeout", ds.state, input.Serial, attempt)
+			log.Printf("[%s_%s] Attempt %d timeout after %v", ds.state, input.Serial, attempt, time.Since(attemptStart))
 		}
 
-		// Wait before retry with exponential backoff
 		if attempt < maxRetries {
 			backoffDuration := time.Duration(attempt*attempt) * 3 * time.Second
 			log.Printf("[%s_%s] Retrying in %v...", ds.state, input.Serial, backoffDuration)
@@ -128,6 +120,7 @@ func (ds *DataScraper) ExtractSingleTender(input TenderInput) (*TenderData, erro
 		}
 	}
 
+	log.Printf("[%s_%s] FAILED after %v total", ds.state, input.Serial, time.Since(overallStart))
 	return nil, fmt.Errorf("failed after %d attempts: %w", maxRetries, lastErr)
 }
 

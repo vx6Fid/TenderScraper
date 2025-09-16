@@ -88,18 +88,7 @@ func dirname(path string) string {
 }
 
 func CalculateOptimalWorkers(totalJobs int) int {
-	switch {
-	case totalJobs <= 50:
-		return 1
-	case totalJobs <= 200:
-		return 5
-	case totalJobs <= 500:
-		return 8
-	case totalJobs <= 1000:
-		return 12
-	default:
-		return 15
-	}
+	return min(totalJobs, 96)
 }
 
 // function to get the last created folder name in TenderDate/Links
@@ -130,5 +119,5 @@ func GetRunDate() string {
 func EstimateJobCount(state string, runDate string) int {
 	// Implement your logic here to estimate the job count based on state and runDate
 	// This is just a placeholder implementation
-	return 12
+	return 620
 }

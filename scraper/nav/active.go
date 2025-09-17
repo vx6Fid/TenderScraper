@@ -35,8 +35,8 @@ type TenderScraper struct {
 	csvWriter          *csv.Writer
 }
 
-// NewTenderScraper initializes a new scraper instance.
-func NewTenderScraper(sess *session.Session, domain string, state string) *TenderScraper {
+// NewActiveScraper initializes a new scraper instance.
+func NewActiveScraper(sess *session.Session, domain string, state string) *TenderScraper {
 	collector := sess.NewCollector(domain)
 	collector.AllowURLRevisit = true
 	return &TenderScraper{

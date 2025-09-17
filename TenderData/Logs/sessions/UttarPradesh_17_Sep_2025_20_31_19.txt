@@ -1,0 +1,38 @@
+2025/09/17 20:31:19 STEP 1: Starting captcha/session flow: https://etender.up.nic.in/nicgep/app?page=FrontEndLatestActiveTenders&service=page
+2025/09/17 20:31:19 [request] GET https://etender.up.nic.in/nicgep/app?page=FrontEndLatestActiveTenders&service=page
+2025/09/17 20:31:21 [response] https://etender.up.nic.in/nicgep/app?page=FrontEndLatestActiveTenders&service=page | 200 | 32881 bytes
+2025/09/17 20:31:21 [captcha] response handler: GET | https://etender.up.nic.in/nicgep/app?page=FrontEndLatestActiveTenders&service=page | 200
+2025/09/17 20:31:21 [captcha] found form (status 200) at https://etender.up.nic.in/nicgep/app?page=FrontEndLatestActiveTenders&service=page
+2025/09/17 20:31:21 [captcha] find table in document
+2025/09/17 20:31:21 [captcha] found form (status 200) at https://etender.up.nic.in/nicgep/app?page=FrontEndLatestActiveTenders&service=page
+2025/09/17 20:31:21 [captcha] image found!
+2025/09/17 20:31:21 === CAPTCHA SOLVER ===
+2025/09/17 20:31:21 Captcha image saved to: /tmp/captcha_1758121281.png
+2025/09/17 20:31:21 Sending captcha to API...
+2025/09/17 20:31:44 Captcha solution received: 21ZJX4
+2025/09/17 20:31:44 Captcha solution received: '21ZJX4'
+2025/09/17 20:31:44 Warning: Could not remove temporary file /tmp/captcha_1758121281.png: remove /tmp/captcha_1758121281.png: no such file or directory
+2025/09/17 20:31:44 [captcha] solved: 21ZJX4
+2025/09/17 20:31:44 [captcha] submitting form with 17 fields
+2025/09/17 20:31:44 [request] POST https://etender.up.nic.in/nicgep/app
+2025/09/17 20:31:47 [response] https://etender.up.nic.in/nicgep/app | 200 | 33387 bytes
+2025/09/17 20:31:47 [captcha] response handler: POST | https://etender.up.nic.in/nicgep/app | 200
+2025/09/17 20:31:47 [captcha] found form (status 200) at https://etender.up.nic.in/nicgep/app
+2025/09/17 20:31:47 [captcha] find table in document
+2025/09/17 20:31:47 [captcha] found form (status 200) at https://etender.up.nic.in/nicgep/app
+2025/09/17 20:31:47 [captcha] image found!
+2025/09/17 20:31:47 === CAPTCHA SOLVER ===
+2025/09/17 20:31:47 Captcha image saved to: /tmp/captcha_1758121307.png
+2025/09/17 20:31:49 Sending captcha to API...
+2025/09/17 20:32:11 Captcha solution received: L43CeP
+2025/09/17 20:32:11 Captcha solution received: 'L43CeP'
+2025/09/17 20:32:11 [captcha] solved: L43CeP
+2025/09/17 20:32:11 [captcha] submitting form with 17 fields
+2025/09/17 20:32:11 [request] POST https://etender.up.nic.in/nicgep/app
+2025/09/17 20:32:16 [response] https://etender.up.nic.in/nicgep/app | 200 | 55602 bytes
+2025/09/17 20:32:16 [captcha] response handler: POST | https://etender.up.nic.in/nicgep/app | 200
+2025/09/17 20:32:16 [captcha] found form (status 200) at https://etender.up.nic.in/nicgep/app
+2025/09/17 20:32:16 [captcha] find table in document
+2025/09/17 20:32:16 [captcha] tender list table found, skipping captcha
+2025/09/17 20:32:16 Session established: 1 cookies
+2025/09/17 20:32:16 [request] GET https://etender.up.nic.in/nicgep/app?component=$TablePages.linkPage&page=FrontEndAdvancedSearchResult&service=direct&session=T&sp=AFrontEndAdvancedSearchResult%2Ctable&sp=1

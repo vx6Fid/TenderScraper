@@ -1,0 +1,32 @@
+2025/09/17 20:31:19 STEP 1: Starting captcha/session flow: https://ddtenders.gov.in/nicgep/app?page=FrontEndLatestActiveTenders&service=page
+2025/09/17 20:31:19 [request] GET https://ddtenders.gov.in/nicgep/app?page=FrontEndLatestActiveTenders&service=page
+2025/09/17 20:31:22 [response] https://ddtenders.gov.in/nicgep/app?page=FrontEndLatestActiveTenders&service=page | 200 | 32297 bytes
+2025/09/17 20:31:22 [captcha] response handler: GET | https://ddtenders.gov.in/nicgep/app?page=FrontEndLatestActiveTenders&service=page | 200
+2025/09/17 20:31:22 [captcha] found form (status 200) at https://ddtenders.gov.in/nicgep/app?page=FrontEndLatestActiveTenders&service=page
+2025/09/17 20:31:22 [captcha] find table in document
+2025/09/17 20:31:22 [captcha] found form (status 200) at https://ddtenders.gov.in/nicgep/app?page=FrontEndLatestActiveTenders&service=page
+2025/09/17 20:31:22 [captcha] image found!
+2025/09/17 20:31:22 === CAPTCHA SOLVER ===
+2025/09/17 20:31:22 Captcha image saved to: /tmp/captcha_1758121282.png
+2025/09/17 20:31:26 Sending captcha to API...
+2025/09/17 20:31:48 Captcha solution received: xvex27
+2025/09/17 20:31:48 Captcha solution received: 'xvex27'
+2025/09/17 20:31:48 Warning: Could not remove temporary file /tmp/captcha_1758121282.png: remove /tmp/captcha_1758121282.png: no such file or directory
+2025/09/17 20:31:48 [captcha] solved: xvex27
+2025/09/17 20:31:48 [captcha] submitting form with 17 fields
+2025/09/17 20:31:48 [request] POST https://ddtenders.gov.in/nicgep/app
+2025/09/17 20:31:51 [response] https://ddtenders.gov.in/nicgep/app | 200 | 32867 bytes
+2025/09/17 20:31:51 [captcha] response handler: POST | https://ddtenders.gov.in/nicgep/app | 200
+2025/09/17 20:31:51 [captcha] found form (status 200) at https://ddtenders.gov.in/nicgep/app
+2025/09/17 20:31:51 [captcha] find table in document
+2025/09/17 20:31:51 [captcha] found form (status 200) at https://ddtenders.gov.in/nicgep/app
+2025/09/17 20:31:51 [captcha] image found!
+2025/09/17 20:31:51 === CAPTCHA SOLVER ===
+2025/09/17 20:31:51 Captcha image saved to: /tmp/captcha_1758121311.png
+2025/09/17 20:31:54 Sending captcha to API...
+2025/09/17 20:32:16 Captcha solution received: pndH86
+2025/09/17 20:32:16 Captcha solution received: 'pndH86'
+2025/09/17 20:32:16 Warning: Could not remove temporary file /tmp/captcha_1758121311.png: remove /tmp/captcha_1758121311.png: no such file or directory
+2025/09/17 20:32:16 [captcha] solved: pndH86
+2025/09/17 20:32:16 [captcha] submitting form with 17 fields
+2025/09/17 20:32:16 [request] POST https://ddtenders.gov.in/nicgep/app

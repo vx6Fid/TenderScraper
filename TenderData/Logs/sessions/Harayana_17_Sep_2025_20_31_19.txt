@@ -1,0 +1,4 @@
+2025/09/17 20:31:19 STEP 1: Starting captcha/session flow: https://etenders.hry.nic.in/nicgep/app?page=FrontEndLatestActiveTenders&service=page
+2025/09/17 20:31:19 [request] GET https://etenders.hry.nic.in/nicgep/app?page=FrontEndLatestActiveTenders&service=page
+2025/09/17 20:31:51 [error] https://etenders.hry.nic.in/nicgep/app?page=FrontEndLatestActiveTenders&service=page | 0 | Get "https://etenders.hry.nic.in/nicgep/app?page=FrontEndLatestActiveTenders&service=page": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+2025/09/17 20:31:51 [session error] url=https://etenders.hry.nic.in/nicgep/app?page=FrontEndLatestActiveTenders&service=page status=0 err=Get "https://etenders.hry.nic.in/nicgep/app?page=FrontEndLatestActiveTenders&service=page": context deadline exceeded (Client.Timeout exceeded while awaiting headers)

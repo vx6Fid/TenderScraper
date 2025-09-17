@@ -5,12 +5,10 @@ import (
 	"log"
 	"os"
 	"slices"
-	"sync"
 
 	"github.com/joho/godotenv"
 	"github.com/vx6fid/tender-scraper/scraper/extract"
 	"github.com/vx6fid/tender-scraper/scraper/nav"
-	"github.com/vx6fid/tender-scraper/session"
 	"github.com/vx6fid/tender-scraper/utils"
 )
 
@@ -26,7 +24,7 @@ func main() {
 		// {BaseURL: "https://eprocure.gov.in/eprocure/app", State: "eProcurementCentralGovernment", Domain: "eprocure.gov.in"},
 		// {BaseURL: "https://defproc.gov.in/nicgep/app", State: "MinistryOfDefence", Domain: "defproc.gov.in"},
 		// {BaseURL: "https://pmgsytenders.gov.in/nicgep/app", State: "PMGSY", Domain: "pmgsytenders.gov.in"},
-		{BaseURL: "https://etenders.gov.in/eprocure/app", State: "PSU", Domain: "etenders.gov.in"},
+		// {BaseURL: "https://etenders.gov.in/eprocure/app", State: "PSU", Domain: "etenders.gov.in"},
 		// {BaseURL: "https://coalindiatenders.nic.in/nicgep/app", State: "CoalIndia", Domain: "coalindiatenders.nic.in"},
 		// {BaseURL: "https://iocletenders.nic.in/nicgep/app", State: "IOCL", Domain: "iocletenders.nic.in"},
 		// {BaseURL: "https://cpcletenders.nic.in/nicgep/app", State: "CPCL", Domain: "cpcletenders.nic.in"},
@@ -68,7 +66,7 @@ func main() {
 		// {BaseURL: "https://tripuratenders.gov.in/nicgep/app", State: "Tripura", Domain: "tripuratenders.gov.in"},
 		// {BaseURL: "https://wbtenders.gov.in/nicgep/app", State: "WestBengal", Domain: "wbtenders.gov.in"},
 		// {BaseURL: "https://uktenders.gov.in/nicgep/app", State: "Uttarakhand", Domain: "uktenders.gov.in"},
-		// {BaseURL: "https://etender.up.nic.in/nicgep/app", State: "UttarPradesh", Domain: "etender.up.nic.in"},
+		{BaseURL: "https://etender.up.nic.in/nicgep/app", State: "UttarPradesh", Domain: "etender.up.nic.in"},
 	}
 
 	// Reverse the links
@@ -77,33 +75,19 @@ func main() {
 	fmt.Println("--- Choose one of the following ---")
 	fmt.Println("1.Tender links")
 	fmt.Println("2.Tender data")
+	fmt.Println("3.Corrigendum data")
 	var choice int
 	fmt.Print("Enter your choice: ")
 	fmt.Scan(&choice)
 
 	switch choice {
 	case 1:
-		var wg sync.WaitGroup
-
-		for _, u := range baseURLs {
-			wg.Add(1)
-			go func(u utils.URLS) {
-				defer wg.Done()
-
-				sess := session.NewSession(u.BaseURL, u.State)
-				if err := sess.EstablishSession(); err != nil {
-					log.Printf("[%s] failed to establish session: %v", u.State, err)
-					return
-				}
-
-				scraper := nav.NewTenderScraper(sess, u.Domain, u.State)
-				if err := scraper.ScrapeActiveTenders(); err != nil {
-					log.Printf("[%s] scraping failed: %v", u.State, err)
-				}
-			}(u)
+		runDate := utils.GetRunDate()
+		// fmt.Println("RunDate: ", runDate)
+		linkExtractor := nav.NewLinkExtractor(runDate, baseURLs)
+		if err := linkExtractor.Run(); err != nil {
+			log.Printf("Link extraction failed: %v", err)
 		}
-
-		wg.Wait()
 	case 2:
 		runDate := utils.GetRunDate()
 		// fmt.Println("RunDate: ", runDate)
@@ -111,7 +95,12 @@ func main() {
 			log.Printf("--- Starting concurrent tender extraction for [%s] ---", u.State)
 
 			// Determine optimal worker count based on expected load
-			totalJobs := utils.EstimateJobCount(u.State, runDate)
+			totalJobs, err := utils.EstimateJobCount(u.State, runDate)
+			if err != nil {
+				log.Printf("[%s] failed to estimate job count: %v", u.State, err)
+				continue
+			}
+
 			optimalWorkers := utils.CalculateOptimalWorkers(totalJobs)
 
 			extractor := extract.NewConcurrentExtractor(u.BaseURL, u.Domain, u.State, runDate, optimalWorkers)
@@ -122,6 +111,16 @@ func main() {
 			}
 
 			log.Printf("--- Completed [%s] ---", u.State)
+		}
+	case 3:
+		runDate := utils.GetRunDate()
+		// fmt.Println("RunDate: ", runDate)
+		linkExtractor := nav.NewLinkExtractor(runDate, baseURLs)
+		linkExtractor.Corrigendums()
+	case 4:
+		filePath := "TenderData/Links/17_Sep_2025/UttarPradesh/search.csv"
+		if err := utils.CountUniqueTenderIDs(filePath); err != nil {
+			fmt.Printf("Error: %v\n", err)
 		}
 	default:
 		fmt.Println("Invalid choice")

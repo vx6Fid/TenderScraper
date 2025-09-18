@@ -1,4 +1,0 @@
-2025/09/17 20:31:19 STEP 1: Starting captcha/session flow: https://sikkimtender.gov.in/nicgep/app?page=FrontEndLatestActiveTenders&service=page
-2025/09/17 20:31:19 [request] GET https://sikkimtender.gov.in/nicgep/app?page=FrontEndLatestActiveTenders&service=page
-2025/09/17 20:31:51 [error] https://sikkimtender.gov.in/nicgep/app?page=FrontEndLatestActiveTenders&service=page | 0 | Get "https://sikkimtender.gov.in/nicgep/app?page=FrontEndLatestActiveTenders&service=page": dial tcp 164.100.69.235:443: i/o timeout (Client.Timeout exceeded while awaiting headers)
-2025/09/17 20:31:51 [session error] url=https://sikkimtender.gov.in/nicgep/app?page=FrontEndLatestActiveTenders&service=page status=0 err=Get "https://sikkimtender.gov.in/nicgep/app?page=FrontEndLatestActiveTenders&service=page": dial tcp 164.100.69.235:443: i/o timeout (Client.Timeout exceeded while awaiting headers)

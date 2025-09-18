@@ -19,6 +19,7 @@ type Session struct {
 	Jar                http.CookieJar
 	BaseURL            string
 	ActiveTendersURL   string
+	CorrigendumURL     string
 	captchaSolved      bool
 	sessionEstablished bool
 	logger             *log.Logger
@@ -43,6 +44,7 @@ func NewSession(baseURL string, state string) *Session {
 		BaseURL:          baseURL,
 		logger:           logger,
 		ActiveTendersURL: baseURL + "?page=FrontEndLatestActiveTenders&service=page",
+		CorrigendumURL:   baseURL + "?page=FrontEndLatestActiveCorrigendums&service=page",
 	}
 }
 
@@ -97,17 +99,23 @@ func (s *Session) NewCollector(allowedDomains ...string) *colly.Collector {
 // EstablishSession performs the captcha flow using an internal collector
 // and populates the session's cookie jar. It waits (with timeout) for the
 // captcha flow to confirm the session.
-func (s *Session) EstablishSession() error {
-	s.logger.Printf("STEP 1: Starting captcha/session flow: %s", s.ActiveTendersURL)
-
+func (s *Session) EstablishSession(sessionType string) error {
 	// build captcha collector bound to host
 	host := hostFromURL(s.BaseURL)
 	s.captchaCollector = s.NewCollector(host)
 
 	// bind handlers
-	s.captchaCollector.OnHTML("form#LatestActiveTenders", func(e *colly.HTMLElement) {
-		s.handleCaptchaForm(e)
-	})
+	switch sessionType {
+	case "ActiveTenders":
+		s.captchaCollector.OnHTML("form#LatestActiveTenders", func(e *colly.HTMLElement) {
+			s.handleCaptchaForm(e)
+		})
+	case "CorrigendumTenders":
+		s.captchaCollector.OnHTML("form#LatestActiveCorrigendums", func(e *colly.HTMLElement) {
+			s.handleCaptchaForm(e)
+		})
+	}
+
 	s.captchaCollector.OnResponse(func(r *colly.Response) {
 		s.handleCaptchaResponse(r)
 	})
@@ -115,9 +123,17 @@ func (s *Session) EstablishSession() error {
 		s.handleError(r, err)
 	})
 
-	// visit the page that shows captcha
-	if err := s.captchaCollector.Visit(s.ActiveTendersURL); err != nil {
-		return fmt.Errorf("failed to visit active tenders page for captcha: %w", err)
+	switch sessionType {
+	case "ActiveTenders":
+		s.logger.Printf("STEP 1: Starting captcha/session flow: %s", s.ActiveTendersURL)
+		if err := s.captchaCollector.Visit(s.ActiveTendersURL); err != nil {
+			return fmt.Errorf("failed to visit active tenders page for captcha: %w", err)
+		}
+	case "CorrigendumTenders":
+		s.logger.Printf("STEP 1: Starting captcha/session flow: %s", s.CorrigendumURL)
+		if err := s.captchaCollector.Visit(s.CorrigendumURL); err != nil {
+			return fmt.Errorf("failed to visit corrigendum tenders page for captcha: %w", err)
+		}
 	}
 
 	// wait until either sessionEstablished is true or timeout
@@ -198,8 +214,8 @@ func (s *Session) handleCaptchaForm(e *colly.HTMLElement) {
 
 	s.logger.Printf("[captcha] image found!")
 
-	// call your manual solver (blocks until you provide solution)
-	sol, err := captcha.ManualCaptchaSolver(captchaSrc, s.logger)
+	// call your local solver (blocks until you provide solution)
+	sol, err := captcha.LocalCaptchaSolver(captchaSrc, s.logger)
 	if err != nil {
 		s.logger.Printf("[captcha] solver error: %v", err)
 		s.captchaSolved = false

@@ -45,7 +45,7 @@ func NewCorrScraper(sess *session.Session, domain string, state string) *CorrScr
 		collector:      collector,
 		baseURL:        sess.BaseURL,
 		state:          state,
-		corrigendumURL: sess.BaseURL + "?page=FrontEndLatestActiveCorrigendums&service=page",
+		corrigendumURL: sess.CorrigendumURL,
 		currentPage:    1,
 	}
 }
@@ -84,7 +84,17 @@ func (cs *CorrScraper) ScrapeCorrigendum() error {
 	cs.csvWriter = csv.NewWriter(file)
 
 	// write header
-	cs.csvWriter.Write([]string{"Serial Number", "Title", "E-Published Date", "Organisation", "Closing Date", "Link"})
+	cs.csvWriter.Write([]string{
+		"Serial Number",
+		"Tender ID",
+		"Page Number",
+		"Title",
+		"E-Published Date",
+		"Organisation",
+		"Closing Date",
+		"Link",
+	})
+
 	cs.csvWriter.Flush()
 
 	defer func() {
@@ -96,8 +106,8 @@ func (cs *CorrScraper) ScrapeCorrigendum() error {
 		}
 	}()
 
-	// STEP 1: Click Active Tenders link with established session
-	cs.logger.Printf("STEP 1: Clicking Active Tenders link with session: %s", cs.corrigendumURL)
+	// STEP 1: Click Corrigendum Tenders link with established session
+	cs.logger.Printf("STEP 1: Clicking Corrigendum Tenders link with session: %s", cs.corrigendumURL)
 
 	// Clear handlers and setup for tender parsing
 	cs.clearHandlers()
@@ -107,7 +117,6 @@ func (cs *CorrScraper) ScrapeCorrigendum() error {
 		return fmt.Errorf("failed to visit active tenders page with session: %w", err)
 	}
 
-	// Stops here, check from here
 	if !cs.resultsFound {
 		return fmt.Errorf("no tender results found after establishing session")
 	}
@@ -158,7 +167,7 @@ func (cs *CorrScraper) handlePagination() error {
 
 // setupTenderHandlers configures handlers for tender scraping phase
 func (cs *CorrScraper) setupTenderHandlers() {
-	cs.collector.OnHTML("table#table", cs.handleTenderTable)
+	cs.collector.OnHTML("table.list_table", cs.handleTenderTable)
 	cs.collector.OnHTML("a#loadNext", cs.handleNextButton)
 	cs.collector.OnHTML("span:contains('Total records:')", cs.handleTotalRecords)
 	cs.collector.OnError(cs.handleError)
@@ -240,43 +249,44 @@ func (cs *CorrScraper) parseTenders(e *colly.HTMLElement) {
 	// cs.saveFile("debug", fmt.Sprintf("Page_%d.html", cs.currentPage), []byte(e.Response.Body))
 
 	// e.DOM.Find("tr.even, tr.odd").Each(func(i int, s *goquery.Selection) {
-	e.DOM.Find(`tr[id^="informal"]`).Each(func(i int, s *goquery.Selection) {
+	e.DOM.Find("tr.odd, tr.even, tr[id^=informal]").Each(func(i int, s *goquery.Selection) {
+		cs.logger.Printf("Parsing tender data from row %d...", i)
 		tendersFoundOnPage++
 		cs.scrapedTenders++
-		cells := s.Find("td")
 
+		cells := s.Find("td")
 		if cells.Length() >= 6 {
 			closingDate := strings.TrimSpace(cells.Eq(2).Text())
 			ePublishedDate := strings.TrimSpace(cells.Eq(1).Text())
 			linkTag := cells.Eq(4).Find("a")
 			title := strings.TrimSpace(linkTag.Text())
-			href, exists := linkTag.Attr("href")
-			if !exists {
-				href = "" // no link present
-			}
+			href, _ := linkTag.Attr("href")
 
 			organisation := strings.TrimSpace(cells.Eq(5).Text())
 
-			// Print tender details to screen
-			// fmt.Printf("TENDER #%d (Page %d, Item %d):\n", ts.scrapedTenders, ts.currentPage, tendersFoundOnPage)
-			// fmt.Printf("  Title: %s\n", title)
-			// fmt.Printf("  Organization: %s\n", organisation)
-			// fmt.Printf("  Closing Date: %s\n", closingDate)
-			// fmt.Printf("  Link: %s\n", href)
-			// fmt.Println("  " + strings.Repeat("-", 50))
+			// Extract tender ID from cell text
+			reTenderID := regexp.MustCompile(`\[(\d{4}_[A-Z]+_\d+_\d+)\]`)
+			cellText := strings.TrimSpace(cells.Eq(4).Text())
+			tenderID := ""
+			if matches := reTenderID.FindStringSubmatch(cellText); len(matches) > 1 {
+				tenderID = matches[1]
+			}
 
+			// Build full link
 			fullLink := href
 			if href != "" {
-				base, err := url.Parse(cs.baseURL)
-				if err == nil {
-					rel, err := url.Parse(href)
-					if err == nil {
+				if base, err := url.Parse(cs.baseURL); err == nil {
+					if rel, err := url.Parse(href); err == nil {
 						fullLink = base.ResolveReference(rel).String()
 					}
 				}
 			}
+
+			// Write row: Serial, TenderID, PageNum, Title, E-Published, Organisation, ClosingDate, Link
 			if err := cs.csvWriter.Write([]string{
 				strconv.Itoa(cs.scrapedTenders),
+				tenderID,
+				strconv.Itoa(cs.currentPage),
 				title,
 				ePublishedDate,
 				organisation,
@@ -286,13 +296,12 @@ func (cs *CorrScraper) parseTenders(e *colly.HTMLElement) {
 				cs.logger.Printf("ERROR: Failed to write CSV row: %v", err)
 			}
 
-			cs.logger.Printf("  Tender %d (Page %d): '%s' ", cs.scrapedTenders, cs.currentPage, title)
+			cs.logger.Printf("  Tender %d (Page %d): ID=%s Title='%s'",
+				cs.scrapedTenders, cs.currentPage, tenderID, title)
 		}
-
 	})
 
 	cs.csvWriter.Flush()
-
 	cs.logger.Printf("PAGE %d: Successfully parsed %d tenders", cs.currentPage, tendersFoundOnPage)
 }
 

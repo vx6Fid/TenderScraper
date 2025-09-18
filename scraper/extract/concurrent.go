@@ -130,7 +130,7 @@ func (ce *ConcurrentExtractor) ExtractTendersWithMultipleSessions() error {
 			var lastErr error
 
 			for attempt := 1; attempt <= maxRetries; attempt++ {
-				if err := sess.EstablishSession(); err != nil {
+				if err := sess.EstablishSession("ActiveTenders"); err != nil {
 					lastErr = err
 					log.Printf("[%s] Worker %d session attempt %d failed: %v", ce.state, workerID, attempt, err)
 					if attempt < maxRetries {

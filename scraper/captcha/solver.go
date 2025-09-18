@@ -1,27 +1,103 @@
 package captcha
 
 import (
+	"bytes"
 	"encoding/base64"
-	"log"
-	"path/filepath"
-	"sync"
-	"time"
-
-	// "encoding/base64"
+	"encoding/json"
 	"fmt"
+	"io"
+	"log"
+	"mime/multipart"
+	"net/http"
 	"os"
 	"os/exec"
-
-	// "path/filepath"
+	"path/filepath"
 	"runtime"
 	"strings"
+	"sync"
+	"time"
 
 	api2captcha "github.com/2captcha/2captcha-go"
 )
 
 var (
+	lastSolve time.Time
+)
+
+type solveResponse struct {
+	Text string `json:"text"`
+	Ms   int    `json:"ms"`
+}
+
+// LocalCaptchaSolver sends captcha image to your local FastAPI server and returns the OCR result
+func LocalCaptchaSolver(captchaImageData string, logger *log.Logger) (string, error) {
+	logger.Println("=== LOCAL CAPTCHA SOLVER ===")
+
+	// strip prefix if needed
+	base64Data := captchaImageData
+	if strings.HasPrefix(captchaImageData, "data:image/") {
+		parts := strings.Split(captchaImageData, ",")
+		if len(parts) > 1 {
+			base64Data = parts[1]
+		}
+	}
+
+	// decode base64 to []byte (for multipart upload)
+	imageBytes, err := base64.StdEncoding.DecodeString(base64Data)
+	if err != nil {
+		return "", fmt.Errorf("failed to decode base64 image: %v", err)
+	}
+
+	// ---- build multipart request ----
+	var buf bytes.Buffer
+	writer := multipart.NewWriter(&buf)
+
+	part, err := writer.CreateFormFile("file", "captcha.png")
+	if err != nil {
+		return "", fmt.Errorf("failed to create form file: %v", err)
+	}
+	if _, err := part.Write(imageBytes); err != nil {
+		return "", fmt.Errorf("failed to write image bytes: %v", err)
+	}
+
+	if err := writer.Close(); err != nil {
+		return "", fmt.Errorf("failed to close writer: %v", err)
+	}
+
+	// ---- send HTTP request ----
+	req, err := http.NewRequest("POST", "http://127.0.0.1:8000/solve", &buf)
+	if err != nil {
+		return "", fmt.Errorf("failed to create request: %v", err)
+	}
+	req.Header.Set("Content-Type", writer.FormDataContentType())
+
+	client := &http.Client{
+		Timeout: 10 * time.Second,
+	}
+
+	resp, err := client.Do(req)
+	if err != nil {
+		return "", fmt.Errorf("failed to send request to OCR server: %v", err)
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != 200 {
+		body, _ := io.ReadAll(resp.Body)
+		return "", fmt.Errorf("OCR server error (%d): %s", resp.StatusCode, string(body))
+	}
+
+	// ---- parse response ----
+	var sr solveResponse
+	if err := json.NewDecoder(resp.Body).Decode(&sr); err != nil {
+		return "", fmt.Errorf("failed to parse OCR response: %v", err)
+	}
+
+	logger.Printf("Captcha solved in %dms: '%s'\n", sr.Ms, sr.Text)
+	return sr.Text, nil
+}
+
+var (
 	captchaLock sync.Mutex
-	lastSolve   time.Time
 )
 
 // ManualCaptchaSolver displays the captcha image to the user and prompts for input

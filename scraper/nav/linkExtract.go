@@ -116,7 +116,7 @@ func (le *LinkExtractor) Run() error {
 		// Step 1: Establish session
 		log.Printf("[%s] Establishing session...", u.State)
 		mainSess := session.NewSession(u.BaseURL, u.State)
-		if err := mainSess.EstablishSession(); err != nil {
+		if err := mainSess.EstablishSession("ActiveTenders"); err != nil {
 			log.Printf("[%s] [ERROR] Failed to establish session: %v", u.State, err)
 			continue
 		}
@@ -270,7 +270,7 @@ func (le *LinkExtractor) ActiveLinks() {
 			defer wg.Done()
 
 			sess := session.NewSession(u.BaseURL, u.State)
-			if err := sess.EstablishSession(); err != nil {
+			if err := sess.EstablishSession("ActiveTenders"); err != nil {
 				log.Printf("[%s] failed to establish session: %v", u.State, err)
 			}
 
@@ -292,7 +292,7 @@ func (le *LinkExtractor) Corrigendums() {
 			defer wg.Done()
 
 			sess := session.NewSession(u.BaseURL, u.State)
-			if err := sess.EstablishSession(); err != nil {
+			if err := sess.EstablishSession("CorrigendumTenders"); err != nil {
 				log.Printf("[%s] failed to establish session: %v", u.State, err)
 			}
 

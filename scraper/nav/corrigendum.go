@@ -114,7 +114,7 @@ func (cs *CorrScraper) ScrapeCorrigendum() error {
 	cs.setupTenderHandlers()
 
 	if err := cs.collector.Visit(cs.corrigendumURL); err != nil {
-		return fmt.Errorf("failed to visit active tenders page with session: %w", err)
+		return fmt.Errorf("failed to visit corrigendum tenders page with session: %w", err)
 	}
 
 	if !cs.resultsFound {

@@ -211,64 +211,150 @@ func BuildPageURLRaw(baseURL string, currentPage int) string {
 	return fmt.Sprintf("%s?component=$TablePages.linkPage&page=FrontEndAdvancedSearchResult&service=direct&session=T&sp=AFrontEndAdvancedSearchResult%%2Ctable&sp=%d", baseURL, currentPage)
 }
 
-func CountUniqueTenderIDs(filePath string) error {
-	// Open the CSV file
-	file, err := os.Open(filePath)
+type seenInfo struct {
+	rowNum int
+	record []string
+}
+
+func ShowDuplicatesByIDLink(filePath string, outFile string) {
+	f, err := os.Open(filePath)
 	if err != nil {
-		return fmt.Errorf("failed to open file: %w", err)
+		log.Fatalf("Failed to open file: %v", err)
 	}
-	defer file.Close()
+	defer f.Close()
 
-	// Create CSV reader
-	reader := csv.NewReader(file)
-
-	// Read all records
-	records, err := reader.ReadAll()
+	reader := csv.NewReader(f)
+	rows, err := reader.ReadAll()
 	if err != nil {
-		return fmt.Errorf("failed to read CSV: %w", err)
+		log.Fatalf("Failed to read CSV: %v", err)
+	}
+	if len(rows) < 2 {
+		log.Fatalf("CSV has no data rows")
 	}
 
-	if len(records) == 0 {
-		fmt.Println("CSV file is empty")
-		return nil
+	header := rows[0]
+	fmt.Println("Header:", header)
+
+	// open output log file
+	out, err := os.Create(outFile)
+	if err != nil {
+		log.Fatalf("Failed to create output file: %v", err)
 	}
+	defer out.Close()
 
-	// Find the tenderID column index
-	headers := records[0]
-	tenderIDIndex := -1
+	// writer for duplicates
+	logger := log.New(out, "", 0)
 
-	for i, header := range headers {
-		// Case-insensitive search for tenderID column
-		if strings.ToLower(strings.TrimSpace(header)) == "tenderid" {
-			tenderIDIndex = i
-			break
+	// figure out index of TenderID and Link
+	// var idxTenderID int = -1
+	var idxLink int = -1
+	for i, h := range header {
+		// if h == "TenderID" {
+		// 	idxTenderID = i
+		// }
+		if h == "Link" {
+			idxLink = i
 		}
 	}
-
-	if tenderIDIndex == -1 {
-		return fmt.Errorf("tenderID column not found in CSV headers: %v", headers)
+	// if idxTenderID == -1 || idxLink == -1 {
+	if idxLink == -1 {
+		log.Fatalf("CSV missing TenderID or Link column")
 	}
 
-	// Use a map to store unique tender IDs
-	uniqueTenderIDs := make(map[string]bool)
+	// seenTenderID := make(map[string]seenInfo)
+	seenLink := make(map[string]seenInfo)
 
-	// Process data rows (skip header)
-	for i, record := range records[1:] {
-		if len(record) <= tenderIDIndex {
-			fmt.Printf("Warning: Row %d has insufficient columns, skipping\n", i+2)
+	// process rows
+	for i, row := range rows[0:] {
+		rowNum := i + 1
+		// tid := row[idxTenderID]
+		link := row[idxLink]
+
+		// check TenderID
+		// if prev, ok := seenTenderID[tid]; ok {
+		// 	logger.Printf("[DUP TenderID] Row %d duplicates Row %d → TenderID=%s\n", rowNum, prev.rowNum, tid)
+		// 	logger.Printf("  Previous: %v\n", prev.record)
+		// 	logger.Printf("  Current : %v\n", row)
+		// } else {
+		// 	seenTenderID[tid] = seenInfo{rowNum, row}
+		// }
+
+		// check Link
+		if prev, ok := seenLink[link]; ok {
+			logger.Printf("[DUP Link] Row %d duplicates Row %d → Link=%s\n", rowNum, prev.rowNum, link)
+			logger.Printf("  Previous: %v\n", prev.record)
+			logger.Printf("  Current : %v\n", row)
+		} else {
+			seenLink[link] = seenInfo{rowNum, row}
+		}
+	}
+}
+
+func ShowDuplicatesByRow(filePath string, outFile string) {
+	f, err := os.Open(filePath)
+	if err != nil {
+		log.Fatalf("Failed to open file: %v", err)
+	}
+	defer f.Close()
+
+	reader := csv.NewReader(f)
+	rows, err := reader.ReadAll()
+	if err != nil {
+		log.Fatalf("Failed to read CSV: %v", err)
+	}
+	if len(rows) < 2 {
+		log.Fatalf("CSV has no data rows")
+	}
+
+	header := rows[0]
+	fmt.Println("Header:", header)
+
+	out, err := os.Create(outFile)
+	if err != nil {
+		log.Fatalf("Failed to create output file: %v", err)
+	}
+	defer out.Close()
+
+	logger := log.New(out, "", 0)
+
+	// find TenderID and Link columns
+	idxTenderID, idxLink := -1, -1
+	for i, h := range header {
+		if h == "TenderID" {
+			idxTenderID = i
+		}
+		if h == "Link" {
+			idxLink = i
+		}
+	}
+	if idxTenderID == -1 || idxLink == -1 {
+		log.Fatalf("CSV missing TenderID or Link column")
+	}
+
+	seen := make(map[string]seenInfo)
+
+	for i, row := range rows[1:] {
+		rowNum := i + 2
+
+		if len(row) <= idxLink {
 			continue
 		}
 
-		tenderID := strings.TrimSpace(record[tenderIDIndex])
-		if tenderID != "" {
-			uniqueTenderIDs[tenderID] = true
+		tid := strings.TrimSpace(row[idxTenderID])
+		link := strings.TrimSpace(row[idxLink])
+		key := tid + "|" + link
+
+		if key == "|" {
+			continue // skip blank
 		}
+
+		if prev, ok := seen[key]; ok {
+			logger.Printf("[DUP] Row %d duplicates Row %d → TenderID=%s Link=%s\n", rowNum, prev.rowNum, tid, link)
+			logger.Printf("  Previous: %v\n", prev.record)
+			logger.Printf("  Current : %v\n", row)
+			continue
+		}
+
+		seen[key] = seenInfo{rowNum, row}
 	}
-
-	// Print results
-	fmt.Printf("File: %s\n", filePath)
-	fmt.Printf("Total rows (excluding header): %d\n", len(records)-1)
-	fmt.Printf("Unique Tender IDs: %d\n", len(uniqueTenderIDs))
-
-	return nil
 }

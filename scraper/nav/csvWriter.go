@@ -37,7 +37,7 @@ func NewCSVWriter(state string) *CSVWriter {
 		defer w.Flush()
 
 		// header
-		w.Write([]string{"S.No", "e-Published Date", "Closing Date", "Opening Date",
+		w.Write([]string{"S.No", "Page No", "e-Published Date", "Closing Date", "Opening Date",
 			"Title", "TenderID", "Link", "Organisation Chain"})
 
 		for row := range cw.rows {

@@ -7,8 +7,10 @@ import (
 	"slices"
 
 	"github.com/joho/godotenv"
+	docdownload "github.com/vx6fid/tender-scraper/docDownloads"
 	"github.com/vx6fid/tender-scraper/scraper/extract"
 	"github.com/vx6fid/tender-scraper/scraper/nav"
+	"github.com/vx6fid/tender-scraper/session"
 	"github.com/vx6fid/tender-scraper/utils"
 )
 
@@ -21,7 +23,7 @@ func main() {
 	}
 
 	baseURLs := []utils.URLS{
-		{BaseURL: "https://eprocure.gov.in/eprocure/app", State: "eProcurementCentralGovernment", Domain: "eprocure.gov.in"},
+		{BaseURL: "https://eprocure.gov.in/eprocure/app", State: "eProcurementCentralGovernment", Domain: "eprocure.gov.in"}, // eprocure only for this
 		{BaseURL: "https://defproc.gov.in/nicgep/app", State: "MinistryOfDefence", Domain: "defproc.gov.in"},
 		{BaseURL: "https://pmgsytenders.gov.in/nicgep/app", State: "PMGSY", Domain: "pmgsytenders.gov.in"},
 		{BaseURL: "https://etenders.gov.in/eprocure/app", State: "PSU", Domain: "etenders.gov.in"},
@@ -76,6 +78,7 @@ func main() {
 	fmt.Println("1.Tender links")
 	fmt.Println("2.Tender data")
 	fmt.Println("3.Corrigendum data")
+	fmt.Println("4.Document download")
 	var choice int
 	fmt.Print("Enter your choice: ")
 	fmt.Scan(&choice)
@@ -118,8 +121,31 @@ func main() {
 		linkExtractor := nav.NewLinkExtractor(runDate, baseURLs)
 		linkExtractor.Corrigendums()
 	case 4:
-		filePath := "TenderData/Links/17_Sep_2025/UttarPradesh/search.csv"
-		utils.ShowDuplicatesByRow(filePath, "duplicates.log")
+		baseURL := "https://etender.up.nic.in/nicgep/app"
+		state := "UttarPradesh"
+
+		// 1. Create session
+		sess := session.NewSession(baseURL, state)
+
+		// 2. Establish tender session (solves tender captcha, stores cookies)
+		if err := sess.EstablishSession("ActiveTenders"); err != nil {
+			log.Fatalf("[%s] failed to establish tender session: %v", state, err)
+		}
+
+		// 3. Create doc downloader with that session
+		downloader := docdownload.NewDocDownloader(sess, state, log.Default())
+
+		// 4. For each tender URL you want, run the doc download flow
+		tenderURL := "https://etender.up.nic.in/nicgep/app?component=%24DirectLink_0&page=FrontEndAdvancedSearchResult&service=direct&session=T&sp=SAGgIi6lp7JDfDzH93cfo8Q%3D%3D"
+		if err := downloader.Run(tenderURL); err != nil {
+			log.Printf("[%s] doc download failed: %v", state, err)
+		}
+		// Get results
+		nitDocs, ZipFiles := downloader.GetResults()
+		log.Printf("Extracted %d NIT documents and %s zip files", len(nitDocs), ZipFiles.DocumentName)
+
+		// Clean up for reuse
+		downloader.Reset()
 	default:
 		fmt.Println("Invalid choice")
 		os.Exit(1)

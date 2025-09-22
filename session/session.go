@@ -16,13 +16,14 @@ import (
 )
 
 type Session struct {
-	Jar                http.CookieJar
-	BaseURL            string
-	ActiveTendersURL   string
-	CorrigendumURL     string
-	captchaSolved      bool
-	sessionEstablished bool
-	logger             *log.Logger
+	Jar                   http.CookieJar
+	BaseURL               string
+	ActiveTendersURL      string
+	CorrigendumURL        string
+	captchaSolved         bool
+	sessionEstablished    bool
+	docSessionEstablished bool
+	logger                *log.Logger
 
 	// internal collector used only for captcha/session establishment
 	captchaCollector *colly.Collector
@@ -89,10 +90,10 @@ func (s *Session) NewCollector(allowedDomains ...string) *colly.Collector {
 	c.Limit(&colly.LimitRule{
 		DomainGlob:  "*",
 		Parallelism: 1,
-		Delay:       2 * time.Second,
+		Delay:       400 * time.Millisecond,
 	})
 
-	c.SetRequestTimeout(30 * time.Second)
+	c.SetRequestTimeout(40 * time.Second)
 	return c
 }
 
@@ -101,7 +102,7 @@ func (s *Session) NewCollector(allowedDomains ...string) *colly.Collector {
 // captcha flow to confirm the session.
 func (s *Session) EstablishSession(sessionType string) error {
 	// build captcha collector bound to host
-	host := hostFromURL(s.BaseURL)
+	host := HostFromURL(s.BaseURL)
 	s.captchaCollector = s.NewCollector(host)
 
 	// bind handlers
@@ -171,6 +172,10 @@ func (s *Session) ValidateSession() bool {
 	cookies := s.Jar.Cookies(u)
 	return len(cookies) > 0
 }
+
+func (s *Session) SessionEstablished() bool    { return s.sessionEstablished }
+func (s *Session) DocSessionEstablished() bool { return s.docSessionEstablished }
+func (s *Session) MarkDocSessionEstablished()  { s.docSessionEstablished = true }
 
 /* ----- internal handlers ----- */
 
@@ -314,7 +319,7 @@ func (s *Session) handleError(r *colly.Response, err error) {
 }
 
 /* helpers */
-func hostFromURL(raw string) string {
+func HostFromURL(raw string) string {
 	u, err := url.Parse(raw)
 	if err != nil {
 		return ""

@@ -198,7 +198,7 @@ func (ce *ConcurrentExtractor) ExtractTendersWithMultipleSessions() error {
 
 			// Add validation for required fields
 			serial := strings.TrimSpace(row[0])
-			link := strings.TrimSpace(row[4])
+			link := strings.TrimSpace(row[6])
 
 			if serial == "" || link == "" {
 				log.Printf("[%s] Skipping invalid row %d: missing serial or link", ce.state, i)
@@ -302,8 +302,8 @@ func (ce *ConcurrentExtractor) workerProcess(ws *WorkerSession, jobs <-chan Tend
 }
 
 func (ce *ConcurrentExtractor) loadInputCSV() ([][]string, error) {
-	fileName := fmt.Sprintf("%s_Links.csv", ce.state)
-	filePath := fmt.Sprintf("TenderData/Links/%s", ce.runDate)
+	fileName := "FinalLinks.csv"
+	filePath := fmt.Sprintf("TenderData/Links/%s/%s", ce.runDate, ce.state)
 	inputPath := filepath.Join(filePath, fileName)
 
 	inFile, err := os.Open(inputPath)

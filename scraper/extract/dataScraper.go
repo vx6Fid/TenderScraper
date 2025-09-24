@@ -30,7 +30,6 @@ func NewDataScraper(sess *session.Session, domain, state, runDate string) *DataS
 }
 
 // ExtractSingleTender extracts data from a single tender URL
-// ExtractSingleTender extracts data from a single tender URL
 func (ds *DataScraper) ExtractSingleTender(input TenderInput) (*TenderData, error) {
 	overallStart := time.Now()
 
@@ -65,6 +64,8 @@ func (ds *DataScraper) ExtractSingleTender(input TenderInput) (*TenderData, erro
 	// Fresh TenderData
 	tenderData := &TenderData{}
 
+	tenderData.Information.Website = ds.domain // or ds.session.BaseURL
+	tenderData.Information.TenderURL = input.Link
 	// Setup parser handlers (instrumented version below)
 	parser := NewTenderParser()
 	parser.SetupHandlers(c, tenderData)
@@ -176,6 +177,11 @@ func (ds *DataScraper) ConvertToUtilsTender(data *TenderData) utils.Tender {
 	tender.BasicDetails.IsMultiCurrencyAllowedForBOQ = strings.EqualFold(strings.TrimSpace(data.BasicDetails.IsMultiCurrencyAllowedForBOQ), "yes")
 	tender.BasicDetails.IsMultiCurrencyAllowedForFee = strings.EqualFold(strings.TrimSpace(data.BasicDetails.IsMultiCurrencyAllowedForFee), "yes")
 	tender.BasicDetails.AllowTwoStageBidding = strings.EqualFold(strings.TrimSpace(data.BasicDetails.AllowTwoStageBidding), "yes")
+
+	// Information Section
+	tender.Information.Website = data.Information.Website
+	tender.Information.Link = data.Information.TenderURL
+	tender.Information.UpdatedAt = time.Now()
 
 	// Map other sections
 	tender.PaymentInstruments.Offline = data.PaymentInstruments

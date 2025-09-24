@@ -9,7 +9,6 @@ import (
 	"github.com/PuerkitoBio/goquery"
 	"github.com/gocolly/colly/v2"
 	"github.com/vx6fid/tender-scraper/scraper/captcha"
-	"github.com/vx6fid/tender-scraper/session"
 )
 
 // HandleDocDownloadCaptchaForm handles the captcha form on DocDownload page.
@@ -89,7 +88,7 @@ func (d *DocDownloader) submitDocDownloadCaptchaForm(e *colly.HTMLElement, captc
 	d.logger.Printf("[docDownload][captcha] submitting form with %d fields", len(formData))
 
 	// Construct proper action URL - the form action is "/eprocure/app"
-	actionURL := "https://" + session.HostFromURL(d.sess.BaseURL) + "/nicgep/app"
+	actionURL := d.sess.BaseURL
 	fmt.Println("actionURL: ", actionURL)
 	if err := e.Request.Post(actionURL, formData); err != nil {
 		d.logger.Printf("[docDownload][captcha] post failed: %v", err)

@@ -102,10 +102,14 @@ type WorkDocument struct {
 
 // TenderData holds all extracted tender information
 type TenderData struct {
-	DetailsURL              string
-	BasicDetails            BasicDetails
-	PaymentInstruments      []utils.PaymentInstrument
-	Covers                  []utils.CoverInformation
+	DetailsURL         string
+	BasicDetails       BasicDetails
+	PaymentInstruments []utils.PaymentInstrument
+	Covers             []utils.CoverInformation
+	Information        struct {
+		Website   string
+		TenderURL string
+	}
 	TenderFee               TenderFeeDetails
 	EMDFee                  EMDFeeDetails
 	WorkItem                WorkItemDetails

@@ -1,3 +1,6 @@
+// add corrigendum type before there name
+// Check if the corrigendum files are downloaded properly
+
 package docdownload
 
 import (
@@ -117,6 +120,30 @@ func (d *DocDownloader) processAndUploadDocs(tenderID string, bucket string) err
 		os.Remove(baseZip)
 		// Delete extracted folder
 		os.RemoveAll(tempExtractDir)
+	}
+
+	// Upload Corrigendum Documents
+	for _, doc := range d.CorrigendumDocs {
+		localFile := filepath.Join(baseDir, doc.DocumentName) // prepend folder
+
+		// Convert DOCX to PDF if needed
+		if strings.HasSuffix(strings.ToLower(localFile), ".docx") {
+			pdfFile, err := ConvertDocxToPDF(localFile)
+			if err != nil {
+				d.logger.Printf("[%s][docUpload] conversion failed: %v", d.state, err)
+				continue
+			}
+			localFile = pdfFile
+		}
+
+		flatName := FlattenPath(filepath.Base(localFile))
+		key := fmt.Sprintf("tender-documents/%s/latest-corrigendum-list/%s_%s", tenderID, doc.Type, flatName)
+
+		if err := uploadFileToS3(bucket, key, localFile); err != nil {
+			d.logger.Printf("[%s][docUpload] upload failed: %v", d.state, err)
+		} else {
+			d.logger.Printf("[%s][docUpload] successfully uploaded: %s", d.state, key)
+		}
 	}
 
 	// --- Delete local folder after upload ---

@@ -125,8 +125,8 @@ func GetRunDate() string {
 }
 
 func EstimateJobCount(state string, runDate string) (int, error) {
-	fileName := fmt.Sprintf("%s_Links.csv", state)
-	filePath := fmt.Sprintf("TenderData/Links/%s", runDate)
+	fileName := "FinalLinks.csv"
+	filePath := fmt.Sprintf("TenderData/Links/%s/%s", runDate, state)
 	inputPath := filepath.Join(filePath, fileName)
 
 	// Open the CSV file

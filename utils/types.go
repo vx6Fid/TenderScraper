@@ -62,9 +62,9 @@ type Tender struct {
 	}
 
 	Information struct {
-		Website   string
-		Link      string // tender link
-		CreatedAt time.Time
+		Website string
+		Link    string // tender link
+		// CreatedAt time.Time
 		UpdatedAt time.Time
 	}
 
@@ -158,4 +158,10 @@ type TenderLinks struct {
 	Organisation string
 	ClosingDate  string
 	Link         string
+}
+
+type CorrLinks struct {
+	Type string
+	Name string
+	Link string
 }

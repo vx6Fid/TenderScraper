@@ -97,7 +97,19 @@ func (d *DocDownloader) downloadFiles() error {
 		}
 	}
 
-	// Download zip files
+	// Download corrigendum documents
+	for i, doc := range d.CorrigendumDocs {
+		filePath := filepath.Join(baseDir, doc.DocumentName)
+		d.logger.Printf("[%s][docDownload] downloading corrigendum doc %d/%d: %s",
+			d.state, i+1, len(d.CorrigendumDocs), filePath)
+
+		if err := DownloadFile(doc.URL, filePath, d.sess.Jar); err != nil {
+			d.logger.Printf("[%s][docDownload] corrigendum doc download failed: %v", d.state, err)
+		} else {
+			d.logger.Printf("[%s][docDownload] successfully downloaded: %s", d.state, filePath)
+		}
+	}
+
 	// Download zip file (if exists)
 	if d.WorkItemZip.URL != "" {
 		baseDir := "TenderDocs"
@@ -122,6 +134,7 @@ func (d *DocDownloader) GetResults() ([]NITDocument, WorkItemDocument) {
 func (d *DocDownloader) Reset() {
 	d.NITDocs = nil
 	d.WorkItemZip = WorkItemDocument{}
+	d.CorrigendumDocs = nil
 	d.logger.Printf("[%s][docDownload] reset completed", d.state)
 }
 
@@ -153,4 +166,16 @@ type WorkItemDocument struct {
 	DocumentName   string
 	DocumentSizeKB string
 	URL            string
+}
+
+type CorrigendumDocs struct {
+	DocumentName   string
+	DocumentSizeKB string
+	URL            string
+}
+
+type CorrigendumDocument struct {
+	DocumentName string
+	Type         string
+	URL          string
 }

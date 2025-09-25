@@ -3,7 +3,6 @@ package docdownload
 import (
 	"fmt"
 	"log"
-	"os"
 	"strings"
 	"time"
 
@@ -98,17 +97,17 @@ func (d *DocDownloader) visitViewLinks(viewLinks []string) {
 			c.SetCookies(d.sess.BaseURL, cookies)
 		}
 
-		c.OnResponse(func(r *colly.Response) {
-			if strings.Contains(strings.ToLower(r.Request.URL.String()), "directlink") &&
-				strings.Contains(strings.ToLower(r.Request.URL.String()), "page=frontendtenderdetails") {
-				filename := fmt.Sprintf("viewlink_debug_%d.html", time.Now().UnixNano())
-				if err := os.WriteFile(filename, r.Body, 0644); err != nil {
-					d.logger.Printf("[%s][docDownload] failed to save debug HTML: %v", d.state, err)
-				} else {
-					d.logger.Printf("[%s][docDownload] saved debug HTML to %s", d.state, filename)
-				}
-			}
-		})
+		// c.OnResponse(func(r *colly.Response) {
+		// 	if strings.Contains(strings.ToLower(r.Request.URL.String()), "directlink") &&
+		// 		strings.Contains(strings.ToLower(r.Request.URL.String()), "page=frontendtenderdetails") {
+		// 		filename := fmt.Sprintf("viewlink_debug_%d.html", time.Now().UnixNano())
+		// 		if err := os.WriteFile(filename, r.Body, 0644); err != nil {
+		// 			d.logger.Printf("[%s][docDownload] failed to save debug HTML: %v", d.state, err)
+		// 		} else {
+		// 			d.logger.Printf("[%s][docDownload] saved debug HTML to %s", d.state, filename)
+		// 		}
+		// 	}
+		// })
 
 		if err := c.Visit(url); err != nil {
 			d.logger.Printf("[%s][docDownload] failed to visit View Link: %v", d.state, err)

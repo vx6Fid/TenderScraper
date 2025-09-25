@@ -266,7 +266,8 @@ func (cm *CSVManager) WriteStructuredCSVs(sinks *CSVSinks, input TenderInput, da
 		data.DetailsURL, tenderID, &data.BasicDetails)
 
 	// Write payment instruments
-	cm.writePaymentInstruments(sinks.payW, serial, tenderID, "Offline", data.PaymentInstruments)
+	cm.writePaymentInstruments(sinks.payW, serial, tenderID, "Offline", data.PaymentInstruments.Offline)
+	cm.writePaymentInstruments(sinks.payW, serial, tenderID, "Online", data.PaymentInstruments.Online)
 
 	// Write cover details
 	cm.writeCoverDetails(sinks.coversW, serial, tenderID, data.Covers)

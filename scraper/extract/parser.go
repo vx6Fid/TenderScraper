@@ -194,6 +194,7 @@ func (tp *TenderParser) assignBasicDetailValue(label, value string, basic *Basic
 
 // setupPaymentInstrumentsHandler parses payment instruments
 func (tp *TenderParser) setupPaymentInstrumentsHandler(c *colly.Collector, data *TenderData) {
+	// Offline payment instruments
 	c.OnHTML("table#offlineInstrumentsTableView", func(e *colly.HTMLElement) {
 		// start := time.Now()
 		e.DOM.Find("tr").Each(func(_ int, s *goquery.Selection) {
@@ -204,7 +205,25 @@ func (tp *TenderParser) setupPaymentInstrumentsHandler(c *colly.Collector, data 
 			if tds.Length() >= 2 {
 				serial := strings.TrimSpace(tds.Eq(0).Text())
 				instr := strings.TrimSpace(tds.Eq(1).Text())
-				data.PaymentInstruments = append(data.PaymentInstruments,
+				data.PaymentInstruments.Offline = append(data.PaymentInstruments.Offline,
+					utils.PaymentInstrument{SerialNo: serial, InstrumentType: instr})
+			}
+		})
+		// log.Printf("Payment instruments parsing took %v", time.Since(start))
+	})
+
+	// Online payment instruments
+	c.OnHTML("table#onlineInstrumentsTableView", func(e *colly.HTMLElement) {
+		// start := time.Now()
+		e.DOM.Find("tr").Each(func(_ int, s *goquery.Selection) {
+			if s.HasClass("caption") {
+				return
+			}
+			tds := s.Find("td.field_text")
+			if tds.Length() >= 2 {
+				serial := strings.TrimSpace(tds.Eq(0).Text())
+				instr := strings.TrimSpace(tds.Eq(1).Text())
+				data.PaymentInstruments.Online = append(data.PaymentInstruments.Online,
 					utils.PaymentInstrument{SerialNo: serial, InstrumentType: instr})
 			}
 		})

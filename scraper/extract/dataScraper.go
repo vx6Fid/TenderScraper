@@ -184,7 +184,8 @@ func (ds *DataScraper) ConvertToUtilsTender(data *TenderData) utils.Tender {
 	tender.Information.UpdatedAt = time.Now()
 
 	// Map other sections
-	tender.PaymentInstruments.Offline = data.PaymentInstruments
+	tender.PaymentInstruments.Online = data.PaymentInstruments.Online
+	tender.PaymentInstruments.Offline = data.PaymentInstruments.Offline
 	tender.CoversInformation = data.Covers
 
 	// Map fee details

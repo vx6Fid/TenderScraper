@@ -104,9 +104,12 @@ type WorkDocument struct {
 type TenderData struct {
 	DetailsURL         string
 	BasicDetails       BasicDetails
-	PaymentInstruments []utils.PaymentInstrument
-	Covers             []utils.CoverInformation
-	Information        struct {
+	PaymentInstruments struct {
+		Online  []utils.PaymentInstrument
+		Offline []utils.PaymentInstrument
+	}
+	Covers      []utils.CoverInformation
+	Information struct {
 		Website   string
 		TenderURL string
 	}

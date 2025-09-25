@@ -50,7 +50,6 @@ func NewDocDownloader(sess *session.Session, state string, logger *log.Logger) *
 }
 
 // RunTender downloads documents for a given tender URL
-// Assumes the doc captcha has already been solved (or solves it if not)
 func (d *DocDownloader) Run(tenderID string, tenderURL string, corrigendumLinks []utils.CorrLinks) error {
 	d.logger.Printf("[%s][docDownload] solving doc captcha", d.state)
 	if err := d.SolveDocCaptcha(); err != nil {

@@ -10,6 +10,14 @@ import (
 	"strings"
 )
 
+func Unrar(src, dest string) error {
+	if err := os.MkdirAll(dest, os.ModePerm); err != nil {
+		return err
+	}
+	cmd := exec.Command("unrar", "x", "-o+", src, dest)
+	return cmd.Run()
+}
+
 // Unzip extracts a zip archive to a specified folder
 func Unzip(src, dest string) error {
 	r, err := zip.OpenReader(src)
@@ -69,6 +77,58 @@ func ConvertDocxToPDF(docxPath string) (string, error) {
 		return "", fmt.Errorf("failed to convert %s to PDF: %w", docxPath, err)
 	}
 	return pdfPath, nil
+}
+
+// PreprocessFile takes an input file, expands/converts if needed, and returns a list of final files ready to upload.
+func PreprocessFile(inputPath, workDir string) ([]string, error) {
+	ext := strings.ToLower(filepath.Ext(inputPath))
+
+	switch ext {
+	case ".zip":
+		// Extract zip
+		extractDir := filepath.Join(workDir, strings.TrimSuffix(filepath.Base(inputPath), ext))
+		if err := Unzip(inputPath, extractDir); err != nil {
+			return nil, fmt.Errorf("failed to unzip %s: %w", inputPath, err)
+		}
+		return collectAndProcessFiles(extractDir, workDir)
+
+	case ".rar":
+		// Extract rar
+		extractDir := filepath.Join(workDir, strings.TrimSuffix(filepath.Base(inputPath), ext))
+		if err := Unrar(inputPath, extractDir); err != nil {
+			return nil, fmt.Errorf("failed to unrar %s: %w", inputPath, err)
+		}
+		return collectAndProcessFiles(extractDir, workDir)
+
+	case ".docx":
+		// Convert DOCX → PDF
+		pdfFile, err := ConvertDocxToPDF(inputPath)
+		if err != nil {
+			return nil, err
+		}
+		return []string{pdfFile}, nil
+
+	default:
+		// Already a final file
+		return []string{inputPath}, nil
+	}
+}
+
+func collectAndProcessFiles(dir, workDir string) ([]string, error) {
+	var results []string
+	err := filepath.Walk(dir, func(path string, info os.FileInfo, err error) error {
+		if err != nil || info.IsDir() {
+			return err
+		}
+
+		files, err := PreprocessFile(path, workDir)
+		if err != nil {
+			return err
+		}
+		results = append(results, files...)
+		return nil
+	})
+	return results, err
 }
 
 // downloadFiles downloads all collected NIT documents and zip files

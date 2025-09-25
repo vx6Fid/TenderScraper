@@ -2,6 +2,7 @@ package utils
 
 import (
 	"bufio"
+	"context"
 	"encoding/csv"
 	"encoding/json"
 	"fmt"
@@ -13,9 +14,42 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/config"
+	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/gocolly/colly/v2"
 	"github.com/vx6fid/tender-scraper/session"
 )
+
+// CheckTenderFolderExists checks if the given tenderID folder exists in the S3 bucket
+func CheckTenderFolderExists(bucket, tenderID string) (bool, error) {
+	cfg, err := config.LoadDefaultConfig(context.TODO())
+	if err != nil {
+		return false, fmt.Errorf("unable to load AWS config: %w", err)
+	}
+
+	client := s3.NewFromConfig(cfg)
+
+	// Construct prefix for the tender folder
+	prefix := fmt.Sprintf("tender-documents/%s/", tenderID)
+
+	// List objects with that prefix
+	resp, err := client.ListObjectsV2(context.TODO(), &s3.ListObjectsV2Input{
+		Bucket:  aws.String(bucket),
+		Prefix:  aws.String(prefix),
+		MaxKeys: aws.Int32(1), // optimization, we only care if at least one exists
+	})
+	if err != nil {
+		return false, fmt.Errorf("failed to list objects: %w", err)
+	}
+
+	// If no contents, folder doesn't exist
+	if len(resp.Contents) == 0 {
+		return false, nil
+	}
+
+	return true, nil
+}
 
 func SaveToFile(content []byte, filename string) error {
 	file, err := os.Create(filename)
@@ -30,6 +64,24 @@ func SaveToFile(content []byte, filename string) error {
 	}
 
 	return nil
+}
+
+// GetBaseURLAndState finds the baseURL and state for a given tenderURL
+func GetBaseURLAndState(tenderURL string, baseURLs []URLS) (string, string, error) {
+	parsed, err := url.Parse(tenderURL)
+	if err != nil {
+		return "", "", fmt.Errorf("invalid tenderURL: %w", err)
+	}
+
+	host := parsed.Hostname()
+
+	for _, entry := range baseURLs {
+		if strings.EqualFold(host, entry.Domain) {
+			return entry.BaseURL, entry.State, nil
+		}
+	}
+
+	return "", "", fmt.Errorf("no matching baseURL found for host %s", host)
 }
 
 // SaveToCSV writes scraped tenders to a csv file

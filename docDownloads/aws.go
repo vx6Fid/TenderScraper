@@ -1,6 +1,3 @@
-// add corrigendum type before there name
-// Check if the corrigendum files are downloaded properly
-
 package docdownload
 
 import (
@@ -8,7 +5,6 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"strings"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/config"
@@ -42,115 +38,54 @@ func uploadFileToS3(bucket, key, filePath string) error {
 	return nil
 }
 
-// processAndUploadDocs flattens, converts DOCX->PDF, and uploads to S3
+// processAndUploadDocs preprocesses and uploads all tender documents to S3
 func (d *DocDownloader) processAndUploadDocs(tenderID string, bucket string) error {
-	baseDir := "TenderDocs" // folder where files are downloaded
+	baseDir := "TenderDocs" // local download dir
 
-	// Process NITDocs
+	// Common helper: preprocess + upload
+	uploadWithFolder := func(localFile, folder, prefix string) {
+		files, err := PreprocessFile(localFile, baseDir)
+		if err != nil {
+			d.logger.Printf("[%s][docUpload] preprocess failed for %s: %v", d.state, localFile, err)
+			return
+		}
+		for _, f := range files {
+			flatName := FlattenPath(filepath.Base(f))
+			key := fmt.Sprintf("tender-documents/%s/%s/%s%s", tenderID, folder, prefix, flatName)
+			if err := uploadFileToS3(bucket, key, f); err != nil {
+				d.logger.Printf("[%s][docUpload] upload failed: %v", d.state, err)
+			} else {
+				d.logger.Printf("[%s][docUpload] uploaded %s", d.state, key)
+			}
+		}
+	}
+
+	// --- NIT Docs ---
 	for _, doc := range d.NITDocs {
-		localFile := filepath.Join(baseDir, doc.DocumentName) // prepend folder
-
-		// Convert DOCX to PDF if needed
-		if strings.HasSuffix(strings.ToLower(localFile), ".docx") {
-			pdfFile, err := ConvertDocxToPDF(localFile)
-			if err != nil {
-				d.logger.Printf("[%s][docUpload] conversion failed: %v", d.state, err)
-				continue
-			}
-			localFile = pdfFile
-		}
-
-		folder := "nit-documents"
-		flatName := FlattenPath(filepath.Base(localFile)) // flatten only the filename
-		key := fmt.Sprintf("tender-documents/%s/%s/%s", tenderID, folder, flatName)
-
-		// Upload to S3
-		if err := uploadFileToS3(bucket, key, localFile); err != nil {
-			d.logger.Printf("[%s][docUpload] upload failed: %v", d.state, err)
-		} else {
-			d.logger.Printf("[%s][docUpload] successfully uploaded: %s", d.state, key)
-		}
+		localFile := filepath.Join(baseDir, doc.DocumentName)
+		uploadWithFolder(localFile, "nit-documents", "")
 	}
 
-	// Process Zip files
+	// --- WorkItem ZIP (or rar) ---
 	if d.WorkItemZip.URL != "" {
-		baseZip := filepath.Join(baseDir, d.WorkItemZip.DocumentName)
-		tempExtractDir := filepath.Join(baseDir, "workitem_extracted")
-
-		// Unzip
-		if err := Unzip(baseZip, tempExtractDir); err != nil {
-			d.logger.Printf("[%s][docUpload] failed to unzip WorkItem zip: %v", d.state, err)
-		} else {
-			d.logger.Printf("[%s][docUpload] unzipped WorkItem zip to %s", d.state, tempExtractDir)
-
-			// Walk through all extracted files
-			err := filepath.Walk(tempExtractDir, func(path string, info os.FileInfo, err error) error {
-				if err != nil || info.IsDir() {
-					return err
-				}
-
-				localFile := path
-
-				// Convert DOCX to PDF if needed
-				if strings.HasSuffix(strings.ToLower(localFile), ".docx") {
-					pdfFile, err := ConvertDocxToPDF(localFile)
-					if err != nil {
-						d.logger.Printf("[%s][docUpload] conversion failed: %v", d.state, err)
-						return nil
-					}
-					localFile = pdfFile
-				}
-
-				flatName := FlattenPath(localFile[len(tempExtractDir)+1:]) // relative path flatten
-				key := fmt.Sprintf("tender-documents/%s/work-item-documents/%s", tenderID, flatName)
-
-				if err := uploadFileToS3(bucket, key, localFile); err != nil {
-					d.logger.Printf("[%s][docUpload] upload failed: %v", d.state, err)
-				} else {
-					d.logger.Printf("[%s][docUpload] successfully uploaded: %s", d.state, key)
-				}
-				return nil
-			})
-			if err != nil {
-				d.logger.Printf("[%s][docUpload] walking extracted files failed: %v", d.state, err)
-			}
-		}
-
-		// Optional: delete the original zip
-		os.Remove(baseZip)
-		// Delete extracted folder
-		os.RemoveAll(tempExtractDir)
+		localFile := filepath.Join(baseDir, d.WorkItemZip.DocumentName)
+		uploadWithFolder(localFile, "work-item-documents", "")
+		// optional cleanup
+		os.Remove(localFile)
 	}
 
-	// Upload Corrigendum Documents
+	// --- Corrigendum Docs ---
 	for _, doc := range d.CorrigendumDocs {
-		localFile := filepath.Join(baseDir, doc.DocumentName) // prepend folder
-
-		// Convert DOCX to PDF if needed
-		if strings.HasSuffix(strings.ToLower(localFile), ".docx") {
-			pdfFile, err := ConvertDocxToPDF(localFile)
-			if err != nil {
-				d.logger.Printf("[%s][docUpload] conversion failed: %v", d.state, err)
-				continue
-			}
-			localFile = pdfFile
-		}
-
-		flatName := FlattenPath(filepath.Base(localFile))
-		key := fmt.Sprintf("tender-documents/%s/latest-corrigendum-list/%s_%s", tenderID, doc.Type, flatName)
-
-		if err := uploadFileToS3(bucket, key, localFile); err != nil {
-			d.logger.Printf("[%s][docUpload] upload failed: %v", d.state, err)
-		} else {
-			d.logger.Printf("[%s][docUpload] successfully uploaded: %s", d.state, key)
-		}
+		localFile := filepath.Join(baseDir, doc.DocumentName)
+		// Corrigendum gets type prefix before filename
+		uploadWithFolder(localFile, "latest-corrigendum-list", doc.Type+"_")
 	}
 
-	// --- Delete local folder after upload ---
+	// --- Delete local folder ---
 	if err := os.RemoveAll(baseDir); err != nil {
-		d.logger.Printf("[%s][docUpload] failed to delete local folder %s: %v", d.state, baseDir, err)
+		d.logger.Printf("[%s][docUpload] cleanup failed: %v", d.state, err)
 	} else {
-		d.logger.Printf("[%s][docUpload] local folder %s deleted successfully", d.state, baseDir)
+		d.logger.Printf("[%s][docUpload] cleaned up %s", d.state, baseDir)
 	}
 
 	return nil

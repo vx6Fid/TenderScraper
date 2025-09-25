@@ -1,0 +1,20 @@
+# Ignore local directories and files
+#TenderData/
+*.log
+*.csv
+*.txt
+
+# Ignore Go build outputs
+bin/
+*.exe
+*.out
+
+# Ignore IDE/editor configs
+.vscode/
+.idea/
+
+.git
+#*.env
+*.zip
+*.rar
+*.pdf

@@ -1,0 +1,10 @@
+services:
+  tender-scraper:
+    build: .
+    image: tender-scraper:latest
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    volumes:
+      - ./TenderData:/app/TenderData

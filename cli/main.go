@@ -79,7 +79,8 @@ func main() {
 	fmt.Println("1.Tender links")
 	fmt.Println("2.Tender data")
 	fmt.Println("3.Corrigendum Links")
-	fmt.Println("4.Document download")
+	fmt.Println("4.Past Tenders Scraping")
+	fmt.Println("5.Document download")
 	var choice int
 	fmt.Print("Enter your choice: ")
 	fmt.Scan(&choice)
@@ -122,6 +123,11 @@ func main() {
 		linkExtractor := nav.NewLinkExtractor(runDate, baseURLs)
 		linkExtractor.Corrigendums()
 	case 4:
+		runDate := utils.GetRunDate()
+		// fmt.Println("RunDate: ", runDate)
+		linkExtractor := nav.NewLinkExtractor(runDate, baseURLs)
+		linkExtractor.PastTenders()
+	case 5:
 		_id := "68695b2955d119428e5086ab"
 		tenderURL := "https://etenders.gov.in/eprocure/app?component=%24DirectLink&page=FrontEndLatestActiveCorrigendums&service=direct&session=T&sp=SwKgOCf7CLcX8A0VIcO%2FJUA%3D%3D"
 		// corrigendumLinks := []utils.CorrLinks{

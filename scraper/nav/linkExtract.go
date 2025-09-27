@@ -194,3 +194,36 @@ func (le *LinkExtractor) Corrigendums() {
 	wg.Wait()
 	log.Println("=== Corrigendum extraction finished ===")
 }
+
+func (le *LinkExtractor) PastTenders() {
+	sem := make(chan struct{}, utils.MaxSessionParallel)
+	var wg sync.WaitGroup
+
+	for _, u := range le.baseURLs {
+		wg.Add(1)
+		go func(u utils.URLS) {
+			defer wg.Done()
+
+			sess := session.NewSession(u.BaseURL, u.State)
+
+			// Acquire slot ONLY for captcha solving
+			sem <- struct{}{}
+			if err := sess.EstablishTenderStatusSession("6", "", ""); err != nil {
+				log.Printf("[%s] failed to establish session: %v", u.State, err)
+			}
+			<-sem // release slot immediately after captcha solved
+
+			headers := []string{"S.No", "TenderID", "PageNo", "Title", "Organisation Chain", "Tender Stage", "Link"}
+			scraper, err := NewPastScraper(sess, u.Domain, u.State, headers)
+			if err != nil {
+				log.Printf("[%s] failed to create scraper: %v", u.State, err)
+				return
+			}
+			if err := scraper.Run(); err != nil {
+				log.Printf("[%s] scraping failed: %v", u.State, err)
+			}
+		}(u)
+	}
+	wg.Wait()
+	log.Println("=== Past Tenders extraction finished ===")
+}

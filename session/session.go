@@ -20,6 +20,7 @@ type Session struct {
 	BaseURL               string
 	ActiveTendersURL      string
 	CorrigendumURL        string
+	ResultsURL            string
 	captchaSolved         bool
 	sessionEstablished    bool
 	docSessionEstablished bool
@@ -46,6 +47,7 @@ func NewSession(baseURL string, state string) *Session {
 		logger:           logger,
 		ActiveTendersURL: baseURL + "?page=FrontEndLatestActiveTenders&service=page",
 		CorrigendumURL:   baseURL + "?page=FrontEndLatestActiveCorrigendums&service=page",
+		ResultsURL:       baseURL + "?page=WebTenderStatusLists&service=page",
 	}
 }
 
@@ -115,6 +117,10 @@ func (s *Session) EstablishSession(sessionType string) error {
 		s.captchaCollector.OnHTML("form#LatestActiveCorrigendums", func(e *colly.HTMLElement) {
 			s.handleCaptchaForm(e)
 		})
+		// case "TenderStatus":
+		// 	s.captchaCollector.OnHTML("form#frmSearchFilter", func(e *colly.HTMLElement) {
+		// 		s.handleCaptchaForm(e)
+		// 	})
 	}
 
 	s.captchaCollector.OnResponse(func(r *colly.Response) {
@@ -135,6 +141,11 @@ func (s *Session) EstablishSession(sessionType string) error {
 		if err := s.captchaCollector.Visit(s.CorrigendumURL); err != nil {
 			return fmt.Errorf("failed to visit corrigendum tenders page for captcha: %w", err)
 		}
+		// case "TenderStatus":
+		// 	s.logger.Printf("STEP 1: Starting captcha/session flow: %s", s.ResultsURL)
+		// 	if err := s.captchaCollector.Visit(s.ResultsURL); err != nil {
+		// 		return fmt.Errorf("failed to visit tender status page for captcha: %w", err)
+		// 	}
 	}
 
 	// wait until either sessionEstablished is true or timeout

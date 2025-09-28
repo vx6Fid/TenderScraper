@@ -25,27 +25,38 @@ type PastScraper struct {
 	scrapedTenders int
 	currentPage    int
 	nextButtonURL  string
+	fromDate       string
+	toDate         string
 	logger         *log.Logger
 	pastWriter     *PastWriter
+	failedWriter   *FailedWriter
 }
 
-func NewPastScraper(sess *session.Session, domain string, state string, headers []string) (*PastScraper, error) {
+func NewPastScraper(sess *session.Session, domain string, state string, headers []string, writer *PastWriter, failedWriter *FailedWriter, fromDate string, toDate string) (*PastScraper, error) {
 	collector := sess.NewCollector(domain)
 	collector.AllowURLRevisit = true
 
-	// Initialize PastWriter with custom headers
-	pastWriter := NewPastWriter(state, headers)
+	// If no writer was passed, create one (fallback)
+	var pastWriter *PastWriter
+	if writer != nil {
+		pastWriter = writer
+	} else {
+		pastWriter = NewPastWriter(state, headers)
+	}
 
 	return &PastScraper{
 		collector:      collector,
 		baseURL:        sess.BaseURL,
 		state:          state,
 		ResultsURL:     sess.ResultsURL,
+		fromDate:       fromDate,
+		toDate:         toDate,
 		scrapedTenders: 0,
 		currentPage:    1,
 		nextButtonURL:  sess.BaseURL + "?component=loadNext&page=WebTenderStatusLists&service=direct&session=T",
 		logger:         log.New(os.Stdout, "PastScraper: ", log.LstdFlags),
 		pastWriter:     pastWriter,
+		failedWriter:   failedWriter,
 	}, nil
 }
 
@@ -71,6 +82,9 @@ func (ps *PastScraper) Run() error {
 	// Start scraping from the initial page
 	err := ps.collector.Visit(ps.ResultsURL)
 	if err != nil {
+		if ps.failedWriter != nil {
+			ps.failedWriter.WriteFailure(ps.fromDate, ps.toDate, err.Error())
+		}
 		return fmt.Errorf("failed to visit initial page: %w", err)
 	}
 
@@ -133,7 +147,10 @@ func (ps *PastScraper) handlePagination() error {
 
 		// Visit the next page
 		if err := ps.collector.Visit(ps.nextButtonURL); err != nil {
-			ps.logger.Printf("ERROR: Failed to visit next page: %v", err)
+			ps.logger.Printf("failed to visit page: %v", err)
+			if ps.failedWriter != nil {
+				ps.failedWriter.WriteFailure(ps.fromDate, ps.toDate, err.Error())
+			}
 			break
 		}
 

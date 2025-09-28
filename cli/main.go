@@ -128,8 +128,11 @@ func main() {
 		// Case 4 and 5 are not yet parallel and write safe
 		runDate := utils.GetRunDate(false)
 		// fmt.Println("RunDate: ", runDate)
+		fromStr := "01/08/2025"
+		toStr := "13/09/2025"
+
 		linkExtractor := nav.NewLinkExtractor(runDate, baseURLs)
-		linkExtractor.PastTenders()
+		linkExtractor.PastTenders(fromStr, toStr, 7)
 	case 5:
 		runDate := utils.GetRunDate(true)
 		dir := fmt.Sprintf("TenderData/PastLinks/%s", runDate)

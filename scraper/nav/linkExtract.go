@@ -195,36 +195,98 @@ func (le *LinkExtractor) Corrigendums() {
 	log.Println("=== Corrigendum extraction finished ===")
 }
 
-func (le *LinkExtractor) PastTenders() {
-	sem := make(chan struct{}, utils.MaxSessionParallel)
+func (le *LinkExtractor) PastTenders(fromStr, toStr string, chunkSize int) {
+	sem := make(chan struct{}, utils.MaxSessionParallel) // global session limiter
 	var wg sync.WaitGroup
 
-	from, to := utils.GetDateRange()
+	// Parse input dates
+	from, err := time.Parse("02/01/2006", fromStr)
+	if err != nil {
+		log.Fatalf("invalid from date: %v", err)
+	}
+	to, err := time.Parse("02/01/2006", toStr)
+	if err != nil {
+		log.Fatalf("invalid to date: %v", err)
+	}
+
+	// Split into ranges
+	if chunkSize <= 0 {
+		chunkSize = 7
+	}
+	dateRanges := utils.SplitDateRange(from, to, chunkSize)
+
+	// Loop over states
 	for _, u := range le.baseURLs {
 		wg.Add(1)
 		go func(u utils.URLS) {
 			defer wg.Done()
 
-			sess := session.NewSession(u.BaseURL, u.State)
-
-			// Acquire slot ONLY for captcha solving
-			sem <- struct{}{}
-			if err := sess.EstablishTenderStatusSession("6", from, to); err != nil {
-				log.Printf("[%s] failed to establish session: %v", u.State, err)
-			}
-			<-sem // release slot immediately after captcha solved
-
+			// One writer per state
 			headers := []string{"S.No", "TenderID", "PageNo", "Title", "Organisation Chain", "Tender Stage", "Link"}
-			scraper, err := NewPastScraper(sess, u.Domain, u.State, headers)
-			if err != nil {
-				log.Printf("[%s] failed to create scraper: %v", u.State, err)
-				return
+			stateWriter := NewPastWriter(u.State, headers)
+			failedWriter := NewFailedWriter(u.State)
+			defer stateWriter.Close()
+			defer failedWriter.Close()
+
+			// Channel of date range jobs
+			jobs := make(chan [2]time.Time, len(dateRanges))
+			var workers sync.WaitGroup
+
+			// Launch workers
+			numWorkers := utils.CalculateOptimalWorkers(len(dateRanges))
+			for i := 0; i < numWorkers; i++ {
+				workers.Add(1)
+				go func() {
+					defer workers.Done()
+					for dr := range jobs {
+						fromFormatted := utils.FormatDate(dr[0])
+						toFormatted := utils.FormatDate(dr[1])
+
+						log.Printf("[%s] worker started range %s - %s", u.State, fromFormatted, toFormatted)
+
+						sess := session.NewSession(u.BaseURL, u.State)
+
+						// Acquire slot ONLY for captcha solving
+						sem <- struct{}{}
+						if err := sess.EstablishTenderStatusSession("6", fromFormatted, toFormatted); err != nil {
+							log.Printf("[%s] failed to establish session for range %s-%s: %v",
+								u.State, fromFormatted, toFormatted, err)
+							failedWriter.WriteFailure(fromFormatted, toFormatted, err.Error())
+							<-sem
+							continue
+						}
+						<-sem // release slot
+
+						// Past Scraper
+						scraper, err := NewPastScraper(sess, u.Domain, u.State, nil, stateWriter, failedWriter, fromFormatted, toFormatted)
+						if err != nil {
+							log.Printf("[%s] failed to create scraper: %v", u.State, err)
+							failedWriter.WriteFailure(fromFormatted, toFormatted, err.Error())
+							continue
+						}
+
+						if err := scraper.Run(); err != nil {
+							log.Printf("[%s] scraping failed for range %s-%s: %v",
+								u.State, fromFormatted, toFormatted, err)
+							failedWriter.WriteFailure(fromFormatted, toFormatted, err.Error())
+						}
+
+						log.Printf("[%s] worker finished range %s - %s", u.State, fromFormatted, toFormatted)
+					}
+				}()
 			}
-			if err := scraper.Run(); err != nil {
-				log.Printf("[%s] scraping failed: %v", u.State, err)
+
+			// Feed jobs
+			for _, dr := range dateRanges {
+				jobs <- dr
 			}
+			close(jobs)
+			workers.Wait()
+
+			log.Printf("[%s] all date ranges completed", u.State)
 		}(u)
 	}
+
 	wg.Wait()
 	log.Println("=== Past Tenders extraction finished ===")
 }

@@ -35,10 +35,11 @@ type CorrScraper struct {
 	logger             *log.Logger
 	csvFile            *os.File
 	csvWriter          *csv.Writer
+	failedWriter       *FailedCorrigendumWriter
 }
 
 // NewCorrScraper initializes a new scraper instance.
-func NewCorrScraper(sess *session.Session, domain string, state string) *CorrScraper {
+func NewCorrScraper(sess *session.Session, domain string, state string, failed *FailedCorrigendumWriter) *CorrScraper {
 	collector := sess.NewCollector(domain)
 	collector.AllowURLRevisit = true
 	return &CorrScraper{
@@ -47,6 +48,7 @@ func NewCorrScraper(sess *session.Session, domain string, state string) *CorrScr
 		state:          state,
 		corrigendumURL: sess.CorrigendumURL,
 		currentPage:    1,
+		failedWriter:   failed,
 	}
 }
 
@@ -148,7 +150,7 @@ func (cs *CorrScraper) handlePagination() error {
 		// Visit the next page
 		if err := cs.collector.Visit(cs.nextButtonURL); err != nil {
 			cs.logger.Printf("ERROR: Failed to visit next page: %v", err)
-			break
+			return err
 		}
 
 		cs.currentPage++
@@ -196,7 +198,13 @@ func (cs *CorrScraper) handleTenderTable(e *colly.HTMLElement) {
 	cs.logger.Printf("PAGE %d: Found tender table! Parsing results... (Status: %d)", cs.currentPage, e.Response.StatusCode)
 	cs.resultsFound = true
 	cs.sessionEstablished = true
-	cs.parseTenders(e)
+
+	if err := cs.parseTenders(e); err != nil {
+		cs.logger.Printf("ERROR: %v", err)
+		if cs.failedWriter != nil {
+			cs.failedWriter.WriteFailure(cs.state, err.Error()) // Only log the website failure
+		}
+	}
 }
 
 // Test it for a small number of tenders to see it stops after scraping whole page
@@ -243,66 +251,76 @@ func (cs *CorrScraper) handleTotalRecords(e *colly.HTMLElement) {
 }
 
 // parseTenders parses tender data from HTML element
-func (cs *CorrScraper) parseTenders(e *colly.HTMLElement) {
+// Returns an error if parsing fails for the page (website-level failure)
+func (cs *CorrScraper) parseTenders(e *colly.HTMLElement) error {
 	cs.logger.Printf("PAGE %d: Parsing tender data from table element...", cs.currentPage)
 	var tendersFoundOnPage int
-	// cs.saveFile("debug", fmt.Sprintf("Page_%d.html", cs.currentPage), []byte(e.Response.Body))
 
-	// e.DOM.Find("tr.even, tr.odd").Each(func(i int, s *goquery.Selection) {
+	// Track if any row parsing fails (non-fatal)
+	var parseFailed bool
+
 	e.DOM.Find("tr.odd, tr.even, tr[id^=informal]").Each(func(i int, s *goquery.Selection) {
-		cs.logger.Printf("Parsing tender data from row %d...", i)
 		tendersFoundOnPage++
 		cs.scrapedTenders++
 
 		cells := s.Find("td")
-		if cells.Length() >= 6 {
-			closingDate := strings.TrimSpace(cells.Eq(2).Text())
-			ePublishedDate := strings.TrimSpace(cells.Eq(1).Text())
-			linkTag := cells.Eq(4).Find("a")
-			title := strings.TrimSpace(linkTag.Text())
-			href, _ := linkTag.Attr("href")
+		if cells.Length() < 6 {
+			cs.logger.Printf("WARNING: Row %d has less than 6 columns, skipping", i)
+			parseFailed = true
+			return
+		}
 
-			organisation := strings.TrimSpace(cells.Eq(5).Text())
+		closingDate := strings.TrimSpace(cells.Eq(2).Text())
+		ePublishedDate := strings.TrimSpace(cells.Eq(1).Text())
+		linkTag := cells.Eq(4).Find("a")
+		title := strings.TrimSpace(linkTag.Text())
+		href, _ := linkTag.Attr("href")
+		organisation := strings.TrimSpace(cells.Eq(5).Text())
 
-			// Extract tender ID from cell text
-			reTenderID := regexp.MustCompile(`\[(\d{4}_[A-Z]+_\d+_\d+)\]`)
-			cellText := strings.TrimSpace(cells.Eq(4).Text())
-			tenderID := ""
-			if matches := reTenderID.FindStringSubmatch(cellText); len(matches) > 1 {
-				tenderID = matches[1]
-			}
+		// Extract tender ID
+		reTenderID := regexp.MustCompile(`\[(\d{4}_[A-Z]+_\w+_\d+)\]`)
+		cellText := strings.TrimSpace(cells.Eq(4).Text())
+		tenderID := ""
+		if matches := reTenderID.FindStringSubmatch(cellText); len(matches) > 1 {
+			tenderID = matches[1]
+		}
 
-			// Build full link
-			fullLink := href
-			if href != "" {
-				if base, err := url.Parse(cs.baseURL); err == nil {
-					if rel, err := url.Parse(href); err == nil {
-						fullLink = base.ResolveReference(rel).String()
-					}
+		// Build full link
+		fullLink := href
+		if href != "" {
+			if base, err := url.Parse(cs.baseURL); err == nil {
+				if rel, err := url.Parse(href); err == nil {
+					fullLink = base.ResolveReference(rel).String()
 				}
+			} else {
+				parseFailed = true
 			}
+		}
 
-			// Write row: Serial, TenderID, PageNum, Title, E-Published, Organisation, ClosingDate, Link
-			if err := cs.csvWriter.Write([]string{
-				strconv.Itoa(cs.scrapedTenders),
-				tenderID,
-				strconv.Itoa(cs.currentPage),
-				title,
-				ePublishedDate,
-				organisation,
-				closingDate,
-				fullLink,
-			}); err != nil {
-				cs.logger.Printf("ERROR: Failed to write CSV row: %v", err)
-			}
-
-			cs.logger.Printf("  Tender %d (Page %d): ID=%s Title='%s'",
-				cs.scrapedTenders, cs.currentPage, tenderID, title)
+		// Write row to CSV
+		if err := cs.csvWriter.Write([]string{
+			strconv.Itoa(cs.scrapedTenders),
+			tenderID,
+			strconv.Itoa(cs.currentPage),
+			title,
+			ePublishedDate,
+			organisation,
+			closingDate,
+			fullLink,
+		}); err != nil {
+			cs.logger.Printf("ERROR: Failed to write CSV row: %v", err)
+			parseFailed = true
 		}
 	})
 
 	cs.csvWriter.Flush()
-	cs.logger.Printf("PAGE %d: Successfully parsed %d tenders", cs.currentPage, tendersFoundOnPage)
+	cs.logger.Printf("PAGE %d: Parsed %d tenders", cs.currentPage, tendersFoundOnPage)
+
+	if tendersFoundOnPage == 0 || parseFailed {
+		return fmt.Errorf("failed to parse tenders on page %d", cs.currentPage)
+	}
+
+	return nil
 }
 
 // saveFile utility function

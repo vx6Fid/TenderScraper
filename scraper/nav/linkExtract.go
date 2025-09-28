@@ -164,6 +164,9 @@ func (le *LinkExtractor) Corrigendums() {
 	sem := make(chan struct{}, utils.MaxSessionParallel)
 	var wg sync.WaitGroup
 
+	failedWriter := NewFailedCorrigendumWriter()
+	defer failedWriter.Close()
+
 	for _, u := range le.baseURLs {
 		wg.Add(1)
 		go func(u utils.URLS) {
@@ -175,12 +178,17 @@ func (le *LinkExtractor) Corrigendums() {
 			sem <- struct{}{}
 			if err := sess.EstablishSession("CorrigendumTenders"); err != nil {
 				log.Printf("[%s] failed to establish session: %v", u.State, err)
+				failedWriter.WriteFailure(u.State, fmt.Sprintf("Session failed: %v", err))
+				<-sem
+				return // skip this state
 			}
-			<-sem // release slot immediately after captcha solved
+			<-sem // release slot
 
-			scraper := NewCorrScraper(sess, u.Domain, u.State)
+			scraper := NewCorrScraper(sess, u.Domain, u.State, failedWriter)
 			if err := scraper.ScrapeCorrigendum(); err != nil {
 				log.Printf("[%s] scraping failed: %v", u.State, err)
+				logMessage := fmt.Sprintf("[%s] scraping failed: %v", u.State, err)
+				failedWriter.WriteFailure(u.State, logMessage)
 			}
 		}(u)
 	}

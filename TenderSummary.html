@@ -1,0 +1,734 @@
+<!-- BEGIN: HEADER -->
+<html>
+<head>
+<title>Government eProcurement System</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link href="css/preview.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<script language="javascript" type="text/javascript">
+	if(window.name == "" ){
+		
+		var arrUrl = window.location.href.split("?");
+		var sPath;
+		
+		if(arrUrl){
+			sPath = arrUrl[0];
+			sPath += "?page=UnauthorisedAccessPage&service=page";
+			// Redirect the url
+			window.location.replace(sPath);
+		}else{
+			window.location.href="/nicgep/app?page=UnauthorisedAccessPage&service=page";
+		}
+	} else if (window.name.indexOf("Popup") == -1) {
+	
+		var arrUrl = window.location.href.split("?");
+		var sPath;
+		
+		if(arrUrl){
+			sPath = arrUrl[0];
+			sPath += "?page=UnauthorisedAccessPage&service=page";
+			// Redirect the url
+			window.location.replace(sPath);
+		}else{
+			window.location.href="/nicgep/app?page=UnauthorisedAccessPage&service=page";
+		}
+	}
+</script>
+			<!--span jwcid="UserTypeRadioGroup"-->
+			<table width="100%" height="100%" border="0" align="center" cellpadding="0" cellspacing="0">
+				<tr>
+					<td valign="top" height="100%">
+					<div id="watermark" align="left"><img src="images/gep_logo.png" id="Any"></img></div>
+						<table width="98%" height="100%" cellspacing="0" cellpadding="0" border="0" align="center" class="page_border">
+							<tr>
+								<td class="page_head" align="center">Government eProcurement System</td>
+							</tr>
+							<tr>
+								<td class="page_title" align="center"><!-- <span jwcid="@Insert" value="ognl:status" />  -->Tender Summary Reports</td>
+							</tr>
+							<tr>
+								<td class="td_space" align="right">Date : 28-Sep-2025 09:51 AM</td>
+							</tr>
+							<tr>
+								<td width="100%" valign="top" height="100%">
+								<table width="100%" height="100%" cellspacing="0" cellpadding="0" border="0">
+									<tr>
+										<td width="100%" valign="top" height="100%">
+											<!-- Interface -->
+		  														<table width="94%" border="0" align="center" cellpadding="0" cellspacing="0">
+		  														  <tr> 
+		  															<td valign="top" bgcolor="#FFFFFF">
+		  															<!-- interface_elements -->
+		  															<form method="post" action="/eprocure/app" id="bidSummaryForm">
+<div style="display:none;" id="bidSummaryFormhidden"><input type="hidden" name="formids" value="If_0,If_1_0,iterRows_0,If_2_0,If_3_0,If_4_0,If_5_0,If_6_0,If_7_0,If_8_0,If_9_0,If_10_0,If_11_0,If_12_0,If_14_0,If_15_0,If_16_0,If_18_0,If_19_0,If_28_0,If_29_0,iterRows_5,If_30_0,If_31_0,If_32_0,If_33_0,If_36_0,If_37_0,If_38_0,iterRows_10,If_39_0" />
+<input type="hidden" name="seedids" value="ZH4sIAAAAAAAAAFvzloG1vIAhT6c4tagsMzlVxUCnIDEdRCXn5xbk56XmlYDZeSWJmXmpRUB2cWpxcWZ+HohVACQ884A6QWoc8yrh3HgDBNMQyEzKTAkuzc1NLKp0yy/KVTEAAOBbcNx2AAAA" />
+<input type="hidden" name="component" value="bidSummaryForm" />
+<input type="hidden" name="page" value="FrontEndViewBidSummaryDetailsPrint" />
+<input type="hidden" name="service" value="direct" />
+<input type="hidden" name="session" value="T" />
+<input type="hidden" name="submitmode" value="" />
+<input type="hidden" name="submitname" value="" />
+<input type="hidden" name="If_0" value="F" />
+<input type="hidden" name="If_1_0" value="T" />
+<input type="hidden" name="iterRows_0" value="VZH4sIAAAAAAAAAFWRvW/TQBjG3zgKTQmtSmCAASkSgqWNkzgN/UAguUnTmLoWjVOJjJf44lzkr9rn4CzQDlCkDjCUAZWBAYml4l/oCoIRZhCCDWYGFs5J2qSerOd+9zzv+9zRH4h5Lszqdpe3SJPXscM3iMZjixLa41eIpmFX9U0Tub0SpogY3uHHY+7gce8uB1MyxBgsaRRm5A7qooyBLD0j25Z+W4ZJdlTFyLMtCsmxY5W65BRQKaK+tw2PgJNhJhT8hkkoxVoJUXzq61NiZEKFXZtm1JajoSET3o3KcL7RH1VBJh66JVrE9eggbShdaNm+S9tnNI5o4V9EhgnD1oklaSewh5u2pZ2Bo55lU7g0to1kUaxjl82VoG3ijuOBw5qdDlE+RPl+L/s/X3x+fv0bB5F7EOsiw8eBCzMjSPHNBnafHr28ljj4vs8BBA6EH/dvj0JcTgupslTdYMVUcQc3WQfpMrGQ1cQsK9m38bYNvkZM7FFkOjevfP0QUY8xy5MgxkDbC06GCkvlwwrbnd3Iep1ejYZpD+MAkVdO/suzYPLd753+2yQG4pP3r+NB4dfhDoUbklKqiookp1YqYq0mFititS6m1NXiVlWq1VPi2qpSrFO4LAhpFTtpISsUUjlhWZhP3d9w+qbn+ntNfZqjMJdfctubypoSVNR1f7NUelAwF2f1Ui63JC7U1EpLFbR8eUFWdZK9E5reGplm55fzWWbK9r84qnH4LMkfb97+3d1bHKw/qDvMnmDJEec/fpzhBf0CAAA=" />
+<input type="hidden" name="iterRows_0" value="VZH4sIAAAAAAAAAFWRMWzTQBSGXxyFFtJWJTAECZAlJJYSp0kbVIpACmmgJm5axYmqMHGJr85F9tm1nxOnA6gDMHSAoQyIhYGxAzCydAXEygoIsSLB1BU7SdvUk/Xfd///3n97fyDmOjCjWx2Js6akU1tqME2iHBn2pDtM06ijeqZJnN4SRcIM9/XnfWH3ce+2AJMKxAJY1hCmlTbpkLRBuJ5WLK7fVOB0cFShxLU4QmLkWEWHHQEqEvTcTXgEggLToeA1TIZItSWC9MjXQ2akQyW4NhVQNVsjQya8G1XgTKM/apmYdOgW32COi4O0oTSxYXkOtk5oAtPCv4gCY4alMy5rh7BLmxbXTsBRl1sI50a2kTlSnTrBXHFsMWcU9+2g2akQlUJU6vey8/vF1+dXfggQuQ+xDjE86jswfQyVPbNBnad7Ly/Fd3/uCAC+DeEn/IsjjCupjHhXrqwgTOSbTWoHHaTyq4UgJ9G3cDcNqcpM6iIx7avJb58i6j4NsmSIccIt1z8cKCxUCutrtbcjpTpeiIZJ3XGAyCvy9+I7f+a7D/13iQ/EJx+kpJ/MvX+IcLmyLFfX5ZKo5JfliiyqxUKtIlfrYv5esVyoI5zP3Eip1E5lZ7M5cTa3mMuJayt23+1Uf5nJLx8RrrVzW74irxfsta6eKXVKfK5RzHRLRfvBgs+3sLDKmtlWh1stpXYrMM1eHzGdX5ybD0yDxc8edzd8i8SvN28Ptp8tDPYedBxmj4U12v8BcGWnkvICAAA=" />
+<input type="hidden" name="iterRows_0" value="VZH4sIAAAAAAAAAFWRvW/TQBjG3zgKDYRWaWCAAclSJZYSJyS0VHxJbpNSFyeldlIp3S7x1bnIX7HPwWEAOgBDBxjKAGVg6FjxL3QtEhMSMwjBBhMDK2cnbRNP1nO/e573fe7gDyQ8F2Z1uydYpCXo2BGaRBOwRQntC4tE07Cr+qaJ3H4JU0QMb+/TIbf7tH+Pg0kZEgyWNAppuYN6KGcgS8/JtqXfluEsO1Iw8myLQmbkWKUuOQFUiqjvdeEJcDKkQ8FvmoRSrJUQxSe+PiVGLlTYtSlG1R0NDZnwblyGc81o1Coy8dAttUVcjw7ShtL5Ldt3aXtM44gW/sVkmDBsnViSdgx7uGVb2hgc9yybwoWRbSSLYh27bK4UbRN3FA8c1uxUiAohKkS97Px8/fnVzDcOYquQ6CHDx4EL6VOo6ptN7L44eHMltft9hwMIHAg/7u9vCkk5W+SXJaXCilFwB7dYB9llYiGrhVlWJrLxuoZQIyb2KDKdq5e+HsXUQ8zyJEgw0PaC46HCUoWwwnZnO/agQS/Hw7RHSYDY296d5lEwvf8OordJDcTnH98ng7lfe88ozKhidVXa4EtiQ5T5ilhbqSu8Wl6qK1KtwYv3y9WlBoWLhWJWxU62kC/M8fkbt4rX+YcVJ7I8E201+aVG4dqKsrm2USPeumbXrQVTVLqirHc2pXIbPZ4PbvZmi77mBWvB4rp4NzSdHzfNM1O2/fRpicNHyfz4sP9v++XCYPlB2WH2BEuOO/8BvkTqZPsCAAA=" />
+<input type="hidden" name="If_2_0" value="F" />
+<input type="hidden" name="If_3_0" value="T" />
+<input type="hidden" name="If_4_0" value="T" />
+<input type="hidden" name="If_5_0" value="T" />
+<input type="hidden" name="If_6_0" value="T" />
+<input type="hidden" name="If_7_0" value="T" />
+<input type="hidden" name="If_8_0" value="T" />
+<input type="hidden" name="If_9_0" value="F" />
+<input type="hidden" name="If_10_0" value="T" />
+<input type="hidden" name="If_11_0" value="F" />
+<input type="hidden" name="If_12_0" value="F" />
+<input type="hidden" name="If_14_0" value="T" />
+<input type="hidden" name="If_15_0" value="T" />
+<input type="hidden" name="If_16_0" value="F" />
+<input type="hidden" name="If_18_0" value="F" />
+<input type="hidden" name="If_19_0" value="F" />
+<input type="hidden" name="If_28_0" value="T" />
+<input type="hidden" name="If_29_0" value="T" />
+<input type="hidden" name="iterRows_5" value="VZH4sIAAAAAAAAAG1RwXLSUBS9pEIpVMTaGVc6mdElpEBLC3UVECU2pRiwyvJBLunT8BKTB8WNM250xi50oXsXbpzpF/gJjl/gxo7j1oUrt75E0tIZs8l75557zj33Hf+CuO/BTcuZKIwOFAtdpU9NBRmn/Jlyf0xsOqRo1qjplwv7n06+PXotwaoOccHSTA5Z/TGZkDWbMGtNd5h1S4dFUTIIe8JhZa7Y4R4NywlRNtF7Cs9B0iGFE2J3OOFjn8OVOb7GOFroiYZMQBkT7nj74o+zxuSQ2tgio+i+NKTMQOI7bAZI1AxOMR2uUr/BSN/GtkcnosvCWjjCecOa49hImDBMOS4yNG8THoknQiSaecm1yQDnylk3EjZrp+Eu6HDpDNdGxIroCz5zguOCEPbD6NEyOA4OzoUQCBN66GlRmOUImcuePKT8wPTIYag6dcWLZoJgShBMCZ/l6Ofbr29ufJcgdg/iwT5x6kH2jNQaj/rovTx+fy397uRIApi6EHwXv3zmYtB8kcN1o6l1H2o7sq42NUOTO436A0Pr9mT1bqNV7wnTy2d6s+db+fHh458XryrCV4t8gyEXhXSMQ2Y9t1XNVSq54lZV2dh0OSSFlXxHM3bDnSSiGURltbSZ76CbLxVKZbmwsb1ekNu7Am4bakdtdVW53lR3DLW2Z3R7Ai5W59jl7XJZsF03VE3/M19WBwN0OZp5da/+f2fpdzq4pE7b4C+FMZrPMQMAAA==" />
+<input type="hidden" name="iterRows_5" value="VZH4sIAAAAAAAAAG1RMW/TQBR+dUmaphBCqcSEZAnYEjd10zYtk5Om1OCa4ISKjJf4xb3inI19ScOCxEIlOsAAOwMLUv8J/AIWKsTKzMDC2cRNKtWL7973ve9737vT35AKA7jreEOF0a7ioK90qK0g45S/VJ4MiEt7FO0qtcO10v6Xs+/P3kqwZEBKsHSbQ944JEOy7BLmLBsec+4bMCcgi7DnHBanwCYPaAynBWxj8AJegWRAFofEbXLCByGHm1N8nXF0MBANuYgyINwL9sUfx42ZHnXRJP3kPt+jzEISemxckKgdnWYMuEXDOiMdFxsBHYouB6vxCBcNq57nImHCMOv5yNDeJjwRT8eVZOZ53yVdnILzfiJsV8/DXTHg+qSu94mT0GdD5kXHWSEcxtGTZXDsHlwIISpM6GGgJ2GuJpWp7Jkjyg/sgBzFqiNfvGguCqZEwZT4WU5+vf/27s4PCWYeQiraJ44CyE9I5qDfweDN6cfbCx/OTiSAkQ/Rd+1rgYtBiyqHe7q5bWmmbsjVXa3V0mq7mtXW5Ga99tTSW21Ze1A3a23hfWMiO37FxZ+fPv95fVwR9npiH806JxwkDrnVwsZmoVIprGxsKuV1n0NGOMo7urUXryadjCKQJXW92ES/qJbUNblU3lotyY09UW5YWlMzW5osxnpkadXHVqsdsdUJe0XdUsuC7fux6sJ/87yFh9jlaBd3KCOsi5e7S3+Po0v2vBX+AYgsgQo8AwAA" />
+<input type="hidden" name="iterRows_5" value="VZH4sIAAAAAAAAAG1Sv2/TQBR+dUiaphBCqcSEZKmMiZsm/ZHC5KQpdXFCcNKoGS/xi3vFORv7koYFiQUkOsAAOwMLUv8UJkYWKsQIEwMrZytuEgkvd/fe977vfe/54jfEfQ/uWc5IYbSnWOgqXWoqyDjlz5UnQ2LTPkWzTE1/K9/+fPnt+I0EqzrEBUozOWT0UzIi6zZh1rruMOuBDosiZRD2lMPKTLLJPRqmEyJtovcMXoCkQwpHxG5ywoc+h9szeI1xtNATBekAMiTc8drixElhsk9trJNB9F7qU2Yg8R02CUjUDG4LOtyhfpWRro0Nj45ElYXlsIV5wbLj2EiYEEw5LjI09wiPyBNhJOp5ybVJD2fSGTciNstX5q7pcHMa1wbEiuAxnznBNSaI/dB6NAyOvZM5EyLCBB96WmTmehSZ8Z48o/zE9MhZyDp2xUbTgTElMKaEazn/+e7L27XvEiwcQjyYJ449yExB9eGgi96riw93l99fnksAYxeC78bXFheN5ooc1ppq/VBry3tqR9Xlmto6ODLkZrVyZGitjqw+rNYrHaF8a0o62eHKj4+f/r58XRLiWiQedLoo+CUO6WJ2ZzdbKmU3dnaVzW2XQ1LoyfuaUQsHk4gaEZnVwnauiW6ukC9syfnN+8W83KiJcMNQRXctVa4cqI8MtfzYaHUCdHEevSHQrhuyLgvOmPh/DTzFHkczt08ZYT38v7r051fwSF2Vwj/Rfm9NOgMAAA==" />
+<input type="hidden" name="If_30_0" value="T" />
+<input type="hidden" name="If_31_0" value="T" />
+<input type="hidden" name="If_32_0" value="T" />
+<input type="hidden" name="If_33_0" value="F" />
+<input type="hidden" name="If_36_0" value="T" />
+<input type="hidden" name="If_37_0" value="T" />
+<input type="hidden" name="If_38_0" value="T" />
+<input type="hidden" name="iterRows_10" value="VZH4sIAAAAAAAAAF2Sv28TMRTHXy6NVJSmSgprUUQnRHURAtEUpvwo1OUUoaSAOjp3j6vhYhufL0pBQsAAQ4cywMTCwFixsCBGNhD/AwixMjOwYB+99IIn+/n7Pt/3nn34C0qxgjOhGLuc+W6I0vWFUi5yzfSe22ZBS/geizXFD82D8so5B2oelIYsIIGGqneXjmkjojxseIKHVzyo+mIkI9RM8BuomDCqkzkV4RpDVEa44AuuFfV1l2qcohLNooaNGEUlU9yiUWIkSzlOVyTDCFNMohRyf69HR/9pBlqxtKZygLGvmLRF3YdHUPJg/g6L0KbkzwP2ID3PeeCwwO4KHtSkYmNzGeLV2ZTF6QUZ0TCLVqfRwAwvQDXbf1uICCm3RUnTAYt3bbNHuZWYhdyU3DFZJPMvxlzYrWN61cgNEVWuioVERoIGGGSc4kSaF120lq61dNOH2f/54uvByjcHCltQGtt5ThRUj0W9ZDRE9ezw1XL55fd9B2Aiwa7Kl4/S8nLSf6N//P7T1tl7f+YMsZsRrf2J1tPly6/fnXqooUh6famhcmFtdb3ZXD2/tu5evCRjq5pP4YX2Z2mX4deO+UdfZOnHm7e/nzxvGgMyY2ATNZzub5Lt2+R63Wttkj6pDzY6N/tke6feurbR6+zIv+QyfbzaAgAA" />
+<input type="hidden" name="If_39_0" value="F" />
+</div>
+		  															<table width="92%" border="0" align="center" cellpadding="0" cellspacing="0">
+		  																<tr>
+		  																	<td class="td_space">&nbsp;</td>
+		  																</tr>
+		  																<tr>
+																		<td align="right" class="td_space"><a href="javascript:void(0)" onClick="javascript:window.print();" title="Print" class="brown_link"><img src="images/print.png" border="0" align="absmiddle"> <b>Print</b></a></td>
+																		</tr>
+		  																<tr> 
+		  																  <td class="td_space">
+		  																		<table width="100%" cellpadding="0" cellspacing="0">
+		  																			<tr>
+		  																				<td>
+																						<!-- Information Box -->
+																								<table width="100%" border="1" align="center" cellpadding="0" cellspacing="0" class="table_list">
+																									<tr class="td_caption" valign="middle"> 
+																										<td width="40%" align="right"><b>Organisation Chain :</b></td>
+																										<td height="60%" >Yantra India Limited||METAL AND STEEL FACTORY - 24 PARGANAS</td>
+																									</tr>
+																									<tr class="td_caption" valign="middle"> 
+																										<td width="40%" align="right"><b>Tender ID : </b></td>
+																										<td height="60%">2025_YIL_249302_1</td>
+																									</tr>
+																									<tr class="td_caption" valign="middle"> 
+																										<td align="right"><b>Tender Ref No : </b></td>
+																										<td >MSF/PV-3/PSG/2025-26/0695</td>
+																									</tr>
+																									<tr class="td_caption" valign="middle"> 
+																										<td  align="right"><b>Tender Title : </b></td>
+																										<td >Private Security Guards </td>
+																									</tr>																									
+																								</table>
+																						<!-- Information Box -->	
+		  																				</td>
+		  																			</tr>
+		  																			
+		  																			<tr>
+																						<td class="td_space">&nbsp;</td>
+																					</tr>
+																							<tr>
+			  																					<td>
+			  																						<!-- List -->
+			  																						
+  																	
+  																									<!-- End : List -->
+																								</td>
+																							</tr>
+		  																			<tr>
+																						<td class="td_space">&nbsp;</td>
+																					</tr>
+																							<tr>
+			  																					<td>
+			  																						<!-- List -->
+			  																						<span id="If_1_0">
+  																									
+
+<table border="1" cellpadding="0" width="100%" cellspacing="0" id="bidValidTableView" class="table_list">
+	
+  																										<tr>
+			  																								<td colspan="8" class="section_head">Bids List</td>
+			  																							</tr>
+  																										<tr class="td_caption">
+																											<td width="5%" align="left"><b>S.No</b></td>
+																											<td width="10%" align="left"><b>Bid Number</b></td>
+																											<td width="20%" align="left"><b>Bidder Name</b></td>
+																											<td width="20%" align="left"><b>Submitted Date</b></td>
+																											<td width="25%" align="left"><b>Status</b></td>
+																											<td width="25%" align="left"><b>Remarks</b></td>
+																											<td width="20%" align="left"><b>Status Updated On</b></td>
+																										</tr>
+																										
+																										
+
+
+	<tr class="td_field" id="informal">
+																								
+																											<td align="left">1</td>
+																											<td align="left">																									
+																											<a id="DirectLink_1" onClick="return popUp1(this, 'location=no, scrollbars=yes, toolbar=no, width=700, height=550, directories=no, menubar=no, resizable=yes, status=no, titlebar=yes');" href="/eprocure/app?component=%24DirectLink_1&amp;page=FrontEndViewBidSummaryDetailsPrint&amp;service=direct&amp;session=T&amp;sp=S39rhQNGNxHSKuQDDX5m8%2BgD119A7TSHfS2d3F7LSgi0%3D">
+                																										903980
+                																									</a>
+																											</td>	
+																											
+																											
+																											<td align="left">INDRANIL BHATTACHARYA SECURITY AGENCY</td>
+																											<td align="left">22-Sep-2025 12:24 PM</td>
+																											<td align="left">Rejected-Finance</td>
+																											
+																											
+																											<td align="left">L-2 FIRM</td>
+																											
+																											<td align="left">26-Sep-2025 04:30 PM</td>
+																										
+	</tr>
+
+	<tr class="td_field" id="informal_0">
+																								
+																											<td align="left">2</td>
+																											<td align="left">																									
+																											<a id="DirectLink_1_0" onClick="return popUp1(this, 'location=no, scrollbars=yes, toolbar=no, width=700, height=550, directories=no, menubar=no, resizable=yes, status=no, titlebar=yes');" href="/eprocure/app?component=%24DirectLink_1&amp;page=FrontEndViewBidSummaryDetailsPrint&amp;service=direct&amp;session=T&amp;sp=Sj5zxLIWCpPwg1KvKn3bE1wKEpZ8xnztCOic2hvnohLU%3D">
+                																										903866
+                																									</a>
+																											</td>	
+																											
+																											
+																											<td align="left">RHITWIK LAHIRI SECURITY AGENCY</td>
+																											<td align="left">19-Sep-2025 05:55 PM</td>
+																											<td align="left">Accepted-AOC</td>
+																											
+																											
+																											<td align="left">L-1 FIRM</td>
+																											
+																											<td align="left">26-Sep-2025 04:34 PM</td>
+																										
+	</tr>
+
+	<tr class="td_field" id="informal_1">
+																								
+																											<td align="left">3</td>
+																											<td align="left">																									
+																											<a id="DirectLink_1_1" onClick="return popUp1(this, 'location=no, scrollbars=yes, toolbar=no, width=700, height=550, directories=no, menubar=no, resizable=yes, status=no, titlebar=yes');" href="/eprocure/app?component=%24DirectLink_1&amp;page=FrontEndViewBidSummaryDetailsPrint&amp;service=direct&amp;session=T&amp;sp=SHRZOVTisQdoUn8mARqALgjZIEhaz6x7v%2B3udsxOxBQA%3D">
+                																										905812
+                																									</a>
+																											</td>	
+																											
+																											
+																											<td align="left">SANJIV DAYAL MATHUR SECURITY AGENCY</td>
+																											<td align="left">23-Sep-2025 04:31 PM</td>
+																											<td align="left">Rejected-Finance</td>
+																											
+																											
+																											<td align="left">L-3 FIRM</td>
+																											
+																											<td align="left">26-Sep-2025 04:30 PM</td>
+																										
+	</tr>
+
+
+
+  																									
+</table>
+
+
+  																									</span>
+  																	
+  																									<!-- End : List -->
+																								</td>
+																							</tr>
+																							<tr><td>
+																							
+								              												</td></tr>		
+								              												
+																							<tr>
+																								<td class="td_space">&nbsp;</td>
+																							</tr>
+																							
+  																		
+  																	<span id="If_3_0">
+  																	<tr><td>
+  																	<table  border="1" width="100%" cellspacing="0" cellpadding="0" class="table_list">
+																		
+																			<span id="If_4_0">
+																				<tr>
+																						<td colspan="5" class="section_head">Bid Opening Summary</td>
+																					</tr>
+																			</span>
+																			
+																			<tr class="td_caption" valign="middle"> 
+																					  <td  width="40%"  align="right">Type : </td>
+																					  <td height="60%" ><b>Finance</b></td>
+																			</tr>
+																			<tr class="td_caption" valign="middle"> 
+																				  <td  width="40%"  align="right">Summary : </td>
+																				  <td height="60%" ><b>Technical and Financial bid of three firms have been opened and case to be put up in TEC</b></td>
+																			</tr>
+																			<tr class="td_caption" valign="middle"> 
+																				  <td  width="40%"  align="right">Updated By : </td>
+																				  <td height="60%" ><b>PRASANTA CHAKRABORTY</b></td>
+																			</tr>
+																			<tr class="td_caption" valign="middle"> 
+																				  <td  width="40%"  align="right">Updated On : </td>
+																				  <td height="60%" ><b>25-Sep-2025 11:58 AM</b></td>
+																			</tr>
+																			
+																				 <tr class="td_caption" valign="middle"> 
+																				  <td  width="40%"  align="right">Document : </td>
+																				  	<span id="If_5_0">
+																				  		 <td height="60%"  nowrap><a id="DirectLink_2" href="/eprocure/app?component=%24DirectLink_2&amp;page=FrontEndViewBidSummaryDetailsPrint&amp;service=direct&amp;session=T&amp;sp=SfKSxoREPRDHCPCYp1RwtsUQLWTmjEeysIihsCSTtz3k%3D"><b>finance_285840.pdf</b></a>
+																		
+																							<!--  <span jwcid="@DirectLink" listener="listener:showDocumentSign" parameters="ognl:summaryId" onClick="return popUp1(this, 'location=no, scrollbars=yes, toolbar=no, width=400, height=250, directories=no, menubar=no, resizable=yes, status=no, titlebar=yes')" class="blue_link">
+																									<img src="images/certificate.png" border="0" alt="Digital Signature"/>
+																							 </span>-->
+																							 
+																							  <a id="DirectLink_3" onClick="return popUp1(this, 'location=no, scrollbars=yes, toolbar=no, width=400, height=250, directories=no, menubar=no, resizable=yes, status=no, titlebar=yes')" class="blue_link" href="/eprocure/app?component=%24DirectLink_3&amp;page=FrontEndViewBidSummaryDetailsPrint&amp;service=direct&amp;session=T&amp;sp=ZH4sIAAAAAAAAAE1QPUsDQRCdHNGAAQliKyxYWXjRYCBodRrFjzNqcoKCIJvbSbKa21v39mLSWNqk0EL%2FQwp%2Fiv9BC1uxtHXvEtEtBubNvnlv3ssnTEUKltphzxbct9so7SZnNgrN9cDe5OxIomjEQUDVwOWR%2Fq6M3JPR4NSCnAsWZxoK7hXt0WKXinbRDUV7w4Xp0JBQaZj7N2toxdNpLhqvu4E7sFyYmbTV0J8g%2BQniDST%2BQrFkVCOrmvLLuw3V9Z7GYI8lSKYvzSGziZ6d6Nmpl%2BHH4%2BvD4psFmX2Y6tFujH0Fhb9PtThoorp%2FeV7IP70PLYC%2BhORlv7Y1zB%2FXnYZT8xyytesc1J3No7p3ruHMQ79jwqJdQgUjO1xQ4XPTmeBI2CK6oxBJi6sgIh3aQ9JEFCSNhKUMn0ZIdGhwImNNYkm4IN72lsmrlS7Dy1KlXFlbsSVraciNFdAYKpWXGyiXSyulMlldXS9XiHMYJddnx64vHn8AtjOFaNEBAAA%3D">
+																									<img src="images/certificate.png" border="0" alt="Digital Signature"/>
+																							 </a>
+																						
+																					 </td>
+																				  	
+																				  	</span>
+																				  	
+																						
+																				</tr>  
+
+																			
+																			<span id="If_6_0">
+																			<span id="If_7_0">
+																				<span id="If_8_0">
+																					<tr class="td_caption" valign="middle"> 
+																						<td  align="right"><b>BOQ Comparative Chart :</b> </td>
+																						<td>																										
+																							<a id="CHART" title="Click here to Download Document" href="/eprocure/app?component=CHART&amp;page=FrontEndViewBidSummaryDetailsPrint&amp;service=direct&amp;session=T&amp;sp=SWQkBjCCcrE18ySx4AioUNw%3D%3D">BOQ Comparative Chart</a>
+																						</td>
+																					</tr>
+																					</span>
+																					
+																					
+																					</span>
+																			</span>
+																			</table>
+  																	
+  																	</td></tr>
+  															
+  																	
+  																<tr>
+																			<td class="td_space">&nbsp;</td>
+																		</tr>
+																	 </span>  		
+  																	
+																																	
+  																	
+  																<span id="If_10_0">
+	 																<tr>
+																		<td>
+																			<!-- Information Box -->
+																			 <table width="100%" border="1" align="center" cellpadding="2" cellspacing="0" class="table_list">
+																				 <tr>
+																					<td colspan="5" class="section_head">Technical Evaluation Summary Details</td>
+																				</tr>
+																				<tr class="td_caption" valign="middle"> 
+																					  <td  width="40%"  align="right">Committee Chairperson/Co-ordinator Name : </td>
+																					  <td height="60%" ><b>D K SINGH JOINT GM MSF<b></td>
+																				</tr>
+																				<tr class="td_caption" valign="middle"> 
+																					  <td  width="40%"  align="right">Committee Chairperson/Co-ordinator Type : </td>
+																					  <td height="60%" ><b>Internal<b></td>
+																				</tr>
+																				
+																				<tr class="td_caption" valign="middle"> 
+																					  <td width="40%"  align="right">Committee Members : </td>
+																					  <td height="60%" ><b>UMASHANKARDGM/MSFANAYAKLTCOL AKUMARJTGM/MSFSBERADGM/MSF</b></td>
+																				</tr>
+																				<tr class="td_caption" valign="middle"> 
+																					  <td width="40%"  align="right">Updated By : </td>
+																					  <td height="60%" ><b>PRASANTA CHAKRABORTY</b></td>
+																				</tr>
+																				<tr class="td_caption" valign="middle"> 
+																					  <td width="40%"  align="right">Updated On : </td>
+																					  <td height="60%" ><b>26-Sep-2025 04:24 PM</b></td>
+																				</tr>
+																				
+																				
+																				
+																				
+																								
+																				<span id="If_14_0">
+																					<tr class="td_caption" valign="middle"> 
+																					  <td width="40%"  align="right">Document : </td>
+																					  <td height="60%"  nowrap><a id="DirectLink_4" href="/eprocure/app?component=%24DirectLink_4&amp;page=FrontEndViewBidSummaryDetailsPrint&amp;service=direct&amp;session=T&amp;sp=SQqzlhnYsfoMdI9Np2Ut1sg%3D%3D"><b>techsummary_285840.pdf</b></a> (<b>68.92 KB</b>)
+																						  <span id="If_15_0">
+																							 <!--<span jwcid="@DirectLink" listener="listener:showDocumentSignEval" parameters="ognl:tenderEvalTechId" onClick="return popUp1(this, 'location=no, scrollbars=yes, toolbar=no, width=400, height=250, directories=no, menubar=no, resizable=yes, status=no, titlebar=yes')" class="blue_link">
+																									<img src="images/certificate.png" border="0" alt="Digital Signature"/>
+																							 </span>-->
+																							 <a id="DirectLink_5" onClick="return popUp1(this, 'location=no, scrollbars=yes, toolbar=no, width=400, height=250, directories=no, menubar=no, resizable=yes, status=no, titlebar=yes')" class="blue_link" href="/eprocure/app?component=%24DirectLink_5&amp;page=FrontEndViewBidSummaryDetailsPrint&amp;service=direct&amp;session=T&amp;sp=ZH4sIAAAAAAAAAF1Tv2%2FTQBS%2BJK1U2pL%2BgBaQQLKEhIDBQUDVii44SUmdX4XYDEVI6BJfnWttn2uf2wQkVIaydKBIMCDxByBRsbCwITExgMQCKyAxIKEyMCFYeOc6iYu39733fe%2B97553dlG%2F76GzJluTHdqQTeLKnDgG8WTicMrbsh5Gc2vYCjCnzJnC3y8c2f01kUQTZZSuU2PBJQ51zDzmhKPR8jJew5mAUysjkNkyGoMaLajnLOZHZavoLkp0EzF%2BlBhpNDH1XOL5zKliG2TH92Qt7JgZjXtQPru%2FTG%2B7ITtZRsMNZtuUc0IUw4iwyS6WE5yrIUc1uvOGwmUWyqZJd9eY6ghpgS8%2BgDWCgdxptkQtUqEwY690QGBi7nis0dv%2F7ZFnQd0SBiVpOGYKHKG%2Bvs40jk2SpYYBa3J0KEbJMmYR7IghLYZxgwfYYp7Z47ueIFYI4fsdHXKhF%2FWbMeigT03he454XO0IDAYuCBvEyLYjZLiDxKiD68xbUTmxI17LhY%2BjybxUkjS1WpiXigtqVZcKFamiXeFoQHU48RxscTR9vaJo80q1pNTyhUoG0kpVWVRKZT23UJaUEqRrRX0vo2XnakpUBfIHdNJowo1iC4KUayxBRw6QH9g29tq3zs9MzVw8J0MCDnpUmCYL0%2BQ9nzdevimeWfnbl0SJPOoXL0xa%2B8qqgV0n3v2dxyeGHn3ZSiLUci9fu%2FS18OLwHdBL9wrDM9n6tv3uwcnPoFbsqAkr0kh8qc0fQBnrUaJ3ey95Gx%2Bf%2FvkJrBsdlovAO19wR0Nu8tPzeIQ%2FgNJ4qOSvWrIOl%2BZzbLunjn58m9BeE5BSUb%2BDHea3OlOKn08Wz9VcvpcoLfJjKbHM%2BgBCiSebzx6ebh1%2FNf071qTv5vY%2FAO8BHgcEAAA%3D">
+																									<img src="images/certificate.png" border="0" alt="Digital Signature"/>
+																							 </a>
+																						 </span>
+																					 </td>
+																					</tr>
+																					
+																				</span>
+																					<!-- <tr class="td_caption" valign="middle"> 
+																					<td width="40%"  align="right">Bid Opening Date & Time for Financial : </td>
+																				 	<td height="60%" ><b><span jwcid="@Insert" value="ognl:financeDateTime" /></b></td>
+																					</tr> -->
+																					
+																				  
+																			</table>
+																			<!-- Information Box -->	
+																		</td>
+																	</tr>
+																	<tr>
+																		<td class="td_space">&nbsp;</td>
+																	</tr>
+																</span>
+																
+										
+  																		<tr>
+		  																	<td>
+		  																		
+																			</td>
+		  																</tr>
+		  																
+		  																<span id="If_28_0">
+																					<span id="If_29_0">
+																						
+
+<table border="1" width="100%" cellspacing="0" id="table_list" cellpadding="0">
+	
+               																						<tr>
+																										<td class="section_head" colspan="9">Financial Evaluation Bid List</td>
+																									</tr>
+               																							<tr class="td_caption">
+																										<!-- <span jwcid="@If" condition="ognl:evaluationType">
+																											<td  width="10%"><b>S.No</b></td>
+                																							<td  width="25%"><b>Bid Number</b></td>
+               																								<td  width="30%"><b>Bidder Name</b></td>
+               																								<td  width="25%"><b>Value</b></td>
+	           																								<td  width="10%"><b>Rank</b></td>
+	           																								
+	           																							</span> -->
+	           																							
+	           																								<td  width="10%"><b>S.No</b></td>
+                																							<td  width="25%"><b>Bid Number</b></td>
+               																								<td  width="30%"><b>Bidder Name</b></td>
+               																								<td  width="25%"><b>Value</b></td>
+	           																								<td  width="10%"><b>Rank</b></td>    														
+	           																							             							
+               																							</tr>
+               																							
+               																							
+
+
+	<tr id="informal_2">
+																				
+																											<td>1</td>
+																											<td>903866</td>
+																											<td>RHITWIK LAHIRI SECURITY AGENCY</td>
+																											<td align="right">3,79,88,179.46</td>
+																											<td align="center">L-1</td>
+																																																											
+																										
+	</tr>
+
+	<tr id="informal_3">
+																				
+																											<td>2</td>
+																											<td>903980</td>
+																											<td>INDRANIL BHATTACHARYA SECURITY AGENCY</td>
+																											<td align="right">3,79,88,179.46</td>
+																											<td align="center">L-2</td>
+																																																											
+																										
+	</tr>
+
+	<tr id="informal_4">
+																				
+																											<td>3</td>
+																											<td>905812</td>
+																											<td>SANJIV DAYAL MATHUR SECURITY AGENCY</td>
+																											<td align="right">3,79,88,179.46</td>
+																											<td align="center">L-3</td>
+																																																											
+																										
+	</tr>
+
+
+
+																										
+               																							<!-- <tr jwcid="bidEvalFinRow">
+																											<td jwcid="bidEvalFinValues"  />	 -->
+																											<!-- <span jwcid="FinWithdrawColumnValue@Block">
+																													<span jwcid="@If" condition="ognl:bidRow.withdraw == 2">None</span>
+																													<span jwcid="@Else">
+																														<span jwcid="@DirectLink" listener="listener:doViewBidderDocs" parameters="ognl:bidEvalFinRow" onClick="return popup(this,'window');">View Doc</span>
+																													</span>
+																												</span>	 -->
+               																							<!-- </tr> -->
+               																						
+</table>
+
+
+	   																						<tr>
+																								<td class="td_space">&nbsp;</td>
+																							</tr>
+																					</span>
+																					</span>
+		  																
+		  																<span id="If_30_0">
+		  																<tr>
+   																				<td>
+																					<!-- Information Box -->
+																					 <table width="100%" border="1" align="center" cellpadding="2" cellspacing="0" class="table_list">
+																					 		
+																					 		<tr>
+																								<td colspan="5" class="section_head">Finance Evaluation Summary Details </td>
+																							</tr>
+																					 		<tr class="td_caption" valign="middle"> 
+																							  <td  width="40%"  align="right">Committee Chairperson/Co-ordinator Name : </td>
+																							  <td height="60%" ><b>D K SINGH JOINT GM MSF<b></td>
+																							</tr>
+																							<tr class="td_caption" valign="middle"> 
+																							  <td  width="40%"  align="right">Committee Chairperson/Co-ordinator Type : </td>
+																							  <td height="60%" ><b>Internal<b></td>
+																							</tr>
+																							
+																							<tr class="td_caption" valign="middle"> 
+																							  <td width="40%"  align="right">Committee Members : </td>
+																							  <td height="60%" ><b>UMASHANKARDGMANAYAKLTCOLAJAYKUMARJTGMSBERADGM</b></td>
+																							</tr>
+																							<tr class="td_caption" valign="middle"> 
+																							  <td width="40%"  align="right">Updated By : </td>
+																							  <td height="60%" ><b>PRASANTA CHAKRABORTY</b></td>
+																							</tr>
+																							<tr class="td_caption" valign="middle"> 
+																							  <td width="40%"  align="right">Updated on : </td>
+																							  <td height="60%" ><b>26-Sep-2025 04:30 PM</b></td>
+																							</tr>
+																							<span id="If_31_0">
+																							<tr class="td_caption" valign="middle"> 
+																							  <td width="40%"  align="right">Document : </td>
+																							  <td height="60%"  nowrap><a id="DirectLink_10" href="/eprocure/app?component=%24DirectLink_10&amp;page=FrontEndViewBidSummaryDetailsPrint&amp;service=direct&amp;session=T&amp;sp=S6OYQNM%2BtXyN%2BfqEDynfTAA%3D%3D"><b>finsummary_285840.pdf</b></a> (<b>68.93 KB</b>)
+																							   <span id="If_32_0">
+																								 <a id="DirectLink_11" onClick="return popUp1(this, 'location=no, scrollbars=yes, toolbar=no, width=400, height=250, directories=no, menubar=no, resizable=yes, status=no, titlebar=yes')" class="blue_link" href="/eprocure/app?component=%24DirectLink_11&amp;page=FrontEndViewBidSummaryDetailsPrint&amp;service=direct&amp;session=T&amp;sp=ZH4sIAAAAAAAAAF1Tv08UQRidu4PkBDwODKiF5hITE01cDEpCQuPeHRx7t3vI7VpATMzc7bAM7M4Mu7NwZ2GwwIZCCi2M%2FAcSGxs7EysLTWyw1UITC7Gg1MaZ5X4sbve977033%2Fdm9uAI9Ac%2BuO7QTYXghuIgpnBEbOQriHDMW4oVVbOb0A0hx5RMwZ%2B3zh8djyXBmA4ydWwvMEQwcYqQIw6y%2BhrchBMhx%2B6ERGZ0MCI4ZlgvuDRo0zbAI5DoNmL6dmO4sQqxz5AfUFKFnrAdPbF1IXEmTO4L%2BsxpmtVikTqpg6EG9TzMOUKqbbex8S5WkJq7kUazu%2FNGxjqNbDOou2vMdRg1RS6BAGsICnHnsBXsIgOLGXvUtMTk3PHaxA%2F%2F26NIw7orA0riaMyUSAQH1hY1OXRQHtu2WJODczFJnlIXQSKHdCmEDR5Cl%2FpOT898KTQQ4qcTHWTiLBysxqCzAXZk7gXkc61jMBAyYWwjO99qI0MdJCYd2KL%2BusaR19Y1mfg4GC%2FmKjlTq5bmc%2BUFrWrlSkbOMOc4SGuEI59Al4Mb9wzVnFerFbVWLBlqVV1SK7pVWNDVsrpUEc1a2SoZZn62poq%2BMD0zhwkkDQxdUaSYvcLB2AomQeh50G89mJyemr59UxG4eMVZmZQik1JOwt1%2B8758bf1vXxIkiqBfXitqnqJVQ6%2BO%2FCcHzy8NPvu2mwSgye4szuxcfrv4S%2FhlesTobex%2B3%2Fv49MpX4VbuuMn9M0B%2BqZ1jIRnpSdqX9Snnbx%2Fu%2F%2FktVMsdFQOBFGYjIchOMhark19exSv4WdiORrbBhqtY4q0FHHrs6oXDDwnzHRK%2BGugXGdGg2RlZ%2Fn6KvLDVtceJyhK%2FmJKbbaUBSLzYeb2fbk79eLkdO6Tv%2Ft4%2F0GKNEAkEAAA%3D">
+																										<img src="images/certificate.png" border="0" alt="Digital Signature"/>
+																								 </a>
+																							 </span>
+																							 </td>
+																							 </tr>
+																		
+																							</span>
+																						  </table>
+
+
+																					<!-- Information Box -->	
+   																				</td>
+   																			</tr>
+   																			<tr>
+																				<td class="td_space">&nbsp;</td>
+																			</tr>
+   																			</span>		
+   																			
+   																															
+		  																	
+		  																	<span id="If_36_0">
+																			<tr>
+																				<td>
+																					 <table width="100%" border="1" align="center" cellpadding="2" cellspacing="0" class="table_list">
+																					 		
+																					 		<tr>
+																								<td colspan="5" class="section_head">AOC </td>
+																							</tr>
+																							<tr class="td_caption" valign="middle"> 
+																							  <td width="40%" class="td_caption" align="right">Contract Date : </td>
+																							  <td height="60%" class="td_field"><b>28-Sep-2025</b></td>
+																							</tr>
+																							<tr valign="middle"> 
+																							  <td class="td_caption" align="right">Contract Value : </td>
+																							  <td class="td_field"><b>INR&nbsp;37,988,179.46</b></td>
+																							</tr>
+																							<tr valign="middle"> 
+																							  <td class="td_caption" align="right">Work Completion Period in days : </td>
+																							  <td class="td_field"><b>365</b></td>
+																							</tr>																							
+																							<tr valign="middle"> 
+																							  <td class="td_caption" align="right">Updated By : </td>
+																							  <td class="td_field"><b>PRASANTA CHAKRABORTY</b></td>
+																							</tr>
+																							<tr valign="middle"> 
+																							  <td class="td_caption" align="right">Updated on : </td>
+																							  <td class="td_field"><b>26-Sep-2025 04:34 PM</b></td>
+																							</tr>																							
+																							<tr valign="middle"> 
+																							  <td class="td_caption" align="right" nowrap>AOC document : </td>
+																							  <td class="td_field" nowrap><a id="DirectLink_14" href="/eprocure/app?component=%24DirectLink_14&amp;page=FrontEndViewBidSummaryDetailsPrint&amp;service=direct&amp;session=T&amp;sp=SXYbshcM2%2F2uSo81enzLRXA%3D%3D">
+																							  	<b>Sanctionorder.pdf</b></a> (<b>68.93 KB</b>)
+																							   <span id="If_37_0">
+																								  <a id="DirectLink_15" onClick="return popUp1(this, 'location=no, scrollbars=yes, toolbar=no, width=400, height=250, directories=no, menubar=no, resizable=yes, status=no, titlebar=yes');" title="Digital Signature" class="blue_link" href="/eprocure/app?component=%24DirectLink_15&amp;page=FrontEndViewBidSummaryDetailsPrint&amp;service=direct&amp;session=T&amp;sp=ZH4sIAAAAAAAAAF1SPWwTMRR2kgYVpY2SkKEMRRGVkFCl61ro0kvDz7VHSHMRUkfnzr263NmuzxdSkFCLVBiKVAYYEAsDGxUDLN2QmBgQG6z8iBFmBhaeL01I8GS%2F973v%2B957PvyFspFEZ33eMRh1DZ8Iw%2BVSGoQpqraNKvVM7to0UpgczR%2FkZmbTqGijbJt6lqdQwd7EHTwXYObP2Zz5CzYquDwUAVGUswaRlAPq1BDKYor4RAJwwuVMSeyqGlZkQBUrGszpCCAm%2B4gbOIgBUhriqfG4HZCEJpaSMHe7jsP%2FMI6SNPGU80jkSiq0qS10F2VtNL5OA6JLht8OvZ28x2yUpp6%2BpWxUFJJ2IOmTy6Ml%2BUHCCrHfjxYGUQ%2BG5xE52n%2BV84Bgpk0J6IBGG7rZ49rJiPoMLC9BldXXz0SM62saelWEASORQy4mYhFw7BGvz5PpCgErLWpNQ2saxzMvfX%2F%2B4vfug%2Fk0Slko29Ez7UpU%2BIerx2GbyPuHT6Zzj7%2FupxHqCoRSIZCVElC0FRgtGhL4DKE4N%2FXpfcp5S3psDDMeAVs%2BAeolGtrPxuZuamVNnc5orlvjwPb0ofAWuwhONKLd2%2BfOm3fL52%2F%2BGQPSWt%2Bi7umkeW%2F64rNX5TsKZax6U6GpBkwZBCoOgf3DT61cibH0oopCRQczV2%2BaS5iVIbz1SFPkF1cX9s4crf6M%2Bi4T3eTX7v949OFg5guoLo%2BoouR8vCCEUOjENcxiHCRk5SSR%2FvwS4uVG03TMesusLF01V5pm9XqztZagcr2O915nKt3ZS992%2FgL9Xj76bQMAAA%3D%3D">
+																									<img src="images/certificate.png" border="0" alt="Digital Signature"/>
+																								  </a>
+																							  </span>
+																							  </td>															  
+																							</tr>
+																							<span id="If_38_0">
+																								<tr valign="middle"> 
+																								  <td class="td_caption" align="right">AOC Description : </td>
+																								  <td class="td_field"><b>Private Security Guards </b></td>
+																								</tr>
+																							</span>
+								                   										</table>
+																					<!-- Information Box -->	
+																							</td>
+																			</tr>
+																			<tr>
+																				<td class="td_space">&nbsp;</td>
+																			</tr>
+								
+																			<tr>
+																				<td>
+																					<!-- List -->
+																					
+
+<table border="1" cellpadding="0" width="100%" cellspacing="0" id="bidAocTableView" class="table_list">
+	
+																						<tr>
+																							<td colspan="7" class="section_head">Awarded Bids List</td>
+																						</tr>
+																							<tr class="td_caption">
+																								<td width="5%" align="left"><b>S.No</b></td>
+																								<td width="10%" align="left"><b>Bid Number</b></td>
+																								<td width="20%" align="left"><b>Bidder Name</b></td>
+																								<td width="20%" align="left"><b>Awarded Currency</b></td>
+																								<td width="20%" align="left"><b>Awarded Value</b></td>
+																							</tr>
+																							
+																							
+
+
+	<tr class="even" id="informal_5">
+																								
+																								<td align="left">1</td>
+																								<td align="left">903866</td>
+																								<td align="left">RHITWIK LAHIRI SECURITY AGENCY</td>																																																																	
+																								<td align="left">INR</td>
+																								<td align="right">37,988,179.46</td>
+																								
+																							
+	</tr>
+
+
+
+																						
+</table>
+
+
+																						<!-- End : List -->
+																					</td>
+																				
+																			
+																			<tr>
+																				<td class="td_space">&nbsp;</td>
+																			</tr>													
+																		</span>
+																		
+																		
+  																																
+  																	</table> 
+  																  </td>
+  																</tr>
+															<tr>
+																<td>&nbsp;</td>
+															</tr>
+															 	 </table>
+																  </form>
+															  <!-- END: interface_elements -->
+															  
+															  </td>															
+														  </tr>
+														  <tr>
+															<td class="td_space" align="right">
+																<b>Tendering Inviting Authority</b><br>
+																<!--i>eProcurement System</i-->
+															</td>
+														</tr>
+														</table>
+													<!-- End : Interface -->
+										</td>
+									</tr>
+								</table>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+			<!--/span-->
+</body>
+</html>
+<!-- Javascript -->
+<script language="javascript">
+	
+	/**
+	* This method invokes the print dialog
+	*/
+	function callPrint(){
+		window.print();
+	}
+	
+	/**
+	* It opens the pop up window based on the given anchor object
+	*/
+	
+
+	function popUp1(obElm, sFeature) {
+
+		var sLink;
+
+		if(typeof(obElm) == 'string') {
+
+			sLink = obElm;
+		} else {
+			sLink = obElm.href;
+			
+			var obWin = window.open(sLink, "ChildPopup2", sFeature);
+			
+			obWin.focus();
+			
+			if(!obWin.opener) obWin.opener = _self;
+			
+			return false;
+		}
+	}
+	
+/* 	function popup(mylink, windowname) {
+		if (! window.focus)return true;
+		var href;
+	if (typeof(mylink) == 'string')
+ 				href=mylink;
+	else
+				 href=mylink.href;
+	window.open(href, "Popup", 'location=no, scrollbars=yes, toolbar=no, width=700, height=550, directories=no, menubar=no, resizable=yes, status=no, titlebar=yes');
+			return false;   
+	} */
+		
+	
+</script>
+
+<!-- End -->

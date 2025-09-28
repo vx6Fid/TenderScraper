@@ -11,6 +11,7 @@ import (
 	docdownload "github.com/vx6fid/tender-scraper/docDownloads"
 	"github.com/vx6fid/tender-scraper/scraper/extract"
 	"github.com/vx6fid/tender-scraper/scraper/nav"
+	"github.com/vx6fid/tender-scraper/scraper/pastTenders"
 	"github.com/vx6fid/tender-scraper/session"
 	"github.com/vx6fid/tender-scraper/utils"
 )
@@ -79,22 +80,23 @@ func main() {
 	fmt.Println("1.Tender links")
 	fmt.Println("2.Tender data")
 	fmt.Println("3.Corrigendum Links")
-	fmt.Println("4.Past Tenders Scraping")
-	fmt.Println("5.Document download")
+	fmt.Println("4.Past Tenders Links")
+	fmt.Println("5.Past Tenders Data")
+	fmt.Println("6.Document download")
 	var choice int
 	fmt.Print("Enter your choice: ")
 	fmt.Scan(&choice)
 
 	switch choice {
 	case 1:
-		runDate := utils.GetRunDate()
+		runDate := utils.GetRunDate(false)
 		// fmt.Println("RunDate: ", runDate)
 		linkExtractor := nav.NewLinkExtractor(runDate, baseURLs)
 		if err := linkExtractor.Run(); err != nil {
 			log.Printf("Link extraction failed: %v", err)
 		}
 	case 2:
-		runDate := utils.GetRunDate()
+		runDate := utils.GetRunDate(false)
 		// fmt.Println("RunDate: ", runDate)
 		for _, u := range baseURLs {
 			log.Printf("--- Starting concurrent tender extraction for [%s] ---", u.State)
@@ -118,16 +120,24 @@ func main() {
 			log.Printf("--- Completed [%s] ---", u.State)
 		}
 	case 3:
-		runDate := utils.GetRunDate()
+		runDate := utils.GetRunDate(false)
 		// fmt.Println("RunDate: ", runDate)
 		linkExtractor := nav.NewLinkExtractor(runDate, baseURLs)
 		linkExtractor.Corrigendums()
 	case 4:
-		runDate := utils.GetRunDate()
+		// Case 4 and 5 are not yet parallel and write safe
+		runDate := utils.GetRunDate(false)
 		// fmt.Println("RunDate: ", runDate)
 		linkExtractor := nav.NewLinkExtractor(runDate, baseURLs)
 		linkExtractor.PastTenders()
 	case 5:
+		runDate := utils.GetRunDate(true)
+		dir := fmt.Sprintf("TenderData/PastLinks/%s", runDate)
+		err := pastTenders.Run(dir, runDate)
+		if err != nil {
+			log.Printf("Error running past tenders: %v", err)
+		}
+	case 6:
 		_id := "68695b2955d119428e5086ab"
 		tenderURL := "https://etenders.gov.in/eprocure/app?component=%24DirectLink&page=FrontEndLatestActiveCorrigendums&service=direct&session=T&sp=SwKgOCf7CLcX8A0VIcO%2FJUA%3D%3D"
 		// corrigendumLinks := []utils.CorrLinks{

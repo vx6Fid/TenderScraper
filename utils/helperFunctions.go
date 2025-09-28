@@ -152,8 +152,11 @@ func CalculateOptimalWorkers(totalJobs int) int {
 }
 
 // function to get the last created folder name in TenderDate/Links
-func GetRunDate() string {
+func GetRunDate(PastTenders bool) string {
 	dirPath := "TenderData/Links"
+	if PastTenders {
+		dirPath = "TenderData/PastLinks"
+	}
 
 	entries, err := os.ReadDir(dirPath)
 	if err != nil {

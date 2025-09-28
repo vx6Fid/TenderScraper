@@ -25,9 +25,6 @@ func NewLinkExtractor(runDate string, baseURLs []utils.URLS) *LinkExtractor {
 func (le *LinkExtractor) Run() error {
 	log.Println("=== Link extraction started ===")
 
-	// ---------------------------------------------
-	// Step 0: Parallel session validation
-	// ---------------------------------------------
 	type validatedSession struct {
 		state  string
 		domain string
@@ -35,10 +32,13 @@ func (le *LinkExtractor) Run() error {
 	}
 
 	var validSessions []validatedSession
-	var mu sync.Mutex     // protects validSessions slice
-	var wg sync.WaitGroup // waits for all session validation goroutines
+	var mu sync.Mutex
+	var wg sync.WaitGroup
 
-	// Limit concurrent session validation to avoid overwhelming the system
+	// Writers for failed sessions even if session establishment fails
+	failedSessionsWriter := NewFailedSearchWriter("Sessions")
+	defer failedSessionsWriter.Close()
+
 	sem := make(chan struct{}, utils.MaxSessionParallel)
 
 	for _, u := range le.baseURLs {
@@ -46,35 +46,33 @@ func (le *LinkExtractor) Run() error {
 		go func(u utils.URLS) {
 			defer wg.Done()
 
-			sem <- struct{}{}        // acquire slot
-			defer func() { <-sem }() // release slot after session validation
+			sem <- struct{}{}
+			defer func() { <-sem }()
 
 			s := session.NewSession(u.BaseURL, u.State)
 			if err := s.EstablishSession("ActiveTenders"); err != nil {
 				log.Printf("[%s] [ERROR] Failed to establish session: %v", u.State, err)
+				// Write to failed sessions file
+				failedSessionsWriter.WriteFailure(0, fmt.Sprintf("Session failed: %v", err))
 				return
 			}
 
 			log.Printf("[%s] Session established.", u.State)
-
 			mu.Lock()
 			validSessions = append(validSessions, validatedSession{state: u.State, sess: s, domain: u.Domain})
 			mu.Unlock()
 		}(u)
 	}
-	wg.Wait() // wait until all sessions are validated
+	wg.Wait()
 
 	if len(validSessions) == 0 {
-		return fmt.Errorf("no sessions could be established")
+		return fmt.Errorf("no sessions could be established for any state")
 	}
 
-	// ---------------------------------------------
-	// Step 1: For each validated session, launch worker pool for scraping
-	// ---------------------------------------------
+	// Process each validated session
 	for _, vs := range validSessions {
 		log.Printf(">>> [%s] Starting extraction", vs.state)
 
-		// Fetch total pages for the session
 		totalPages, err := utils.FetchTotalPages(vs.sess, vs.sess.BaseURL, vs.domain)
 		if err != nil {
 			log.Printf("[%s] [ERROR] Failed to fetch total pages: %v", vs.state, err)
@@ -82,26 +80,21 @@ func (le *LinkExtractor) Run() error {
 		}
 		log.Printf("[%s] Total pages: %d", vs.state, totalPages)
 
-		// Determine worker pool size dynamically
 		workers := utils.CalculateOptimalWorkers(totalPages)
 		log.Printf("[%s] Worker pool size = %d", vs.state, workers)
 
-		// Initialize CSV writer for this session
+		// Writers
+		failedWriter := NewFailedSearchWriter(vs.state)
 		csvWriter := NewCSVWriter(vs.state)
+		defer failedWriter.Close()
 		defer csvWriter.Close()
 
-		// Optional deduplication map
-		// seen := make(map[string]struct{})
-		// var seenMu sync.Mutex
-
-		// Prepare pages channel
 		pages := make(chan int, totalPages)
 		for i := 1; i <= totalPages; i++ {
 			pages <- i
 		}
 		close(pages)
 
-		// Launch workers for scraping pages
 		var wgWorkers sync.WaitGroup
 		for w := 0; w < workers; w++ {
 			wgWorkers.Add(1)
@@ -110,34 +103,34 @@ func (le *LinkExtractor) Run() error {
 				for pageNum := range pages {
 					scraper := NewSearchScraper(vs.sess, vs.domain, vs.state, pageNum)
 					scraper.SetRowHandler(func(row []string) {
-						// Deduplication example:
-						// link := row[6]
-						// seenMu.Lock()
-						// if _, exists := seen[link]; !exists {
 						csvWriter.WriteRow(row)
-						// 	seen[link] = struct{}{}
-						// }
-						// seenMu.Unlock()
 					})
 
 					const maxRetries = 3
+					var lastErr error
 					for attempt := 1; attempt <= maxRetries; attempt++ {
-						if err := scraper.Scrape(); err != nil {
+						lastErr = scraper.Scrape()
+						if lastErr != nil {
 							log.Printf("[%s] Worker %d page %d failed (attempt %d/%d): %v",
-								vs.state, workerID, pageNum, attempt, maxRetries, err)
-							time.Sleep(time.Duration(attempt) * 100 * time.Millisecond) // backoff
+								vs.state, workerID, pageNum, attempt, maxRetries, lastErr)
+							time.Sleep(time.Duration(attempt) * 100 * time.Millisecond)
 							continue
 						}
 						log.Printf("[%s] Worker %d completed page %d", vs.state, workerID, pageNum)
+						lastErr = nil
 						break
 					}
-				}
 
+					if lastErr != nil {
+						// Write immediately to failed page file
+						failedWriter.WriteFailure(pageNum, lastErr.Error())
+					}
+				}
 				log.Printf("[%s] Worker %d finished all assigned pages.", vs.state, workerID)
 			}(w)
 		}
 
-		wgWorkers.Wait() // wait until all pages for this session are scraped
+		wgWorkers.Wait()
 		log.Printf("<<< [%s] Extraction completed (Pages=%d, Workers=%d)", vs.state, totalPages, workers)
 	}
 

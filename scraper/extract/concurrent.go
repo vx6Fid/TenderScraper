@@ -17,11 +17,12 @@ import (
 
 // ConcurrentExtractor manages multiple workers with individual sessions
 type ConcurrentExtractor struct {
-	baseURL    string
-	domain     string
-	state      string
-	runDate    string
-	maxWorkers int
+	baseURL          string
+	domain           string
+	state            string
+	runDate          string
+	maxWorkers       int
+	failedTenderLogs *FailedTenderWriter
 }
 
 // WorkerSession represents a worker with its own session
@@ -111,6 +112,9 @@ func (ce *ConcurrentExtractor) ExtractTendersWithMultipleSessions() error {
 	// Create workers with individual sessions - with staggered initialization
 	workers := make([]*WorkerSession, ce.maxWorkers)
 	workerInitErrors := make(chan error, ce.maxWorkers)
+
+	ce.failedTenderLogs = NewFailedTenderWriter(ce.state)
+	defer ce.failedTenderLogs.Close()
 
 	// Initialize workers in parallel with staggered delays to reduce server load
 	var initWg sync.WaitGroup
@@ -264,23 +268,22 @@ func (ce *ConcurrentExtractor) workerProcess(ws *WorkerSession, jobs <-chan Tend
 
 	for tenderInput := range jobs {
 		processed++
-
 		if processed%progressInterval == 0 {
 			log.Printf("[%s] Worker %d processed %d tenders", ce.state, ws.WorkerID, processed)
 		}
 
-		// Add worker-level mutex to prevent concurrent access to session
-		// ws.mu.Lock()
-		// Extract tender data using the worker's dedicated session
 		start := time.Now()
 		tenderData, err := ws.Scraper.ExtractSingleTender(tenderInput)
 		elapsed := time.Since(start)
 		log.Printf("[%s] Worker %d extracted tender %s in %s", ce.state, ws.WorkerID, tenderInput.Serial, elapsed)
-		// ws.mu.Unlock()
 
 		if err != nil {
 			log.Printf("[%s_%s] Worker %d extraction failed: %v", ce.state, tenderInput.Serial, ws.WorkerID, err)
-			// Still send a nil result to maintain count
+			if ce.failedTenderLogs != nil {
+				ce.failedTenderLogs.WriteFailure(tenderInput.Serial, tenderInput.Link, err.Error())
+			}
+
+			// send nil result safely with timeout
 			select {
 			case results <- nil:
 			case <-time.After(3 * time.Second):
@@ -289,11 +292,10 @@ func (ce *ConcurrentExtractor) workerProcess(ws *WorkerSession, jobs <-chan Tend
 			continue
 		}
 
-		// Send result with timeout
+		// send successful result with timeout
 		select {
 		case results <- tenderData:
-			// Success
-		case <-time.After(5 * time.Second): // Increased timeout
+		case <-time.After(5 * time.Second):
 			log.Printf("[%s] Worker %d timeout sending tender %s", ce.state, ws.WorkerID, tenderInput.Serial)
 		}
 	}

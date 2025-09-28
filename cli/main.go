@@ -102,7 +102,7 @@ func main() {
 			log.Printf("--- Starting concurrent tender extraction for [%s] ---", u.State)
 
 			// Determine optimal worker count based on expected load
-			totalJobs, err := utils.EstimateJobCount(u.State, runDate)
+			totalJobs, err := utils.EstimateJobCount(u.State, runDate, false)
 			if err != nil {
 				log.Printf("[%s] failed to estimate job count: %v", u.State, err)
 				continue
@@ -280,7 +280,7 @@ func main() {
 		// Replace \u0026 in the tenderURL
 		tenderURL = strings.ReplaceAll(tenderURL, "\\u0026", "&")
 
-		baseURL, state, err := utils.GetBaseURLAndState(tenderURL, baseURLs)
+		baseURL, state, err := utils.GetBaseURLAndState(tenderURL)
 		if err != nil {
 			fmt.Println("Error:", err)
 		} else {

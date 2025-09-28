@@ -1,8 +1,6 @@
 package pastTenders
 
 import (
-	"fmt"
-
 	"github.com/gocolly/colly/v2"
 	"github.com/vx6fid/tender-scraper/session"
 )
@@ -35,7 +33,7 @@ func (pt *PastTender) Extract(tenderData *TenderData, pastTenderData *PastTender
 		viewMoreHandled = true
 		href := e.Attr("href")
 		absHref := e.Request.AbsoluteURL(href)
-		fmt.Printf("(View More Details) link: %s\n", absHref)
+		// fmt.Printf("(View More Details) link: %s\n", absHref)
 		pt.setupTenderDataHandler(pt.collector, tenderData, absHref)
 	})
 
@@ -46,7 +44,7 @@ func (pt *PastTender) Extract(tenderData *TenderData, pastTenderData *PastTender
 		viewSummaryHandled = true
 		href := e.Attr("href")
 		absHref := e.Request.AbsoluteURL(href)
-		fmt.Printf("(View the all stage summary Details) link: %s\n", absHref)
+		// fmt.Printf("(View the all stage summary Details) link: %s\n", absHref)
 		pt.setupPastTenderDataHandler(pt.collector, pastTenderData, absHref)
 	})
 

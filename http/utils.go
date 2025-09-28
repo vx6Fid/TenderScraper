@@ -67,7 +67,7 @@ func runTenderDownload(tenderID, tenderURL string, corrigendumLinks []utils.Corr
 	}
 	tenderURL = strings.ReplaceAll(tenderURL, "\\u0026", "&")
 
-	baseURL, state, err := utils.GetBaseURLAndState(tenderURL, baseURLs)
+	baseURL, state, err := utils.GetBaseURLAndState(tenderURL)
 	if err != nil {
 		mu.Lock()
 		taskStore[tenderID].Status = StatusFailed

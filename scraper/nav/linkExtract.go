@@ -199,6 +199,7 @@ func (le *LinkExtractor) PastTenders() {
 	sem := make(chan struct{}, utils.MaxSessionParallel)
 	var wg sync.WaitGroup
 
+	from, to := utils.GetDateRange()
 	for _, u := range le.baseURLs {
 		wg.Add(1)
 		go func(u utils.URLS) {
@@ -208,7 +209,7 @@ func (le *LinkExtractor) PastTenders() {
 
 			// Acquire slot ONLY for captcha solving
 			sem <- struct{}{}
-			if err := sess.EstablishTenderStatusSession("6", "", ""); err != nil {
+			if err := sess.EstablishTenderStatusSession("6", from, to); err != nil {
 				log.Printf("[%s] failed to establish session: %v", u.State, err)
 			}
 			<-sem // release slot immediately after captcha solved

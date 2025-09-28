@@ -137,6 +137,11 @@ func (ps *PastScraper) handlePagination() error {
 			break
 		}
 
+		if ps.scrapedTenders == 0 {
+			ps.logger.Printf("No tenders found on page %d", ps.currentPage)
+			break
+		}
+
 		ps.currentPage++
 
 		// Log progress

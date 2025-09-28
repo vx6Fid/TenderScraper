@@ -7,6 +7,7 @@ import (
 	"log"
 	"os"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/vx6fid/tender-scraper/session"
@@ -14,14 +15,30 @@ import (
 )
 
 func Run(dir string, runDate string) error {
+	sessionLimiter := make(chan struct{}, utils.MaxSessionParallel)
+
+	writeCh := make(chan *utils.PastTenders) // global writer channel
+	var writeWg sync.WaitGroup
+
+	// Writer goroutine (sequential writes)
+	writeWg.Add(1)
+	go func() {
+		defer writeWg.Done()
+		for tender := range writeCh {
+			if err := WriteAllTendersJSONL(tender, runDate); err != nil {
+				log.Printf("failed to write tender: %v", err)
+			}
+		}
+	}()
+
+	// Loop over states
 	for _, u := range utils.BaseURLs {
 		fileName := u.State + ".csv"
 		filePath := fmt.Sprintf("%s/%s", dir, fileName)
-		// If there is no file, skip it
 		if _, err := os.Stat(filePath); os.IsNotExist(err) {
 			continue
 		}
-		// Read each row of the above file, skip the header
+
 		file, err := os.Open(filePath)
 		if err != nil {
 			log.Fatal(err)
@@ -29,8 +46,65 @@ func Run(dir string, runDate string) error {
 		defer file.Close()
 
 		reader := csv.NewReader(file)
-		reader.Read() // Skip header
+		_, _ = reader.Read() // skip header
 
+		// Prepare channel for this state
+		recordsCh := make(chan []string, 400)
+
+		var wg sync.WaitGroup
+
+		totalJobs, err := utils.EstimateJobCount(u.State, runDate, true)
+		numWorkers := utils.CalculateOptimalWorkers(totalJobs)
+		// Launch workers for this state
+		for i := 0; i < numWorkers; i++ {
+			wg.Add(1)
+			go func(workerID int) {
+				defer wg.Done()
+				log.Printf("[Worker-%d] started for state %s", workerID, u.State)
+
+				for record := range recordsCh {
+					urlSnippet := record[6]
+					// log.Printf("[Worker-%d][%s] processing tender URL: %s", workerID, u.State, urlSnippet)
+
+					// Acquire session slot
+					sessionLimiter <- struct{}{}
+					// log.Printf("[Worker-%d][%s] acquired session slot", workerID, u.State)
+
+					sess := session.NewSession(u.BaseURL, u.State)
+					if err := sess.EstablishTenderStatusSession("6", "", ""); err != nil {
+						log.Printf("[Worker-%d][%s] failed to establish session for %s: %v", workerID, u.State, urlSnippet, err)
+						<-sessionLimiter // release slot
+						continue
+					}
+					<-sessionLimiter // release slot
+					log.Printf("[Worker-%d][%s] session established for %s", workerID, u.State, urlSnippet)
+
+					// Extraction
+					tenderData := &TenderData{}
+					tenderData.Information.Website = u.Domain
+					tenderData.Information.TenderURL = urlSnippet
+
+					pastTenderData := &PastTendersData{}
+					pasTenderExtractor := NewPastTender(sess, urlSnippet, u.Domain)
+					if err := pasTenderExtractor.Extract(tenderData, pastTenderData); err != nil {
+						log.Printf("[Worker-%d][%s] extraction failed for %s: %v", workerID, u.State, urlSnippet, err)
+						continue
+					}
+
+					if pasTenderExtractor.validateTenderData(tenderData, pastTenderData) {
+						tender := pasTenderExtractor.ConvertToUtilsTender(tenderData, pastTenderData)
+						writeCh <- &tender
+						log.Printf("[Worker-%d][%s] tender written for %s", workerID, u.State, urlSnippet)
+					} else {
+						log.Printf("[Worker-%d][%s] tender validation failed for %s", workerID, u.State, urlSnippet)
+					}
+				}
+
+				log.Printf("[Worker-%d] finished for state %s", workerID, u.State)
+			}(i)
+		}
+
+		// Feed records into this state’s channel
 		for {
 			record, err := reader.Read()
 			if err == io.EOF {
@@ -39,32 +113,16 @@ func Run(dir string, runDate string) error {
 			if err != nil {
 				log.Fatal(err)
 			}
-			sess := session.NewSession(u.BaseURL, u.State)
-			if err := sess.EstablishTenderStatusSession("6", "", ""); err != nil {
-				log.Printf("[%s] failed to establish session: %v", u.State, err)
-			}
-			tenderData := &TenderData{}
-			tenderData.Information.Website = u.Domain
-			tenderData.Information.TenderURL = record[6]
-
-			pastTenderData := &PastTendersData{}
-
-			pasTenderExtractor := NewPastTender(sess, record[6], u.Domain)
-			pasTenderExtractor.Extract(tenderData, pastTenderData)
-
-			fmt.Println("Tender Data:", tenderData)
-			fmt.Println("Past Tender Data:", pastTenderData)
-
-			// Validate and convert before writing
-			// if pasTenderExtractor.validateTenderData(tenderData, pastTenderData) {
-			tender := pasTenderExtractor.ConvertToUtilsTender(tenderData, pastTenderData)
-			if err := WriteAllTendersJSONL(tender, runDate); err != nil {
-				log.Printf("[%s] failed to write tender: %v", u.State, err)
-			}
-			// }this
-
+			recordsCh <- record
 		}
+
+		close(recordsCh) // no more records for this state
+		wg.Wait()        // wait for all workers of this state to finish
 	}
+
+	close(writeCh) // all states finished, stop writer
+	writeWg.Wait() // wait for writer to finish
+
 	return nil
 }
 
@@ -173,10 +231,10 @@ func (ps *PastTender) ConvertToUtilsTender(data *TenderData, pastTenderData *Pas
 	//------------------
 	// Mapping Tender Summary Details
 	//------------------
-	log.Printf("[MAPPING] Converting tender data - Bids: %d, Financial: %d, Awarded: %d",
-		len(pastTenderData.Bids),
-		len(pastTenderData.FinancialEvaluationBidList),
-		len(pastTenderData.AwardedBidsList))
+	// log.Printf("[MAPPING] Converting tender data - Bids: %d, Financial: %d, Awarded: %d",
+	// 	len(pastTenderData.Bids),
+	// 	len(pastTenderData.FinancialEvaluationBidList),
+	// 	len(pastTenderData.AwardedBidsList))
 
 	tender.Bids = pastTenderData.Bids
 	tender.StageUpdates = pastTenderData.StageUpdates

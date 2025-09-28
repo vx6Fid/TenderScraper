@@ -2,7 +2,6 @@ package pastTenders
 
 import (
 	"encoding/json"
-	"fmt"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -14,9 +13,9 @@ import (
 )
 
 // WriteAllTendersJSONL writes all tender data into TenderData/PastTenders/tenders.jsonl
-func WriteAllTendersJSONL(tenders utils.PastTenders, runDate string) error {
+func WriteAllTendersJSONL(tenders *utils.PastTenders, runDate string) error {
 	// Ensure path is correct
-	filePath := filepath.Join("TenderData", "Tenders", runDate, "Pasttenders.jsonl")
+	filePath := filepath.Join("TenderData", "Tenders", runDate, "PastTenders.jsonl")
 
 	// Create dirs if missing
 	if err := os.MkdirAll(filepath.Dir(filePath), 0755); err != nil {
@@ -40,7 +39,7 @@ func WriteAllTendersJSONL(tenders utils.PastTenders, runDate string) error {
 
 // WriteJSONLToFile encodes v as JSON and appends it to an already-open file
 func WriteJSONLToFile(file *os.File, v any) error {
-	fmt.Println("Tender Data:", v)
+	// fmt.Println("Tender Data:", v)
 	data, err := json.Marshal(v)
 	if err != nil {
 		return err
@@ -68,7 +67,7 @@ func parseAmountToFloat(amount string) float64 {
 }
 
 func parseDate(input string) time.Time {
-	fmt.Println("Parsing date:", input)
+	// fmt.Println("Parsing date:", input)
 	input = strings.TrimSpace(input)
 	if input == "" {
 		return time.Time{}

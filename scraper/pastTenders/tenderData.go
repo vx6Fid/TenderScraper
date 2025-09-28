@@ -13,7 +13,7 @@ import (
 )
 
 func (tp *PastTender) setupTenderDataHandler(c *colly.Collector, data *TenderData, URL string) {
-	log.Printf("[Navigation] Visiting detail page %s", URL)
+	// log.Printf("[Navigation] Visiting detail page %s", URL)
 
 	// Attach all detail handlers only now
 	tp.setupBasicDetailsHandler(c, data)

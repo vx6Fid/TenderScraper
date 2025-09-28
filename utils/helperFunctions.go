@@ -21,6 +21,20 @@ import (
 	"github.com/vx6fid/tender-scraper/session"
 )
 
+// GetDateRange returns the start and end dates for the past tender data
+func GetDateRange() (string, string) {
+	// read from and to date
+	fmt.Println("Enter start date(DD/MM/YYYY):")
+	var from string
+	fmt.Scanln(&from)
+
+	fmt.Println("Enter end date(DD/MM/YYYY):")
+	var to string
+	fmt.Scanln(&to)
+
+	return from, to
+}
+
 // CheckTenderFolderExists checks if the given tenderID folder exists in the S3 bucket
 func CheckTenderFolderExists(bucket, tenderID string) (bool, error) {
 	cfg, err := config.LoadDefaultConfig(context.TODO())
@@ -66,8 +80,16 @@ func SaveToFile(content []byte, filename string) error {
 	return nil
 }
 
+func GetDomain(baseURL string) (string, error) {
+	parsedURL, err := url.Parse(baseURL)
+	if err != nil {
+		return "", err
+	}
+	return parsedURL.Host, nil
+}
+
 // GetBaseURLAndState finds the baseURL and state for a given tenderURL
-func GetBaseURLAndState(tenderURL string, baseURLs []URLS) (string, string, error) {
+func GetBaseURLAndState(tenderURL string) (string, string, error) {
 	parsed, err := url.Parse(tenderURL)
 	if err != nil {
 		return "", "", fmt.Errorf("invalid tenderURL: %w", err)
@@ -75,7 +97,7 @@ func GetBaseURLAndState(tenderURL string, baseURLs []URLS) (string, string, erro
 
 	host := parsed.Hostname()
 
-	for _, entry := range baseURLs {
+	for _, entry := range BaseURLs {
 		if strings.EqualFold(host, entry.Domain) {
 			return entry.BaseURL, entry.State, nil
 		}
@@ -179,9 +201,13 @@ func GetRunDate(PastTenders bool) string {
 	return names[len(names)-1] // last in sorted order
 }
 
-func EstimateJobCount(state string, runDate string) (int, error) {
+func EstimateJobCount(state string, runDate string, PastTenders bool) (int, error) {
 	fileName := "FinalLinks.csv"
 	filePath := fmt.Sprintf("TenderData/Links/%s/%s", runDate, state)
+	if PastTenders {
+		fileName = fmt.Sprintf("%s.csv", state)
+		filePath = fmt.Sprintf("TenderData/PastLinks/%s", runDate)
+	}
 	inputPath := filepath.Join(filePath, fileName)
 
 	// Open the CSV file

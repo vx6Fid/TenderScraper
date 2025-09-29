@@ -11,14 +11,12 @@ import (
 )
 
 type LinkExtractor struct {
-	runDate  string
-	baseURLs []utils.URLS
+	runDate string
 }
 
-func NewLinkExtractor(runDate string, baseURLs []utils.URLS) *LinkExtractor {
+func NewLinkExtractor(runDate string) *LinkExtractor {
 	return &LinkExtractor{
-		runDate:  runDate,
-		baseURLs: baseURLs,
+		runDate: runDate,
 	}
 }
 
@@ -41,7 +39,7 @@ func (le *LinkExtractor) Run() error {
 
 	sem := make(chan struct{}, utils.MaxSessionParallel)
 
-	for _, u := range le.baseURLs {
+	for _, u := range utils.BaseURLs {
 		wg.Add(1)
 		go func(u utils.URLS) {
 			defer wg.Done()
@@ -141,7 +139,7 @@ func (le *LinkExtractor) Run() error {
 func (le *LinkExtractor) ActiveLinks() {
 	var wg sync.WaitGroup
 
-	for _, u := range le.baseURLs {
+	for _, u := range utils.BaseURLs {
 		wg.Add(1)
 		go func(u utils.URLS) {
 			defer wg.Done()
@@ -167,7 +165,7 @@ func (le *LinkExtractor) Corrigendums() {
 	failedWriter := NewFailedCorrigendumWriter()
 	defer failedWriter.Close()
 
-	for _, u := range le.baseURLs {
+	for _, u := range utils.BaseURLs {
 		wg.Add(1)
 		go func(u utils.URLS) {
 			defer wg.Done()
@@ -175,6 +173,7 @@ func (le *LinkExtractor) Corrigendums() {
 			sess := session.NewSession(u.BaseURL, u.State)
 
 			// Acquire slot ONLY for captcha solving
+			fmt.Printf("[%s] Starting Session Establishment\n", u.State)
 			sem <- struct{}{}
 			if err := sess.EstablishSession("CorrigendumTenders"); err != nil {
 				log.Printf("[%s] failed to establish session: %v", u.State, err)
@@ -183,6 +182,7 @@ func (le *LinkExtractor) Corrigendums() {
 				return // skip this state
 			}
 			<-sem // release slot
+			fmt.Printf("[%s] Session Established\n", u.State)
 
 			scraper := NewCorrScraper(sess, u.Domain, u.State, failedWriter)
 			if err := scraper.ScrapeCorrigendum(); err != nil {
@@ -217,7 +217,7 @@ func (le *LinkExtractor) PastTenders(fromStr, toStr string, chunkSize int, stage
 	dateRanges := utils.SplitDateRange(from, to, chunkSize)
 
 	// Loop over states
-	for _, u := range le.baseURLs {
+	for _, u := range utils.BaseURLs {
 		wg.Add(1)
 		go func(u utils.URLS) {
 			defer wg.Done()

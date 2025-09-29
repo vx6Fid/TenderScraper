@@ -170,7 +170,7 @@ func dirname(path string) string {
 }
 
 func CalculateOptimalWorkers(totalJobs int) int {
-	return min(totalJobs, 240)
+	return min(totalJobs, 120)
 }
 
 // function to get the last created folder name in TenderDate/Links
@@ -283,7 +283,7 @@ func FetchTotalPages(sess *session.Session, baseURL string, domain string) (int,
 		return 0, scrapeErr
 	}
 	if totalPages == 0 {
-		return 0, fmt.Errorf("could not find last page anchor")
+		totalPages = 1
 	}
 	return totalPages, nil
 }

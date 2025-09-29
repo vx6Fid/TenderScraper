@@ -1,0 +1,25 @@
+2025/09/29 18:20:52 STEP 1: Starting captcha/session flow: https://eprocure.gov.in/eprocure/app?page=FrontEndLatestActiveTenders&service=page
+2025/09/29 18:20:52 [request] GET https://eprocure.gov.in/eprocure/app?page=FrontEndLatestActiveTenders&service=page
+2025/09/29 18:20:53 [response] https://eprocure.gov.in/eprocure/app?page=FrontEndLatestActiveTenders&service=page | 200 | 33459 bytes
+2025/09/29 18:20:53 [captcha] response handler: GET | https://eprocure.gov.in/eprocure/app?page=FrontEndLatestActiveTenders&service=page | 200
+2025/09/29 18:20:53 [captcha] found form (status 200) at https://eprocure.gov.in/eprocure/app?page=FrontEndLatestActiveTenders&service=page
+2025/09/29 18:20:53 [captcha] find table in document
+2025/09/29 18:20:53 [captcha] found form (status 200) at https://eprocure.gov.in/eprocure/app?page=FrontEndLatestActiveTenders&service=page
+2025/09/29 18:20:53 [captcha] image found!
+2025/09/29 18:20:53 === LOCAL CAPTCHA SOLVER ===
+2025/09/29 18:20:56 Captcha solved in 2973ms: 'YRFxRK'
+2025/09/29 18:20:56 [captcha] solved: YRFxRK
+2025/09/29 18:20:56 [captcha] submitting form with 17 fields
+2025/09/29 18:20:56 [request] POST https://eprocure.gov.in/eprocure/app
+2025/09/29 18:20:56 [response] https://eprocure.gov.in/eprocure/app | 200 | 58227 bytes
+2025/09/29 18:20:56 [captcha] response handler: POST | https://eprocure.gov.in/eprocure/app | 200
+2025/09/29 18:20:56 [captcha] found form (status 200) at https://eprocure.gov.in/eprocure/app
+2025/09/29 18:20:56 [captcha] find table in document
+2025/09/29 18:20:56 [captcha] tender list table found, skipping captcha
+2025/09/29 18:20:57 Session established: 1 cookies
+2025/09/29 18:25:19 [request] GET https://eprocure.gov.in/eprocure/app?component=%24DirectLink&page=FrontEndLatestActiveCorrigendums&service=direct&session=T&sp=Sud8pNaZ9IIKAdkoSPaauHA%3D%3D
+2025/09/29 18:25:20 [response] https://eprocure.gov.in/eprocure/app?component=%24DirectLink&page=FrontEndLatestActiveCorrigendums&service=direct&session=T&sp=Sud8pNaZ9IIKAdkoSPaauHA%3D%3D | 200 | 91918 bytes
+2025/09/29 18:25:20 [request] GET https://eprocure.gov.in/eprocure/app?component=%24DirectLink&page=FrontEndTenderDetails&service=direct&session=T&sp=S0LK1eXN8T3vYvcqGn2O56eSJge%2FMOuBR%2BaAsI38I%2Bs4%3D
+2025/09/29 18:25:21 [response] https://eprocure.gov.in/eprocure/app?component=%24DirectLink&page=FrontEndTenderDetails&service=direct&session=T&sp=S0LK1eXN8T3vYvcqGn2O56eSJge%2FMOuBR%2BaAsI38I%2Bs4%3D | 200 | 41033 bytes
+2025/09/29 18:25:21 [request] GET https://eprocure.gov.in/eprocure/app?component=%24DirectLink_0&page=ViewTenderDetails&service=direct&session=T&sp=SAn4rVVMXOocilKh5cLGdtg%3D%3D
+2025/09/29 18:25:21 [response] https://eprocure.gov.in/eprocure/app?component=%24DirectLink_0&page=ViewTenderDetails&service=direct&session=T&sp=SAn4rVVMXOocilKh5cLGdtg%3D%3D | 200 | 13215 bytes

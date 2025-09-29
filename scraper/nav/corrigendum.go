@@ -17,6 +17,7 @@ import (
 	"github.com/PuerkitoBio/goquery"
 	"github.com/gocolly/colly/v2"
 	"github.com/vx6fid/tender-scraper/session"
+	"github.com/vx6fid/tender-scraper/utils"
 )
 
 // CorrScraper holds the state and configuration for the scraping process.
@@ -118,6 +119,8 @@ func (cs *CorrScraper) ScrapeCorrigendum() error {
 	if err := cs.collector.Visit(cs.corrigendumURL); err != nil {
 		return fmt.Errorf("failed to visit corrigendum tenders page with session: %w", err)
 	}
+
+	cs.collector.Wait()
 
 	if !cs.resultsFound {
 		return fmt.Errorf("no tender results found after establishing session")
@@ -278,12 +281,8 @@ func (cs *CorrScraper) parseTenders(e *colly.HTMLElement) error {
 		organisation := strings.TrimSpace(cells.Eq(5).Text())
 
 		// Extract tender ID
-		reTenderID := regexp.MustCompile(`\[(\d{4}_[A-Z]+_\w+_\d+)\]`)
 		cellText := strings.TrimSpace(cells.Eq(4).Text())
-		tenderID := ""
-		if matches := reTenderID.FindStringSubmatch(cellText); len(matches) > 1 {
-			tenderID = matches[1]
-		}
+		tenderID := utils.ExtractTenderID(cellText)
 
 		// Build full link
 		fullLink := href
@@ -316,8 +315,13 @@ func (cs *CorrScraper) parseTenders(e *colly.HTMLElement) error {
 	cs.csvWriter.Flush()
 	cs.logger.Printf("PAGE %d: Parsed %d tenders", cs.currentPage, tendersFoundOnPage)
 
-	if tendersFoundOnPage == 0 || parseFailed {
-		return fmt.Errorf("failed to parse tenders on page %d", cs.currentPage)
+	if parseFailed {
+		return fmt.Errorf("failed to parse page %d", cs.currentPage)
+	}
+
+	if tendersFoundOnPage == 0 {
+		cs.logger.Printf("PAGE %d: No tenders found (likely last page or empty dataset)", cs.currentPage)
+		return nil
 	}
 
 	return nil

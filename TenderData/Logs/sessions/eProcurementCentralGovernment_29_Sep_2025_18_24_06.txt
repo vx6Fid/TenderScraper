@@ -1,0 +1,31 @@
+2025/09/29 18:24:06 STEP 1: Starting captcha/session flow: https://eprocure.gov.in/eprocure/app?page=FrontEndLatestActiveTenders&service=page
+2025/09/29 18:24:06 [request] GET https://eprocure.gov.in/eprocure/app?page=FrontEndLatestActiveTenders&service=page
+2025/09/29 18:24:07 [response] https://eprocure.gov.in/eprocure/app?page=FrontEndLatestActiveTenders&service=page | 200 | 33261 bytes
+2025/09/29 18:24:07 [captcha] response handler: GET | https://eprocure.gov.in/eprocure/app?page=FrontEndLatestActiveTenders&service=page | 200
+2025/09/29 18:24:07 [captcha] found form (status 200) at https://eprocure.gov.in/eprocure/app?page=FrontEndLatestActiveTenders&service=page
+2025/09/29 18:24:07 [captcha] find table in document
+2025/09/29 18:24:07 [captcha] found form (status 200) at https://eprocure.gov.in/eprocure/app?page=FrontEndLatestActiveTenders&service=page
+2025/09/29 18:24:07 [captcha] image found!
+2025/09/29 18:24:07 === LOCAL CAPTCHA SOLVER ===
+2025/09/29 18:24:11 Captcha solved in 4041ms: 'F76jbR'
+2025/09/29 18:24:11 [captcha] solved: F76jbR
+2025/09/29 18:24:11 [captcha] submitting form with 17 fields
+2025/09/29 18:24:11 [request] POST https://eprocure.gov.in/eprocure/app
+2025/09/29 18:24:12 [response] https://eprocure.gov.in/eprocure/app | 200 | 58321 bytes
+2025/09/29 18:24:12 [captcha] response handler: POST | https://eprocure.gov.in/eprocure/app | 200
+2025/09/29 18:24:12 [captcha] found form (status 200) at https://eprocure.gov.in/eprocure/app
+2025/09/29 18:24:12 [captcha] find table in document
+2025/09/29 18:24:12 [captcha] tender list table found, skipping captcha
+2025/09/29 18:24:12 Session established: 1 cookies
+2025/09/29 18:25:34 [request] GET https://eprocure.gov.in/eprocure/app?component=%24DirectLink&page=FrontEndLatestActiveCorrigendums&service=direct&session=T&sp=S2d6HpRhw8V%2BjMrG8cvB2SQ%3D%3D
+2025/09/29 18:25:35 [response] https://eprocure.gov.in/eprocure/app?component=%24DirectLink&page=FrontEndLatestActiveCorrigendums&service=direct&session=T&sp=S2d6HpRhw8V%2BjMrG8cvB2SQ%3D%3D | 200 | 76515 bytes
+2025/09/29 18:25:35 [request] GET https://eprocure.gov.in/eprocure/app?component=%24DirectLink&page=FrontEndTenderDetails&service=direct&session=T&sp=SPHQIHLTH1L0qLR8c2ksNteSJge%2FMOuBR%2BaAsI38I%2Bs4%3D
+2025/09/29 18:25:36 [response] https://eprocure.gov.in/eprocure/app?component=%24DirectLink&page=FrontEndTenderDetails&service=direct&session=T&sp=SPHQIHLTH1L0qLR8c2ksNteSJge%2FMOuBR%2BaAsI38I%2Bs4%3D | 200 | 32812 bytes
+2025/09/29 18:25:36 [request] GET https://eprocure.gov.in/eprocure/app?component=%24DirectLink_0&page=ViewTenderDetails&service=direct&session=T&sp=SHDuBwjGojC8Z2x1HhD6hIw%3D%3D
+2025/09/29 18:25:36 [response] https://eprocure.gov.in/eprocure/app?component=%24DirectLink_0&page=ViewTenderDetails&service=direct&session=T&sp=SHDuBwjGojC8Z2x1HhD6hIw%3D%3D | 200 | 9845 bytes
+2025/09/29 18:25:51 [request] GET https://eprocure.gov.in/eprocure/app?component=%24DirectLink&page=FrontEndLatestActiveCorrigendums&service=direct&session=T&sp=S72gsr1UfwTO0c8D1GhBQ8A%3D%3D
+2025/09/29 18:25:52 [response] https://eprocure.gov.in/eprocure/app?component=%24DirectLink&page=FrontEndLatestActiveCorrigendums&service=direct&session=T&sp=S72gsr1UfwTO0c8D1GhBQ8A%3D%3D | 200 | 78363 bytes
+2025/09/29 18:25:52 [request] GET https://eprocure.gov.in/eprocure/app?component=%24DirectLink&page=FrontEndTenderDetails&service=direct&session=T&sp=SVeo4LPSuF8AWsWZ%2FnHMpZeSJge%2FMOuBR%2BaAsI38I%2Bs4%3D
+2025/09/29 18:25:53 [response] https://eprocure.gov.in/eprocure/app?component=%24DirectLink&page=FrontEndTenderDetails&service=direct&session=T&sp=SVeo4LPSuF8AWsWZ%2FnHMpZeSJge%2FMOuBR%2BaAsI38I%2Bs4%3D | 200 | 33850 bytes
+2025/09/29 18:25:53 [request] GET https://eprocure.gov.in/eprocure/app?component=%24DirectLink_0&page=ViewTenderDetails&service=direct&session=T&sp=Sigvq4WApJKaEuQ6628%2FDMg%3D%3D
+2025/09/29 18:25:53 [response] https://eprocure.gov.in/eprocure/app?component=%24DirectLink_0&page=ViewTenderDetails&service=direct&session=T&sp=Sigvq4WApJKaEuQ6628%2FDMg%3D%3D | 200 | 13144 bytes

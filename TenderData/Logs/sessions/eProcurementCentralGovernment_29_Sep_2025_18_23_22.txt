@@ -1,0 +1,19 @@
+2025/09/29 18:23:22 STEP 1: Starting captcha/session flow: https://eprocure.gov.in/eprocure/app?page=FrontEndLatestActiveTenders&service=page
+2025/09/29 18:23:22 [request] GET https://eprocure.gov.in/eprocure/app?page=FrontEndLatestActiveTenders&service=page
+2025/09/29 18:23:23 [response] https://eprocure.gov.in/eprocure/app?page=FrontEndLatestActiveTenders&service=page | 200 | 33213 bytes
+2025/09/29 18:23:23 [captcha] response handler: GET | https://eprocure.gov.in/eprocure/app?page=FrontEndLatestActiveTenders&service=page | 200
+2025/09/29 18:23:23 [captcha] found form (status 200) at https://eprocure.gov.in/eprocure/app?page=FrontEndLatestActiveTenders&service=page
+2025/09/29 18:23:23 [captcha] find table in document
+2025/09/29 18:23:23 [captcha] found form (status 200) at https://eprocure.gov.in/eprocure/app?page=FrontEndLatestActiveTenders&service=page
+2025/09/29 18:23:23 [captcha] image found!
+2025/09/29 18:23:23 === LOCAL CAPTCHA SOLVER ===
+2025/09/29 18:23:27 Captcha solved in 4064ms: '1j4a1X'
+2025/09/29 18:23:27 [captcha] solved: 1j4a1X
+2025/09/29 18:23:27 [captcha] submitting form with 17 fields
+2025/09/29 18:23:27 [request] POST https://eprocure.gov.in/eprocure/app
+2025/09/29 18:23:28 [response] https://eprocure.gov.in/eprocure/app | 200 | 58039 bytes
+2025/09/29 18:23:28 [captcha] response handler: POST | https://eprocure.gov.in/eprocure/app | 200
+2025/09/29 18:23:28 [captcha] found form (status 200) at https://eprocure.gov.in/eprocure/app
+2025/09/29 18:23:28 [captcha] find table in document
+2025/09/29 18:23:28 [captcha] tender list table found, skipping captcha
+2025/09/29 18:23:28 Session established: 1 cookies

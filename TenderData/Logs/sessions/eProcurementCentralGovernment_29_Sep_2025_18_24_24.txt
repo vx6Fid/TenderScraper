@@ -1,0 +1,31 @@
+2025/09/29 18:24:24 STEP 1: Starting captcha/session flow: https://eprocure.gov.in/eprocure/app?page=FrontEndLatestActiveTenders&service=page
+2025/09/29 18:24:24 [request] GET https://eprocure.gov.in/eprocure/app?page=FrontEndLatestActiveTenders&service=page
+2025/09/29 18:24:25 [response] https://eprocure.gov.in/eprocure/app?page=FrontEndLatestActiveTenders&service=page | 200 | 33381 bytes
+2025/09/29 18:24:25 [captcha] response handler: GET | https://eprocure.gov.in/eprocure/app?page=FrontEndLatestActiveTenders&service=page | 200
+2025/09/29 18:24:25 [captcha] found form (status 200) at https://eprocure.gov.in/eprocure/app?page=FrontEndLatestActiveTenders&service=page
+2025/09/29 18:24:25 [captcha] find table in document
+2025/09/29 18:24:25 [captcha] found form (status 200) at https://eprocure.gov.in/eprocure/app?page=FrontEndLatestActiveTenders&service=page
+2025/09/29 18:24:25 [captcha] image found!
+2025/09/29 18:24:25 === LOCAL CAPTCHA SOLVER ===
+2025/09/29 18:24:28 Captcha solved in 3117ms: 'peJA31'
+2025/09/29 18:24:28 [captcha] solved: peJA31
+2025/09/29 18:24:28 [captcha] submitting form with 17 fields
+2025/09/29 18:24:28 [request] POST https://eprocure.gov.in/eprocure/app
+2025/09/29 18:24:29 [response] https://eprocure.gov.in/eprocure/app | 200 | 58277 bytes
+2025/09/29 18:24:29 [captcha] response handler: POST | https://eprocure.gov.in/eprocure/app | 200
+2025/09/29 18:24:29 [captcha] found form (status 200) at https://eprocure.gov.in/eprocure/app
+2025/09/29 18:24:29 [captcha] find table in document
+2025/09/29 18:24:29 [captcha] tender list table found, skipping captcha
+2025/09/29 18:24:29 Session established: 1 cookies
+2025/09/29 18:24:49 [request] GET https://eprocure.gov.in/eprocure/app?component=%24DirectLink&page=FrontEndLatestActiveCorrigendums&service=direct&session=T&sp=SI6JSdMvUKwt5SGWW0iXBww%3D%3D
+2025/09/29 18:24:51 [response] https://eprocure.gov.in/eprocure/app?component=%24DirectLink&page=FrontEndLatestActiveCorrigendums&service=direct&session=T&sp=SI6JSdMvUKwt5SGWW0iXBww%3D%3D | 200 | 79669 bytes
+2025/09/29 18:24:51 [request] GET https://eprocure.gov.in/eprocure/app?component=%24DirectLink&page=FrontEndTenderDetails&service=direct&session=T&sp=SfkS7Kheh%2BgVowNfW2e4jHuSJge%2FMOuBR%2BaAsI38I%2Bs4%3D
+2025/09/29 18:24:51 [response] https://eprocure.gov.in/eprocure/app?component=%24DirectLink&page=FrontEndTenderDetails&service=direct&session=T&sp=SfkS7Kheh%2BgVowNfW2e4jHuSJge%2FMOuBR%2BaAsI38I%2Bs4%3D | 200 | 34496 bytes
+2025/09/29 18:24:51 [request] GET https://eprocure.gov.in/eprocure/app?component=%24DirectLink_0&page=ViewTenderDetails&service=direct&session=T&sp=Sb%2B%2BI%2BK%2FQAjzRnMog6aaU0g%3D%3D
+2025/09/29 18:24:52 [response] https://eprocure.gov.in/eprocure/app?component=%24DirectLink_0&page=ViewTenderDetails&service=direct&session=T&sp=Sb%2B%2BI%2BK%2FQAjzRnMog6aaU0g%3D%3D | 200 | 13664 bytes
+2025/09/29 18:25:22 [request] GET https://eprocure.gov.in/eprocure/app?component=%24DirectLink&page=FrontEndLatestActiveCorrigendums&service=direct&session=T&sp=SP%2Fb%2B7dAi7XSNDfDNDcAdmQ%3D%3D
+2025/09/29 18:25:23 [response] https://eprocure.gov.in/eprocure/app?component=%24DirectLink&page=FrontEndLatestActiveCorrigendums&service=direct&session=T&sp=SP%2Fb%2B7dAi7XSNDfDNDcAdmQ%3D%3D | 200 | 89882 bytes
+2025/09/29 18:25:23 [request] GET https://eprocure.gov.in/eprocure/app?component=%24DirectLink&page=FrontEndTenderDetails&service=direct&session=T&sp=SO6pUZPlormp7KYgHQMo6zOSJge%2FMOuBR%2BaAsI38I%2Bs4%3D
+2025/09/29 18:25:24 [response] https://eprocure.gov.in/eprocure/app?component=%24DirectLink&page=FrontEndTenderDetails&service=direct&session=T&sp=SO6pUZPlormp7KYgHQMo6zOSJge%2FMOuBR%2BaAsI38I%2Bs4%3D | 200 | 39741 bytes
+2025/09/29 18:25:24 [request] GET https://eprocure.gov.in/eprocure/app?component=%24DirectLink_0&page=ViewTenderDetails&service=direct&session=T&sp=SaHGvJ1EsrAEOW4UqNggRZw%3D%3D
+2025/09/29 18:25:24 [response] https://eprocure.gov.in/eprocure/app?component=%24DirectLink_0&page=ViewTenderDetails&service=direct&session=T&sp=SaHGvJ1EsrAEOW4UqNggRZw%3D%3D | 200 | 13530 bytes

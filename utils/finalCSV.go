@@ -20,7 +20,7 @@ type TenderF struct {
 }
 
 // Extract last [...] as Tender ID from search.csv TenderID field
-func extractTenderID(s string) string {
+func ExtractTenderID(s string) string {
 	re := regexp.MustCompile(`\[(.*?)\]`)
 	matches := re.FindAllStringSubmatch(s, -1)
 	if len(matches) == 0 {
@@ -80,7 +80,7 @@ func readSearch(path string) (map[string]TenderF, error) {
 		if i == 0 { // skip header
 			continue
 		}
-		tenderID := extractTenderID(row[6])
+		tenderID := ExtractTenderID(row[6])
 		t := TenderF{
 			TenderID:     tenderID,
 			Title:        row[5],

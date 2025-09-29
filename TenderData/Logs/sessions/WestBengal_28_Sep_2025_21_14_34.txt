@@ -1,9 +1,0 @@
-2025/09/28 21:16:05 STEP 1: Starting captcha/session flow: https://wbtenders.gov.in/nicgep/app?page=FrontEndLatestActiveCorrigendums&service=page
-2025/09/28 21:16:05 [request] GET https://wbtenders.gov.in/nicgep/app?page=FrontEndLatestActiveCorrigendums&service=page
-2025/09/28 21:16:07 [response] https://wbtenders.gov.in/nicgep/app?page=FrontEndLatestActiveCorrigendums&service=page | 200 | 32418 bytes
-2025/09/28 21:16:07 [captcha] response handler: GET | https://wbtenders.gov.in/nicgep/app?page=FrontEndLatestActiveCorrigendums&service=page | 200
-2025/09/28 21:16:07 [captcha] found form (status 200) at https://wbtenders.gov.in/nicgep/app?page=FrontEndLatestActiveCorrigendums&service=page
-2025/09/28 21:16:07 [captcha] find table in document
-2025/09/28 21:16:07 [captcha] found form (status 200) at https://wbtenders.gov.in/nicgep/app?page=FrontEndLatestActiveCorrigendums&service=page
-2025/09/28 21:16:07 [captcha] image found!
-2025/09/28 21:16:07 === LOCAL CAPTCHA SOLVER ===

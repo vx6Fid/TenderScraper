@@ -92,7 +92,7 @@ func main() {
 	case 1:
 		runDate := utils.GetRunDate(false)
 		// fmt.Println("RunDate: ", runDate)
-		linkExtractor := nav.NewLinkExtractor(runDate, utils.BaseURLs)
+		linkExtractor := nav.NewLinkExtractor(runDate)
 		if err := linkExtractor.Run(); err != nil {
 			log.Printf("Link extraction failed: %v", err)
 		}
@@ -123,7 +123,7 @@ func main() {
 	case 3:
 		runDate := utils.GetRunDate(false)
 		// fmt.Println("RunDate: ", runDate)
-		linkExtractor := nav.NewLinkExtractor(runDate, utils.BaseURLs)
+		linkExtractor := nav.NewLinkExtractor(runDate)
 		linkExtractor.Corrigendums()
 	case 4:
 		// Case 4 and 5 are not yet parallel and write safe
@@ -134,7 +134,7 @@ func main() {
 
 		tenderType := utils.GiveStageName()
 
-		linkExtractor := nav.NewLinkExtractor(runDate, utils.BaseURLs)
+		linkExtractor := nav.NewLinkExtractor(runDate)
 		linkExtractor.PastTenders(fromStr, toStr, 7, tenderType)
 	case 5:
 		runDate := utils.GetRunDate(true)

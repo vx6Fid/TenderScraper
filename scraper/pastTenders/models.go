@@ -123,4 +123,5 @@ type PastTendersData struct {
 	StageUpdates               utils.StageUpdates
 	FinancialEvaluationBidList []utils.FinancialEvaluationBidList
 	AwardedBidsList            []utils.AwardedBidsList
+	ContractValue              string
 }

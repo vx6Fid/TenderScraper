@@ -33,7 +33,7 @@ func Run(dir string, runDate string, stage string) error {
 
 	// Loop over states
 	for _, u := range utils.BaseURLs {
-		fileName := u.State + ".csv"
+		fileName := fmt.Sprintf("%s_%s.csv", u.State, utils.StageName[stage])
 		filePath := fmt.Sprintf("%s/%s", dir, fileName)
 		if _, err := os.Stat(filePath); os.IsNotExist(err) {
 			continue
@@ -53,7 +53,11 @@ func Run(dir string, runDate string, stage string) error {
 
 		var wg sync.WaitGroup
 
-		totalJobs, err := utils.EstimateJobCount(u.State, runDate, true)
+		totalJobs, err := utils.EstimateJobCount(u.State, runDate, true, utils.StageName[stage])
+		if totalJobs < 1 {
+			log.Printf("No jobs found for state %s", u.State)
+			continue
+		}
 		numWorkers := utils.CalculateOptimalWorkers(totalJobs)
 		// Launch workers for this state
 		for i := 0; i < numWorkers; i++ {
@@ -62,30 +66,29 @@ func Run(dir string, runDate string, stage string) error {
 				defer wg.Done()
 				log.Printf("[Worker-%d] started for state %s", workerID, u.State)
 
+				// One session for this worker
+				workerSess := session.NewSession(u.BaseURL, u.State)
+				// One session for this worker
+				sessionLimiter <- struct{}{}
+				if err := workerSess.EstablishTenderStatusSession(stage, "", ""); err != nil {
+					<-sessionLimiter // release slot on failure
+					log.Printf("[Worker-%d][%s] failed to establish worker session: %v", workerID, u.State, err)
+					return
+				}
+				<-sessionLimiter
+
+				log.Printf("[Worker-%d][%s] worker session established", workerID, u.State)
+
+				// Process all tenders with this session
 				for record := range recordsCh {
 					urlSnippet := record[6]
-					// log.Printf("[Worker-%d][%s] processing tender URL: %s", workerID, u.State, urlSnippet)
 
-					// Acquire session slot
-					sessionLimiter <- struct{}{}
-					// log.Printf("[Worker-%d][%s] acquired session slot", workerID, u.State)
-
-					sess := session.NewSession(u.BaseURL, u.State)
-					if err := sess.EstablishTenderStatusSession(stage, "", ""); err != nil {
-						log.Printf("[Worker-%d][%s] failed to establish session for %s: %v", workerID, u.State, urlSnippet, err)
-						<-sessionLimiter // release slot
-						continue
-					}
-					<-sessionLimiter // release slot
-					log.Printf("[Worker-%d][%s] session established for %s", workerID, u.State, urlSnippet)
-
-					// Extraction
 					tenderData := &TenderData{}
 					tenderData.Website = u.Domain
 					tenderData.TenderURL = urlSnippet
 
 					pastTenderData := &PastTendersData{}
-					pasTenderExtractor := NewPastTender(sess, urlSnippet, u.Domain)
+					pasTenderExtractor := NewPastTender(workerSess, urlSnippet, u.Domain)
 					if err := pasTenderExtractor.Extract(tenderData, pastTenderData); err != nil {
 						log.Printf("[Worker-%d][%s] extraction failed for %s: %v", workerID, u.State, urlSnippet, err)
 						continue
@@ -94,6 +97,7 @@ func Run(dir string, runDate string, stage string) error {
 					if pasTenderExtractor.validateTenderData(tenderData, pastTenderData) {
 						tender := pasTenderExtractor.ConvertToUtilsTender(tenderData, pastTenderData)
 						tender.LatestStage = utils.StageName[stage]
+						tender.TenderInfo.UpdatedAt = time.Now()
 						writeCh <- &tender
 						log.Printf("[Worker-%d][%s] tender written for %s", workerID, u.State, urlSnippet)
 					} else {
@@ -103,6 +107,7 @@ func Run(dir string, runDate string, stage string) error {
 
 				log.Printf("[Worker-%d] finished for state %s", workerID, u.State)
 			}(i)
+
 		}
 
 		// Feed records into this state’s channel
@@ -237,19 +242,11 @@ func (ps *PastTender) ConvertToUtilsTender(data *TenderData, pastTenderData *Pas
 	// 	len(pastTenderData.FinancialEvaluationBidList),
 	// 	len(pastTenderData.AwardedBidsList))
 
-	tender.BidList = pastTenderData.Bids
+	tender.BidsList = pastTenderData.Bids
 	tender.StageUpdates = pastTenderData.StageUpdates
 	// Extract the latest stage date from stage updates
-	tender.LatestStageDate = tender.StageUpdates.TechnicalBidOpeningUpdatedOn
-	if tender.StageUpdates.TechnicalEvaluationUpdatedOn.After(tender.LatestStageDate) {
-		tender.LatestStageDate = tender.StageUpdates.TechnicalEvaluationUpdatedOn
-	}
-	if tender.StageUpdates.FinancialEvaluationUpdatedOn.After(tender.LatestStageDate) {
-		tender.LatestStageDate = tender.StageUpdates.FinancialEvaluationUpdatedOn
-	}
-	if tender.StageUpdates.AOCUpdatedOn.After(tender.LatestStageDate) {
-		tender.LatestStageDate = tender.StageUpdates.AOCUpdatedOn
-	}
+	tender.LatestStageDate = updateLatestStageDate(&tender.StageUpdates)
+	tender.ContractValue = pastTenderData.ContractValue
 
 	tender.FinancialEvaluationBidList = pastTenderData.FinancialEvaluationBidList
 	tender.AwardedBidsList = pastTenderData.AwardedBidsList

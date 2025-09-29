@@ -103,7 +103,7 @@ func main() {
 			log.Printf("--- Starting concurrent tender extraction for [%s] ---", u.State)
 
 			// Determine optimal worker count based on expected load
-			totalJobs, err := utils.EstimateJobCount(u.State, runDate, false)
+			totalJobs, err := utils.EstimateJobCount(u.State, runDate, false, "")
 			if err != nil {
 				log.Printf("[%s] failed to estimate job count: %v", u.State, err)
 				continue
@@ -301,6 +301,15 @@ func main() {
 				fmt.Printf("%v\n", err)
 			} else {
 				fmt.Printf("[%s] CSV file generated successfully\n", u.State)
+			}
+		}
+	case 8:
+		for _, u := range utils.BaseURLs {
+			domain, err := utils.GetDomain(u.BaseURL)
+			if err != nil {
+				fmt.Printf("%v\n", err)
+			} else {
+				fmt.Printf("%s\n", domain)
 			}
 		}
 	default:

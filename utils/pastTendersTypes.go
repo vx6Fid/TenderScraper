@@ -4,12 +4,13 @@ import "time"
 
 type PastTenders struct {
 	TenderInfo                 Tender
-	BidList                    []Bid
+	BidsList                   []Bid
 	StageUpdates               StageUpdates
 	FinancialEvaluationBidList []FinancialEvaluationBidList
 	AwardedBidsList            []AwardedBidsList
 	LatestStage                string
-	LatestStageDate            time.Time
+	LatestStageDate            string
+	ContractValue              string
 }
 
 type Bid struct {
@@ -37,8 +38,8 @@ type AwardedBidsList struct {
 }
 
 type StageUpdates struct {
-	TechnicalBidOpeningUpdatedOn time.Time
-	TechnicalEvaluationUpdatedOn time.Time
-	FinancialEvaluationUpdatedOn time.Time
-	AOCUpdatedOn                 time.Time
+	TechnicalBidOpeningUpdatedOn string
+	TechnicalEvaluationUpdatedOn string
+	FinancialEvaluationUpdatedOn string
+	AOCUpdatedOn                 string
 }

@@ -104,7 +104,7 @@ func (pt *PastTender) extractBidOpeningSummary(table *goquery.Selection, pastTen
 		firstCell := strings.TrimSpace(row.Find("td").First().Text())
 		if strings.Contains(firstCell, "Updated On") {
 			dateText := cleanText(row.Find("td").Last().Text())
-			pastTenderData.StageUpdates.TechnicalBidOpeningUpdatedOn = parseDate(dateText)
+			pastTenderData.StageUpdates.TechnicalBidOpeningUpdatedOn = strings.TrimSpace(dateText)
 			// // log.Printf("[SCRAPER] Bid opening updated on: %s", dateText)
 		}
 	})
@@ -117,7 +117,7 @@ func (pt *PastTender) extractTechnicalEvaluationSummary(table *goquery.Selection
 		firstCell := strings.TrimSpace(row.Find("td").First().Text())
 		if strings.Contains(firstCell, "Updated On") {
 			dateText := cleanText(row.Find("td").Last().Text())
-			pastTenderData.StageUpdates.TechnicalEvaluationUpdatedOn = parseDate(dateText)
+			pastTenderData.StageUpdates.TechnicalEvaluationUpdatedOn = strings.TrimSpace(dateText)
 			// // log.Printf("[SCRAPER] Technical evaluation updated on: %s", dateText)
 		}
 	})
@@ -130,7 +130,7 @@ func (pt *PastTender) extractFinanceEvaluationSummary(table *goquery.Selection, 
 		firstCell := strings.TrimSpace(row.Find("td").First().Text())
 		if strings.Contains(firstCell, "Updated on") {
 			dateText := cleanText(row.Find("td").Last().Text())
-			pastTenderData.StageUpdates.FinancialEvaluationUpdatedOn = parseDate(dateText)
+			pastTenderData.StageUpdates.FinancialEvaluationUpdatedOn = strings.TrimSpace(dateText)
 			// // log.Printf("[SCRAPER] Finance evaluation updated on: %s", dateText)
 		}
 	})
@@ -143,8 +143,13 @@ func (pt *PastTender) extractAOCSummary(table *goquery.Selection, pastTenderData
 		firstCell := strings.TrimSpace(row.Find("td").First().Text())
 		if strings.Contains(firstCell, "Updated on") {
 			dateText := cleanText(row.Find("td").Last().Text())
-			pastTenderData.StageUpdates.AOCUpdatedOn = parseDate(dateText)
+			pastTenderData.StageUpdates.AOCUpdatedOn = strings.TrimSpace(dateText)
 			// // log.Printf("[SCRAPER] AOC updated on: %s", dateText)
+		}
+		if strings.Contains(firstCell, "Contract Value") {
+			contractValue := cleanText(row.Find("td").Last().Text())
+			pastTenderData.ContractValue = strings.TrimSpace(contractValue)
+			// // log.Printf("[SCRAPER] Contract value: %s", contractValue)
 		}
 	})
 }

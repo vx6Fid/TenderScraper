@@ -81,11 +81,11 @@ func SaveToFile(content []byte, filename string) error {
 }
 
 func GetDomain(baseURL string) (string, error) {
-	parsedURL, err := url.Parse(baseURL)
+	u, err := url.Parse(baseURL)
 	if err != nil {
 		return "", err
 	}
-	return parsedURL.Host, nil
+	return u.Hostname(), nil
 }
 
 // GetBaseURLAndState finds the baseURL and state for a given tenderURL
@@ -201,15 +201,15 @@ func GetRunDate(PastTenders bool) string {
 	return names[len(names)-1] // last in sorted order
 }
 
-func EstimateJobCount(state string, runDate string, PastTenders bool) (int, error) {
+func EstimateJobCount(state string, runDate string, PastTenders bool, stage string) (int, error) {
 	fileName := "FinalLinks.csv"
 	filePath := fmt.Sprintf("TenderData/Links/%s/%s", runDate, state)
 	if PastTenders {
-		fileName = fmt.Sprintf("%s.csv", state)
+		fileName = fmt.Sprintf("%s_%s.csv", state, stage)
 		filePath = fmt.Sprintf("TenderData/PastLinks/%s", runDate)
 	}
 	inputPath := filepath.Join(filePath, fileName)
-
+	fmt.Println(inputPath)
 	// Open the CSV file
 	inFile, err := os.Open(inputPath)
 	if err != nil {
@@ -225,7 +225,7 @@ func EstimateJobCount(state string, runDate string, PastTenders bool) (int, erro
 	}
 
 	// Ensure there are data rows (at least 2 rows: header + data)
-	if len(rows) <= 1 {
+	if len(rows) < 1 {
 		return 0, fmt.Errorf("no data rows found in %s", inputPath)
 	}
 

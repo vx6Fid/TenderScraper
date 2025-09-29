@@ -108,11 +108,11 @@ type TenderData struct {
 		Online  []utils.PaymentInstrument
 		Offline []utils.PaymentInstrument
 	}
-	Covers      []utils.CoverInformation
-	Information struct {
-		Website   string
-		TenderURL string
-	}
+	Covers []utils.CoverInformation
+
+	Website   string
+	TenderURL string
+
 	TenderFee               TenderFeeDetails
 	EMDFee                  EMDFeeDetails
 	WorkItem                WorkItemDetails

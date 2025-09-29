@@ -91,14 +91,14 @@ func main() {
 	case 1:
 		runDate := utils.GetRunDate(false)
 		// fmt.Println("RunDate: ", runDate)
-		linkExtractor := nav.NewLinkExtractor(runDate, baseURLs)
+		linkExtractor := nav.NewLinkExtractor(runDate, utils.BaseURLs)
 		if err := linkExtractor.Run(); err != nil {
 			log.Printf("Link extraction failed: %v", err)
 		}
 	case 2:
 		runDate := utils.GetRunDate(false)
 		// fmt.Println("RunDate: ", runDate)
-		for _, u := range baseURLs {
+		for _, u := range utils.BaseURLs {
 			log.Printf("--- Starting concurrent tender extraction for [%s] ---", u.State)
 
 			// Determine optimal worker count based on expected load
@@ -122,21 +122,25 @@ func main() {
 	case 3:
 		runDate := utils.GetRunDate(false)
 		// fmt.Println("RunDate: ", runDate)
-		linkExtractor := nav.NewLinkExtractor(runDate, baseURLs)
+		linkExtractor := nav.NewLinkExtractor(runDate, utils.BaseURLs)
 		linkExtractor.Corrigendums()
 	case 4:
 		// Case 4 and 5 are not yet parallel and write safe
 		runDate := utils.GetRunDate(false)
 		// fmt.Println("RunDate: ", runDate)
-		fromStr := "01/08/2025"
-		toStr := "13/09/2025"
+		fromStr := "01/01/2025"
+		toStr := "30/09/2025"
 
-		linkExtractor := nav.NewLinkExtractor(runDate, baseURLs)
-		linkExtractor.PastTenders(fromStr, toStr, 7)
+		tenderType := utils.GiveStageName()
+
+		linkExtractor := nav.NewLinkExtractor(runDate, utils.BaseURLs)
+		linkExtractor.PastTenders(fromStr, toStr, 7, tenderType)
 	case 5:
 		runDate := utils.GetRunDate(true)
 		dir := fmt.Sprintf("TenderData/PastLinks/%s", runDate)
-		err := pastTenders.Run(dir, runDate)
+
+		tenderType := utils.GiveStageName()
+		err := pastTenders.Run(dir, runDate, tenderType)
 		if err != nil {
 			log.Printf("Error running past tenders: %v", err)
 		}

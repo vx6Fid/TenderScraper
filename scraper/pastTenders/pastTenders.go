@@ -14,7 +14,7 @@ import (
 	"github.com/vx6fid/tender-scraper/utils"
 )
 
-func Run(dir string, runDate string) error {
+func Run(dir string, runDate string, stage string) error {
 	sessionLimiter := make(chan struct{}, utils.MaxSessionParallel)
 
 	writeCh := make(chan *utils.PastTenders) // global writer channel
@@ -71,7 +71,7 @@ func Run(dir string, runDate string) error {
 					// log.Printf("[Worker-%d][%s] acquired session slot", workerID, u.State)
 
 					sess := session.NewSession(u.BaseURL, u.State)
-					if err := sess.EstablishTenderStatusSession("6", "", ""); err != nil {
+					if err := sess.EstablishTenderStatusSession(stage, "", ""); err != nil {
 						log.Printf("[Worker-%d][%s] failed to establish session for %s: %v", workerID, u.State, urlSnippet, err)
 						<-sessionLimiter // release slot
 						continue
@@ -81,8 +81,8 @@ func Run(dir string, runDate string) error {
 
 					// Extraction
 					tenderData := &TenderData{}
-					tenderData.Information.Website = u.Domain
-					tenderData.Information.TenderURL = urlSnippet
+					tenderData.Website = u.Domain
+					tenderData.TenderURL = urlSnippet
 
 					pastTenderData := &PastTendersData{}
 					pasTenderExtractor := NewPastTender(sess, urlSnippet, u.Domain)
@@ -93,6 +93,7 @@ func Run(dir string, runDate string) error {
 
 					if pasTenderExtractor.validateTenderData(tenderData, pastTenderData) {
 						tender := pasTenderExtractor.ConvertToUtilsTender(tenderData, pastTenderData)
+						tender.LatestStage = utils.StageName[stage]
 						writeCh <- &tender
 						log.Printf("[Worker-%d][%s] tender written for %s", workerID, u.State, urlSnippet)
 					} else {
@@ -187,9 +188,9 @@ func (ps *PastTender) ConvertToUtilsTender(data *TenderData, pastTenderData *Pas
 	tender.TenderInfo.BasicDetails.AllowTwoStageBidding = strings.EqualFold(strings.TrimSpace(data.BasicDetails.AllowTwoStageBidding), "yes")
 
 	// Information Section
-	tender.TenderInfo.Information.Website = data.Information.Website
-	tender.TenderInfo.Information.Link = data.Information.TenderURL
-	tender.TenderInfo.Information.UpdatedAt = time.Now()
+	tender.TenderInfo.Website = data.Website
+	tender.TenderInfo.Link = data.TenderURL
+	tender.TenderInfo.UpdatedAt = time.Now()
 
 	// Map other sections
 	tender.TenderInfo.PaymentInstruments.Online = data.PaymentInstruments.Online
@@ -236,8 +237,20 @@ func (ps *PastTender) ConvertToUtilsTender(data *TenderData, pastTenderData *Pas
 	// 	len(pastTenderData.FinancialEvaluationBidList),
 	// 	len(pastTenderData.AwardedBidsList))
 
-	tender.Bids = pastTenderData.Bids
+	tender.BidList = pastTenderData.Bids
 	tender.StageUpdates = pastTenderData.StageUpdates
+	// Extract the latest stage date from stage updates
+	tender.LatestStageDate = tender.StageUpdates.TechnicalBidOpeningUpdatedOn
+	if tender.StageUpdates.TechnicalEvaluationUpdatedOn.After(tender.LatestStageDate) {
+		tender.LatestStageDate = tender.StageUpdates.TechnicalEvaluationUpdatedOn
+	}
+	if tender.StageUpdates.FinancialEvaluationUpdatedOn.After(tender.LatestStageDate) {
+		tender.LatestStageDate = tender.StageUpdates.FinancialEvaluationUpdatedOn
+	}
+	if tender.StageUpdates.AOCUpdatedOn.After(tender.LatestStageDate) {
+		tender.LatestStageDate = tender.StageUpdates.AOCUpdatedOn
+	}
+
 	tender.FinancialEvaluationBidList = pastTenderData.FinancialEvaluationBidList
 	tender.AwardedBidsList = pastTenderData.AwardedBidsList
 

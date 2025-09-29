@@ -32,25 +32,21 @@ type PastScraper struct {
 	failedWriter   *FailedWriter
 }
 
-func NewPastScraper(sess *session.Session, domain string, state string, headers []string, writer *PastWriter, failedWriter *FailedWriter, fromDate string, toDate string) (*PastScraper, error) {
+func NewPastScraper(sess *session.Session, domain string, state string, headers []string, writer *PastWriter, failedWriter *FailedWriter) (*PastScraper, error) {
 	collector := sess.NewCollector(domain)
 	collector.AllowURLRevisit = true
 
 	// If no writer was passed, create one (fallback)
 	var pastWriter *PastWriter
-	if writer != nil {
-		pastWriter = writer
-	} else {
-		pastWriter = NewPastWriter(state, headers)
-	}
+	pastWriter = writer
 
 	return &PastScraper{
-		collector:      collector,
-		baseURL:        sess.BaseURL,
-		state:          state,
-		ResultsURL:     sess.ResultsURL,
-		fromDate:       fromDate,
-		toDate:         toDate,
+		collector:  collector,
+		baseURL:    sess.BaseURL,
+		state:      state,
+		ResultsURL: sess.ResultsURL,
+		// fromDate:       fromDate,
+		// toDate:         toDate,
 		scrapedTenders: 0,
 		currentPage:    1,
 		nextButtonURL:  sess.BaseURL + "?component=loadNext&page=WebTenderStatusLists&service=direct&session=T",

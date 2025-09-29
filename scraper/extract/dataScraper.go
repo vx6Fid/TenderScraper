@@ -64,8 +64,8 @@ func (ds *DataScraper) ExtractSingleTender(input TenderInput) (*TenderData, erro
 	// Fresh TenderData
 	tenderData := &TenderData{}
 
-	tenderData.Information.Website = ds.domain // or ds.session.BaseURL
-	tenderData.Information.TenderURL = input.Link
+	tenderData.Website = ds.domain // or ds.session.BaseURL
+	tenderData.TenderURL = input.Link
 	// Setup parser handlers (instrumented version below)
 	parser := NewTenderParser()
 	parser.SetupHandlers(c, tenderData)
@@ -179,9 +179,9 @@ func (ds *DataScraper) ConvertToUtilsTender(data *TenderData) utils.Tender {
 	tender.BasicDetails.AllowTwoStageBidding = strings.EqualFold(strings.TrimSpace(data.BasicDetails.AllowTwoStageBidding), "yes")
 
 	// Information Section
-	tender.Information.Website = data.Information.Website
-	tender.Information.Link = data.Information.TenderURL
-	tender.Information.UpdatedAt = time.Now()
+	tender.Website = data.Website
+	tender.Link = data.TenderURL
+	tender.UpdatedAt = time.Now()
 
 	// Map other sections
 	tender.PaymentInstruments.Online = data.PaymentInstruments.Online

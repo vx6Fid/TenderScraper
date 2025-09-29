@@ -61,12 +61,10 @@ type Tender struct {
 		AllowTwoStageBidding               bool
 	}
 
-	Information struct {
-		Website string
-		Link    string // tender link
-		// CreatedAt time.Time
-		UpdatedAt time.Time
-	}
+	Website string
+	Link    string // tender link
+	// CreatedAt time.Time
+	UpdatedAt time.Time
 
 	PaymentInstruments struct {
 		Offline []PaymentInstrument

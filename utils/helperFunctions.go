@@ -170,7 +170,7 @@ func dirname(path string) string {
 }
 
 func CalculateOptimalWorkers(totalJobs int) int {
-	return min(totalJobs, 120)
+	return min(totalJobs, 240)
 }
 
 // function to get the last created folder name in TenderDate/Links
@@ -438,4 +438,15 @@ func ShowDuplicatesByRow(filePath string, outFile string) {
 
 		seen[key] = seenInfo{rowNum, row}
 	}
+}
+
+func GiveStageName() string {
+	fmt.Printf("Choose one of the Tender Types:\n")
+	for key, value := range StageName {
+		fmt.Printf("%s: %s\n", key, value)
+	}
+	fmt.Println("Enter the tender type:")
+	var tenderType string
+	fmt.Scanln(&tenderType)
+	return tenderType
 }

@@ -2,6 +2,7 @@ package nav
 
 import (
 	"encoding/csv"
+	"fmt"
 	"log"
 	"os"
 	"path/filepath"
@@ -14,14 +15,15 @@ type PastWriter struct {
 	wg   sync.WaitGroup
 }
 
-func NewPastWriter(state string, headers []string) *PastWriter {
+func NewPastWriter(state string, headers []string, tender_type string) *PastWriter {
 	today := time.Now().Format("02_Jan_2006")
 	dir := filepath.Join("TenderData", "PastLinks", today)
 	if err := os.MkdirAll(dir, os.ModePerm); err != nil {
 		log.Fatalf("failed to create directories: %v", err)
 	}
 
-	filePath := filepath.Join(dir, state+".csv")
+	fileName := fmt.Sprintf("%s_%s.csv", state, tender_type)
+	filePath := filepath.Join(dir, fileName)
 	file, err := os.Create(filePath)
 	if err != nil {
 		log.Fatalf("failed to create CSV: %v", err)

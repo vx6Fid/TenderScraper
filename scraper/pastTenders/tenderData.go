@@ -1,7 +1,6 @@
 package pastTenders
 
 import (
-	"fmt"
 	"html"
 	"log"
 	"regexp"
@@ -655,7 +654,7 @@ func (tp *PastTender) setupCorrigendumHandler(c *colly.Collector, data *TenderDa
 
 				absLink := e.Request.AbsoluteURL(rawLink)
 				cleanURL := html.UnescapeString(absLink)
-				fmt.Println("View Link: ", cleanURL)
+				// fmt.Println("View Link: ", cleanURL)
 
 				corr := utils.Corrigendum{
 					SerialNo: strings.TrimSpace(tds.Eq(0).Text()),

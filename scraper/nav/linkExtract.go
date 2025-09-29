@@ -196,7 +196,7 @@ func (le *LinkExtractor) Corrigendums() {
 	log.Println("=== Corrigendum extraction finished ===")
 }
 
-func (le *LinkExtractor) PastTenders(fromStr, toStr string, chunkSize int) {
+func (le *LinkExtractor) PastTenders(fromStr, toStr string, chunkSize int, stage string) {
 	sem := make(chan struct{}, utils.MaxSessionParallel) // global session limiter
 	var wg sync.WaitGroup
 
@@ -224,7 +224,7 @@ func (le *LinkExtractor) PastTenders(fromStr, toStr string, chunkSize int) {
 
 			// One writer per state
 			headers := []string{"S.No", "TenderID", "PageNo", "Title", "Organisation Chain", "Tender Stage", "Link"}
-			stateWriter := NewPastWriter(u.State, headers)
+			stateWriter := NewPastWriter(u.State, headers, utils.StageName[stage])
 			failedWriter := NewFailedWriter(u.State)
 			defer stateWriter.Close()
 			defer failedWriter.Close()
@@ -249,7 +249,7 @@ func (le *LinkExtractor) PastTenders(fromStr, toStr string, chunkSize int) {
 
 						// Acquire slot ONLY for captcha solving
 						sem <- struct{}{}
-						if err := sess.EstablishTenderStatusSession("6", fromFormatted, toFormatted); err != nil {
+						if err := sess.EstablishTenderStatusSession(stage, fromFormatted, toFormatted); err != nil {
 							log.Printf("[%s] failed to establish session for range %s-%s: %v",
 								u.State, fromFormatted, toFormatted, err)
 							failedWriter.WriteFailure(fromFormatted, toFormatted, err.Error())
@@ -259,7 +259,7 @@ func (le *LinkExtractor) PastTenders(fromStr, toStr string, chunkSize int) {
 						<-sem // release slot
 
 						// Past Scraper
-						scraper, err := NewPastScraper(sess, u.Domain, u.State, nil, stateWriter, failedWriter, fromFormatted, toFormatted)
+						scraper, err := NewPastScraper(sess, u.Domain, u.State, nil, stateWriter, failedWriter)
 						if err != nil {
 							log.Printf("[%s] failed to create scraper: %v", u.State, err)
 							failedWriter.WriteFailure(fromFormatted, toFormatted, err.Error())

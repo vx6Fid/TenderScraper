@@ -2,6 +2,15 @@ package utils
 
 var MaxSessionParallel int = 6
 
+var StageName = map[string]string{
+	"1": "To Be Opened Tenders",
+	"2": "Technical Bid Opening",
+	"3": "Technical Evaluation",
+	"4": "Financial Bid Opening",
+	"5": "Financial Evaluation",
+	"6": "AOC",
+}
+
 var BaseURLs = []URLS{
 	{BaseURL: "https://eprocure.gov.in/eprocure/app", State: "eProcurementCentralGovernment", Domain: "eprocure.gov.in"}, // eprocure only for this
 	{BaseURL: "https://defproc.gov.in/nicgep/app", State: "MinistryOfDefence", Domain: "defproc.gov.in"},

@@ -1,0 +1,30 @@
+2025/09/28 21:14:59 STEP 1: Starting captcha/session flow: https://eprocurebel.co.in/nicgep/app?page=FrontEndLatestActiveCorrigendums&service=page
+2025/09/28 21:14:59 [request] GET https://eprocurebel.co.in/nicgep/app?page=FrontEndLatestActiveCorrigendums&service=page
+2025/09/28 21:15:00 [response] https://eprocurebel.co.in/nicgep/app?page=FrontEndLatestActiveCorrigendums&service=page | 200 | 29687 bytes
+2025/09/28 21:15:00 [captcha] response handler: GET | https://eprocurebel.co.in/nicgep/app?page=FrontEndLatestActiveCorrigendums&service=page | 200
+2025/09/28 21:15:00 [captcha] found form (status 200) at https://eprocurebel.co.in/nicgep/app?page=FrontEndLatestActiveCorrigendums&service=page
+2025/09/28 21:15:00 [captcha] find table in document
+2025/09/28 21:15:00 [captcha] found form (status 200) at https://eprocurebel.co.in/nicgep/app?page=FrontEndLatestActiveCorrigendums&service=page
+2025/09/28 21:15:00 [captcha] image found!
+2025/09/28 21:15:00 === LOCAL CAPTCHA SOLVER ===
+2025/09/28 21:15:09 Captcha solved in 8647ms: 'h6yPij'
+2025/09/28 21:15:09 [captcha] solved: h6yPij
+2025/09/28 21:15:09 [captcha] submitting form with 16 fields
+2025/09/28 21:15:09 [request] POST https://eprocurebel.co.in/nicgep/app
+2025/09/28 21:15:10 [response] https://eprocurebel.co.in/nicgep/app | 200 | 30348 bytes
+2025/09/28 21:15:10 [captcha] response handler: POST | https://eprocurebel.co.in/nicgep/app | 200
+2025/09/28 21:15:10 [captcha] found form (status 200) at https://eprocurebel.co.in/nicgep/app
+2025/09/28 21:15:10 [captcha] find table in document
+2025/09/28 21:15:10 [captcha] found form (status 200) at https://eprocurebel.co.in/nicgep/app
+2025/09/28 21:15:10 [captcha] image found!
+2025/09/28 21:15:10 === LOCAL CAPTCHA SOLVER ===
+2025/09/28 21:15:17 Captcha solved in 7390ms: 'JZHe8B'
+2025/09/28 21:15:17 [captcha] solved: JZHe8B
+2025/09/28 21:15:17 [captcha] submitting form with 16 fields
+2025/09/28 21:15:17 [request] POST https://eprocurebel.co.in/nicgep/app
+2025/09/28 21:15:18 [response] https://eprocurebel.co.in/nicgep/app | 200 | 70057 bytes
+2025/09/28 21:15:18 [captcha] response handler: POST | https://eprocurebel.co.in/nicgep/app | 200
+2025/09/28 21:15:18 [captcha] found form (status 200) at https://eprocurebel.co.in/nicgep/app
+2025/09/28 21:15:18 [captcha] find table in document
+2025/09/28 21:15:18 [captcha] tender list table found, skipping captcha
+2025/09/28 21:15:18 Session established: 1 cookies

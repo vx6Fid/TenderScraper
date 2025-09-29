@@ -1,0 +1,19 @@
+2025/09/28 21:14:47 STEP 1: Starting captcha/session flow: https://tenders.ladakh.gov.in/nicgep/app?page=FrontEndLatestActiveCorrigendums&service=page
+2025/09/28 21:14:47 [request] GET https://tenders.ladakh.gov.in/nicgep/app?page=FrontEndLatestActiveCorrigendums&service=page
+2025/09/28 21:14:50 [response] https://tenders.ladakh.gov.in/nicgep/app?page=FrontEndLatestActiveCorrigendums&service=page | 200 | 32119 bytes
+2025/09/28 21:14:50 [captcha] response handler: GET | https://tenders.ladakh.gov.in/nicgep/app?page=FrontEndLatestActiveCorrigendums&service=page | 200
+2025/09/28 21:14:50 [captcha] found form (status 200) at https://tenders.ladakh.gov.in/nicgep/app?page=FrontEndLatestActiveCorrigendums&service=page
+2025/09/28 21:14:50 [captcha] find table in document
+2025/09/28 21:14:50 [captcha] found form (status 200) at https://tenders.ladakh.gov.in/nicgep/app?page=FrontEndLatestActiveCorrigendums&service=page
+2025/09/28 21:14:50 [captcha] image found!
+2025/09/28 21:14:50 === LOCAL CAPTCHA SOLVER ===
+2025/09/28 21:14:58 Captcha solved in 8429ms: 'H82dv1'
+2025/09/28 21:14:58 [captcha] solved: H82dv1
+2025/09/28 21:14:58 [captcha] submitting form with 16 fields
+2025/09/28 21:14:58 [request] POST https://tenders.ladakh.gov.in/nicgep/app
+2025/09/28 21:14:59 [response] https://tenders.ladakh.gov.in/nicgep/app | 200 | 74823 bytes
+2025/09/28 21:14:59 [captcha] response handler: POST | https://tenders.ladakh.gov.in/nicgep/app | 200
+2025/09/28 21:14:59 [captcha] found form (status 200) at https://tenders.ladakh.gov.in/nicgep/app
+2025/09/28 21:14:59 [captcha] find table in document
+2025/09/28 21:14:59 [captcha] tender list table found, skipping captcha
+2025/09/28 21:14:59 Session established: 1 cookies

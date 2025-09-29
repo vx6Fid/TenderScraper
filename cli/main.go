@@ -83,6 +83,7 @@ func main() {
 	fmt.Println("4.Past Tenders Links")
 	fmt.Println("5.Past Tenders Data")
 	fmt.Println("6.Document download")
+	fmt.Println("7.Prepare FinalLinks.csv")
 	var choice int
 	fmt.Print("Enter your choice: ")
 	fmt.Scan(&choice)
@@ -147,29 +148,6 @@ func main() {
 	case 6:
 		_id := "68695b2955d119428e5086ab"
 		tenderURL := "https://etenders.gov.in/eprocure/app?component=%24DirectLink&page=FrontEndLatestActiveCorrigendums&service=direct&session=T&sp=SwKgOCf7CLcX8A0VIcO%2FJUA%3D%3D"
-		// corrigendumLinks := []utils.CorrLinks{
-		// 	{
-		// 		Name: "267020.pdf",
-		// 		Link: "https://etenders.gov.in/eprocure/app?component=%24DirectLink_9\u0026page=CorrViewDetailsPrint\u0026service=direct\u0026session=T\u0026sp=SXa2%2Bv1L%2FiUoZA9%2FQE0KbZajv0bVL9ByrEDT3Hk8pjFA%3D",
-		// 		Type: "Date",
-		// 	},
-		// 	{
-		// 		Name: "C3.pdf",
-		// 		Link: "https://etenders.gov.in/eprocure/app?component=%24DirectLink_9\u0026page=CorrViewDetailsPrint\u0026service=direct\u0026session=T\u0026sp=SCFSvWn251d7lvuC4Nh5dGcW686t3AHcBGQneN2DULys%3D",
-		// 		Type: "Date",
-		// 	},
-		// 	{
-		// 		Name: "Pkg-III-DOCS.part06.rar",
-		// 		Link: "https://etenders.gov.in/eprocure/app?component=%24DirectLink_41\u0026page=CorrViewDetailsPrint\u0026service=direct\u0026session=T\u0026sp=SYBgqgF2rfPSuzM%2F4m3729eUcv4IY4eKw825%2BKxXulQmrRv1rpDQuT0%2F%2Bft9JQhCI",
-		// 		Type: "Others",
-		// 	},
-		// 	{
-		// 		Name: "Pkg-III-DOCS.part05.rar",
-		// 		Link: "https://etenders.gov.in/eprocure/app?component=%24DirectLink_41\u0026page=CorrViewDetailsPrint\u0026service=direct\u0026session=T\u0026sp=Se3MER5jkdgXexbF0bo2OQcNNDmAMce5eRz8025QjC5foMCIGr0bNcBoo3cWWc4qs",
-		// 		Type: "Others",
-		// 	},
-		// }
-
 		corrigendumLinks := []utils.CorrLinks{
 			{
 				Name: "267020.pdf",
@@ -315,6 +293,16 @@ func main() {
 
 		// Clean up for reuse
 		downloader.Reset()
+	case 7:
+		runDate := utils.GetRunDate(false)
+		for _, u := range utils.BaseURLs {
+			err := utils.FinalCSV(runDate, u.State)
+			if err != nil {
+				fmt.Printf("%v\n", err)
+			} else {
+				fmt.Printf("[%s] CSV file generated successfully\n", u.State)
+			}
+		}
 	default:
 		fmt.Println("Invalid choice")
 		os.Exit(1)

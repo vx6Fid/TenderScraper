@@ -1,0 +1,19 @@
+2025/09/28 21:14:34 STEP 1: Starting captcha/session flow: https://etender.up.nic.in/nicgep/app?page=FrontEndLatestActiveCorrigendums&service=page
+2025/09/28 21:14:34 [request] GET https://etender.up.nic.in/nicgep/app?page=FrontEndLatestActiveCorrigendums&service=page
+2025/09/28 21:14:35 [response] https://etender.up.nic.in/nicgep/app?page=FrontEndLatestActiveCorrigendums&service=page | 200 | 32742 bytes
+2025/09/28 21:14:35 [captcha] response handler: GET | https://etender.up.nic.in/nicgep/app?page=FrontEndLatestActiveCorrigendums&service=page | 200
+2025/09/28 21:14:35 [captcha] found form (status 200) at https://etender.up.nic.in/nicgep/app?page=FrontEndLatestActiveCorrigendums&service=page
+2025/09/28 21:14:35 [captcha] find table in document
+2025/09/28 21:14:35 [captcha] found form (status 200) at https://etender.up.nic.in/nicgep/app?page=FrontEndLatestActiveCorrigendums&service=page
+2025/09/28 21:14:35 [captcha] image found!
+2025/09/28 21:14:35 === LOCAL CAPTCHA SOLVER ===
+2025/09/28 21:14:41 Captcha solved in 6258ms: 'kd8AtJ'
+2025/09/28 21:14:41 [captcha] solved: kd8AtJ
+2025/09/28 21:14:41 [captcha] submitting form with 16 fields
+2025/09/28 21:14:41 [request] POST https://etender.up.nic.in/nicgep/app
+2025/09/28 21:14:47 [response] https://etender.up.nic.in/nicgep/app | 200 | 74370 bytes
+2025/09/28 21:14:47 [captcha] response handler: POST | https://etender.up.nic.in/nicgep/app | 200
+2025/09/28 21:14:47 [captcha] found form (status 200) at https://etender.up.nic.in/nicgep/app
+2025/09/28 21:14:47 [captcha] find table in document
+2025/09/28 21:14:47 [captcha] tender list table found, skipping captcha
+2025/09/28 21:14:47 Session established: 1 cookies

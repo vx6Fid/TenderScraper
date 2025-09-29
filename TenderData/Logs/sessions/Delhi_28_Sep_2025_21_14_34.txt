@@ -1,0 +1,30 @@
+2025/09/28 21:15:35 STEP 1: Starting captcha/session flow: https://govtprocurement.delhi.gov.in/nicgep/app?page=FrontEndLatestActiveCorrigendums&service=page
+2025/09/28 21:15:35 [request] GET https://govtprocurement.delhi.gov.in/nicgep/app?page=FrontEndLatestActiveCorrigendums&service=page
+2025/09/28 21:15:36 [response] https://govtprocurement.delhi.gov.in/nicgep/app?page=FrontEndLatestActiveCorrigendums&service=page | 200 | 33105 bytes
+2025/09/28 21:15:36 [captcha] response handler: GET | https://govtprocurement.delhi.gov.in/nicgep/app?page=FrontEndLatestActiveCorrigendums&service=page | 200
+2025/09/28 21:15:36 [captcha] found form (status 200) at https://govtprocurement.delhi.gov.in/nicgep/app?page=FrontEndLatestActiveCorrigendums&service=page
+2025/09/28 21:15:36 [captcha] find table in document
+2025/09/28 21:15:36 [captcha] found form (status 200) at https://govtprocurement.delhi.gov.in/nicgep/app?page=FrontEndLatestActiveCorrigendums&service=page
+2025/09/28 21:15:36 [captcha] image found!
+2025/09/28 21:15:36 === LOCAL CAPTCHA SOLVER ===
+2025/09/28 21:15:42 Captcha solved in 5872ms: 'D23/1L1'
+2025/09/28 21:15:42 [captcha] solved: D23/1L1
+2025/09/28 21:15:42 [captcha] submitting form with 16 fields
+2025/09/28 21:15:42 [request] POST https://govtprocurement.delhi.gov.in/nicgep/app
+2025/09/28 21:15:43 [response] https://govtprocurement.delhi.gov.in/nicgep/app | 200 | 33782 bytes
+2025/09/28 21:15:43 [captcha] response handler: POST | https://govtprocurement.delhi.gov.in/nicgep/app | 200
+2025/09/28 21:15:43 [captcha] found form (status 200) at https://govtprocurement.delhi.gov.in/nicgep/app
+2025/09/28 21:15:43 [captcha] find table in document
+2025/09/28 21:15:43 [captcha] found form (status 200) at https://govtprocurement.delhi.gov.in/nicgep/app
+2025/09/28 21:15:43 [captcha] image found!
+2025/09/28 21:15:43 === LOCAL CAPTCHA SOLVER ===
+2025/09/28 21:15:51 Captcha solved in 8732ms: 'ehTcXV'
+2025/09/28 21:15:51 [captcha] solved: ehTcXV
+2025/09/28 21:15:51 [captcha] submitting form with 16 fields
+2025/09/28 21:15:51 [request] POST https://govtprocurement.delhi.gov.in/nicgep/app
+2025/09/28 21:15:54 [response] https://govtprocurement.delhi.gov.in/nicgep/app | 200 | 71633 bytes
+2025/09/28 21:15:54 [captcha] response handler: POST | https://govtprocurement.delhi.gov.in/nicgep/app | 200
+2025/09/28 21:15:54 [captcha] found form (status 200) at https://govtprocurement.delhi.gov.in/nicgep/app
+2025/09/28 21:15:54 [captcha] find table in document
+2025/09/28 21:15:54 [captcha] tender list table found, skipping captcha
+2025/09/28 21:15:54 Session established: 1 cookies

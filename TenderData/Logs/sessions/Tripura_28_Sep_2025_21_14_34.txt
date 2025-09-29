@@ -1,0 +1,19 @@
+2025/09/28 21:15:41 STEP 1: Starting captcha/session flow: https://tripuratenders.gov.in/nicgep/app?page=FrontEndLatestActiveCorrigendums&service=page
+2025/09/28 21:15:41 [request] GET https://tripuratenders.gov.in/nicgep/app?page=FrontEndLatestActiveCorrigendums&service=page
+2025/09/28 21:15:42 [response] https://tripuratenders.gov.in/nicgep/app?page=FrontEndLatestActiveCorrigendums&service=page | 200 | 33416 bytes
+2025/09/28 21:15:42 [captcha] response handler: GET | https://tripuratenders.gov.in/nicgep/app?page=FrontEndLatestActiveCorrigendums&service=page | 200
+2025/09/28 21:15:42 [captcha] found form (status 200) at https://tripuratenders.gov.in/nicgep/app?page=FrontEndLatestActiveCorrigendums&service=page
+2025/09/28 21:15:42 [captcha] find table in document
+2025/09/28 21:15:42 [captcha] found form (status 200) at https://tripuratenders.gov.in/nicgep/app?page=FrontEndLatestActiveCorrigendums&service=page
+2025/09/28 21:15:42 [captcha] image found!
+2025/09/28 21:15:42 === LOCAL CAPTCHA SOLVER ===
+2025/09/28 21:15:51 Captcha solved in 9047ms: 'dEBtD6'
+2025/09/28 21:15:51 [captcha] solved: dEBtD6
+2025/09/28 21:15:51 [captcha] submitting form with 16 fields
+2025/09/28 21:15:51 [request] POST https://tripuratenders.gov.in/nicgep/app
+2025/09/28 21:15:52 [response] https://tripuratenders.gov.in/nicgep/app | 200 | 75417 bytes
+2025/09/28 21:15:52 [captcha] response handler: POST | https://tripuratenders.gov.in/nicgep/app | 200
+2025/09/28 21:15:52 [captcha] found form (status 200) at https://tripuratenders.gov.in/nicgep/app
+2025/09/28 21:15:52 [captcha] find table in document
+2025/09/28 21:15:52 [captcha] tender list table found, skipping captcha
+2025/09/28 21:15:52 Session established: 1 cookies

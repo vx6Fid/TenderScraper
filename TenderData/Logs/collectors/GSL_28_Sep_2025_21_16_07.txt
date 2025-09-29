@@ -1,0 +1,16 @@
+2025/09/28 21:16:07 Starting tender scraping process with correct session flow.
+2025/09/28 21:16:07 STEP 1: Clicking Corrigendum Tenders link with session: https://eprocuregsl.nic.in/nicgep/app?page=FrontEndLatestActiveCorrigendums&service=page
+2025/09/28 21:16:08 PAGE 1: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:16:08 PAGE 1: Parsing tender data from table element...
+2025/09/28 21:16:08 PAGE 1: Parsed 0 tenders
+2025/09/28 21:16:08 ERROR: failed to parse tenders on page 1
+2025/09/28 21:16:08 PAGE 1: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:16:08 PAGE 1: Parsing tender data from table element...
+2025/09/28 21:16:08 PAGE 1: Parsed 0 tenders
+2025/09/28 21:16:08 ERROR: failed to parse tenders on page 1
+2025/09/28 21:16:08 PAGE 1: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:16:08 PAGE 1: Parsing tender data from table element...
+2025/09/28 21:16:08 PAGE 1: Parsed 1 tenders
+2025/09/28 21:16:08 STEP 2: Starting pagination process...
+2025/09/28 21:16:08 Pagination completed! Processed 1 pages, scraped 1 tenders
+2025/09/28 21:16:08 Scraping completed successfully! Total tenders scraped: 1/0

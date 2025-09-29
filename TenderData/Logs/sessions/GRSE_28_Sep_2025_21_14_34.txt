@@ -1,0 +1,19 @@
+2025/09/28 21:14:54 STEP 1: Starting captcha/session flow: https://eprocuregrse.co.in/nicgep/app?page=FrontEndLatestActiveCorrigendums&service=page
+2025/09/28 21:14:54 [request] GET https://eprocuregrse.co.in/nicgep/app?page=FrontEndLatestActiveCorrigendums&service=page
+2025/09/28 21:14:56 [response] https://eprocuregrse.co.in/nicgep/app?page=FrontEndLatestActiveCorrigendums&service=page | 200 | 29918 bytes
+2025/09/28 21:14:56 [captcha] response handler: GET | https://eprocuregrse.co.in/nicgep/app?page=FrontEndLatestActiveCorrigendums&service=page | 200
+2025/09/28 21:14:56 [captcha] found form (status 200) at https://eprocuregrse.co.in/nicgep/app?page=FrontEndLatestActiveCorrigendums&service=page
+2025/09/28 21:14:56 [captcha] find table in document
+2025/09/28 21:14:56 [captcha] found form (status 200) at https://eprocuregrse.co.in/nicgep/app?page=FrontEndLatestActiveCorrigendums&service=page
+2025/09/28 21:14:56 [captcha] image found!
+2025/09/28 21:14:56 === LOCAL CAPTCHA SOLVER ===
+2025/09/28 21:15:05 Captcha solved in 8915ms: 'PV3ELT'
+2025/09/28 21:15:05 [captcha] solved: PV3ELT
+2025/09/28 21:15:05 [captcha] submitting form with 16 fields
+2025/09/28 21:15:05 [request] POST https://eprocuregrse.co.in/nicgep/app
+2025/09/28 21:15:06 [response] https://eprocuregrse.co.in/nicgep/app | 200 | 69291 bytes
+2025/09/28 21:15:06 [captcha] response handler: POST | https://eprocuregrse.co.in/nicgep/app | 200
+2025/09/28 21:15:06 [captcha] found form (status 200) at https://eprocuregrse.co.in/nicgep/app
+2025/09/28 21:15:06 [captcha] find table in document
+2025/09/28 21:15:06 [captcha] tender list table found, skipping captcha
+2025/09/28 21:15:06 Session established: 1 cookies

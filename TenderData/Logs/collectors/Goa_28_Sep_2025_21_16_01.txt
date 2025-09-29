@@ -1,0 +1,32 @@
+2025/09/28 21:16:01 Starting tender scraping process with correct session flow.
+2025/09/28 21:16:01 STEP 1: Clicking Corrigendum Tenders link with session: https://eprocure.goa.gov.in/nicgep/app?page=FrontEndLatestActiveCorrigendums&service=page
+2025/09/28 21:16:01 PAGE 1: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:16:01 PAGE 1: Parsing tender data from table element...
+2025/09/28 21:16:01 PAGE 1: Parsed 0 tenders
+2025/09/28 21:16:01 ERROR: failed to parse tenders on page 1
+2025/09/28 21:16:01 PAGE 1: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:16:01 PAGE 1: Parsing tender data from table element...
+2025/09/28 21:16:01 PAGE 1: Parsed 0 tenders
+2025/09/28 21:16:01 ERROR: failed to parse tenders on page 1
+2025/09/28 21:16:01 PAGE 1: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:16:01 PAGE 1: Parsing tender data from table element...
+2025/09/28 21:16:01 PAGE 1: Parsed 10 tenders
+2025/09/28 21:16:01 PAGE 1: Next button found: https://eprocure.goa.gov.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:16:01 Total records found: 19
+2025/09/28 21:16:01 STEP 2: Starting pagination process...
+2025/09/28 21:16:01 PAGE 2: Clicking Next button: https://eprocure.goa.gov.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:16:03 PAGE 1: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:16:03 PAGE 1: Parsing tender data from table element...
+2025/09/28 21:16:03 PAGE 1: Parsed 0 tenders
+2025/09/28 21:16:03 ERROR: failed to parse tenders on page 1
+2025/09/28 21:16:03 PAGE 1: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:16:03 PAGE 1: Parsing tender data from table element...
+2025/09/28 21:16:03 PAGE 1: Parsed 0 tenders
+2025/09/28 21:16:03 ERROR: failed to parse tenders on page 1
+2025/09/28 21:16:03 PAGE 1: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:16:03 PAGE 1: Parsing tender data from table element...
+2025/09/28 21:16:03 PAGE 1: Parsed 9 tenders
+2025/09/28 21:16:03 Progress: 19/19 tenders (100.0%) - Page 2 completed
+2025/09/28 21:16:03 All 19 tenders scraped, stopping pagination
+2025/09/28 21:16:03 Pagination completed! Processed 2 pages, scraped 19 tenders
+2025/09/28 21:16:03 Scraping completed successfully! Total tenders scraped: 19/19

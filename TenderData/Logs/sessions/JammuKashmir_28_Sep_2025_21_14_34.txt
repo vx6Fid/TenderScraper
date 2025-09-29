@@ -1,0 +1,19 @@
+2025/09/28 21:14:34 STEP 1: Starting captcha/session flow: https://jktenders.gov.in/nicgep/app?page=FrontEndLatestActiveCorrigendums&service=page
+2025/09/28 21:14:34 [request] GET https://jktenders.gov.in/nicgep/app?page=FrontEndLatestActiveCorrigendums&service=page
+2025/09/28 21:14:35 [response] https://jktenders.gov.in/nicgep/app?page=FrontEndLatestActiveCorrigendums&service=page | 200 | 32145 bytes
+2025/09/28 21:14:35 [captcha] response handler: GET | https://jktenders.gov.in/nicgep/app?page=FrontEndLatestActiveCorrigendums&service=page | 200
+2025/09/28 21:14:35 [captcha] found form (status 200) at https://jktenders.gov.in/nicgep/app?page=FrontEndLatestActiveCorrigendums&service=page
+2025/09/28 21:14:35 [captcha] find table in document
+2025/09/28 21:14:35 [captcha] found form (status 200) at https://jktenders.gov.in/nicgep/app?page=FrontEndLatestActiveCorrigendums&service=page
+2025/09/28 21:14:35 [captcha] image found!
+2025/09/28 21:14:35 === LOCAL CAPTCHA SOLVER ===
+2025/09/28 21:14:40 Captcha solved in 4880ms: '8jLBrv'
+2025/09/28 21:14:40 [captcha] solved: 8jLBrv
+2025/09/28 21:14:40 [captcha] submitting form with 16 fields
+2025/09/28 21:14:40 [request] POST https://jktenders.gov.in/nicgep/app
+2025/09/28 21:14:42 [response] https://jktenders.gov.in/nicgep/app | 200 | 74666 bytes
+2025/09/28 21:14:42 [captcha] response handler: POST | https://jktenders.gov.in/nicgep/app | 200
+2025/09/28 21:14:42 [captcha] found form (status 200) at https://jktenders.gov.in/nicgep/app
+2025/09/28 21:14:42 [captcha] find table in document
+2025/09/28 21:14:42 [captcha] tender list table found, skipping captcha
+2025/09/28 21:14:43 Session established: 1 cookies

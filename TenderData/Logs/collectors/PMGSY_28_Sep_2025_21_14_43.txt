@@ -1,0 +1,228 @@
+2025/09/28 21:14:43 Starting tender scraping process with correct session flow.
+2025/09/28 21:14:43 STEP 1: Clicking Corrigendum Tenders link with session: https://pmgsytenders.gov.in/nicgep/app?page=FrontEndLatestActiveCorrigendums&service=page
+2025/09/28 21:14:44 PAGE 1: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:14:44 PAGE 1: Parsing tender data from table element...
+2025/09/28 21:14:44 PAGE 1: Parsed 0 tenders
+2025/09/28 21:14:44 ERROR: failed to parse tenders on page 1
+2025/09/28 21:14:44 PAGE 1: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:14:44 PAGE 1: Parsing tender data from table element...
+2025/09/28 21:14:44 PAGE 1: Parsed 0 tenders
+2025/09/28 21:14:44 ERROR: failed to parse tenders on page 1
+2025/09/28 21:14:44 PAGE 1: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:14:44 PAGE 1: Parsing tender data from table element...
+2025/09/28 21:14:44 PAGE 1: Parsed 10 tenders
+2025/09/28 21:14:44 PAGE 1: Next button found: https://pmgsytenders.gov.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:14:44 Total records found: 152
+2025/09/28 21:14:44 STEP 2: Starting pagination process...
+2025/09/28 21:14:44 PAGE 2: Clicking Next button: https://pmgsytenders.gov.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:14:45 PAGE 1: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:14:45 PAGE 1: Parsing tender data from table element...
+2025/09/28 21:14:45 PAGE 1: Parsed 0 tenders
+2025/09/28 21:14:45 ERROR: failed to parse tenders on page 1
+2025/09/28 21:14:45 PAGE 1: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:14:45 PAGE 1: Parsing tender data from table element...
+2025/09/28 21:14:45 PAGE 1: Parsed 0 tenders
+2025/09/28 21:14:45 ERROR: failed to parse tenders on page 1
+2025/09/28 21:14:45 PAGE 1: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:14:45 PAGE 1: Parsing tender data from table element...
+2025/09/28 21:14:45 PAGE 1: Parsed 10 tenders
+2025/09/28 21:14:45 PAGE 1: Next button found: https://pmgsytenders.gov.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:14:45 Progress: 20/152 tenders (13.2%) - Page 2 completed
+2025/09/28 21:14:45 PAGE 3: Clicking Next button: https://pmgsytenders.gov.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:14:47 PAGE 2: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:14:47 PAGE 2: Parsing tender data from table element...
+2025/09/28 21:14:47 PAGE 2: Parsed 0 tenders
+2025/09/28 21:14:47 ERROR: failed to parse tenders on page 2
+2025/09/28 21:14:47 PAGE 2: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:14:47 PAGE 2: Parsing tender data from table element...
+2025/09/28 21:14:47 PAGE 2: Parsed 0 tenders
+2025/09/28 21:14:47 ERROR: failed to parse tenders on page 2
+2025/09/28 21:14:47 PAGE 2: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:14:47 PAGE 2: Parsing tender data from table element...
+2025/09/28 21:14:47 PAGE 2: Parsed 10 tenders
+2025/09/28 21:14:47 PAGE 2: Next button found: https://pmgsytenders.gov.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:14:47 Progress: 30/152 tenders (19.7%) - Page 3 completed
+2025/09/28 21:14:47 PAGE 4: Clicking Next button: https://pmgsytenders.gov.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:14:48 PAGE 3: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:14:48 PAGE 3: Parsing tender data from table element...
+2025/09/28 21:14:48 PAGE 3: Parsed 0 tenders
+2025/09/28 21:14:48 ERROR: failed to parse tenders on page 3
+2025/09/28 21:14:48 PAGE 3: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:14:48 PAGE 3: Parsing tender data from table element...
+2025/09/28 21:14:48 PAGE 3: Parsed 0 tenders
+2025/09/28 21:14:48 ERROR: failed to parse tenders on page 3
+2025/09/28 21:14:48 PAGE 3: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:14:48 PAGE 3: Parsing tender data from table element...
+2025/09/28 21:14:48 PAGE 3: Parsed 10 tenders
+2025/09/28 21:14:48 PAGE 3: Next button found: https://pmgsytenders.gov.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:14:48 Progress: 40/152 tenders (26.3%) - Page 4 completed
+2025/09/28 21:14:48 PAGE 5: Clicking Next button: https://pmgsytenders.gov.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:14:50 PAGE 4: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:14:50 PAGE 4: Parsing tender data from table element...
+2025/09/28 21:14:50 PAGE 4: Parsed 0 tenders
+2025/09/28 21:14:50 ERROR: failed to parse tenders on page 4
+2025/09/28 21:14:50 PAGE 4: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:14:50 PAGE 4: Parsing tender data from table element...
+2025/09/28 21:14:50 PAGE 4: Parsed 0 tenders
+2025/09/28 21:14:50 ERROR: failed to parse tenders on page 4
+2025/09/28 21:14:50 PAGE 4: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:14:50 PAGE 4: Parsing tender data from table element...
+2025/09/28 21:14:50 PAGE 4: Parsed 10 tenders
+2025/09/28 21:14:50 PAGE 4: Next button found: https://pmgsytenders.gov.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:14:50 Progress: 50/152 tenders (32.9%) - Page 5 completed
+2025/09/28 21:14:50 PAGE 6: Clicking Next button: https://pmgsytenders.gov.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:14:52 PAGE 5: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:14:52 PAGE 5: Parsing tender data from table element...
+2025/09/28 21:14:52 PAGE 5: Parsed 0 tenders
+2025/09/28 21:14:52 ERROR: failed to parse tenders on page 5
+2025/09/28 21:14:52 PAGE 5: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:14:52 PAGE 5: Parsing tender data from table element...
+2025/09/28 21:14:52 PAGE 5: Parsed 0 tenders
+2025/09/28 21:14:52 ERROR: failed to parse tenders on page 5
+2025/09/28 21:14:52 PAGE 5: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:14:52 PAGE 5: Parsing tender data from table element...
+2025/09/28 21:14:52 PAGE 5: Parsed 10 tenders
+2025/09/28 21:14:52 PAGE 5: Next button found: https://pmgsytenders.gov.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:14:52 Progress: 60/152 tenders (39.5%) - Page 6 completed
+2025/09/28 21:14:52 PAGE 7: Clicking Next button: https://pmgsytenders.gov.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:14:53 PAGE 6: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:14:53 PAGE 6: Parsing tender data from table element...
+2025/09/28 21:14:53 PAGE 6: Parsed 0 tenders
+2025/09/28 21:14:53 ERROR: failed to parse tenders on page 6
+2025/09/28 21:14:53 PAGE 6: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:14:53 PAGE 6: Parsing tender data from table element...
+2025/09/28 21:14:53 PAGE 6: Parsed 0 tenders
+2025/09/28 21:14:53 ERROR: failed to parse tenders on page 6
+2025/09/28 21:14:53 PAGE 6: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:14:53 PAGE 6: Parsing tender data from table element...
+2025/09/28 21:14:53 PAGE 6: Parsed 10 tenders
+2025/09/28 21:14:53 PAGE 6: Next button found: https://pmgsytenders.gov.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:14:53 Progress: 70/152 tenders (46.1%) - Page 7 completed
+2025/09/28 21:14:53 PAGE 8: Clicking Next button: https://pmgsytenders.gov.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:14:55 PAGE 7: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:14:55 PAGE 7: Parsing tender data from table element...
+2025/09/28 21:14:55 PAGE 7: Parsed 0 tenders
+2025/09/28 21:14:55 ERROR: failed to parse tenders on page 7
+2025/09/28 21:14:55 PAGE 7: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:14:55 PAGE 7: Parsing tender data from table element...
+2025/09/28 21:14:55 PAGE 7: Parsed 0 tenders
+2025/09/28 21:14:55 ERROR: failed to parse tenders on page 7
+2025/09/28 21:14:55 PAGE 7: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:14:55 PAGE 7: Parsing tender data from table element...
+2025/09/28 21:14:55 PAGE 7: Parsed 10 tenders
+2025/09/28 21:14:55 PAGE 7: Next button found: https://pmgsytenders.gov.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:14:55 Progress: 80/152 tenders (52.6%) - Page 8 completed
+2025/09/28 21:14:55 PAGE 9: Clicking Next button: https://pmgsytenders.gov.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:14:56 PAGE 8: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:14:56 PAGE 8: Parsing tender data from table element...
+2025/09/28 21:14:56 PAGE 8: Parsed 0 tenders
+2025/09/28 21:14:56 ERROR: failed to parse tenders on page 8
+2025/09/28 21:14:56 PAGE 8: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:14:56 PAGE 8: Parsing tender data from table element...
+2025/09/28 21:14:56 PAGE 8: Parsed 0 tenders
+2025/09/28 21:14:56 ERROR: failed to parse tenders on page 8
+2025/09/28 21:14:56 PAGE 8: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:14:56 PAGE 8: Parsing tender data from table element...
+2025/09/28 21:14:56 PAGE 8: Parsed 10 tenders
+2025/09/28 21:14:56 PAGE 8: Next button found: https://pmgsytenders.gov.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:14:56 Progress: 90/152 tenders (59.2%) - Page 9 completed
+2025/09/28 21:14:56 PAGE 10: Clicking Next button: https://pmgsytenders.gov.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:14:58 PAGE 9: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:14:58 PAGE 9: Parsing tender data from table element...
+2025/09/28 21:14:58 PAGE 9: Parsed 0 tenders
+2025/09/28 21:14:58 ERROR: failed to parse tenders on page 9
+2025/09/28 21:14:58 PAGE 9: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:14:58 PAGE 9: Parsing tender data from table element...
+2025/09/28 21:14:58 PAGE 9: Parsed 0 tenders
+2025/09/28 21:14:58 ERROR: failed to parse tenders on page 9
+2025/09/28 21:14:58 PAGE 9: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:14:58 PAGE 9: Parsing tender data from table element...
+2025/09/28 21:14:58 PAGE 9: Parsed 10 tenders
+2025/09/28 21:14:58 PAGE 9: Next button found: https://pmgsytenders.gov.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:14:58 Progress: 100/152 tenders (65.8%) - Page 10 completed
+2025/09/28 21:14:58 PAGE 11: Clicking Next button: https://pmgsytenders.gov.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:14:59 PAGE 10: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:14:59 PAGE 10: Parsing tender data from table element...
+2025/09/28 21:14:59 PAGE 10: Parsed 0 tenders
+2025/09/28 21:14:59 ERROR: failed to parse tenders on page 10
+2025/09/28 21:14:59 PAGE 10: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:14:59 PAGE 10: Parsing tender data from table element...
+2025/09/28 21:14:59 PAGE 10: Parsed 0 tenders
+2025/09/28 21:14:59 ERROR: failed to parse tenders on page 10
+2025/09/28 21:14:59 PAGE 10: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:14:59 PAGE 10: Parsing tender data from table element...
+2025/09/28 21:14:59 PAGE 10: Parsed 10 tenders
+2025/09/28 21:14:59 PAGE 10: Next button found: https://pmgsytenders.gov.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:14:59 Progress: 110/152 tenders (72.4%) - Page 11 completed
+2025/09/28 21:14:59 PAGE 12: Clicking Next button: https://pmgsytenders.gov.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:01 PAGE 11: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:01 PAGE 11: Parsing tender data from table element...
+2025/09/28 21:15:01 PAGE 11: Parsed 0 tenders
+2025/09/28 21:15:01 ERROR: failed to parse tenders on page 11
+2025/09/28 21:15:01 PAGE 11: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:01 PAGE 11: Parsing tender data from table element...
+2025/09/28 21:15:01 PAGE 11: Parsed 0 tenders
+2025/09/28 21:15:01 ERROR: failed to parse tenders on page 11
+2025/09/28 21:15:01 PAGE 11: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:01 PAGE 11: Parsing tender data from table element...
+2025/09/28 21:15:01 PAGE 11: Parsed 10 tenders
+2025/09/28 21:15:01 PAGE 11: Next button found: https://pmgsytenders.gov.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:01 Progress: 120/152 tenders (78.9%) - Page 12 completed
+2025/09/28 21:15:01 PAGE 13: Clicking Next button: https://pmgsytenders.gov.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:02 PAGE 12: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:02 PAGE 12: Parsing tender data from table element...
+2025/09/28 21:15:02 PAGE 12: Parsed 0 tenders
+2025/09/28 21:15:02 ERROR: failed to parse tenders on page 12
+2025/09/28 21:15:02 PAGE 12: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:02 PAGE 12: Parsing tender data from table element...
+2025/09/28 21:15:02 PAGE 12: Parsed 0 tenders
+2025/09/28 21:15:02 ERROR: failed to parse tenders on page 12
+2025/09/28 21:15:02 PAGE 12: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:02 PAGE 12: Parsing tender data from table element...
+2025/09/28 21:15:02 PAGE 12: Parsed 10 tenders
+2025/09/28 21:15:02 PAGE 12: Next button found: https://pmgsytenders.gov.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:02 Progress: 130/152 tenders (85.5%) - Page 13 completed
+2025/09/28 21:15:02 PAGE 14: Clicking Next button: https://pmgsytenders.gov.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:04 PAGE 13: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:04 PAGE 13: Parsing tender data from table element...
+2025/09/28 21:15:04 PAGE 13: Parsed 0 tenders
+2025/09/28 21:15:04 ERROR: failed to parse tenders on page 13
+2025/09/28 21:15:04 PAGE 13: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:04 PAGE 13: Parsing tender data from table element...
+2025/09/28 21:15:04 PAGE 13: Parsed 0 tenders
+2025/09/28 21:15:04 ERROR: failed to parse tenders on page 13
+2025/09/28 21:15:04 PAGE 13: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:04 PAGE 13: Parsing tender data from table element...
+2025/09/28 21:15:04 PAGE 13: Parsed 10 tenders
+2025/09/28 21:15:04 PAGE 13: Next button found: https://pmgsytenders.gov.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:04 Progress: 140/152 tenders (92.1%) - Page 14 completed
+2025/09/28 21:15:04 PAGE 15: Clicking Next button: https://pmgsytenders.gov.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:05 PAGE 14: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:05 PAGE 14: Parsing tender data from table element...
+2025/09/28 21:15:05 PAGE 14: Parsed 0 tenders
+2025/09/28 21:15:05 ERROR: failed to parse tenders on page 14
+2025/09/28 21:15:05 PAGE 14: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:05 PAGE 14: Parsing tender data from table element...
+2025/09/28 21:15:05 PAGE 14: Parsed 0 tenders
+2025/09/28 21:15:05 ERROR: failed to parse tenders on page 14
+2025/09/28 21:15:05 PAGE 14: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:05 PAGE 14: Parsing tender data from table element...
+2025/09/28 21:15:05 PAGE 14: Parsed 10 tenders
+2025/09/28 21:15:05 PAGE 14: Next button found: https://pmgsytenders.gov.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:05 Progress: 150/152 tenders (98.7%) - Page 15 completed
+2025/09/28 21:15:05 PAGE 16: Clicking Next button: https://pmgsytenders.gov.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:07 PAGE 15: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:07 PAGE 15: Parsing tender data from table element...
+2025/09/28 21:15:07 PAGE 15: Parsed 0 tenders
+2025/09/28 21:15:07 ERROR: failed to parse tenders on page 15
+2025/09/28 21:15:07 PAGE 15: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:07 PAGE 15: Parsing tender data from table element...
+2025/09/28 21:15:07 PAGE 15: Parsed 0 tenders
+2025/09/28 21:15:07 ERROR: failed to parse tenders on page 15
+2025/09/28 21:15:07 PAGE 15: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:07 PAGE 15: Parsing tender data from table element...
+2025/09/28 21:15:07 PAGE 15: Parsed 2 tenders
+2025/09/28 21:15:07 Progress: 152/152 tenders (100.0%) - Page 16 completed
+2025/09/28 21:15:07 All 152 tenders scraped, stopping pagination
+2025/09/28 21:15:07 Pagination completed! Processed 16 pages, scraped 152 tenders
+2025/09/28 21:15:07 Scraping completed successfully! Total tenders scraped: 152/152

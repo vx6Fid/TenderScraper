@@ -1,0 +1,116 @@
+2025/09/28 21:14:50 Starting tender scraping process with correct session flow.
+2025/09/28 21:14:50 STEP 1: Clicking Corrigendum Tenders link with session: https://coalindiatenders.nic.in/nicgep/app?page=FrontEndLatestActiveCorrigendums&service=page
+2025/09/28 21:14:50 PAGE 1: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:14:50 PAGE 1: Parsing tender data from table element...
+2025/09/28 21:14:50 PAGE 1: Parsed 0 tenders
+2025/09/28 21:14:50 ERROR: failed to parse tenders on page 1
+2025/09/28 21:14:50 PAGE 1: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:14:50 PAGE 1: Parsing tender data from table element...
+2025/09/28 21:14:50 PAGE 1: Parsed 0 tenders
+2025/09/28 21:14:50 ERROR: failed to parse tenders on page 1
+2025/09/28 21:14:50 PAGE 1: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:14:50 PAGE 1: Parsing tender data from table element...
+2025/09/28 21:14:50 PAGE 1: Parsed 10 tenders
+2025/09/28 21:14:50 PAGE 1: Next button found: https://coalindiatenders.nic.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:14:50 Total records found: 76
+2025/09/28 21:14:50 STEP 2: Starting pagination process...
+2025/09/28 21:14:50 PAGE 2: Clicking Next button: https://coalindiatenders.nic.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:14:51 PAGE 1: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:14:51 PAGE 1: Parsing tender data from table element...
+2025/09/28 21:14:51 PAGE 1: Parsed 0 tenders
+2025/09/28 21:14:51 ERROR: failed to parse tenders on page 1
+2025/09/28 21:14:51 PAGE 1: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:14:51 PAGE 1: Parsing tender data from table element...
+2025/09/28 21:14:51 PAGE 1: Parsed 0 tenders
+2025/09/28 21:14:51 ERROR: failed to parse tenders on page 1
+2025/09/28 21:14:51 PAGE 1: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:14:51 PAGE 1: Parsing tender data from table element...
+2025/09/28 21:14:51 PAGE 1: Parsed 10 tenders
+2025/09/28 21:14:51 PAGE 1: Next button found: https://coalindiatenders.nic.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:14:51 Progress: 20/76 tenders (26.3%) - Page 2 completed
+2025/09/28 21:14:51 PAGE 3: Clicking Next button: https://coalindiatenders.nic.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:14:53 PAGE 2: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:14:53 PAGE 2: Parsing tender data from table element...
+2025/09/28 21:14:53 PAGE 2: Parsed 0 tenders
+2025/09/28 21:14:53 ERROR: failed to parse tenders on page 2
+2025/09/28 21:14:53 PAGE 2: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:14:53 PAGE 2: Parsing tender data from table element...
+2025/09/28 21:14:53 PAGE 2: Parsed 0 tenders
+2025/09/28 21:14:53 ERROR: failed to parse tenders on page 2
+2025/09/28 21:14:53 PAGE 2: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:14:53 PAGE 2: Parsing tender data from table element...
+2025/09/28 21:14:53 PAGE 2: Parsed 10 tenders
+2025/09/28 21:14:53 PAGE 2: Next button found: https://coalindiatenders.nic.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:14:53 Progress: 30/76 tenders (39.5%) - Page 3 completed
+2025/09/28 21:14:53 PAGE 4: Clicking Next button: https://coalindiatenders.nic.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:14:54 PAGE 3: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:14:54 PAGE 3: Parsing tender data from table element...
+2025/09/28 21:14:54 PAGE 3: Parsed 0 tenders
+2025/09/28 21:14:54 ERROR: failed to parse tenders on page 3
+2025/09/28 21:14:54 PAGE 3: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:14:54 PAGE 3: Parsing tender data from table element...
+2025/09/28 21:14:54 PAGE 3: Parsed 0 tenders
+2025/09/28 21:14:54 ERROR: failed to parse tenders on page 3
+2025/09/28 21:14:54 PAGE 3: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:14:54 PAGE 3: Parsing tender data from table element...
+2025/09/28 21:14:54 PAGE 3: Parsed 10 tenders
+2025/09/28 21:14:54 PAGE 3: Next button found: https://coalindiatenders.nic.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:14:54 Progress: 40/76 tenders (52.6%) - Page 4 completed
+2025/09/28 21:14:54 PAGE 5: Clicking Next button: https://coalindiatenders.nic.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:14:55 PAGE 4: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:14:55 PAGE 4: Parsing tender data from table element...
+2025/09/28 21:14:55 PAGE 4: Parsed 0 tenders
+2025/09/28 21:14:55 ERROR: failed to parse tenders on page 4
+2025/09/28 21:14:55 PAGE 4: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:14:55 PAGE 4: Parsing tender data from table element...
+2025/09/28 21:14:55 PAGE 4: Parsed 0 tenders
+2025/09/28 21:14:55 ERROR: failed to parse tenders on page 4
+2025/09/28 21:14:55 PAGE 4: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:14:55 PAGE 4: Parsing tender data from table element...
+2025/09/28 21:14:55 PAGE 4: Parsed 10 tenders
+2025/09/28 21:14:55 PAGE 4: Next button found: https://coalindiatenders.nic.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:14:55 Progress: 50/76 tenders (65.8%) - Page 5 completed
+2025/09/28 21:14:55 PAGE 6: Clicking Next button: https://coalindiatenders.nic.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:14:56 PAGE 5: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:14:56 PAGE 5: Parsing tender data from table element...
+2025/09/28 21:14:56 PAGE 5: Parsed 0 tenders
+2025/09/28 21:14:56 ERROR: failed to parse tenders on page 5
+2025/09/28 21:14:56 PAGE 5: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:14:56 PAGE 5: Parsing tender data from table element...
+2025/09/28 21:14:56 PAGE 5: Parsed 0 tenders
+2025/09/28 21:14:56 ERROR: failed to parse tenders on page 5
+2025/09/28 21:14:56 PAGE 5: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:14:56 PAGE 5: Parsing tender data from table element...
+2025/09/28 21:14:56 PAGE 5: Parsed 10 tenders
+2025/09/28 21:14:56 PAGE 5: Next button found: https://coalindiatenders.nic.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:14:56 Progress: 60/76 tenders (78.9%) - Page 6 completed
+2025/09/28 21:14:56 PAGE 7: Clicking Next button: https://coalindiatenders.nic.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:14:57 PAGE 6: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:14:57 PAGE 6: Parsing tender data from table element...
+2025/09/28 21:14:57 PAGE 6: Parsed 0 tenders
+2025/09/28 21:14:57 ERROR: failed to parse tenders on page 6
+2025/09/28 21:14:57 PAGE 6: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:14:57 PAGE 6: Parsing tender data from table element...
+2025/09/28 21:14:57 PAGE 6: Parsed 0 tenders
+2025/09/28 21:14:57 ERROR: failed to parse tenders on page 6
+2025/09/28 21:14:57 PAGE 6: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:14:57 PAGE 6: Parsing tender data from table element...
+2025/09/28 21:14:57 PAGE 6: Parsed 10 tenders
+2025/09/28 21:14:57 PAGE 6: Next button found: https://coalindiatenders.nic.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:14:57 Progress: 70/76 tenders (92.1%) - Page 7 completed
+2025/09/28 21:14:57 PAGE 8: Clicking Next button: https://coalindiatenders.nic.in/nicgep/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:14:58 PAGE 7: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:14:58 PAGE 7: Parsing tender data from table element...
+2025/09/28 21:14:58 PAGE 7: Parsed 0 tenders
+2025/09/28 21:14:58 ERROR: failed to parse tenders on page 7
+2025/09/28 21:14:58 PAGE 7: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:14:58 PAGE 7: Parsing tender data from table element...
+2025/09/28 21:14:58 PAGE 7: Parsed 0 tenders
+2025/09/28 21:14:58 ERROR: failed to parse tenders on page 7
+2025/09/28 21:14:58 PAGE 7: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:14:58 PAGE 7: Parsing tender data from table element...
+2025/09/28 21:14:58 PAGE 7: Parsed 6 tenders
+2025/09/28 21:14:58 Progress: 76/76 tenders (100.0%) - Page 8 completed
+2025/09/28 21:14:58 All 76 tenders scraped, stopping pagination
+2025/09/28 21:14:58 Pagination completed! Processed 8 pages, scraped 76 tenders
+2025/09/28 21:14:58 Scraping completed successfully! Total tenders scraped: 76/76

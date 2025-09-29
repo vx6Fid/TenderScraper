@@ -1,0 +1,872 @@
+2025/09/28 21:14:47 Starting tender scraping process with correct session flow.
+2025/09/28 21:14:47 STEP 1: Clicking Corrigendum Tenders link with session: https://etenders.gov.in/eprocure/app?page=FrontEndLatestActiveCorrigendums&service=page
+2025/09/28 21:14:48 PAGE 1: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:14:48 PAGE 1: Parsing tender data from table element...
+2025/09/28 21:14:48 PAGE 1: Parsed 0 tenders
+2025/09/28 21:14:48 ERROR: failed to parse tenders on page 1
+2025/09/28 21:14:48 PAGE 1: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:14:48 PAGE 1: Parsing tender data from table element...
+2025/09/28 21:14:48 PAGE 1: Parsed 0 tenders
+2025/09/28 21:14:48 ERROR: failed to parse tenders on page 1
+2025/09/28 21:14:48 PAGE 1: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:14:48 PAGE 1: Parsing tender data from table element...
+2025/09/28 21:14:48 PAGE 1: Parsed 10 tenders
+2025/09/28 21:14:48 PAGE 1: Next button found: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:14:48 Total records found: 615
+2025/09/28 21:14:48 STEP 2: Starting pagination process...
+2025/09/28 21:14:48 PAGE 2: Clicking Next button: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:14:49 PAGE 1: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:14:49 PAGE 1: Parsing tender data from table element...
+2025/09/28 21:14:49 PAGE 1: Parsed 0 tenders
+2025/09/28 21:14:49 ERROR: failed to parse tenders on page 1
+2025/09/28 21:14:49 PAGE 1: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:14:49 PAGE 1: Parsing tender data from table element...
+2025/09/28 21:14:49 PAGE 1: Parsed 0 tenders
+2025/09/28 21:14:49 ERROR: failed to parse tenders on page 1
+2025/09/28 21:14:49 PAGE 1: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:14:49 PAGE 1: Parsing tender data from table element...
+2025/09/28 21:14:49 PAGE 1: Parsed 10 tenders
+2025/09/28 21:14:49 PAGE 1: Next button found: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:14:49 Progress: 20/615 tenders (3.3%) - Page 2 completed
+2025/09/28 21:14:49 PAGE 3: Clicking Next button: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:14:50 PAGE 2: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:14:50 PAGE 2: Parsing tender data from table element...
+2025/09/28 21:14:50 PAGE 2: Parsed 0 tenders
+2025/09/28 21:14:50 ERROR: failed to parse tenders on page 2
+2025/09/28 21:14:50 PAGE 2: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:14:50 PAGE 2: Parsing tender data from table element...
+2025/09/28 21:14:50 PAGE 2: Parsed 0 tenders
+2025/09/28 21:14:50 ERROR: failed to parse tenders on page 2
+2025/09/28 21:14:50 PAGE 2: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:14:50 PAGE 2: Parsing tender data from table element...
+2025/09/28 21:14:50 PAGE 2: Parsed 10 tenders
+2025/09/28 21:14:50 PAGE 2: Next button found: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:14:50 Progress: 30/615 tenders (4.9%) - Page 3 completed
+2025/09/28 21:14:50 PAGE 4: Clicking Next button: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:14:51 PAGE 3: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:14:51 PAGE 3: Parsing tender data from table element...
+2025/09/28 21:14:51 PAGE 3: Parsed 0 tenders
+2025/09/28 21:14:51 ERROR: failed to parse tenders on page 3
+2025/09/28 21:14:51 PAGE 3: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:14:51 PAGE 3: Parsing tender data from table element...
+2025/09/28 21:14:51 PAGE 3: Parsed 0 tenders
+2025/09/28 21:14:51 ERROR: failed to parse tenders on page 3
+2025/09/28 21:14:51 PAGE 3: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:14:51 PAGE 3: Parsing tender data from table element...
+2025/09/28 21:14:51 PAGE 3: Parsed 10 tenders
+2025/09/28 21:14:51 PAGE 3: Next button found: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:14:51 Progress: 40/615 tenders (6.5%) - Page 4 completed
+2025/09/28 21:14:51 PAGE 5: Clicking Next button: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:14:52 PAGE 4: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:14:52 PAGE 4: Parsing tender data from table element...
+2025/09/28 21:14:52 PAGE 4: Parsed 0 tenders
+2025/09/28 21:14:52 ERROR: failed to parse tenders on page 4
+2025/09/28 21:14:52 PAGE 4: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:14:52 PAGE 4: Parsing tender data from table element...
+2025/09/28 21:14:52 PAGE 4: Parsed 0 tenders
+2025/09/28 21:14:52 ERROR: failed to parse tenders on page 4
+2025/09/28 21:14:52 PAGE 4: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:14:52 PAGE 4: Parsing tender data from table element...
+2025/09/28 21:14:52 PAGE 4: Parsed 10 tenders
+2025/09/28 21:14:52 PAGE 4: Next button found: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:14:52 Progress: 50/615 tenders (8.1%) - Page 5 completed
+2025/09/28 21:14:52 PAGE 6: Clicking Next button: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:14:54 PAGE 5: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:14:54 PAGE 5: Parsing tender data from table element...
+2025/09/28 21:14:54 PAGE 5: Parsed 0 tenders
+2025/09/28 21:14:54 ERROR: failed to parse tenders on page 5
+2025/09/28 21:14:54 PAGE 5: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:14:54 PAGE 5: Parsing tender data from table element...
+2025/09/28 21:14:54 PAGE 5: Parsed 0 tenders
+2025/09/28 21:14:54 ERROR: failed to parse tenders on page 5
+2025/09/28 21:14:54 PAGE 5: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:14:54 PAGE 5: Parsing tender data from table element...
+2025/09/28 21:14:54 PAGE 5: Parsed 10 tenders
+2025/09/28 21:14:54 PAGE 5: Next button found: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:14:54 Progress: 60/615 tenders (9.8%) - Page 6 completed
+2025/09/28 21:14:54 PAGE 7: Clicking Next button: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:14:55 PAGE 6: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:14:55 PAGE 6: Parsing tender data from table element...
+2025/09/28 21:14:55 PAGE 6: Parsed 0 tenders
+2025/09/28 21:14:55 ERROR: failed to parse tenders on page 6
+2025/09/28 21:14:55 PAGE 6: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:14:55 PAGE 6: Parsing tender data from table element...
+2025/09/28 21:14:55 PAGE 6: Parsed 0 tenders
+2025/09/28 21:14:55 ERROR: failed to parse tenders on page 6
+2025/09/28 21:14:55 PAGE 6: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:14:55 PAGE 6: Parsing tender data from table element...
+2025/09/28 21:14:55 PAGE 6: Parsed 10 tenders
+2025/09/28 21:14:55 PAGE 6: Next button found: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:14:55 Progress: 70/615 tenders (11.4%) - Page 7 completed
+2025/09/28 21:14:55 PAGE 8: Clicking Next button: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:14:56 PAGE 7: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:14:56 PAGE 7: Parsing tender data from table element...
+2025/09/28 21:14:56 PAGE 7: Parsed 0 tenders
+2025/09/28 21:14:56 ERROR: failed to parse tenders on page 7
+2025/09/28 21:14:56 PAGE 7: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:14:56 PAGE 7: Parsing tender data from table element...
+2025/09/28 21:14:56 PAGE 7: Parsed 0 tenders
+2025/09/28 21:14:56 ERROR: failed to parse tenders on page 7
+2025/09/28 21:14:56 PAGE 7: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:14:56 PAGE 7: Parsing tender data from table element...
+2025/09/28 21:14:56 PAGE 7: Parsed 10 tenders
+2025/09/28 21:14:56 PAGE 7: Next button found: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:14:56 Progress: 80/615 tenders (13.0%) - Page 8 completed
+2025/09/28 21:14:56 PAGE 9: Clicking Next button: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:14:57 PAGE 8: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:14:57 PAGE 8: Parsing tender data from table element...
+2025/09/28 21:14:57 PAGE 8: Parsed 0 tenders
+2025/09/28 21:14:57 ERROR: failed to parse tenders on page 8
+2025/09/28 21:14:57 PAGE 8: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:14:57 PAGE 8: Parsing tender data from table element...
+2025/09/28 21:14:57 PAGE 8: Parsed 0 tenders
+2025/09/28 21:14:57 ERROR: failed to parse tenders on page 8
+2025/09/28 21:14:57 PAGE 8: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:14:57 PAGE 8: Parsing tender data from table element...
+2025/09/28 21:14:57 PAGE 8: Parsed 10 tenders
+2025/09/28 21:14:57 PAGE 8: Next button found: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:14:57 Progress: 90/615 tenders (14.6%) - Page 9 completed
+2025/09/28 21:14:57 PAGE 10: Clicking Next button: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:14:58 PAGE 9: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:14:58 PAGE 9: Parsing tender data from table element...
+2025/09/28 21:14:58 PAGE 9: Parsed 0 tenders
+2025/09/28 21:14:58 ERROR: failed to parse tenders on page 9
+2025/09/28 21:14:58 PAGE 9: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:14:58 PAGE 9: Parsing tender data from table element...
+2025/09/28 21:14:58 PAGE 9: Parsed 0 tenders
+2025/09/28 21:14:58 ERROR: failed to parse tenders on page 9
+2025/09/28 21:14:58 PAGE 9: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:14:58 PAGE 9: Parsing tender data from table element...
+2025/09/28 21:14:58 PAGE 9: Parsed 10 tenders
+2025/09/28 21:14:58 PAGE 9: Next button found: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:14:58 Progress: 100/615 tenders (16.3%) - Page 10 completed
+2025/09/28 21:14:58 PAGE 11: Clicking Next button: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:00 PAGE 10: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:00 PAGE 10: Parsing tender data from table element...
+2025/09/28 21:15:00 PAGE 10: Parsed 0 tenders
+2025/09/28 21:15:00 ERROR: failed to parse tenders on page 10
+2025/09/28 21:15:00 PAGE 10: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:00 PAGE 10: Parsing tender data from table element...
+2025/09/28 21:15:00 PAGE 10: Parsed 0 tenders
+2025/09/28 21:15:00 ERROR: failed to parse tenders on page 10
+2025/09/28 21:15:00 PAGE 10: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:00 PAGE 10: Parsing tender data from table element...
+2025/09/28 21:15:00 PAGE 10: Parsed 10 tenders
+2025/09/28 21:15:00 PAGE 10: Next button found: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:00 Progress: 110/615 tenders (17.9%) - Page 11 completed
+2025/09/28 21:15:00 PAGE 12: Clicking Next button: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:01 PAGE 11: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:01 PAGE 11: Parsing tender data from table element...
+2025/09/28 21:15:01 PAGE 11: Parsed 0 tenders
+2025/09/28 21:15:01 ERROR: failed to parse tenders on page 11
+2025/09/28 21:15:01 PAGE 11: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:01 PAGE 11: Parsing tender data from table element...
+2025/09/28 21:15:01 PAGE 11: Parsed 0 tenders
+2025/09/28 21:15:01 ERROR: failed to parse tenders on page 11
+2025/09/28 21:15:01 PAGE 11: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:01 PAGE 11: Parsing tender data from table element...
+2025/09/28 21:15:01 PAGE 11: Parsed 10 tenders
+2025/09/28 21:15:01 PAGE 11: Next button found: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:01 Progress: 120/615 tenders (19.5%) - Page 12 completed
+2025/09/28 21:15:01 PAGE 13: Clicking Next button: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:02 PAGE 12: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:02 PAGE 12: Parsing tender data from table element...
+2025/09/28 21:15:02 PAGE 12: Parsed 0 tenders
+2025/09/28 21:15:02 ERROR: failed to parse tenders on page 12
+2025/09/28 21:15:02 PAGE 12: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:02 PAGE 12: Parsing tender data from table element...
+2025/09/28 21:15:02 PAGE 12: Parsed 0 tenders
+2025/09/28 21:15:02 ERROR: failed to parse tenders on page 12
+2025/09/28 21:15:02 PAGE 12: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:02 PAGE 12: Parsing tender data from table element...
+2025/09/28 21:15:02 PAGE 12: Parsed 10 tenders
+2025/09/28 21:15:02 PAGE 12: Next button found: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:02 Progress: 130/615 tenders (21.1%) - Page 13 completed
+2025/09/28 21:15:02 PAGE 14: Clicking Next button: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:03 PAGE 13: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:03 PAGE 13: Parsing tender data from table element...
+2025/09/28 21:15:03 PAGE 13: Parsed 0 tenders
+2025/09/28 21:15:03 ERROR: failed to parse tenders on page 13
+2025/09/28 21:15:03 PAGE 13: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:03 PAGE 13: Parsing tender data from table element...
+2025/09/28 21:15:03 PAGE 13: Parsed 0 tenders
+2025/09/28 21:15:03 ERROR: failed to parse tenders on page 13
+2025/09/28 21:15:03 PAGE 13: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:03 PAGE 13: Parsing tender data from table element...
+2025/09/28 21:15:03 PAGE 13: Parsed 10 tenders
+2025/09/28 21:15:03 PAGE 13: Next button found: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:03 Progress: 140/615 tenders (22.8%) - Page 14 completed
+2025/09/28 21:15:03 PAGE 15: Clicking Next button: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:05 PAGE 14: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:05 PAGE 14: Parsing tender data from table element...
+2025/09/28 21:15:05 PAGE 14: Parsed 0 tenders
+2025/09/28 21:15:05 ERROR: failed to parse tenders on page 14
+2025/09/28 21:15:05 PAGE 14: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:05 PAGE 14: Parsing tender data from table element...
+2025/09/28 21:15:05 PAGE 14: Parsed 0 tenders
+2025/09/28 21:15:05 ERROR: failed to parse tenders on page 14
+2025/09/28 21:15:05 PAGE 14: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:05 PAGE 14: Parsing tender data from table element...
+2025/09/28 21:15:05 PAGE 14: Parsed 10 tenders
+2025/09/28 21:15:05 PAGE 14: Next button found: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:05 Progress: 150/615 tenders (24.4%) - Page 15 completed
+2025/09/28 21:15:05 PAGE 16: Clicking Next button: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:06 PAGE 15: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:06 PAGE 15: Parsing tender data from table element...
+2025/09/28 21:15:06 PAGE 15: Parsed 0 tenders
+2025/09/28 21:15:06 ERROR: failed to parse tenders on page 15
+2025/09/28 21:15:06 PAGE 15: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:06 PAGE 15: Parsing tender data from table element...
+2025/09/28 21:15:06 PAGE 15: Parsed 0 tenders
+2025/09/28 21:15:06 ERROR: failed to parse tenders on page 15
+2025/09/28 21:15:06 PAGE 15: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:06 PAGE 15: Parsing tender data from table element...
+2025/09/28 21:15:06 PAGE 15: Parsed 10 tenders
+2025/09/28 21:15:06 PAGE 15: Next button found: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:06 Progress: 160/615 tenders (26.0%) - Page 16 completed
+2025/09/28 21:15:06 PAGE 17: Clicking Next button: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:07 PAGE 16: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:07 PAGE 16: Parsing tender data from table element...
+2025/09/28 21:15:07 PAGE 16: Parsed 0 tenders
+2025/09/28 21:15:07 ERROR: failed to parse tenders on page 16
+2025/09/28 21:15:07 PAGE 16: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:07 PAGE 16: Parsing tender data from table element...
+2025/09/28 21:15:07 PAGE 16: Parsed 0 tenders
+2025/09/28 21:15:07 ERROR: failed to parse tenders on page 16
+2025/09/28 21:15:07 PAGE 16: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:07 PAGE 16: Parsing tender data from table element...
+2025/09/28 21:15:07 PAGE 16: Parsed 10 tenders
+2025/09/28 21:15:07 PAGE 16: Next button found: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:07 Progress: 170/615 tenders (27.6%) - Page 17 completed
+2025/09/28 21:15:07 PAGE 18: Clicking Next button: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:08 PAGE 17: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:08 PAGE 17: Parsing tender data from table element...
+2025/09/28 21:15:08 PAGE 17: Parsed 0 tenders
+2025/09/28 21:15:08 ERROR: failed to parse tenders on page 17
+2025/09/28 21:15:08 PAGE 17: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:08 PAGE 17: Parsing tender data from table element...
+2025/09/28 21:15:08 PAGE 17: Parsed 0 tenders
+2025/09/28 21:15:08 ERROR: failed to parse tenders on page 17
+2025/09/28 21:15:08 PAGE 17: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:08 PAGE 17: Parsing tender data from table element...
+2025/09/28 21:15:08 PAGE 17: Parsed 10 tenders
+2025/09/28 21:15:08 PAGE 17: Next button found: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:08 Progress: 180/615 tenders (29.3%) - Page 18 completed
+2025/09/28 21:15:08 PAGE 19: Clicking Next button: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:09 PAGE 18: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:09 PAGE 18: Parsing tender data from table element...
+2025/09/28 21:15:09 PAGE 18: Parsed 0 tenders
+2025/09/28 21:15:09 ERROR: failed to parse tenders on page 18
+2025/09/28 21:15:09 PAGE 18: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:09 PAGE 18: Parsing tender data from table element...
+2025/09/28 21:15:09 PAGE 18: Parsed 0 tenders
+2025/09/28 21:15:09 ERROR: failed to parse tenders on page 18
+2025/09/28 21:15:09 PAGE 18: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:09 PAGE 18: Parsing tender data from table element...
+2025/09/28 21:15:09 PAGE 18: Parsed 10 tenders
+2025/09/28 21:15:09 PAGE 18: Next button found: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:09 Progress: 190/615 tenders (30.9%) - Page 19 completed
+2025/09/28 21:15:09 PAGE 20: Clicking Next button: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:11 PAGE 19: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:11 PAGE 19: Parsing tender data from table element...
+2025/09/28 21:15:11 PAGE 19: Parsed 0 tenders
+2025/09/28 21:15:11 ERROR: failed to parse tenders on page 19
+2025/09/28 21:15:11 PAGE 19: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:11 PAGE 19: Parsing tender data from table element...
+2025/09/28 21:15:11 PAGE 19: Parsed 0 tenders
+2025/09/28 21:15:11 ERROR: failed to parse tenders on page 19
+2025/09/28 21:15:11 PAGE 19: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:11 PAGE 19: Parsing tender data from table element...
+2025/09/28 21:15:11 PAGE 19: Parsed 10 tenders
+2025/09/28 21:15:11 PAGE 19: Next button found: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:11 Progress: 200/615 tenders (32.5%) - Page 20 completed
+2025/09/28 21:15:11 PAGE 21: Clicking Next button: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:12 PAGE 20: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:12 PAGE 20: Parsing tender data from table element...
+2025/09/28 21:15:12 PAGE 20: Parsed 0 tenders
+2025/09/28 21:15:12 ERROR: failed to parse tenders on page 20
+2025/09/28 21:15:12 PAGE 20: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:12 PAGE 20: Parsing tender data from table element...
+2025/09/28 21:15:12 PAGE 20: Parsed 0 tenders
+2025/09/28 21:15:12 ERROR: failed to parse tenders on page 20
+2025/09/28 21:15:12 PAGE 20: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:12 PAGE 20: Parsing tender data from table element...
+2025/09/28 21:15:12 PAGE 20: Parsed 10 tenders
+2025/09/28 21:15:12 PAGE 20: Next button found: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:12 Progress: 210/615 tenders (34.1%) - Page 21 completed
+2025/09/28 21:15:12 PAGE 22: Clicking Next button: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:13 PAGE 21: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:13 PAGE 21: Parsing tender data from table element...
+2025/09/28 21:15:13 PAGE 21: Parsed 0 tenders
+2025/09/28 21:15:13 ERROR: failed to parse tenders on page 21
+2025/09/28 21:15:13 PAGE 21: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:13 PAGE 21: Parsing tender data from table element...
+2025/09/28 21:15:13 PAGE 21: Parsed 0 tenders
+2025/09/28 21:15:13 ERROR: failed to parse tenders on page 21
+2025/09/28 21:15:13 PAGE 21: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:13 PAGE 21: Parsing tender data from table element...
+2025/09/28 21:15:13 PAGE 21: Parsed 10 tenders
+2025/09/28 21:15:13 PAGE 21: Next button found: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:13 Progress: 220/615 tenders (35.8%) - Page 22 completed
+2025/09/28 21:15:13 PAGE 23: Clicking Next button: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:14 PAGE 22: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:14 PAGE 22: Parsing tender data from table element...
+2025/09/28 21:15:14 PAGE 22: Parsed 0 tenders
+2025/09/28 21:15:14 ERROR: failed to parse tenders on page 22
+2025/09/28 21:15:14 PAGE 22: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:14 PAGE 22: Parsing tender data from table element...
+2025/09/28 21:15:14 PAGE 22: Parsed 0 tenders
+2025/09/28 21:15:14 ERROR: failed to parse tenders on page 22
+2025/09/28 21:15:14 PAGE 22: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:14 PAGE 22: Parsing tender data from table element...
+2025/09/28 21:15:14 PAGE 22: Parsed 10 tenders
+2025/09/28 21:15:14 PAGE 22: Next button found: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:14 Progress: 230/615 tenders (37.4%) - Page 23 completed
+2025/09/28 21:15:14 PAGE 24: Clicking Next button: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:15 PAGE 23: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:15 PAGE 23: Parsing tender data from table element...
+2025/09/28 21:15:15 PAGE 23: Parsed 0 tenders
+2025/09/28 21:15:15 ERROR: failed to parse tenders on page 23
+2025/09/28 21:15:15 PAGE 23: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:15 PAGE 23: Parsing tender data from table element...
+2025/09/28 21:15:15 PAGE 23: Parsed 0 tenders
+2025/09/28 21:15:15 ERROR: failed to parse tenders on page 23
+2025/09/28 21:15:15 PAGE 23: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:15 PAGE 23: Parsing tender data from table element...
+2025/09/28 21:15:15 PAGE 23: Parsed 10 tenders
+2025/09/28 21:15:15 PAGE 23: Next button found: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:15 Progress: 240/615 tenders (39.0%) - Page 24 completed
+2025/09/28 21:15:15 PAGE 25: Clicking Next button: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:17 PAGE 24: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:17 PAGE 24: Parsing tender data from table element...
+2025/09/28 21:15:17 PAGE 24: Parsed 0 tenders
+2025/09/28 21:15:17 ERROR: failed to parse tenders on page 24
+2025/09/28 21:15:17 PAGE 24: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:17 PAGE 24: Parsing tender data from table element...
+2025/09/28 21:15:17 PAGE 24: Parsed 0 tenders
+2025/09/28 21:15:17 ERROR: failed to parse tenders on page 24
+2025/09/28 21:15:17 PAGE 24: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:17 PAGE 24: Parsing tender data from table element...
+2025/09/28 21:15:17 PAGE 24: Parsed 10 tenders
+2025/09/28 21:15:17 PAGE 24: Next button found: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:17 Progress: 250/615 tenders (40.7%) - Page 25 completed
+2025/09/28 21:15:17 PAGE 26: Clicking Next button: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:18 PAGE 25: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:18 PAGE 25: Parsing tender data from table element...
+2025/09/28 21:15:18 PAGE 25: Parsed 0 tenders
+2025/09/28 21:15:18 ERROR: failed to parse tenders on page 25
+2025/09/28 21:15:18 PAGE 25: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:18 PAGE 25: Parsing tender data from table element...
+2025/09/28 21:15:18 PAGE 25: Parsed 0 tenders
+2025/09/28 21:15:18 ERROR: failed to parse tenders on page 25
+2025/09/28 21:15:18 PAGE 25: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:18 PAGE 25: Parsing tender data from table element...
+2025/09/28 21:15:18 PAGE 25: Parsed 10 tenders
+2025/09/28 21:15:18 PAGE 25: Next button found: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:18 Progress: 260/615 tenders (42.3%) - Page 26 completed
+2025/09/28 21:15:18 PAGE 27: Clicking Next button: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:19 PAGE 26: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:19 PAGE 26: Parsing tender data from table element...
+2025/09/28 21:15:19 PAGE 26: Parsed 0 tenders
+2025/09/28 21:15:19 ERROR: failed to parse tenders on page 26
+2025/09/28 21:15:19 PAGE 26: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:19 PAGE 26: Parsing tender data from table element...
+2025/09/28 21:15:19 PAGE 26: Parsed 0 tenders
+2025/09/28 21:15:19 ERROR: failed to parse tenders on page 26
+2025/09/28 21:15:19 PAGE 26: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:19 PAGE 26: Parsing tender data from table element...
+2025/09/28 21:15:19 PAGE 26: Parsed 10 tenders
+2025/09/28 21:15:19 PAGE 26: Next button found: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:19 Progress: 270/615 tenders (43.9%) - Page 27 completed
+2025/09/28 21:15:19 PAGE 28: Clicking Next button: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:20 PAGE 27: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:20 PAGE 27: Parsing tender data from table element...
+2025/09/28 21:15:20 PAGE 27: Parsed 0 tenders
+2025/09/28 21:15:20 ERROR: failed to parse tenders on page 27
+2025/09/28 21:15:20 PAGE 27: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:20 PAGE 27: Parsing tender data from table element...
+2025/09/28 21:15:20 PAGE 27: Parsed 0 tenders
+2025/09/28 21:15:20 ERROR: failed to parse tenders on page 27
+2025/09/28 21:15:20 PAGE 27: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:20 PAGE 27: Parsing tender data from table element...
+2025/09/28 21:15:20 PAGE 27: Parsed 10 tenders
+2025/09/28 21:15:20 PAGE 27: Next button found: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:20 Progress: 280/615 tenders (45.5%) - Page 28 completed
+2025/09/28 21:15:20 PAGE 29: Clicking Next button: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:21 PAGE 28: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:21 PAGE 28: Parsing tender data from table element...
+2025/09/28 21:15:21 PAGE 28: Parsed 0 tenders
+2025/09/28 21:15:21 ERROR: failed to parse tenders on page 28
+2025/09/28 21:15:21 PAGE 28: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:21 PAGE 28: Parsing tender data from table element...
+2025/09/28 21:15:21 PAGE 28: Parsed 0 tenders
+2025/09/28 21:15:21 ERROR: failed to parse tenders on page 28
+2025/09/28 21:15:21 PAGE 28: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:21 PAGE 28: Parsing tender data from table element...
+2025/09/28 21:15:21 PAGE 28: Parsed 10 tenders
+2025/09/28 21:15:21 PAGE 28: Next button found: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:21 Progress: 290/615 tenders (47.2%) - Page 29 completed
+2025/09/28 21:15:21 PAGE 30: Clicking Next button: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:23 PAGE 29: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:23 PAGE 29: Parsing tender data from table element...
+2025/09/28 21:15:23 PAGE 29: Parsed 0 tenders
+2025/09/28 21:15:23 ERROR: failed to parse tenders on page 29
+2025/09/28 21:15:23 PAGE 29: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:23 PAGE 29: Parsing tender data from table element...
+2025/09/28 21:15:23 PAGE 29: Parsed 0 tenders
+2025/09/28 21:15:23 ERROR: failed to parse tenders on page 29
+2025/09/28 21:15:23 PAGE 29: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:23 PAGE 29: Parsing tender data from table element...
+2025/09/28 21:15:23 PAGE 29: Parsed 10 tenders
+2025/09/28 21:15:23 PAGE 29: Next button found: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:23 Progress: 300/615 tenders (48.8%) - Page 30 completed
+2025/09/28 21:15:23 PAGE 31: Clicking Next button: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:24 PAGE 30: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:24 PAGE 30: Parsing tender data from table element...
+2025/09/28 21:15:24 PAGE 30: Parsed 0 tenders
+2025/09/28 21:15:24 ERROR: failed to parse tenders on page 30
+2025/09/28 21:15:24 PAGE 30: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:24 PAGE 30: Parsing tender data from table element...
+2025/09/28 21:15:24 PAGE 30: Parsed 0 tenders
+2025/09/28 21:15:24 ERROR: failed to parse tenders on page 30
+2025/09/28 21:15:24 PAGE 30: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:24 PAGE 30: Parsing tender data from table element...
+2025/09/28 21:15:24 PAGE 30: Parsed 10 tenders
+2025/09/28 21:15:24 PAGE 30: Next button found: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:24 Progress: 310/615 tenders (50.4%) - Page 31 completed
+2025/09/28 21:15:24 PAGE 32: Clicking Next button: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:25 PAGE 31: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:25 PAGE 31: Parsing tender data from table element...
+2025/09/28 21:15:25 PAGE 31: Parsed 0 tenders
+2025/09/28 21:15:25 ERROR: failed to parse tenders on page 31
+2025/09/28 21:15:25 PAGE 31: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:25 PAGE 31: Parsing tender data from table element...
+2025/09/28 21:15:25 PAGE 31: Parsed 0 tenders
+2025/09/28 21:15:25 ERROR: failed to parse tenders on page 31
+2025/09/28 21:15:25 PAGE 31: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:25 PAGE 31: Parsing tender data from table element...
+2025/09/28 21:15:25 PAGE 31: Parsed 10 tenders
+2025/09/28 21:15:25 PAGE 31: Next button found: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:25 Progress: 320/615 tenders (52.0%) - Page 32 completed
+2025/09/28 21:15:25 PAGE 33: Clicking Next button: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:26 PAGE 32: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:26 PAGE 32: Parsing tender data from table element...
+2025/09/28 21:15:26 PAGE 32: Parsed 0 tenders
+2025/09/28 21:15:26 ERROR: failed to parse tenders on page 32
+2025/09/28 21:15:26 PAGE 32: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:26 PAGE 32: Parsing tender data from table element...
+2025/09/28 21:15:26 PAGE 32: Parsed 0 tenders
+2025/09/28 21:15:26 ERROR: failed to parse tenders on page 32
+2025/09/28 21:15:26 PAGE 32: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:26 PAGE 32: Parsing tender data from table element...
+2025/09/28 21:15:26 PAGE 32: Parsed 10 tenders
+2025/09/28 21:15:26 PAGE 32: Next button found: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:26 Progress: 330/615 tenders (53.7%) - Page 33 completed
+2025/09/28 21:15:26 PAGE 34: Clicking Next button: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:27 PAGE 33: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:27 PAGE 33: Parsing tender data from table element...
+2025/09/28 21:15:27 PAGE 33: Parsed 0 tenders
+2025/09/28 21:15:27 ERROR: failed to parse tenders on page 33
+2025/09/28 21:15:27 PAGE 33: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:27 PAGE 33: Parsing tender data from table element...
+2025/09/28 21:15:27 PAGE 33: Parsed 0 tenders
+2025/09/28 21:15:27 ERROR: failed to parse tenders on page 33
+2025/09/28 21:15:27 PAGE 33: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:27 PAGE 33: Parsing tender data from table element...
+2025/09/28 21:15:27 PAGE 33: Parsed 10 tenders
+2025/09/28 21:15:27 PAGE 33: Next button found: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:27 Progress: 340/615 tenders (55.3%) - Page 34 completed
+2025/09/28 21:15:27 PAGE 35: Clicking Next button: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:29 PAGE 34: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:29 PAGE 34: Parsing tender data from table element...
+2025/09/28 21:15:29 PAGE 34: Parsed 0 tenders
+2025/09/28 21:15:29 ERROR: failed to parse tenders on page 34
+2025/09/28 21:15:29 PAGE 34: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:29 PAGE 34: Parsing tender data from table element...
+2025/09/28 21:15:29 PAGE 34: Parsed 0 tenders
+2025/09/28 21:15:29 ERROR: failed to parse tenders on page 34
+2025/09/28 21:15:29 PAGE 34: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:29 PAGE 34: Parsing tender data from table element...
+2025/09/28 21:15:29 PAGE 34: Parsed 10 tenders
+2025/09/28 21:15:29 PAGE 34: Next button found: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:29 Progress: 350/615 tenders (56.9%) - Page 35 completed
+2025/09/28 21:15:29 PAGE 36: Clicking Next button: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:30 PAGE 35: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:30 PAGE 35: Parsing tender data from table element...
+2025/09/28 21:15:30 PAGE 35: Parsed 0 tenders
+2025/09/28 21:15:30 ERROR: failed to parse tenders on page 35
+2025/09/28 21:15:30 PAGE 35: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:30 PAGE 35: Parsing tender data from table element...
+2025/09/28 21:15:30 PAGE 35: Parsed 0 tenders
+2025/09/28 21:15:30 ERROR: failed to parse tenders on page 35
+2025/09/28 21:15:30 PAGE 35: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:30 PAGE 35: Parsing tender data from table element...
+2025/09/28 21:15:30 PAGE 35: Parsed 10 tenders
+2025/09/28 21:15:30 PAGE 35: Next button found: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:30 Progress: 360/615 tenders (58.5%) - Page 36 completed
+2025/09/28 21:15:30 PAGE 37: Clicking Next button: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:31 PAGE 36: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:31 PAGE 36: Parsing tender data from table element...
+2025/09/28 21:15:31 PAGE 36: Parsed 0 tenders
+2025/09/28 21:15:31 ERROR: failed to parse tenders on page 36
+2025/09/28 21:15:31 PAGE 36: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:31 PAGE 36: Parsing tender data from table element...
+2025/09/28 21:15:31 PAGE 36: Parsed 0 tenders
+2025/09/28 21:15:31 ERROR: failed to parse tenders on page 36
+2025/09/28 21:15:31 PAGE 36: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:31 PAGE 36: Parsing tender data from table element...
+2025/09/28 21:15:31 PAGE 36: Parsed 10 tenders
+2025/09/28 21:15:31 PAGE 36: Next button found: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:31 Progress: 370/615 tenders (60.2%) - Page 37 completed
+2025/09/28 21:15:31 PAGE 38: Clicking Next button: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:32 PAGE 37: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:32 PAGE 37: Parsing tender data from table element...
+2025/09/28 21:15:32 PAGE 37: Parsed 0 tenders
+2025/09/28 21:15:32 ERROR: failed to parse tenders on page 37
+2025/09/28 21:15:32 PAGE 37: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:32 PAGE 37: Parsing tender data from table element...
+2025/09/28 21:15:32 PAGE 37: Parsed 0 tenders
+2025/09/28 21:15:32 ERROR: failed to parse tenders on page 37
+2025/09/28 21:15:32 PAGE 37: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:32 PAGE 37: Parsing tender data from table element...
+2025/09/28 21:15:32 PAGE 37: Parsed 10 tenders
+2025/09/28 21:15:32 PAGE 37: Next button found: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:32 Progress: 380/615 tenders (61.8%) - Page 38 completed
+2025/09/28 21:15:32 PAGE 39: Clicking Next button: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:33 PAGE 38: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:33 PAGE 38: Parsing tender data from table element...
+2025/09/28 21:15:33 PAGE 38: Parsed 0 tenders
+2025/09/28 21:15:33 ERROR: failed to parse tenders on page 38
+2025/09/28 21:15:33 PAGE 38: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:33 PAGE 38: Parsing tender data from table element...
+2025/09/28 21:15:33 PAGE 38: Parsed 0 tenders
+2025/09/28 21:15:33 ERROR: failed to parse tenders on page 38
+2025/09/28 21:15:33 PAGE 38: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:33 PAGE 38: Parsing tender data from table element...
+2025/09/28 21:15:33 PAGE 38: Parsed 10 tenders
+2025/09/28 21:15:33 PAGE 38: Next button found: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:33 Progress: 390/615 tenders (63.4%) - Page 39 completed
+2025/09/28 21:15:33 PAGE 40: Clicking Next button: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:34 PAGE 39: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:34 PAGE 39: Parsing tender data from table element...
+2025/09/28 21:15:34 PAGE 39: Parsed 0 tenders
+2025/09/28 21:15:34 ERROR: failed to parse tenders on page 39
+2025/09/28 21:15:34 PAGE 39: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:34 PAGE 39: Parsing tender data from table element...
+2025/09/28 21:15:34 PAGE 39: Parsed 0 tenders
+2025/09/28 21:15:34 ERROR: failed to parse tenders on page 39
+2025/09/28 21:15:34 PAGE 39: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:34 PAGE 39: Parsing tender data from table element...
+2025/09/28 21:15:34 PAGE 39: Parsed 10 tenders
+2025/09/28 21:15:34 PAGE 39: Next button found: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:34 Progress: 400/615 tenders (65.0%) - Page 40 completed
+2025/09/28 21:15:34 PAGE 41: Clicking Next button: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:36 PAGE 40: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:36 PAGE 40: Parsing tender data from table element...
+2025/09/28 21:15:36 PAGE 40: Parsed 0 tenders
+2025/09/28 21:15:36 ERROR: failed to parse tenders on page 40
+2025/09/28 21:15:36 PAGE 40: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:36 PAGE 40: Parsing tender data from table element...
+2025/09/28 21:15:36 PAGE 40: Parsed 0 tenders
+2025/09/28 21:15:36 ERROR: failed to parse tenders on page 40
+2025/09/28 21:15:36 PAGE 40: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:36 PAGE 40: Parsing tender data from table element...
+2025/09/28 21:15:36 PAGE 40: Parsed 10 tenders
+2025/09/28 21:15:36 PAGE 40: Next button found: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:36 Progress: 410/615 tenders (66.7%) - Page 41 completed
+2025/09/28 21:15:36 PAGE 42: Clicking Next button: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:37 PAGE 41: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:37 PAGE 41: Parsing tender data from table element...
+2025/09/28 21:15:37 PAGE 41: Parsed 0 tenders
+2025/09/28 21:15:37 ERROR: failed to parse tenders on page 41
+2025/09/28 21:15:37 PAGE 41: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:37 PAGE 41: Parsing tender data from table element...
+2025/09/28 21:15:37 PAGE 41: Parsed 0 tenders
+2025/09/28 21:15:37 ERROR: failed to parse tenders on page 41
+2025/09/28 21:15:37 PAGE 41: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:37 PAGE 41: Parsing tender data from table element...
+2025/09/28 21:15:37 PAGE 41: Parsed 10 tenders
+2025/09/28 21:15:37 PAGE 41: Next button found: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:37 Progress: 420/615 tenders (68.3%) - Page 42 completed
+2025/09/28 21:15:37 PAGE 43: Clicking Next button: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:38 PAGE 42: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:38 PAGE 42: Parsing tender data from table element...
+2025/09/28 21:15:38 PAGE 42: Parsed 0 tenders
+2025/09/28 21:15:38 ERROR: failed to parse tenders on page 42
+2025/09/28 21:15:38 PAGE 42: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:38 PAGE 42: Parsing tender data from table element...
+2025/09/28 21:15:38 PAGE 42: Parsed 0 tenders
+2025/09/28 21:15:38 ERROR: failed to parse tenders on page 42
+2025/09/28 21:15:38 PAGE 42: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:38 PAGE 42: Parsing tender data from table element...
+2025/09/28 21:15:38 PAGE 42: Parsed 10 tenders
+2025/09/28 21:15:38 PAGE 42: Next button found: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:38 Progress: 430/615 tenders (69.9%) - Page 43 completed
+2025/09/28 21:15:38 PAGE 44: Clicking Next button: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:39 PAGE 43: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:39 PAGE 43: Parsing tender data from table element...
+2025/09/28 21:15:39 PAGE 43: Parsed 0 tenders
+2025/09/28 21:15:39 ERROR: failed to parse tenders on page 43
+2025/09/28 21:15:39 PAGE 43: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:39 PAGE 43: Parsing tender data from table element...
+2025/09/28 21:15:39 PAGE 43: Parsed 0 tenders
+2025/09/28 21:15:39 ERROR: failed to parse tenders on page 43
+2025/09/28 21:15:39 PAGE 43: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:39 PAGE 43: Parsing tender data from table element...
+2025/09/28 21:15:39 PAGE 43: Parsed 10 tenders
+2025/09/28 21:15:39 PAGE 43: Next button found: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:39 Progress: 440/615 tenders (71.5%) - Page 44 completed
+2025/09/28 21:15:39 PAGE 45: Clicking Next button: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:40 PAGE 44: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:40 PAGE 44: Parsing tender data from table element...
+2025/09/28 21:15:40 PAGE 44: Parsed 0 tenders
+2025/09/28 21:15:40 ERROR: failed to parse tenders on page 44
+2025/09/28 21:15:40 PAGE 44: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:40 PAGE 44: Parsing tender data from table element...
+2025/09/28 21:15:40 PAGE 44: Parsed 0 tenders
+2025/09/28 21:15:40 ERROR: failed to parse tenders on page 44
+2025/09/28 21:15:40 PAGE 44: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:40 PAGE 44: Parsing tender data from table element...
+2025/09/28 21:15:40 PAGE 44: Parsed 10 tenders
+2025/09/28 21:15:40 PAGE 44: Next button found: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:40 Progress: 450/615 tenders (73.2%) - Page 45 completed
+2025/09/28 21:15:40 PAGE 46: Clicking Next button: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:42 PAGE 45: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:42 PAGE 45: Parsing tender data from table element...
+2025/09/28 21:15:42 PAGE 45: Parsed 0 tenders
+2025/09/28 21:15:42 ERROR: failed to parse tenders on page 45
+2025/09/28 21:15:42 PAGE 45: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:42 PAGE 45: Parsing tender data from table element...
+2025/09/28 21:15:42 PAGE 45: Parsed 0 tenders
+2025/09/28 21:15:42 ERROR: failed to parse tenders on page 45
+2025/09/28 21:15:42 PAGE 45: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:42 PAGE 45: Parsing tender data from table element...
+2025/09/28 21:15:42 PAGE 45: Parsed 10 tenders
+2025/09/28 21:15:42 PAGE 45: Next button found: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:42 Progress: 460/615 tenders (74.8%) - Page 46 completed
+2025/09/28 21:15:42 PAGE 47: Clicking Next button: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:43 PAGE 46: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:43 PAGE 46: Parsing tender data from table element...
+2025/09/28 21:15:43 PAGE 46: Parsed 0 tenders
+2025/09/28 21:15:43 ERROR: failed to parse tenders on page 46
+2025/09/28 21:15:43 PAGE 46: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:43 PAGE 46: Parsing tender data from table element...
+2025/09/28 21:15:43 PAGE 46: Parsed 0 tenders
+2025/09/28 21:15:43 ERROR: failed to parse tenders on page 46
+2025/09/28 21:15:43 PAGE 46: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:43 PAGE 46: Parsing tender data from table element...
+2025/09/28 21:15:43 PAGE 46: Parsed 10 tenders
+2025/09/28 21:15:43 PAGE 46: Next button found: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:43 Progress: 470/615 tenders (76.4%) - Page 47 completed
+2025/09/28 21:15:43 PAGE 48: Clicking Next button: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:44 PAGE 47: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:44 PAGE 47: Parsing tender data from table element...
+2025/09/28 21:15:44 PAGE 47: Parsed 0 tenders
+2025/09/28 21:15:44 ERROR: failed to parse tenders on page 47
+2025/09/28 21:15:44 PAGE 47: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:44 PAGE 47: Parsing tender data from table element...
+2025/09/28 21:15:44 PAGE 47: Parsed 0 tenders
+2025/09/28 21:15:44 ERROR: failed to parse tenders on page 47
+2025/09/28 21:15:44 PAGE 47: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:44 PAGE 47: Parsing tender data from table element...
+2025/09/28 21:15:44 PAGE 47: Parsed 10 tenders
+2025/09/28 21:15:44 PAGE 47: Next button found: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:44 Progress: 480/615 tenders (78.0%) - Page 48 completed
+2025/09/28 21:15:44 PAGE 49: Clicking Next button: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:45 PAGE 48: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:45 PAGE 48: Parsing tender data from table element...
+2025/09/28 21:15:45 PAGE 48: Parsed 0 tenders
+2025/09/28 21:15:45 ERROR: failed to parse tenders on page 48
+2025/09/28 21:15:45 PAGE 48: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:45 PAGE 48: Parsing tender data from table element...
+2025/09/28 21:15:45 PAGE 48: Parsed 0 tenders
+2025/09/28 21:15:45 ERROR: failed to parse tenders on page 48
+2025/09/28 21:15:45 PAGE 48: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:45 PAGE 48: Parsing tender data from table element...
+2025/09/28 21:15:45 PAGE 48: Parsed 10 tenders
+2025/09/28 21:15:45 PAGE 48: Next button found: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:45 Progress: 490/615 tenders (79.7%) - Page 49 completed
+2025/09/28 21:15:45 PAGE 50: Clicking Next button: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:47 PAGE 49: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:47 PAGE 49: Parsing tender data from table element...
+2025/09/28 21:15:47 PAGE 49: Parsed 0 tenders
+2025/09/28 21:15:47 ERROR: failed to parse tenders on page 49
+2025/09/28 21:15:47 PAGE 49: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:47 PAGE 49: Parsing tender data from table element...
+2025/09/28 21:15:47 PAGE 49: Parsed 0 tenders
+2025/09/28 21:15:47 ERROR: failed to parse tenders on page 49
+2025/09/28 21:15:47 PAGE 49: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:47 PAGE 49: Parsing tender data from table element...
+2025/09/28 21:15:47 PAGE 49: Parsed 10 tenders
+2025/09/28 21:15:47 PAGE 49: Next button found: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:47 Progress: 500/615 tenders (81.3%) - Page 50 completed
+2025/09/28 21:15:47 PAGE 51: Clicking Next button: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:48 PAGE 50: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:48 PAGE 50: Parsing tender data from table element...
+2025/09/28 21:15:48 PAGE 50: Parsed 0 tenders
+2025/09/28 21:15:48 ERROR: failed to parse tenders on page 50
+2025/09/28 21:15:48 PAGE 50: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:48 PAGE 50: Parsing tender data from table element...
+2025/09/28 21:15:48 PAGE 50: Parsed 0 tenders
+2025/09/28 21:15:48 ERROR: failed to parse tenders on page 50
+2025/09/28 21:15:48 PAGE 50: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:48 PAGE 50: Parsing tender data from table element...
+2025/09/28 21:15:48 PAGE 50: Parsed 10 tenders
+2025/09/28 21:15:48 PAGE 50: Next button found: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:48 Progress: 510/615 tenders (82.9%) - Page 51 completed
+2025/09/28 21:15:48 PAGE 52: Clicking Next button: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:49 PAGE 51: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:49 PAGE 51: Parsing tender data from table element...
+2025/09/28 21:15:49 PAGE 51: Parsed 0 tenders
+2025/09/28 21:15:49 ERROR: failed to parse tenders on page 51
+2025/09/28 21:15:49 PAGE 51: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:49 PAGE 51: Parsing tender data from table element...
+2025/09/28 21:15:49 PAGE 51: Parsed 0 tenders
+2025/09/28 21:15:49 ERROR: failed to parse tenders on page 51
+2025/09/28 21:15:49 PAGE 51: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:49 PAGE 51: Parsing tender data from table element...
+2025/09/28 21:15:49 PAGE 51: Parsed 10 tenders
+2025/09/28 21:15:49 PAGE 51: Next button found: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:49 Progress: 520/615 tenders (84.6%) - Page 52 completed
+2025/09/28 21:15:49 PAGE 53: Clicking Next button: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:50 PAGE 52: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:50 PAGE 52: Parsing tender data from table element...
+2025/09/28 21:15:50 PAGE 52: Parsed 0 tenders
+2025/09/28 21:15:50 ERROR: failed to parse tenders on page 52
+2025/09/28 21:15:50 PAGE 52: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:50 PAGE 52: Parsing tender data from table element...
+2025/09/28 21:15:50 PAGE 52: Parsed 0 tenders
+2025/09/28 21:15:50 ERROR: failed to parse tenders on page 52
+2025/09/28 21:15:50 PAGE 52: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:50 PAGE 52: Parsing tender data from table element...
+2025/09/28 21:15:50 PAGE 52: Parsed 10 tenders
+2025/09/28 21:15:50 PAGE 52: Next button found: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:50 Progress: 530/615 tenders (86.2%) - Page 53 completed
+2025/09/28 21:15:50 PAGE 54: Clicking Next button: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:52 PAGE 53: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:52 PAGE 53: Parsing tender data from table element...
+2025/09/28 21:15:52 PAGE 53: Parsed 0 tenders
+2025/09/28 21:15:52 ERROR: failed to parse tenders on page 53
+2025/09/28 21:15:52 PAGE 53: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:52 PAGE 53: Parsing tender data from table element...
+2025/09/28 21:15:52 PAGE 53: Parsed 0 tenders
+2025/09/28 21:15:52 ERROR: failed to parse tenders on page 53
+2025/09/28 21:15:52 PAGE 53: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:52 PAGE 53: Parsing tender data from table element...
+2025/09/28 21:15:52 PAGE 53: Parsed 10 tenders
+2025/09/28 21:15:52 PAGE 53: Next button found: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:52 Progress: 540/615 tenders (87.8%) - Page 54 completed
+2025/09/28 21:15:52 PAGE 55: Clicking Next button: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:53 PAGE 54: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:53 PAGE 54: Parsing tender data from table element...
+2025/09/28 21:15:53 PAGE 54: Parsed 0 tenders
+2025/09/28 21:15:53 ERROR: failed to parse tenders on page 54
+2025/09/28 21:15:53 PAGE 54: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:53 PAGE 54: Parsing tender data from table element...
+2025/09/28 21:15:53 PAGE 54: Parsed 0 tenders
+2025/09/28 21:15:53 ERROR: failed to parse tenders on page 54
+2025/09/28 21:15:53 PAGE 54: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:53 PAGE 54: Parsing tender data from table element...
+2025/09/28 21:15:53 PAGE 54: Parsed 10 tenders
+2025/09/28 21:15:53 PAGE 54: Next button found: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:53 Progress: 550/615 tenders (89.4%) - Page 55 completed
+2025/09/28 21:15:53 PAGE 56: Clicking Next button: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:54 PAGE 55: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:54 PAGE 55: Parsing tender data from table element...
+2025/09/28 21:15:54 PAGE 55: Parsed 0 tenders
+2025/09/28 21:15:54 ERROR: failed to parse tenders on page 55
+2025/09/28 21:15:54 PAGE 55: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:54 PAGE 55: Parsing tender data from table element...
+2025/09/28 21:15:54 PAGE 55: Parsed 0 tenders
+2025/09/28 21:15:54 ERROR: failed to parse tenders on page 55
+2025/09/28 21:15:54 PAGE 55: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:54 PAGE 55: Parsing tender data from table element...
+2025/09/28 21:15:54 PAGE 55: Parsed 10 tenders
+2025/09/28 21:15:54 PAGE 55: Next button found: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:54 Progress: 560/615 tenders (91.1%) - Page 56 completed
+2025/09/28 21:15:54 PAGE 57: Clicking Next button: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:55 PAGE 56: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:55 PAGE 56: Parsing tender data from table element...
+2025/09/28 21:15:55 PAGE 56: Parsed 0 tenders
+2025/09/28 21:15:55 ERROR: failed to parse tenders on page 56
+2025/09/28 21:15:55 PAGE 56: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:55 PAGE 56: Parsing tender data from table element...
+2025/09/28 21:15:55 PAGE 56: Parsed 0 tenders
+2025/09/28 21:15:55 ERROR: failed to parse tenders on page 56
+2025/09/28 21:15:55 PAGE 56: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:55 PAGE 56: Parsing tender data from table element...
+2025/09/28 21:15:55 PAGE 56: Parsed 10 tenders
+2025/09/28 21:15:55 PAGE 56: Next button found: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:55 Progress: 570/615 tenders (92.7%) - Page 57 completed
+2025/09/28 21:15:55 PAGE 58: Clicking Next button: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:57 PAGE 57: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:57 PAGE 57: Parsing tender data from table element...
+2025/09/28 21:15:57 PAGE 57: Parsed 0 tenders
+2025/09/28 21:15:57 ERROR: failed to parse tenders on page 57
+2025/09/28 21:15:57 PAGE 57: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:57 PAGE 57: Parsing tender data from table element...
+2025/09/28 21:15:57 PAGE 57: Parsed 0 tenders
+2025/09/28 21:15:57 ERROR: failed to parse tenders on page 57
+2025/09/28 21:15:57 PAGE 57: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:57 PAGE 57: Parsing tender data from table element...
+2025/09/28 21:15:57 PAGE 57: Parsed 10 tenders
+2025/09/28 21:15:57 PAGE 57: Next button found: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:57 Progress: 580/615 tenders (94.3%) - Page 58 completed
+2025/09/28 21:15:57 PAGE 59: Clicking Next button: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:58 PAGE 58: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:58 PAGE 58: Parsing tender data from table element...
+2025/09/28 21:15:58 PAGE 58: Parsed 0 tenders
+2025/09/28 21:15:58 ERROR: failed to parse tenders on page 58
+2025/09/28 21:15:58 PAGE 58: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:58 PAGE 58: Parsing tender data from table element...
+2025/09/28 21:15:58 PAGE 58: Parsed 0 tenders
+2025/09/28 21:15:58 ERROR: failed to parse tenders on page 58
+2025/09/28 21:15:58 PAGE 58: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:58 PAGE 58: Parsing tender data from table element...
+2025/09/28 21:15:58 PAGE 58: Parsed 10 tenders
+2025/09/28 21:15:58 PAGE 58: Next button found: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:58 Progress: 590/615 tenders (95.9%) - Page 59 completed
+2025/09/28 21:15:58 PAGE 60: Clicking Next button: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:59 PAGE 59: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:59 PAGE 59: Parsing tender data from table element...
+2025/09/28 21:15:59 PAGE 59: Parsed 0 tenders
+2025/09/28 21:15:59 ERROR: failed to parse tenders on page 59
+2025/09/28 21:15:59 PAGE 59: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:59 PAGE 59: Parsing tender data from table element...
+2025/09/28 21:15:59 PAGE 59: Parsed 0 tenders
+2025/09/28 21:15:59 ERROR: failed to parse tenders on page 59
+2025/09/28 21:15:59 PAGE 59: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:15:59 PAGE 59: Parsing tender data from table element...
+2025/09/28 21:15:59 PAGE 59: Parsed 10 tenders
+2025/09/28 21:15:59 PAGE 59: Next button found: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:15:59 Progress: 600/615 tenders (97.6%) - Page 60 completed
+2025/09/28 21:15:59 PAGE 61: Clicking Next button: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:16:00 PAGE 60: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:16:00 PAGE 60: Parsing tender data from table element...
+2025/09/28 21:16:00 PAGE 60: Parsed 0 tenders
+2025/09/28 21:16:00 ERROR: failed to parse tenders on page 60
+2025/09/28 21:16:00 PAGE 60: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:16:00 PAGE 60: Parsing tender data from table element...
+2025/09/28 21:16:00 PAGE 60: Parsed 0 tenders
+2025/09/28 21:16:00 ERROR: failed to parse tenders on page 60
+2025/09/28 21:16:00 PAGE 60: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:16:00 PAGE 60: Parsing tender data from table element...
+2025/09/28 21:16:00 PAGE 60: Parsed 10 tenders
+2025/09/28 21:16:00 PAGE 60: Next button found: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:16:00 Progress: 610/615 tenders (99.2%) - Page 61 completed
+2025/09/28 21:16:00 PAGE 62: Clicking Next button: https://etenders.gov.in/eprocure/app?component=loadNext&page=FrontEndLatestActiveCorrigendums&service=direct&session=T
+2025/09/28 21:16:02 PAGE 61: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:16:02 PAGE 61: Parsing tender data from table element...
+2025/09/28 21:16:02 PAGE 61: Parsed 0 tenders
+2025/09/28 21:16:02 ERROR: failed to parse tenders on page 61
+2025/09/28 21:16:02 PAGE 61: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:16:02 PAGE 61: Parsing tender data from table element...
+2025/09/28 21:16:02 PAGE 61: Parsed 0 tenders
+2025/09/28 21:16:02 ERROR: failed to parse tenders on page 61
+2025/09/28 21:16:02 PAGE 61: Found tender table! Parsing results... (Status: 200)
+2025/09/28 21:16:02 PAGE 61: Parsing tender data from table element...
+2025/09/28 21:16:02 PAGE 61: Parsed 5 tenders
+2025/09/28 21:16:02 Progress: 615/615 tenders (100.0%) - Page 62 completed
+2025/09/28 21:16:02 All 615 tenders scraped, stopping pagination
+2025/09/28 21:16:02 Pagination completed! Processed 62 pages, scraped 615 tenders
+2025/09/28 21:16:02 Scraping completed successfully! Total tenders scraped: 615/615

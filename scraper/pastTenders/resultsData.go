@@ -55,13 +55,13 @@ func (pt *PastTender) extractBidsList(doc *goquery.Selection, pastTenderData *Pa
 			case 2: // Bidder Name
 				bid.BidderName = text
 			case 3: // Submitted Date
-				bid.SubmittedDate = parseDate(text)
+				bid.SubmittedDate = strings.TrimSpace(text)
 			case 4: // Status
 				bid.Status = text
 			case 5: // Remarks
 				bid.Remarks = text
 			case 6: // Status Updated On
-				bid.StatusUpdatedOn = parseDate(text)
+				bid.StatusUpdatedOn = strings.TrimSpace(text)
 			}
 		})
 
@@ -148,7 +148,7 @@ func (pt *PastTender) extractAOCSummary(table *goquery.Selection, pastTenderData
 		}
 		if strings.Contains(firstCell, "Contract Value") {
 			contractValue := cleanText(row.Find("td").Last().Text())
-			pastTenderData.ContractValue = strings.TrimSpace(contractValue)
+			pastTenderData.ContractValue = parseAmountToFloat(strings.TrimSpace(contractValue))
 			// // log.Printf("[SCRAPER] Contract value: %s", contractValue)
 		}
 	})

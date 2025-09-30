@@ -245,7 +245,7 @@ func (ps *PastTender) ConvertToUtilsTender(data *TenderData, pastTenderData *Pas
 	tender.BidsList = pastTenderData.Bids
 	tender.StageUpdates = pastTenderData.StageUpdates
 	// Extract the latest stage date from stage updates
-	tender.LatestStageDate = updateLatestStageDate(&tender.StageUpdates)
+	// tender.LatestStageDate = updateLatestStageDate(&tender.StageUpdates)
 	tender.ContractValue = pastTenderData.ContractValue
 
 	tender.FinancialEvaluationBidList = pastTenderData.FinancialEvaluationBidList

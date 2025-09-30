@@ -1,7 +1,5 @@
 package utils
 
-import "time"
-
 type PastTenders struct {
 	TenderInfo                 Tender
 	BidsList                   []Bid
@@ -9,18 +7,17 @@ type PastTenders struct {
 	FinancialEvaluationBidList []FinancialEvaluationBidList
 	AwardedBidsList            []AwardedBidsList
 	LatestStage                string
-	LatestStageDate            string
-	ContractValue              string
+	ContractValue              float64
 }
 
 type Bid struct {
 	SNo             int
 	BidNumber       string
 	BidderName      string
-	SubmittedDate   time.Time
+	SubmittedDate   string
 	Status          string
 	Remarks         string
-	StatusUpdatedOn time.Time
+	StatusUpdatedOn string
 }
 
 type FinancialEvaluationBidList struct {

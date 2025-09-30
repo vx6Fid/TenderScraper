@@ -3,6 +3,7 @@ package nav
 import (
 	"encoding/csv"
 	"fmt"
+	"net/url"
 	"strconv"
 	"strings"
 	"sync"
@@ -52,7 +53,8 @@ func (s *SearchScraper) Scrape() error {
 		link := e.ChildAttr("td:nth-child(5) a", "href")
 
 		if strings.HasPrefix(link, "/") {
-			link = "https://etender.up.nic.in" + link
+			u, _ := url.Parse(s.baseURL)
+			link = u.Scheme + "://" + u.Host + link
 		}
 
 		row := []string{
@@ -103,7 +105,8 @@ func (s *SearchScraper) ScrapeWithMutex(mu *sync.Mutex) error {
 
 		link := e.ChildAttr("td:nth-child(5) a", "href")
 		if strings.HasPrefix(link, "/") {
-			link = "https://etender.up.nic.in" + link
+			u, _ := url.Parse(s.baseURL)
+			link = u.Scheme + "://" + u.Host + link
 		}
 
 		row := []string{

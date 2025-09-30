@@ -12,7 +12,7 @@ var StageName = map[string]string{
 }
 
 var BaseURLs = []URLS{
-	// {BaseURL: "https://eprocure.gov.in/eprocure/app", State: "eProcurementCentralGovernment", Domain: "eprocure.gov.in"}, // eprocure only for this
+	{BaseURL: "https://eprocure.gov.in/eprocure/app", State: "eProcurementCentralGovernment", Domain: "eprocure.gov.in"}, // eprocure only for this
 	// {BaseURL: "https://defproc.gov.in/nicgep/app", State: "MinistryOfDefence", Domain: "defproc.gov.in"},
 	// {BaseURL: "https://pmgsytenders.gov.in/nicgep/app", State: "PMGSY", Domain: "pmgsytenders.gov.in"},
 	// {BaseURL: "https://etenders.gov.in/eprocure/app", State: "PSU", Domain: "etenders.gov.in"},
@@ -31,7 +31,7 @@ var BaseURLs = []URLS{
 	// {BaseURL: "https://eprocure.andamannicobar.gov.in/nicgep/app", State: "AndamanNicobar", Domain: "eprocure.andamannicobar.gov.in"},
 	// {BaseURL: "https://assamtenders.gov.in/nicgep/app", State: "Assam", Domain: "assamtenders.gov.in"},
 	// {BaseURL: "https://etenders.chd.nic.in/nicgep/app", State: "Chandigarh", Domain: "etenders.chd.nic.in"},
-	{BaseURL: "https://dnhtenders.gov.in/nicgep/app", State: "DadarNagarHaveli", Domain: "dnhtenders.gov.in"},
+	// {BaseURL: "https://dnhtenders.gov.in/nicgep/app", State: "DadarNagarHaveli", Domain: "dnhtenders.gov.in"},
 	// {BaseURL: "https://ddtenders.gov.in/nicgep/app", State: "DamanDiu", Domain: "ddtenders.gov.in"},
 	// {BaseURL: "https://govtprocurement.delhi.gov.in/nicgep/app", State: "Delhi", Domain: "govtprocurement.delhi.gov.in"},
 	// {BaseURL: "https://eprocure.goa.gov.in/nicgep/app", State: "Goa", Domain: "eprocure.goa.gov.in"},

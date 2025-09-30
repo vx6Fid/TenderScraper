@@ -66,31 +66,31 @@ func parseAmountToFloat(amount string) float64 {
 	return v
 }
 
-func updateLatestStageDate(tender *utils.StageUpdates) string {
-	fields := []string{
-		tender.TechnicalBidOpeningUpdatedOn,
-		tender.TechnicalEvaluationUpdatedOn,
-		tender.FinancialEvaluationUpdatedOn,
-		tender.AOCUpdatedOn,
-	}
+// func updateLatestStageDate(tender *utils.StageUpdates) string {
+// 	fields := []string{
+// 		tender.TechnicalBidOpeningUpdatedOn,
+// 		tender.TechnicalEvaluationUpdatedOn,
+// 		tender.FinancialEvaluationUpdatedOn,
+// 		tender.AOCUpdatedOn,
+// 	}
 
-	var latest time.Time
-	for _, f := range fields {
-		if f == "" {
-			continue
-		}
-		d := parseDate(f)
-		if d.After(latest) {
-			latest = d
-		}
-	}
+// 	var latest time.Time
+// 	for _, f := range fields {
+// 		if f == "" {
+// 			continue
+// 		}
+// 		d := parseDate(f)
+// 		if d.After(latest) {
+// 			latest = d
+// 		}
+// 	}
 
-	if !latest.IsZero() {
-		return latest.Format("2006-01-02")
-	} else {
-		return ""
-	}
-}
+// 	if !latest.IsZero() {
+// 		return latest.Format("2006-01-02")
+// 	} else {
+// 		return ""
+// 	}
+// }
 
 func parseDate(input string) time.Time {
 	// fmt.Println("Parsing date:", input)

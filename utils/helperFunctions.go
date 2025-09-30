@@ -170,7 +170,7 @@ func dirname(path string) string {
 }
 
 func CalculateOptimalWorkers(totalJobs int) int {
-	return min(totalJobs, 120)
+	return min(totalJobs, 12)
 }
 
 // function to get the last created folder name in TenderDate/Links

@@ -34,7 +34,7 @@ func (le *LinkExtractor) Run() error {
 	var wg sync.WaitGroup
 
 	// Writers for failed sessions even if session establishment fails
-	failedSessionsWriter := NewFailedSearchWriter("Sessions")
+	failedSessionsWriter := NewFailedSessWriter()
 	defer failedSessionsWriter.Close()
 
 	sem := make(chan struct{}, utils.MaxSessionParallel)
@@ -51,7 +51,7 @@ func (le *LinkExtractor) Run() error {
 			if err := s.EstablishSession("ActiveTenders"); err != nil {
 				log.Printf("[%s] [ERROR] Failed to establish session: %v", u.State, err)
 				// Write to failed sessions file
-				failedSessionsWriter.WriteFailure(0, fmt.Sprintf("Session failed: %v", err))
+				failedSessionsWriter.WriteFailure(u.State, u.BaseURL, err.Error())
 				return
 			}
 

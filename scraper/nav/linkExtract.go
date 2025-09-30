@@ -104,21 +104,7 @@ func (le *LinkExtractor) Run() error {
 						csvWriter.WriteRow(row)
 					})
 
-					const maxRetries = 3
-					var lastErr error
-					for attempt := 1; attempt <= maxRetries; attempt++ {
-						lastErr = scraper.Scrape()
-						if lastErr != nil {
-							log.Printf("[%s] Worker %d page %d failed (attempt %d/%d): %v",
-								vs.state, workerID, pageNum, attempt, maxRetries, lastErr)
-							time.Sleep(time.Duration(attempt) * 100 * time.Millisecond)
-							continue
-						}
-						log.Printf("[%s] Worker %d completed page %d", vs.state, workerID, pageNum)
-						lastErr = nil
-						break
-					}
-
+					lastErr := scraper.Scrape()
 					if lastErr != nil {
 						// Write immediately to failed page file
 						failedWriter.WriteFailure(pageNum, lastErr.Error())

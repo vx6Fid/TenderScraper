@@ -2,6 +2,7 @@ package nav
 
 import (
 	"encoding/csv"
+	"fmt"
 	"log"
 	"os"
 	"path/filepath"
@@ -17,7 +18,7 @@ type FailedCorrigendumWriter struct {
 }
 
 // NewFailedCorrigendumWriter creates a writer under TenderData/Failed/Corrigendums/today_date/corrs.csv
-func NewFailedCorrigendumWriter() *FailedCorrigendumWriter {
+func NewFailedCorrigendumWriter(state string) *FailedCorrigendumWriter {
 	today := time.Now().Format("02_Jan_2006")
 	dir := filepath.Join("TenderData", "Failed", "Corrigendums", today)
 
@@ -25,7 +26,7 @@ func NewFailedCorrigendumWriter() *FailedCorrigendumWriter {
 		log.Fatalf("failed to create directories for failed corrigendums: %v", err)
 	}
 
-	filePath := filepath.Join(dir, "corrs.csv")
+	filePath := filepath.Join(dir, fmt.Sprintf("%s.csv", state))
 	file, err := os.Create(filePath)
 	if err != nil {
 		log.Fatalf("failed to create failed corrigendums CSV: %v", err)

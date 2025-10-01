@@ -148,26 +148,27 @@ func (le *LinkExtractor) Corrigendums() {
 	sem := make(chan struct{}, utils.MaxSessionParallel)
 	var wg sync.WaitGroup
 
-	failedWriter := NewFailedCorrigendumWriter()
-	defer failedWriter.Close()
+	failedSessWriter := NewFailedCorrigendumWriter("Sessions")
 
 	for _, u := range utils.BaseURLs {
 		wg.Add(1)
 		go func(u utils.URLS) {
 			defer wg.Done()
 
+			failedWriter := NewFailedCorrigendumWriter("Sessions")
+
 			sess := session.NewSession(u.BaseURL, u.State)
 
 			// Acquire slot ONLY for captcha solving
 			fmt.Printf("[%s] Starting Session Establishment\n", u.State)
 			sem <- struct{}{}
+			defer func() { <-sem }() // ensure slot is released no matter what
+
 			if err := sess.EstablishSession("CorrigendumTenders"); err != nil {
 				log.Printf("[%s] failed to establish session: %v", u.State, err)
-				failedWriter.WriteFailure(u.State, fmt.Sprintf("Session failed: %v", err))
-				<-sem
-				return // skip this state
+				failedSessWriter.WriteFailure(u.State, fmt.Sprintf("Session failed: %v", err))
+				return
 			}
-			<-sem // release slot
 			fmt.Printf("[%s] Session Established\n", u.State)
 
 			scraper := NewCorrScraper(sess, u.Domain, u.State, failedWriter)

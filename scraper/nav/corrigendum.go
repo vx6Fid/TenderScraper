@@ -42,6 +42,7 @@ type CorrScraper struct {
 // NewCorrScraper initializes a new scraper instance.
 func NewCorrScraper(sess *session.Session, domain string, state string, failed *FailedCorrigendumWriter) *CorrScraper {
 	collector := sess.NewCollector(domain)
+	collector.SetRequestTimeout(30 * time.Second)
 	collector.AllowURLRevisit = true
 	return &CorrScraper{
 		collector:      collector,
@@ -148,7 +149,7 @@ func (cs *CorrScraper) handlePagination() error {
 		cs.logger.Printf("PAGE %d: Clicking Next button: %s", cs.currentPage+1, cs.nextButtonURL)
 
 		// Small delay between page requests
-		time.Sleep(500 * time.Millisecond)
+		time.Sleep(200 * time.Millisecond)
 
 		// Visit the next page
 		if err := cs.collector.Visit(cs.nextButtonURL); err != nil {

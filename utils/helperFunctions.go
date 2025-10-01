@@ -170,7 +170,27 @@ func dirname(path string) string {
 }
 
 func CalculateOptimalWorkers(totalJobs int) int {
-	return min(totalJobs, 120)
+	// For small job sets, use 1 worker per 10 jobs
+	if totalJobs < 100 {
+		return max(1, totalJobs/10)
+	}
+
+	// For larger sets, use an empirically tuned I/O-bound concurrency
+	workers := totalJobs / 100 // 1 worker per 100 jobs
+	if workers < 10 {
+		workers = 10
+	}
+	if workers > 150 {
+		workers = 150
+	}
+	return workers
+}
+
+func max(a, b int) int {
+	if a > b {
+		return a
+	}
+	return b
 }
 
 // function to get the last created folder name in TenderDate/Links

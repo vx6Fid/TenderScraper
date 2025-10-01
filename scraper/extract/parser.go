@@ -30,18 +30,6 @@ func (tp *TenderParser) SetupHandlers(c *colly.Collector, data *TenderData) {
 	}
 
 	timed("Navigation", func() { tp.setupNavigationHandler(c, data) })
-	// timed("BasicDetails", func() { tp.setupBasicDetailsHandler(c, data) })
-	// timed("PaymentInstruments", func() { tp.setupPaymentInstrumentsHandler(c, data) })
-	// timed("CoverDetails", func() { tp.setupCoverDetailsHandler(c, data) })
-	// timed("TenderDocuments", func() { tp.setupTenderDocumentsHandler(c, data) })
-	// timed("TenderFee", func() { tp.setupTenderFeeHandler(c, data) })
-	// timed("EMDFee", func() { tp.setupEMDFeeHandler(c, data) })
-	// timed("CriticalDates", func() { tp.setupCriticalDatesHandler(c, data) })
-	// timed("WorkItem", func() { tp.setupWorkItemHandler(c, data) })
-	// timed("Corrigendum", func() { tp.setupCorrigendumHandler(c, data) })
-	// timed("CorrigendumDetail", func() { tp.setupCorrigendumDetailHandler(c, data) })
-	// timed("TenderInvitingAuthority", func() { tp.setupTenderInvitingAuthorityHandler(c, data) })
-	// timed("Fallback", func() { tp.setupFallbackHandler(c, data) })
 }
 
 // setupNavigationHandler handles following tender detail links
@@ -53,9 +41,6 @@ func (tp *TenderParser) setupNavigationHandler(c *colly.Collector, data *TenderD
 
 		if href != "" && strings.Contains(lowerTitle, "view more details") {
 			absURL := e.Request.AbsoluteURL(href)
-			log.Printf("[Navigation] Visiting detail page %s", absURL)
-
-			// Disable this handler so we don’t keep firing it
 			c.OnHTMLDetach("a")
 
 			// Attach all detail handlers only now
@@ -68,7 +53,6 @@ func (tp *TenderParser) setupNavigationHandler(c *colly.Collector, data *TenderD
 			tp.setupCriticalDatesHandler(c, data)
 			tp.setupWorkItemHandler(c, data)
 			tp.setupCorrigendumHandler(c, data)
-			// tp.setupCorrigendumDetailHandler(c, data)
 			tp.setupTenderInvitingAuthorityHandler(c, data)
 			tp.setupFallbackHandler(c, data)
 

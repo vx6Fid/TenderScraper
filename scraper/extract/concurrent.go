@@ -9,13 +9,13 @@ import (
 	"path/filepath"
 	"strings"
 	"sync"
+	"sync/atomic"
 	"time"
 
 	"github.com/vx6fid/tender-scraper/session"
 	"github.com/vx6fid/tender-scraper/utils"
 )
 
-// ConcurrentExtractor manages multiple workers with individual sessions
 type ConcurrentExtractor struct {
 	baseURL          string
 	domain           string
@@ -25,12 +25,11 @@ type ConcurrentExtractor struct {
 	failedTenderLogs *FailedTenderWriter
 }
 
-// WorkerSession represents a worker with its own session
 type WorkerSession struct {
 	WorkerID int
 	Session  *session.Session
 	Scraper  *DataScraper
-	mu       sync.Mutex // Add mutex for thread safety
+	mu       sync.Mutex
 }
 
 func NewConcurrentExtractor(baseURL, domain, state, runDate string, maxWorkers int) *ConcurrentExtractor {
@@ -46,40 +45,38 @@ func NewConcurrentExtractor(baseURL, domain, state, runDate string, maxWorkers i
 func (ce *ConcurrentExtractor) ExtractTendersWithMultipleSessions() error {
 	log.Printf("--- Starting concurrent tender extraction for [%s] with %d workers ---", ce.state, ce.maxWorkers)
 
-	// Load input CSV to count jobs
 	rows, err := ce.loadInputCSV()
 	if err != nil {
 		return err
 	}
 
-	// Count valid jobs
+	// count jobs
 	totalJobs := 0
 	for i := 1; i < len(rows); i++ {
 		if len(rows[i]) >= 5 {
 			totalJobs++
 		}
 	}
-
 	if totalJobs == 0 {
 		log.Printf("[%s] No valid tender links found in CSV", ce.state)
 		return nil
 	}
-
 	log.Printf("[%s] Found %d valid tender links to process with %d workers", ce.state, totalJobs, ce.maxWorkers)
 
-	// Create job and result channels with proper buffering
-	jobs := make(chan TenderInput, min(totalJobs, 100)) // Buffer to prevent blocking
+	// channels
+	jobs := make(chan TenderInput, min(totalJobs, 100))
 	results := make(chan *TenderData, min(totalJobs, 100))
 
-	var wg sync.WaitGroup
-	var writerWg sync.WaitGroup
+	// job counter + cancel context
+	var remainingJobs int32
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
 
-	// Setup output directory and writer
+	// setup output writer
 	dir := filepath.Join("TenderData/Tenders", ce.runDate)
 	if err := os.MkdirAll(dir, 0755); err != nil {
 		return fmt.Errorf("failed to create output directory: %w", err)
 	}
-
 	fileName := filepath.Join(dir, "tender.jsonl")
 	outFile, err := os.OpenFile(fileName, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0644)
 	if err != nil {
@@ -87,128 +84,114 @@ func (ce *ConcurrentExtractor) ExtractTendersWithMultipleSessions() error {
 	}
 	defer outFile.Close()
 
-	// Start result writer
+	// writer goroutine
+	var writerWg sync.WaitGroup
 	writerWg.Add(1)
 	go func() {
 		defer writerWg.Done()
 		written := 0
 		for tenderData := range results {
-			if tenderData != nil { // Add nil check
-				if err := ce.writeToFile(outFile, tenderData); err != nil {
-					log.Printf("[%s] Failed to write tender data: %v", ce.state, err)
-				} else {
-					written++
-					if written%50 == 0 {
-						log.Printf("[%s] Written %d/%d tenders", ce.state, written, totalJobs)
-						outFile.Sync() // Periodic flush
-					}
-				}
+			if tenderData == nil {
+				continue
+			}
+			if err := ce.writeToFile(outFile, tenderData); err != nil {
+				log.Printf("[%s] Failed to write tender data: %v", ce.state, err)
+			} else {
+				written++
+				log.Printf("[%s] Written %d/%d tenders", ce.state, written, totalJobs)
 			}
 		}
-		outFile.Sync() // Final flush
 		log.Printf("[%s] Writer finished, wrote %d tenders", ce.state, written)
 	}()
 
-	// Create workers with individual sessions - with staggered initialization
-	workers := make([]*WorkerSession, ce.maxWorkers)
-	workerInitErrors := make(chan error, ce.maxWorkers)
-
+	// failed tender logger
 	ce.failedTenderLogs = NewFailedTenderWriter(ce.state)
 	defer ce.failedTenderLogs.Close()
 
-	// Initialize workers in parallel with staggered delays to reduce server load
-	var initWg sync.WaitGroup
-	for i := 0; i < ce.maxWorkers; i++ {
-		initWg.Add(1)
+	// semaphore: limit session creation
+	initLimiter := make(chan struct{}, utils.MaxSessionParallel)
+
+	// worker wg
+	var wg sync.WaitGroup
+
+	// launch workers
+	workerCount := min(totalJobs, ce.maxWorkers) // spin only as many as needed
+	for w := 0; w < workerCount; w++ {
+		wg.Add(1)
 		go func(workerID int) {
-			defer initWg.Done()
+			defer wg.Done()
 
-			// Stagger worker initialization to reduce server load
-			time.Sleep(time.Duration(workerID) * 2 * time.Second)
-
-			log.Printf("[%s] Initializing worker %d session...", ce.state, workerID)
-			sess := session.NewSession(ce.baseURL, ce.state)
-
-			// Add retry logic for session establishment
-			maxRetries := 3
-			var lastErr error
-
-			for attempt := 1; attempt <= maxRetries; attempt++ {
-				if err := sess.EstablishSession("ActiveTenders"); err != nil {
-					lastErr = err
-					log.Printf("[%s] Worker %d session attempt %d failed: %v", ce.state, workerID, attempt, err)
-					if attempt < maxRetries {
-						time.Sleep(time.Duration(attempt) * 5 * time.Second) // Exponential backoff
-					}
-					continue
-				}
-
-				// Session established successfully
-				scraper := NewDataScraper(sess, ce.domain, ce.state, ce.runDate)
-				workers[workerID] = &WorkerSession{
-					WorkerID: workerID,
-					Session:  sess,
-					Scraper:  scraper,
-				}
-				log.Printf("[%s] Worker %d session established successfully", ce.state, workerID)
+			// abort early if no jobs
+			select {
+			case <-ctx.Done():
+				log.Printf("[%s] Worker %d skipped initialization: no tenders left", ce.state, workerID)
 				return
+			default:
 			}
 
-			// All attempts failed
-			workerInitErrors <- fmt.Errorf("worker %d failed to establish session after %d attempts: %w", workerID, maxRetries, lastErr)
-		}(i)
+			maxWorkerAttempts := 3
+			for attempt := 1; attempt <= maxWorkerAttempts; attempt++ {
+				initLimiter <- struct{}{}
+				sess := session.NewSession(ce.baseURL, ce.state)
+
+				maxRetries := 3
+				var lastErr error
+				ok := false
+				for r := 1; r <= maxRetries; r++ {
+					// check cancel before heavy work
+					select {
+					case <-ctx.Done():
+						<-initLimiter
+						log.Printf("[%s] Worker %d aborted during session retry", ce.state, workerID)
+						return
+					default:
+					}
+
+					if err := sess.EstablishSession("ActiveTenders"); err != nil {
+						lastErr = err
+						log.Printf("[%s] Worker %d session attempt %d failed: %v", ce.state, workerID, r, err)
+						time.Sleep(time.Duration(r) * 5 * time.Second)
+						continue
+					}
+					ok = true
+					break
+				}
+				<-initLimiter
+
+				if ok {
+					// still jobs left?
+					if atomic.LoadInt32(&remainingJobs) == 0 {
+						log.Printf("[%s] Worker %d skipping start: no jobs remaining", ce.state, workerID)
+						return
+					}
+					scraper := NewDataScraper(sess, ce.domain, ce.state, ce.runDate)
+					ws := &WorkerSession{WorkerID: workerID, Session: sess, Scraper: scraper}
+					ce.workerProcess(ctx, ws, jobs, results, &remainingJobs, cancel, totalJobs)
+					return
+				}
+
+				log.Printf("[%s] Worker %d failed to establish session (attempt %d/%d): %v",
+					ce.state, workerID, attempt, maxWorkerAttempts, lastErr)
+			}
+			log.Printf("[%s] Worker %d giving up after failed attempts", ce.state, workerID)
+		}(w)
 	}
 
-	initWg.Wait()
-	close(workerInitErrors)
-
-	// Check for initialization errors
-	var validWorkers []*WorkerSession
-	for err := range workerInitErrors {
-		log.Printf("[%s] Worker initialization error: %v", ce.state, err)
-	}
-
-	for _, worker := range workers {
-		if worker != nil {
-			validWorkers = append(validWorkers, worker)
-		}
-	}
-
-	if len(validWorkers) == 0 {
-		return fmt.Errorf("no workers could establish sessions")
-	}
-
-	log.Printf("[%s] Successfully initialized %d/%d workers", ce.state, len(validWorkers), ce.maxWorkers)
-
-	// Start worker goroutines
-	for _, worker := range validWorkers {
-		wg.Add(1)
-		go func(ws *WorkerSession) {
-			defer wg.Done()
-			ce.workerProcess(ws, jobs, results, totalJobs)
-		}(worker)
-	}
-
-	// Enqueue all jobs with better error handling
+	// enqueue jobs
 	go func() {
 		defer close(jobs)
 		jobCount := 0
-
 		for i := 1; i < len(rows); i++ {
 			row := rows[i]
 			if len(row) < 5 {
 				continue
 			}
-
-			// Add validation for required fields
 			serial := strings.TrimSpace(row[0])
 			link := strings.TrimSpace(row[6])
-
 			if serial == "" || link == "" {
-				log.Printf("[%s] Skipping invalid row %d: missing serial or link", ce.state, i)
 				continue
 			}
-
+			atomic.AddInt32(&remainingJobs, 1)
 			jobs <- TenderInput{
 				Serial:       serial,
 				Title:        strings.TrimSpace(row[1]),
@@ -217,47 +200,34 @@ func (ce *ConcurrentExtractor) ExtractTendersWithMultipleSessions() error {
 				Link:         link,
 			}
 			jobCount++
-
-			// Progress logging
-			if jobCount%100 == 0 || jobCount == totalJobs {
-				log.Printf("[%s] Enqueued %d/%d jobs", ce.state, jobCount, totalJobs)
-			}
 		}
-		log.Printf("[%s] Finished enqueuing all %d jobs", ce.state, jobCount)
-	}()
-
-	// Progress monitoring
-	ctx, cancel := context.WithCancel(context.Background())
-	go func() {
-		ticker := time.NewTicker(30 * time.Second)
-		defer ticker.Stop()
-
-		for {
-			select {
-			case <-ticker.C:
-				log.Printf("[%s] Processing in progress with %d active workers...", ce.state, len(validWorkers))
-			case <-ctx.Done():
-				return
-			}
+		log.Printf("[%s] Finished enqueuing %d jobs", ce.state, jobCount)
+		if jobCount == 0 {
+			cancel()
 		}
 	}()
 
-	// Wait for all workers to complete
+	// wait for workers + writer
 	wg.Wait()
-	cancel() // Stop progress monitoring
+	cancel()
 	close(results)
-
-	// Wait for writer to finish
 	writerWg.Wait()
 
 	log.Printf("--- Completed concurrent extraction for [%s] ---", ce.state)
 	return nil
 }
 
-func (ce *ConcurrentExtractor) workerProcess(ws *WorkerSession, jobs <-chan TenderInput, results chan<- *TenderData, totalJobs int) {
+func (ce *ConcurrentExtractor) workerProcess(
+	ctx context.Context,
+	ws *WorkerSession,
+	jobs <-chan TenderInput,
+	results chan<- *TenderData,
+	remainingJobs *int32,
+	cancel context.CancelFunc,
+	totalJobs int,
+) {
 	processed := 0
 	progressInterval := calculateProgressInterval(totalJobs)
-
 	log.Printf("[%s] Worker %d starting processing", ce.state, ws.WorkerID)
 
 	defer func() {
@@ -266,41 +236,51 @@ func (ce *ConcurrentExtractor) workerProcess(ws *WorkerSession, jobs <-chan Tend
 		}
 	}()
 
-	for tenderInput := range jobs {
-		processed++
-		if processed%progressInterval == 0 {
-			log.Printf("[%s] Worker %d processed %d tenders", ce.state, ws.WorkerID, processed)
-		}
-
-		start := time.Now()
-		tenderData, err := ws.Scraper.ExtractSingleTender(tenderInput)
-		elapsed := time.Since(start)
-		log.Printf("[%s] Worker %d extracted tender %s in %s", ce.state, ws.WorkerID, tenderInput.Serial, elapsed)
-
-		if err != nil {
-			log.Printf("[%s_%s] Worker %d extraction failed: %v", ce.state, tenderInput.Serial, ws.WorkerID, err)
-			if ce.failedTenderLogs != nil {
-				ce.failedTenderLogs.WriteFailure(tenderInput.Serial, tenderInput.Link, err.Error())
-			}
-
-			// send nil result safely with timeout
-			select {
-			case results <- nil:
-			case <-time.After(3 * time.Second):
-				log.Printf("[%s] Worker %d timeout sending nil result for %s", ce.state, ws.WorkerID, tenderInput.Serial)
-			}
-			continue
-		}
-
-		// send successful result with timeout
+	for {
 		select {
-		case results <- tenderData:
-		case <-time.After(5 * time.Second):
-			log.Printf("[%s] Worker %d timeout sending tender %s", ce.state, ws.WorkerID, tenderInput.Serial)
+		case <-ctx.Done():
+			log.Printf("[%s] Worker %d stopping: context canceled", ce.state, ws.WorkerID)
+			return
+		case tenderInput, ok := <-jobs:
+			if !ok {
+				log.Printf("[%s] Worker %d finished processing %d tenders", ce.state, ws.WorkerID, processed)
+				return
+			}
+			processed++
+			if processed%progressInterval == 0 {
+				log.Printf("[%s] Worker %d processed %d tenders", ce.state, ws.WorkerID, processed)
+			}
+
+			start := time.Now()
+			tenderData, err := ws.Scraper.ExtractSingleTender(tenderInput)
+			elapsed := time.Since(start)
+			log.Printf("[%s] Worker %d extracted tender %s in %s", ce.state, ws.WorkerID, tenderInput.Serial, elapsed)
+
+			if err != nil {
+				log.Printf("[%s_%s] Worker %d extraction failed: %v", ce.state, tenderInput.Serial, ws.WorkerID, err)
+				if ce.failedTenderLogs != nil {
+					ce.failedTenderLogs.WriteFailure(tenderInput.Serial, tenderInput.Link, err.Error())
+				}
+				select {
+				case results <- nil:
+				case <-time.After(3 * time.Second):
+					log.Printf("[%s] Worker %d timeout sending nil result for %s", ce.state, ws.WorkerID, tenderInput.Serial)
+				}
+			} else {
+				select {
+				case results <- tenderData:
+				case <-time.After(5 * time.Second):
+					log.Printf("[%s] Worker %d timeout sending tender %s", ce.state, ws.WorkerID, tenderInput.Serial)
+				}
+			}
+
+			// decrement remaining
+			if atomic.AddInt32(remainingJobs, -1) == 0 {
+				log.Printf("[%s] All jobs completed, canceling workers...", ce.state)
+				cancel()
+			}
 		}
 	}
-
-	log.Printf("[%s] Worker %d finished processing %d tenders", ce.state, ws.WorkerID, processed)
 }
 
 func (ce *ConcurrentExtractor) loadInputCSV() ([][]string, error) {
@@ -331,9 +311,8 @@ func (ce *ConcurrentExtractor) writeToFile(file *os.File, data *TenderData) erro
 	return WriteJSONLToFile(file, tender)
 }
 
-// This method will be the same as in your original code
+// Create a new DataScraper instance just for conversion
 func (ce *ConcurrentExtractor) convertToUtilsTender(data *TenderData) utils.Tender {
-	// Create a new DataScraper instance just for conversion
 	ds := &DataScraper{state: ce.state}
 	return ds.ConvertToUtilsTender(data)
 }

@@ -1,9 +1,9 @@
 package extract
 
 import (
-	"context"
 	"fmt"
 	"log"
+	"strconv"
 	"strings"
 	"time"
 
@@ -14,115 +14,49 @@ import (
 
 // DataScraper handles individual tender data extraction with its own session
 type DataScraper struct {
-	session *session.Session
-	domain  string
-	state   string
-	runDate string
+	session   *session.Session
+	domain    string
+	state     string
+	runDate   string
+	collector *colly.Collector
 }
 
 func NewDataScraper(sess *session.Session, domain, state, runDate string) *DataScraper {
+	c := sess.NewCollector(domain)
+
 	return &DataScraper{
-		session: sess,
-		domain:  domain,
-		state:   state,
-		runDate: runDate,
+		domain:    domain,
+		state:     state,
+		runDate:   runDate,
+		collector: c,
 	}
 }
 
 // ExtractSingleTender extracts data from a single tender URL
 func (ds *DataScraper) ExtractSingleTender(input TenderInput) (*TenderData, error) {
-	overallStart := time.Now()
-
-	// Create fresh collector for this request
-	c := ds.session.NewCollector(ds.domain)
-
-	// Configure collector
-	c.SetRequestTimeout(30 * time.Second)
-	c.Limit(&colly.LimitRule{
-		DomainGlob:  "*",
-		Parallelism: 3,
-		Delay:       0 * time.Millisecond, // throttle between requests
-	})
-
-	// Add realistic headers
-	c.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
-	// c.OnRequest(func(r *colly.Request) {
-	// 	log.Printf("[Request] -> %s", r.URL.String())
-	// })
-	// c.OnResponse(func(r *colly.Response) {
-	// 	log.Printf("[Response] <- %s (%d bytes)", r.Request.URL.String(), len(r.Body))
-	// })
-	c.OnScraped(func(r *colly.Response) {
-		log.Printf("[Scraped] Finished %s in %v", r.Request.URL.String(), time.Since(overallStart))
-	})
-
-	// Error handler
-	c.OnError(func(r *colly.Response, err error) {
-		log.Printf("[%s] Request error for %s: %v", ds.state, r.Request.URL, err)
-	})
-
 	// Fresh TenderData
 	tenderData := &TenderData{}
 
 	tenderData.Website = ds.domain // or ds.session.BaseURL
 	tenderData.TenderURL = input.Link
-	// Setup parser handlers (instrumented version below)
+
+	// Setup parser handlers
 	parser := NewTenderParser()
+	c := ds.collector.Clone()
 	parser.SetupHandlers(c, tenderData)
 
-	// Retry loop
-	maxRetries := 3
-	var lastErr error
-	for attempt := 1; attempt <= maxRetries; attempt++ {
-		if attempt > 1 {
-			tenderData = &TenderData{}
-			c = ds.session.NewCollector(ds.domain)
-			parser = NewTenderParser()
-			parser.SetupHandlers(c, tenderData)
-		}
+	start := time.Now()
+	err := c.Visit(input.Link)
 
-		ctx := colly.NewContext()
-		visitCtx, cancel := context.WithTimeout(context.Background(), 50*time.Second)
-		attemptStart := time.Now()
-
-		done := make(chan error, 1)
-		go func() {
-			defer func() {
-				if r := recover(); r != nil {
-					done <- fmt.Errorf("panic during extraction: %v", r)
-				}
-			}()
-			done <- c.Request("GET", input.Link, nil, ctx, nil)
-		}()
-
-		select {
-		case err := <-done:
-			cancel()
-			log.Printf("[%s_%s] Attempt %d finished in %v", ds.state, input.Serial, attempt, time.Since(attemptStart))
-			if err == nil && ds.validateTenderData(tenderData) {
-				log.Printf("[%s_%s] Successfully extracted tender data in %v", ds.state, input.Serial, time.Since(overallStart))
-				return tenderData, nil
-			}
-			if err == nil {
-				lastErr = fmt.Errorf("no data extracted from %s", input.Link)
-			} else {
-				lastErr = err
-			}
-		case <-visitCtx.Done():
-			cancel()
-			lastErr = fmt.Errorf("timeout for %s", input.Link)
-			log.Printf("[%s_%s] Attempt %d timeout after %v", ds.state, input.Serial, attempt, time.Since(attemptStart))
-		}
-
-		if attempt < maxRetries {
-			backoffDuration := time.Duration(attempt*attempt) * 3 * time.Second
-			log.Printf("[%s_%s] Retrying in %v...", ds.state, input.Serial, backoffDuration)
-			time.Sleep(backoffDuration)
-		}
+	if err == nil && ds.validateTenderData(tenderData) {
+		log.Printf("[%s_%s] Successfully extracted tender in %v", ds.state, input.Serial, time.Since(start))
+		return tenderData, nil
 	}
 
-	log.Printf("[%s_%s] FAILED after %v total", ds.state, input.Serial, time.Since(overallStart))
-	return nil, fmt.Errorf("failed after %d attempts: %w", maxRetries, lastErr)
+	if err == nil {
+		return nil, fmt.Errorf("no data extracted from %s", input.Link)
+	}
+	return nil, fmt.Errorf("scraper error for %s: %w", input.Link, err)
 }
 
 // validateTenderData checks if meaningful data was extracted
@@ -163,12 +97,7 @@ func (ds *DataScraper) ConvertToUtilsTender(data *TenderData) utils.Tender {
 
 	// Map number of covers
 	if n := strings.TrimSpace(data.BasicDetails.NumberOfCovers); n != "" {
-		switch n {
-		case "1":
-			tender.BasicDetails.NumberOfCovers = 1
-		case "2":
-			tender.BasicDetails.NumberOfCovers = 2
-		}
+		tender.BasicDetails.NumberOfCovers, _ = strconv.Atoi(n)
 	}
 
 	tender.BasicDetails.GeneralTechnicalEvaluationAllowed = strings.EqualFold(strings.TrimSpace(data.BasicDetails.GeneralTechnicalEvaluationAllowed), "yes")

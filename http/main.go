@@ -7,6 +7,7 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/vx6fid/tender-scraper/utils"
+	types "github.com/vx6fid/tender-scraper/utils/types"
 )
 
 // func init() {
@@ -41,7 +42,7 @@ func startDownloadHandler(w http.ResponseWriter, r *http.Request) {
 	var req struct {
 		TenderID         string            `json:"tender_id"`
 		TenderURL        string            `json:"tender_url"`
-		CorrigendumLinks []utils.CorrLinks `json:"corrigendum_links"`
+		CorrigendumLinks []types.CorrLinks `json:"corrigendum_links"`
 	}
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)

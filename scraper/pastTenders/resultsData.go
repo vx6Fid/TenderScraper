@@ -7,7 +7,7 @@ import (
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/gocolly/colly/v2"
-	"github.com/vx6fid/tender-scraper/utils"
+	types "github.com/vx6fid/tender-scraper/utils/types"
 )
 
 func (pt *PastTender) setupPastTenderDataHandler(c *colly.Collector, pastTenderData *PastTendersData, URL string) {
@@ -37,7 +37,7 @@ func (pt *PastTender) extractBidsList(doc *goquery.Selection, pastTenderData *Pa
 	// log.Println("[SCRAPER] Extracting bids list...")
 
 	doc.Find("#bidValidTableView tr.td_field").Each(func(i int, s *goquery.Selection) {
-		bid := utils.Bid{}
+		bid := types.Bid{}
 
 		s.Find("td").Each(func(j int, td *goquery.Selection) {
 			text := strings.TrimSpace(td.Text())
@@ -169,7 +169,7 @@ func (pt *PastTender) extractFinancialEvaluationBids(sel *goquery.Selection, pas
 
 	if strings.Contains(sectionHeader, "Financial Evaluation Bid List") {
 		table.Find("tr[id^='informal']").Each(func(j int, row *goquery.Selection) {
-			financial := utils.FinancialEvaluationBidList{}
+			financial := types.FinancialEvaluationBidList{}
 
 			row.Find("td").Each(func(k int, td *goquery.Selection) {
 				text := strings.TrimSpace(td.Text())
@@ -200,7 +200,7 @@ func (pt *PastTender) extractAwardedBids(doc *goquery.Selection, pastTenderData 
 	// log.Println("[SCRAPER] Extracting awarded bids...")
 
 	doc.Find("#bidAocTableView tr[id^='informal']").Each(func(i int, row *goquery.Selection) {
-		awarded := utils.AwardedBidsList{}
+		awarded := types.AwardedBidsList{}
 
 		row.Find("td").Each(func(j int, td *goquery.Selection) {
 			text := strings.TrimSpace(td.Text())

@@ -8,6 +8,7 @@ import (
 	docdownload "github.com/vx6fid/tender-scraper/docDownloads"
 	"github.com/vx6fid/tender-scraper/session"
 	"github.com/vx6fid/tender-scraper/utils"
+	types "github.com/vx6fid/tender-scraper/utils/types"
 )
 
 type TaskStatus string
@@ -29,7 +30,7 @@ var (
 	mu        sync.Mutex
 )
 
-func runTenderDownload(tenderID, tenderURL string, corrigendumLinks []utils.CorrLinks, baseURLs []utils.URLS) {
+func runTenderDownload(tenderID, tenderURL string, corrigendumLinks []types.CorrLinks, baseURLs []types.URLS) {
 	mu.Lock()
 	taskStore[tenderID] = &Task{TenderID: tenderID, Status: StatusProcessing}
 	mu.Unlock()

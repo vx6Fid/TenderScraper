@@ -8,7 +8,7 @@ import (
 
 	"github.com/gocolly/colly/v2"
 	"github.com/vx6fid/tender-scraper/session"
-	"github.com/vx6fid/tender-scraper/utils"
+	types "github.com/vx6fid/tender-scraper/utils/types"
 )
 
 // DocDownloader handles NIT and Zip downloads using a single collector
@@ -49,7 +49,7 @@ func NewDocDownloader(sess *session.Session, state string, logger *log.Logger) *
 }
 
 // RunTender downloads documents for a given tender URL
-func (d *DocDownloader) Run(tenderID string, tenderURL string, corrigendumLinks []utils.CorrLinks) error {
+func (d *DocDownloader) Run(tenderID string, tenderURL string, corrigendumLinks []types.CorrLinks) error {
 	d.logger.Printf("[%s][docDownload] solving doc captcha", d.state)
 	if err := d.SolveDocCaptcha(); err != nil {
 		return err
@@ -256,7 +256,7 @@ func (d *DocDownloader) hasDirectLinks(documentLinks []DocumentLink) bool {
 }
 
 // processDirectLinks processes links that can be downloaded directly
-func (d *DocDownloader) processDirectLinks(documentLinks []DocumentLink, corrigendumLinks []utils.CorrLinks) {
+func (d *DocDownloader) processDirectLinks(documentLinks []DocumentLink, corrigendumLinks []types.CorrLinks) {
 	for _, link := range documentLinks {
 		switch link.Type {
 		case "NITDocuments":

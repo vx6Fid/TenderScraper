@@ -8,6 +8,7 @@ import (
 	docdownload "github.com/vx6fid/tender-scraper/docDownloads"
 	"github.com/vx6fid/tender-scraper/session"
 	"github.com/vx6fid/tender-scraper/utils"
+	types "github.com/vx6fid/tender-scraper/utils/types"
 )
 
 func DownloadDocuments(logger *log.Logger) error {
@@ -51,14 +52,14 @@ func DownloadDocuments(logger *log.Logger) error {
 type DocumentConfig struct {
 	ID               string
 	TenderURL        string
-	CorrigendumLinks []utils.CorrLinks
+	CorrigendumLinks []types.CorrLinks
 }
 
 func getDocumentDownloadConfig() DocumentConfig {
 	return DocumentConfig{
 		ID:        "68695b2955d119428e5086ab",
 		TenderURL: "https://etenders.gov.in/eprocure/app?component=%24DirectLink&page=FrontEndLatestActiveCorrigendums&service=direct&session=T&sp=SwKgOCf7CLcX8A0VIcO%2FJUA%3D%3D",
-		CorrigendumLinks: []utils.CorrLinks{
+		CorrigendumLinks: []types.CorrLinks{
 			{
 				Name: "267020.pdf",
 				Link: "https://etenders.gov.in/eprocure/app?component=%24DirectLink_9\u0026page=CorrViewDetailsPrint\u0026service=direct\u0026session=T\u0026sp=SXa2%2Bv1L%2FiUoZA9%2FQE0KbZajv0bVL9ByrEDT3Hk8pjFA%3D",

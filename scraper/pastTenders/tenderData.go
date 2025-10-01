@@ -8,7 +8,7 @@ import (
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/gocolly/colly/v2"
-	"github.com/vx6fid/tender-scraper/utils"
+	types "github.com/vx6fid/tender-scraper/utils/types"
 )
 
 func (tp *PastTender) setupTenderDataHandler(c *colly.Collector, data *TenderData, URL string) {
@@ -159,7 +159,7 @@ func (tp *PastTender) setupPaymentInstrumentsHandler(c *colly.Collector, data *T
 				serial := strings.TrimSpace(tds.Eq(0).Text())
 				instr := strings.TrimSpace(tds.Eq(1).Text())
 				data.PaymentInstruments.Offline = append(data.PaymentInstruments.Offline,
-					utils.PaymentInstrument{SerialNo: serial, InstrumentType: instr})
+					types.PaymentInstrument{SerialNo: serial, InstrumentType: instr})
 			}
 		})
 		// log.Printf("Payment instruments parsing took %v", time.Since(start))
@@ -177,7 +177,7 @@ func (tp *PastTender) setupPaymentInstrumentsHandler(c *colly.Collector, data *T
 				serial := strings.TrimSpace(tds.Eq(0).Text())
 				instr := strings.TrimSpace(tds.Eq(1).Text())
 				data.PaymentInstruments.Online = append(data.PaymentInstruments.Online,
-					utils.PaymentInstrument{SerialNo: serial, InstrumentType: instr})
+					types.PaymentInstrument{SerialNo: serial, InstrumentType: instr})
 			}
 		})
 		// log.Printf("Payment instruments parsing took %v", time.Since(start))
@@ -198,7 +198,7 @@ func (tp *PastTender) setupCoverDetailsHandler(c *colly.Collector, data *TenderD
 				coverType := strings.TrimSpace(tds.Eq(1).Text())
 				docType := strings.TrimSpace(tds.Eq(2).Text())
 				desc := strings.TrimSpace(tds.Eq(3).Text())
-				data.Covers = append(data.Covers, utils.CoverInformation{
+				data.Covers = append(data.Covers, types.CoverInformation{
 					CoverNo: coverNo, CoverType: coverType,
 					DocumentType: docType, Description: desc})
 			}
@@ -656,7 +656,7 @@ func (tp *PastTender) setupCorrigendumHandler(c *colly.Collector, data *TenderDa
 				cleanURL := html.UnescapeString(absLink)
 				// fmt.Println("View Link: ", cleanURL)
 
-				corr := utils.Corrigendum{
+				corr := types.Corrigendum{
 					SerialNo: strings.TrimSpace(tds.Eq(0).Text()),
 					Title:    strings.TrimSpace(tds.Eq(1).Text()),
 					Type:     strings.TrimSpace(tds.Eq(2).Text()),

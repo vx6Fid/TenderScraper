@@ -6,7 +6,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/vx6fid/tender-scraper/utils"
+	types "github.com/vx6fid/tender-scraper/utils/types"
 )
 
 type CSVManager struct{}
@@ -301,14 +301,14 @@ func (cm *CSVManager) writeBasicDetails(writer *csv.Writer, serial, title, organ
 	writer.Flush()
 }
 
-func (cm *CSVManager) writePaymentInstruments(writer *csv.Writer, serial, tenderID, mode string, items []utils.PaymentInstrument) {
+func (cm *CSVManager) writePaymentInstruments(writer *csv.Writer, serial, tenderID, mode string, items []types.PaymentInstrument) {
 	for _, pi := range items {
 		writer.Write([]string{serial, tenderID, mode, pi.SerialNo, pi.InstrumentType})
 	}
 	writer.Flush()
 }
 
-func (cm *CSVManager) writeCoverDetails(writer *csv.Writer, serial, tenderID string, covers []utils.CoverInformation) {
+func (cm *CSVManager) writeCoverDetails(writer *csv.Writer, serial, tenderID string, covers []types.CoverInformation) {
 	for _, cv := range covers {
 		writer.Write([]string{serial, tenderID, cv.CoverNo, cv.CoverType, cv.DocumentType, cv.Description})
 	}

@@ -1,6 +1,8 @@
 package extract
 
-import "github.com/vx6fid/tender-scraper/utils"
+import (
+	types "github.com/vx6fid/tender-scraper/utils/types"
+)
 
 // TenderInput represents the input data from CSV
 type TenderInput struct {
@@ -105,10 +107,10 @@ type TenderData struct {
 	DetailsURL         string
 	BasicDetails       BasicDetails
 	PaymentInstruments struct {
-		Online  []utils.PaymentInstrument
-		Offline []utils.PaymentInstrument
+		Online  []types.PaymentInstrument
+		Offline []types.PaymentInstrument
 	}
-	Covers []utils.CoverInformation
+	Covers []types.CoverInformation
 
 	Website   string
 	TenderURL string
@@ -124,5 +126,5 @@ type TenderData struct {
 		Name    string
 		Address string
 	}
-	Corrigendum []utils.Corrigendum
+	Corrigendum []types.Corrigendum
 }

@@ -10,7 +10,7 @@ import (
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/gocolly/colly/v2"
-	"github.com/vx6fid/tender-scraper/utils"
+	types "github.com/vx6fid/tender-scraper/utils/types"
 )
 
 type TenderParser struct{}
@@ -190,7 +190,7 @@ func (tp *TenderParser) setupPaymentInstrumentsHandler(c *colly.Collector, data 
 				serial := strings.TrimSpace(tds.Eq(0).Text())
 				instr := strings.TrimSpace(tds.Eq(1).Text())
 				data.PaymentInstruments.Offline = append(data.PaymentInstruments.Offline,
-					utils.PaymentInstrument{SerialNo: serial, InstrumentType: instr})
+					types.PaymentInstrument{SerialNo: serial, InstrumentType: instr})
 			}
 		})
 		// log.Printf("Payment instruments parsing took %v", time.Since(start))
@@ -208,7 +208,7 @@ func (tp *TenderParser) setupPaymentInstrumentsHandler(c *colly.Collector, data 
 				serial := strings.TrimSpace(tds.Eq(0).Text())
 				instr := strings.TrimSpace(tds.Eq(1).Text())
 				data.PaymentInstruments.Online = append(data.PaymentInstruments.Online,
-					utils.PaymentInstrument{SerialNo: serial, InstrumentType: instr})
+					types.PaymentInstrument{SerialNo: serial, InstrumentType: instr})
 			}
 		})
 		// log.Printf("Payment instruments parsing took %v", time.Since(start))
@@ -229,7 +229,7 @@ func (tp *TenderParser) setupCoverDetailsHandler(c *colly.Collector, data *Tende
 				coverType := strings.TrimSpace(tds.Eq(1).Text())
 				docType := strings.TrimSpace(tds.Eq(2).Text())
 				desc := strings.TrimSpace(tds.Eq(3).Text())
-				data.Covers = append(data.Covers, utils.CoverInformation{
+				data.Covers = append(data.Covers, types.CoverInformation{
 					CoverNo: coverNo, CoverType: coverType,
 					DocumentType: docType, Description: desc})
 			}
@@ -687,7 +687,7 @@ func (tp *TenderParser) setupCorrigendumHandler(c *colly.Collector, data *Tender
 				cleanURL := html.UnescapeString(absLink)
 				fmt.Println("View Link: ", cleanURL)
 
-				corr := utils.Corrigendum{
+				corr := types.Corrigendum{
 					SerialNo: strings.TrimSpace(tds.Eq(0).Text()),
 					Title:    strings.TrimSpace(tds.Eq(1).Text()),
 					Type:     strings.TrimSpace(tds.Eq(2).Text()),
@@ -747,7 +747,7 @@ func (tp *TenderParser) setupCorrigendumDetailHandler(c *colly.Collector, data *
 					// replace \u0026 with & in clean url
 					cleanURL = strings.ReplaceAll(cleanURL, "\\u0026", "&")
 
-					detail := utils.CorrigendumDetail{
+					detail := types.CorrigendumDetail{
 						CorrigendumNo:  strings.TrimSpace(tds.Eq(0).Text()),
 						Title:          strings.TrimSpace(tds.Eq(1).Text()),
 						Description:    strings.TrimSpace(tds.Eq(2).Text()),
@@ -778,7 +778,7 @@ func (tp *TenderParser) setupCorrigendumDetailHandler(c *colly.Collector, data *
 				absLink := e.Request.AbsoluteURL(link)
 				cleanURL := html.UnescapeString(absLink)
 
-				detail := utils.CorrigendumDetail{
+				detail := types.CorrigendumDetail{
 					Title:          strings.TrimSpace(tds.Eq(0).Text()),
 					Description:    strings.TrimSpace(tds.Eq(1).Text()),
 					PublishedDate:  strings.TrimSpace(tds.Eq(2).Text()),
@@ -795,7 +795,7 @@ func (tp *TenderParser) setupCorrigendumDetailHandler(c *colly.Collector, data *
 }
 
 // attachDetailToParent finds the right Corrigendum struct and appends the detail
-func (tp *TenderParser) attachDetailToParent(data *TenderData, pageURL string, detail utils.CorrigendumDetail) {
+func (tp *TenderParser) attachDetailToParent(data *TenderData, pageURL string, detail types.CorrigendumDetail) {
 	for i := range data.Corrigendum {
 		if data.Corrigendum[i].ViewLink == pageURL {
 			data.Corrigendum[i].Details = append(data.Corrigendum[i].Details, detail)

@@ -8,6 +8,7 @@ import (
 
 	"github.com/vx6fid/tender-scraper/session"
 	"github.com/vx6fid/tender-scraper/utils"
+	types "github.com/vx6fid/tender-scraper/utils/types"
 )
 
 type LinkExtractor struct {
@@ -41,7 +42,7 @@ func (le *LinkExtractor) Run() error {
 
 	for _, u := range utils.BaseURLs {
 		wg.Add(1)
-		go func(u utils.URLS) {
+		go func(u types.URLS) {
 			defer wg.Done()
 
 			sem <- struct{}{}
@@ -127,7 +128,7 @@ func (le *LinkExtractor) ActiveLinks() {
 
 	for _, u := range utils.BaseURLs {
 		wg.Add(1)
-		go func(u utils.URLS) {
+		go func(u types.URLS) {
 			defer wg.Done()
 
 			sess := session.NewSession(u.BaseURL, u.State)
@@ -152,7 +153,7 @@ func (le *LinkExtractor) Corrigendums() {
 
 	for _, u := range utils.BaseURLs {
 		wg.Add(1)
-		go func(u utils.URLS) {
+		go func(u types.URLS) {
 			defer wg.Done()
 
 			failedWriter := NewFailedCorrigendumWriter("Sessions")
@@ -206,7 +207,7 @@ func (le *LinkExtractor) PastTenders(fromStr, toStr string, chunkSize int, stage
 	// Loop over states
 	for _, u := range utils.BaseURLs {
 		wg.Add(1)
-		go func(u utils.URLS) {
+		go func(u types.URLS) {
 			defer wg.Done()
 
 			// One writer per state

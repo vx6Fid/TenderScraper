@@ -9,11 +9,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/vx6fid/tender-scraper/utils"
+	types "github.com/vx6fid/tender-scraper/utils/types"
 )
 
 // WriteAllTendersJSONL writes all tender data into TenderData/PastTenders/tenders.jsonl
-func WriteAllTendersJSONL(tenders *utils.PastTenders, runDate string) error {
+func WriteAllTendersJSONL(tenders *types.PastTenders, runDate string) error {
 	// Ensure path is correct
 	filePath := filepath.Join("TenderData", "Tenders", runDate, "PastTenders.jsonl")
 
@@ -114,7 +114,7 @@ func parseDate(input string) time.Time {
 }
 
 // Helper methods for mapping data structures
-func (ps *PastTender) mapWorkItemDetails(tender *utils.Tender, data *TenderData) {
+func (ps *PastTender) mapWorkItemDetails(tender *types.Tender, data *TenderData) {
 	tender.WorkItemDetails.Title = data.WorkItem.Title
 	tender.WorkItemDetails.Description = data.WorkItem.Description
 	tender.WorkItemDetails.NDAOrPreQualification = data.WorkItem.PreQualification
@@ -158,7 +158,7 @@ func (ps *PastTender) mapWorkItemDetails(tender *utils.Tender, data *TenderData)
 	tender.WorkItemDetails.AllowPreferentialBidder = strings.EqualFold(strings.TrimSpace(data.WorkItem.AllowPreferentialBidder), "yes")
 }
 
-func (ps *PastTender) mapTenderDocuments(tender *utils.Tender, data *TenderData) {
+func (ps *PastTender) mapTenderDocuments(tender *types.Tender, data *TenderData) {
 	if len(data.NITDocuments) > 0 || len(data.WorkDocuments) > 0 {
 		entry := struct {
 			WorkItemLink      string
@@ -214,9 +214,9 @@ func (ps *PastTender) mapTenderDocuments(tender *utils.Tender, data *TenderData)
 		if len(data.NITDocuments) > 0 || len(data.WorkDocuments) > 0 {
 
 			// Convert WorkDocuments
-			workDocs := make([]utils.WorkItemDocument, 0, len(data.WorkDocuments))
+			workDocs := make([]types.WorkItemDocument, 0, len(data.WorkDocuments))
 			for _, d := range data.WorkDocuments {
-				workDocs = append(workDocs, utils.WorkItemDocument{
+				workDocs = append(workDocs, types.WorkItemDocument{
 					SerialNo:       d.SerialNo,
 					DocumentType:   d.DocumentType,
 					DocumentName:   d.DocumentName,
@@ -226,9 +226,9 @@ func (ps *PastTender) mapTenderDocuments(tender *utils.Tender, data *TenderData)
 			}
 
 			// Convert NITDocuments
-			nitDocs := make([]utils.NITDocument, 0, len(data.NITDocuments))
+			nitDocs := make([]types.NITDocument, 0, len(data.NITDocuments))
 			for _, d := range data.NITDocuments {
-				nitDocs = append(nitDocs, utils.NITDocument{
+				nitDocs = append(nitDocs, types.NITDocument{
 					SerialNo:       d.SerialNo,
 					DocumentName:   d.DocumentName,
 					Description:    d.Description,

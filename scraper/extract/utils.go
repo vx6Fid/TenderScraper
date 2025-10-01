@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/vx6fid/tender-scraper/utils"
+	types "github.com/vx6fid/tender-scraper/utils/types"
 )
 
 // WriteJSONLToFile encodes v as JSON and appends it to an already-open file
@@ -39,7 +39,7 @@ func parseAmountToFloat(amount string) float64 {
 }
 
 // Helper methods for mapping data structures
-func (ds *DataScraper) mapWorkItemDetails(tender *utils.Tender, data *TenderData) {
+func (ds *DataScraper) mapWorkItemDetails(tender *types.Tender, data *TenderData) {
 	tender.WorkItemDetails.Title = data.WorkItem.Title
 	tender.WorkItemDetails.Description = data.WorkItem.Description
 	tender.WorkItemDetails.NDAOrPreQualification = data.WorkItem.PreQualification
@@ -83,7 +83,7 @@ func (ds *DataScraper) mapWorkItemDetails(tender *utils.Tender, data *TenderData
 	tender.WorkItemDetails.AllowPreferentialBidder = strings.EqualFold(strings.TrimSpace(data.WorkItem.AllowPreferentialBidder), "yes")
 }
 
-func (ds *DataScraper) mapTenderDocuments(tender *utils.Tender, data *TenderData) {
+func (ds *DataScraper) mapTenderDocuments(tender *types.Tender, data *TenderData) {
 	if len(data.NITDocuments) > 0 || len(data.WorkDocuments) > 0 {
 		entry := struct {
 			WorkItemLink      string
@@ -139,9 +139,9 @@ func (ds *DataScraper) mapTenderDocuments(tender *utils.Tender, data *TenderData
 		if len(data.NITDocuments) > 0 || len(data.WorkDocuments) > 0 {
 
 			// Convert WorkDocuments
-			workDocs := make([]utils.WorkItemDocument, 0, len(data.WorkDocuments))
+			workDocs := make([]types.WorkItemDocument, 0, len(data.WorkDocuments))
 			for _, d := range data.WorkDocuments {
-				workDocs = append(workDocs, utils.WorkItemDocument{
+				workDocs = append(workDocs, types.WorkItemDocument{
 					SerialNo:       d.SerialNo,
 					DocumentType:   d.DocumentType,
 					DocumentName:   d.DocumentName,
@@ -151,9 +151,9 @@ func (ds *DataScraper) mapTenderDocuments(tender *utils.Tender, data *TenderData
 			}
 
 			// Convert NITDocuments
-			nitDocs := make([]utils.NITDocument, 0, len(data.NITDocuments))
+			nitDocs := make([]types.NITDocument, 0, len(data.NITDocuments))
 			for _, d := range data.NITDocuments {
-				nitDocs = append(nitDocs, utils.NITDocument{
+				nitDocs = append(nitDocs, types.NITDocument{
 					SerialNo:       d.SerialNo,
 					DocumentName:   d.DocumentName,
 					Description:    d.Description,

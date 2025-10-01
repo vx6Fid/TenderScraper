@@ -1,5 +1,9 @@
 package utils
 
+import (
+	utils "github.com/vx6fid/tender-scraper/utils/types"
+)
+
 var MaxSessionParallel int = 6
 
 var StageName = map[string]string{
@@ -11,7 +15,7 @@ var StageName = map[string]string{
 	"6": "AOC",
 }
 
-var BaseURLs = []URLS{
+var BaseURLs = []utils.URLS{
 	// {BaseURL: "https://eprocure.gov.in/eprocure/app", State: "eProcurementCentralGovernment", Domain: "eprocure.gov.in"}, // eprocure only for this
 	// {BaseURL: "https://defproc.gov.in/nicgep/app", State: "MinistryOfDefence", Domain: "defproc.gov.in"},
 	// {BaseURL: "https://pmgsytenders.gov.in/nicgep/app", State: "PMGSY", Domain: "pmgsytenders.gov.in"},

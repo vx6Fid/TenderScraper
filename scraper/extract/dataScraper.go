@@ -9,7 +9,7 @@ import (
 
 	"github.com/gocolly/colly/v2"
 	"github.com/vx6fid/tender-scraper/session"
-	"github.com/vx6fid/tender-scraper/utils"
+	types "github.com/vx6fid/tender-scraper/utils/types"
 )
 
 // DataScraper handles individual tender data extraction with its own session
@@ -83,8 +83,8 @@ func (ds *DataScraper) validateTenderData(data *TenderData) bool {
 }
 
 // ConvertToUtilsTender converts internal TenderData to utils.Tender
-func (ds *DataScraper) ConvertToUtilsTender(data *TenderData) utils.Tender {
-	tender := utils.Tender{}
+func (ds *DataScraper) ConvertToUtilsTender(data *TenderData) types.Tender {
+	tender := types.Tender{}
 
 	// Map basic details
 	tender.BasicDetails.OrganisationChain = data.BasicDetails.OrganisationChain

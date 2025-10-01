@@ -12,12 +12,13 @@ import (
 
 	"github.com/vx6fid/tender-scraper/session"
 	"github.com/vx6fid/tender-scraper/utils"
+	types "github.com/vx6fid/tender-scraper/utils/types"
 )
 
 func Run(dir string, runDate string, stage string) error {
 	sessionLimiter := make(chan struct{}, utils.MaxSessionParallel)
 
-	writeCh := make(chan *utils.PastTenders) // global writer channel
+	writeCh := make(chan *types.PastTenders) // global writer channel
 	var writeWg sync.WaitGroup
 
 	// Writer goroutine (sequential writes)
@@ -160,8 +161,8 @@ func (ps *PastTender) validateTenderData(data *TenderData, pastTenderData *PastT
 }
 
 // ConvertToUtilsTender converts internal TenderData to utils.Tender
-func (ps *PastTender) ConvertToUtilsTender(data *TenderData, pastTenderData *PastTendersData) utils.PastTenders {
-	tender := utils.PastTenders{}
+func (ps *PastTender) ConvertToUtilsTender(data *TenderData, pastTenderData *PastTendersData) types.PastTenders {
+	tender := types.PastTenders{}
 
 	//------------------
 	// Mapping Tender Basic Details

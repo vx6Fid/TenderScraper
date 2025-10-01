@@ -14,6 +14,7 @@ import (
 
 	"github.com/vx6fid/tender-scraper/session"
 	"github.com/vx6fid/tender-scraper/utils"
+	types "github.com/vx6fid/tender-scraper/utils/types"
 )
 
 type ConcurrentExtractor struct {
@@ -312,7 +313,7 @@ func (ce *ConcurrentExtractor) writeToFile(file *os.File, data *TenderData) erro
 }
 
 // Create a new DataScraper instance just for conversion
-func (ce *ConcurrentExtractor) convertToUtilsTender(data *TenderData) utils.Tender {
+func (ce *ConcurrentExtractor) convertToUtilsTender(data *TenderData) types.Tender {
 	ds := &DataScraper{state: ce.state}
 	return ds.ConvertToUtilsTender(data)
 }

@@ -66,7 +66,7 @@ func (ce *ConcurrentExtractor) ExtractTendersWithMultipleSessions() error {
 
 	// channels
 	jobs := make(chan TenderInput, min(totalJobs, 100))
-	results := make(chan *TenderData, min(totalJobs, 100))
+	results := make(chan *TenderData, min(totalJobs, 2500))
 
 	// job counter + cancel context
 	var remainingJobs int32
@@ -91,6 +91,8 @@ func (ce *ConcurrentExtractor) ExtractTendersWithMultipleSessions() error {
 	go func() {
 		defer writerWg.Done()
 		written := 0
+		const flushInterval = 500 // flush after every 500 writes
+
 		for tenderData := range results {
 			if tenderData == nil {
 				continue
@@ -99,9 +101,23 @@ func (ce *ConcurrentExtractor) ExtractTendersWithMultipleSessions() error {
 				log.Printf("[%s] Failed to write tender data: %v", ce.state, err)
 			} else {
 				written++
-				log.Printf("[%s] Written %d/%d tenders", ce.state, written, totalJobs)
+				if written%flushInterval == 0 {
+					if err := outFile.Sync(); err != nil {
+						log.Printf("[%s] Failed to sync file: %v", ce.state, err)
+					}
+				}
+				// Log progress every 100 tenders to reduce console spam
+				if written%100 == 0 || written == totalJobs {
+					log.Printf("[%s] Written %d/%d tenders", ce.state, written, totalJobs)
+				}
 			}
 		}
+
+		// final sync after all writes
+		if err := outFile.Sync(); err != nil {
+			log.Printf("[%s] Failed to sync file at end: %v", ce.state, err)
+		}
+
 		log.Printf("[%s] Writer finished, wrote %d tenders", ce.state, written)
 	}()
 
@@ -262,17 +278,8 @@ func (ce *ConcurrentExtractor) workerProcess(
 				if ce.failedTenderLogs != nil {
 					ce.failedTenderLogs.WriteFailure(tenderInput.Serial, tenderInput.Link, err.Error())
 				}
-				select {
-				case results <- nil:
-				case <-time.After(3 * time.Second):
-					log.Printf("[%s] Worker %d timeout sending nil result for %s", ce.state, ws.WorkerID, tenderInput.Serial)
-				}
 			} else {
-				select {
-				case results <- tenderData:
-				case <-time.After(5 * time.Second):
-					log.Printf("[%s] Worker %d timeout sending tender %s", ce.state, ws.WorkerID, tenderInput.Serial)
-				}
+				results <- tenderData
 			}
 
 			// decrement remaining

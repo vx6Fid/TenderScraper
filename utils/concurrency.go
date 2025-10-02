@@ -6,7 +6,7 @@ func CalculateOptimalWorkers(totalJobs int) int {
 		return max(1, totalJobs/10)
 	}
 
-	workers := totalJobs / 100
+	workers := totalJobs / 10
 	if workers < 10 {
 		workers = 10
 	}

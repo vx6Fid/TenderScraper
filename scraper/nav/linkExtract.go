@@ -75,7 +75,7 @@ func (le *LinkExtractor) Run() error {
 		totalPages, err := utils.FetchTotalPages(vs.sess, vs.sess.BaseURL, vs.domain)
 		if err != nil {
 			log.Printf("[%s] [ERROR] Failed to fetch total pages: %v", vs.state, err)
-			continue
+			totalPages = 1
 		}
 		log.Printf("[%s] Total pages: %d", vs.state, totalPages)
 

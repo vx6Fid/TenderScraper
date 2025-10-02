@@ -25,6 +25,7 @@ func cliPrompt() int {
 		"Past Tenders Data",
 		"Document download",
 		"Prepare FinalLinks.csv",
+		"Count Number of Links",
 	}
 
 	for {
@@ -51,6 +52,7 @@ var handlers = map[int]func(){
 	5: runPastTenderData,
 	6: runDocDownload,
 	7: runFinalCSV,
+	8: runCountTotalLinks,
 }
 
 func dispatcher(choice int) {

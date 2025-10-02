@@ -85,7 +85,7 @@ func Run(dir string, runDate string, stage string) error {
 					urlSnippet := record[6]
 
 					tenderData := &TenderData{}
-					tenderData.Website = u.Domain
+					tenderData.Website = u.BaseURL
 					tenderData.TenderURL = urlSnippet
 
 					pastTenderData := &PastTendersData{}

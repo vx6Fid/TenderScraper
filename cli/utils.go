@@ -63,3 +63,9 @@ func runFinalCSV() {
 		log.Printf("Final CSV generation failed: %v", err)
 	}
 }
+
+func runCountTotalLinks() {
+	if err := commands.CountTotalLinks(); err != nil {
+		log.Printf("Total links count failed: %v", err)
+	}
+}

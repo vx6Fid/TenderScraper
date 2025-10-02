@@ -6,7 +6,6 @@ import (
 	"log"
 	"regexp"
 	"strings"
-	"time"
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/gocolly/colly/v2"
@@ -23,13 +22,14 @@ func NewTenderParser() *TenderParser {
 func (tp *TenderParser) SetupHandlers(c *colly.Collector, data *TenderData) {
 
 	// Wrap each setup in a timing log
-	timed := func(name string, fn func()) {
-		start := time.Now()
-		fn()
-		log.Printf("[%s] attached in %v", name, time.Since(start))
-	}
+	// timed := func(name string, fn func()) {
+	// 	start := time.Now()
+	// 	fn()
+	// 	log.Printf("[%s] attached in %v", name, time.Since(start))
+	// }
 
-	timed("Navigation", func() { tp.setupNavigationHandler(c, data) })
+	// timed("Navigation", func() { tp.setupNavigationHandler(c, data) })
+	tp.setupNavigationHandler(c, data)
 }
 
 // setupNavigationHandler handles following tender detail links

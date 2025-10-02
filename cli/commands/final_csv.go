@@ -21,7 +21,8 @@ type TenderF struct {
 }
 
 func PrepareFinalCSV(logger *log.Logger) error {
-	runDate := utils.GetRunDate(false)
+	// runDate := utils.GetRunDate(false)
+	runDate := "01_Oct_2025"
 
 	for _, u := range utils.BaseURLs {
 		if err := FinalCSV(runDate, u.State); err != nil {
@@ -101,7 +102,7 @@ func readSearch(path string) (map[string]TenderF, error) {
 
 func FinalCSV(runDate string, state string) error {
 	// Output path
-	commonDir := filepath.Join("TenderData", "Links", runDate, state)
+	commonDir := filepath.Join("/home/achal/Documents/Projects/TenderScraper/TenderData", "Links", runDate, state)
 	if err := os.MkdirAll(commonDir, 0755); err != nil {
 		return err
 	}
@@ -111,6 +112,7 @@ func FinalCSV(runDate string, state string) error {
 	searchPath := filepath.Join(commonDir, "search.csv")
 	outputPath := filepath.Join(commonDir, "FinalLinks.csv")
 
+	fmt.Println("Paths: ", corrigendumPath, searchPath, outputPath)
 	// Check if files exist
 	_, corrErr := os.Stat(corrigendumPath)
 	_, searchErr := os.Stat(searchPath)

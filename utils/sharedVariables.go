@@ -16,10 +16,10 @@ var StageName = map[string]string{
 }
 
 var BaseURLs = []utils.URLS{
-	// {BaseURL: "https://eprocure.gov.in/eprocure/app", State: "eProcurementCentralGovernment", Domain: "eprocure.gov.in"}, // eprocure only for this
+	{BaseURL: "https://eprocure.gov.in/eprocure/app", State: "eProcurementCentralGovernment", Domain: "eprocure.gov.in"}, // eprocure only for this
 	// {BaseURL: "https://defproc.gov.in/nicgep/app", State: "MinistryOfDefence", Domain: "defproc.gov.in"},
 	// {BaseURL: "https://pmgsytenders.gov.in/nicgep/app", State: "PMGSY", Domain: "pmgsytenders.gov.in"},
-	// {BaseURL: "https://etenders.gov.in/eprocure/app", State: "PSU", Domain: "etenders.gov.in"},
+	{BaseURL: "https://etenders.gov.in/eprocure/app", State: "PSU", Domain: "etenders.gov.in"},
 	// {BaseURL: "https://coalindiatenders.nic.in/nicgep/app", State: "CoalIndia", Domain: "coalindiatenders.nic.in"},
 	// {BaseURL: "https://iocletenders.nic.in/nicgep/app", State: "IOCL", Domain: "iocletenders.nic.in"},
 	// {BaseURL: "https://cpcletenders.nic.in/nicgep/app", State: "CPCL", Domain: "cpcletenders.nic.in"},
@@ -42,8 +42,8 @@ var BaseURLs = []utils.URLS{
 	// {BaseURL: "https://etenders.hry.nic.in/nicgep/app", State: "Harayana", Domain: "etenders.hry.nic.in"},
 	// {BaseURL: "https://hptenders.gov.in/nicgep/app", State: "HimachalPradesh", Domain: "hptenders.gov.in"},
 	// {BaseURL: "https://jktenders.gov.in/nicgep/app", State: "JammuKashmir", Domain: "jktenders.gov.in"},
-	{BaseURL: "https://jharkhandtenders.gov.in/nicgep/app", State: "Jharkhand", Domain: "jharkhandtenders.gov.in"},
-	{BaseURL: "https://etenders.kerala.gov.in/nicgep/app", State: "Kerala", Domain: "etenders.kerala.gov.in"},
+	// {BaseURL: "https://jharkhandtenders.gov.in/nicgep/app", State: "Jharkhand", Domain: "jharkhandtenders.gov.in"},
+	// {BaseURL: "https://etenders.kerala.gov.in/nicgep/app", State: "Kerala", Domain: "etenders.kerala.gov.in"},
 	// {BaseURL: "https://tenders.ladakh.gov.in/nicgep/app", State: "Ladakh", Domain: "tenders.ladakh.gov.in"},
 	// {BaseURL: "https://tendersutl.gov.in/nicgep/app", State: "Lakshadweep", Domain: "tendersutl.gov.in"},
 	// {BaseURL: "https://mahatenders.gov.in/nicgep/app", State: "Maharashtra", Domain: "mahatenders.gov.in"},
@@ -59,7 +59,7 @@ var BaseURLs = []utils.URLS{
 	// {BaseURL: "https://sikkimtender.gov.in/nicgep/app", State: "Sikkim", Domain: "sikkimtender.gov.in"},
 	// {BaseURL: "https://tntenders.gov.in/nicgep/app", State: "TamilNadu", Domain: "tntenders.gov.in"},
 	// {BaseURL: "https://tripuratenders.gov.in/nicgep/app", State: "Tripura", Domain: "tripuratenders.gov.in"},
-	// {BaseURL: "https://wbtenders.gov.in/nicgep/app", State: "WestBengal", Domain: "wbtenders.gov.in"},
+	// // {BaseURL: "https://wbtenders.gov.in/nicgep/app", State: "WestBengal", Domain: "wbtenders.gov.in"},
 	// {BaseURL: "https://uktenders.gov.in/nicgep/app", State: "Uttarakhand", Domain: "uktenders.gov.in"},
 	// {BaseURL: "https://etender.up.nic.in/nicgep/app", State: "UttarPradesh", Domain: "etender.up.nic.in"},
 }

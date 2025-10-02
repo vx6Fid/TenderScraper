@@ -14,7 +14,8 @@ import (
 
 // DataScraper handles individual tender data extraction with its own session
 type DataScraper struct {
-	session   *session.Session
+	// session   *session.Session
+	baseURL   string
 	domain    string
 	state     string
 	runDate   string
@@ -25,6 +26,7 @@ func NewDataScraper(sess *session.Session, domain, state, runDate string) *DataS
 	c := sess.NewCollector(domain)
 
 	return &DataScraper{
+		baseURL:   sess.BaseURL,
 		domain:    domain,
 		state:     state,
 		runDate:   runDate,
@@ -37,7 +39,7 @@ func (ds *DataScraper) ExtractSingleTender(input TenderInput) (*TenderData, erro
 	// Fresh TenderData
 	tenderData := &TenderData{}
 
-	tenderData.Website = ds.domain // or ds.session.BaseURL
+	tenderData.Website = ds.baseURL // or ds.session.BaseURL
 	tenderData.TenderURL = input.Link
 
 	// Setup parser handlers

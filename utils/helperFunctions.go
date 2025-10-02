@@ -9,6 +9,7 @@ import (
 	"sort"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/gocolly/colly/v2"
 	"github.com/vx6fid/tender-scraper/session"
@@ -108,19 +109,30 @@ func GetRunDate(pastTenders bool) string {
 		return ""
 	}
 
-	var names []string
+	var dates []time.Time
+	nameMap := make(map[time.Time]string)
+
 	for _, entry := range entries {
 		if entry.IsDir() {
-			names = append(names, entry.Name())
+			name := entry.Name()
+			parsed, err := time.Parse("02_Jan_2006", name)
+			if err != nil {
+				log.Printf("Skipping invalid folder name: %s", name)
+				continue
+			}
+			dates = append(dates, parsed)
+			nameMap[parsed] = name
 		}
 	}
 
-	if len(names) == 0 {
+	if len(dates) == 0 {
 		return ""
 	}
 
-	sort.Strings(names)
-	return names[len(names)-1]
+	sort.Slice(dates, func(i, j int) bool { return dates[i].Before(dates[j]) })
+	latest := dates[len(dates)-1]
+
+	return nameMap[latest]
 }
 
 // Extract last [...] as Tender ID from search.csv TenderID field

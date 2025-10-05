@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 
@@ -25,16 +26,36 @@ import (
 // }
 
 func main() {
-	// if _, err := os.Stat(".env"); err == nil {
-	// 	godotenv.Load()
-	// }
+	LoadEnvOrFatal()
+
+	StartWorkerPool(5) // limit to 5 concurrent downloads
 
 	r := mux.NewRouter()
+	r.HandleFunc("/health", healthHandler).Methods("GET")
 	r.HandleFunc("/download", startDownloadHandler).Methods("POST")
 	r.HandleFunc("/status/{taskID}", statusHandler).Methods("GET")
 
 	log.Println("Server running on :8080")
-	log.Fatal(http.ListenAndServe(":8080", r))
+	log.Fatal(http.ListenAndServe("0.0.0.0:8080", r))
+}
+
+// Write a health handler
+func healthHandler(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte("Server is Up and Running"))
+}
+
+func enqueueTenderDownload(tenderID, tenderURL string, corrigendumLinks []types.CorrLinks, baseURLs []types.URLS) error {
+	job := func() {
+		runTenderDownload(tenderID, tenderURL, corrigendumLinks, baseURLs)
+	}
+
+	select {
+	case jobQueue <- job:
+		return nil
+	default:
+		return fmt.Errorf("server busy: too many pending downloads")
+	}
 }
 
 // Start a new tender download
@@ -49,9 +70,13 @@ func startDownloadHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	go runTenderDownload(req.TenderID, req.TenderURL, req.CorrigendumLinks, utils.BaseURLs)
+	err := enqueueTenderDownload(req.TenderID, req.TenderURL, req.CorrigendumLinks, utils.BaseURLs)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusServiceUnavailable)
+		return
+	}
 
-	resp := map[string]string{"task_id": req.TenderID, "status": "started"}
+	resp := map[string]string{"task_id": req.TenderID, "status": "queued"}
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(resp)
 }
@@ -61,8 +86,8 @@ func statusHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	taskID := vars["taskID"]
 
-	mu.Lock()
-	defer mu.Unlock()
+	mu.RLock()
+	defer mu.RUnlock()
 
 	log.Printf("Status requested for taskID: %s", taskID)
 

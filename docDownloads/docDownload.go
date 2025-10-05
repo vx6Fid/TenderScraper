@@ -75,7 +75,7 @@ func (d *DocDownloader) Run(tenderID string, tenderURL string, corrigendumLinks 
 	d.visitViewLinks(viewLinks)
 
 	// Download files locally
-	if err := d.downloadFiles(); err != nil {
+	if err := d.downloadFiles(tenderID); err != nil {
 		return err
 	}
 

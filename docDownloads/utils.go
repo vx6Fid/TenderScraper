@@ -132,14 +132,14 @@ func collectAndProcessFiles(dir, workDir string) ([]string, error) {
 }
 
 // downloadFiles downloads all collected NIT documents and zip files
-func (d *DocDownloader) downloadFiles() error {
+func (d *DocDownloader) downloadFiles(tenderID string) error {
 	if len(d.NITDocs) == 0 && d.WorkItemZip.URL == "" {
 		d.logger.Printf("[%s][docDownload] no documents found to download", d.state)
 		return nil
 	}
 
 	// Ensure TenderDocs folder exists
-	baseDir := "TenderDocs"
+	baseDir := "TenderDocs" + string(filepath.Separator) + tenderID
 	if err := os.MkdirAll(baseDir, os.ModePerm); err != nil {
 		return fmt.Errorf("failed to create folder %s: %w", baseDir, err)
 	}
@@ -172,7 +172,6 @@ func (d *DocDownloader) downloadFiles() error {
 
 	// Download zip file (if exists)
 	if d.WorkItemZip.URL != "" {
-		baseDir := "TenderDocs"
 		filePath := filepath.Join(baseDir, d.WorkItemZip.DocumentName)
 		d.logger.Printf("[%s][docDownload] downloading zip file: %s", d.state, filePath)
 		if err := DownloadFile(d.WorkItemZip.URL, filePath, d.sess.Jar); err != nil {

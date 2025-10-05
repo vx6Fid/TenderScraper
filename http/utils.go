@@ -5,6 +5,7 @@ import (
 	"strings"
 	"sync"
 
+	"github.com/joho/godotenv"
 	docdownload "github.com/vx6fid/tender-scraper/docDownloads"
 	"github.com/vx6fid/tender-scraper/session"
 	"github.com/vx6fid/tender-scraper/utils"
@@ -26,9 +27,33 @@ type Task struct {
 }
 
 var (
-	taskStore = make(map[string]*Task)
-	mu        sync.Mutex
+	jobQueue = make(chan func(), 100) // max 100 queued jobs
 )
+
+func worker(id int) {
+	for job := range jobQueue {
+		log.Printf("Worker %d starting job", id)
+		job()
+		log.Printf("Worker %d finished job", id)
+	}
+}
+
+func StartWorkerPool(n int) {
+	for i := 0; i < n; i++ {
+		go worker(i + 1)
+	}
+}
+
+var (
+	taskStore = make(map[string]*Task)
+	mu        sync.RWMutex
+)
+
+func LoadEnvOrFatal() {
+	if err := godotenv.Load(); err != nil {
+		log.Fatalf("Error loading .env file: %v", err)
+	}
+}
 
 func runTenderDownload(tenderID, tenderURL string, corrigendumLinks []types.CorrLinks, baseURLs []types.URLS) {
 	mu.Lock()

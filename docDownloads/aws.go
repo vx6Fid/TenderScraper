@@ -40,7 +40,7 @@ func uploadFileToS3(bucket, key, filePath string) error {
 
 // processAndUploadDocs preprocesses and uploads all tender documents to S3
 func (d *DocDownloader) processAndUploadDocs(tenderID string, bucket string) error {
-	baseDir := "TenderDocs" // local download dir
+	baseDir := "TenderDocs/" + tenderID
 
 	// Common helper: preprocess + upload
 	uploadWithFolder := func(localFile, folder, prefix string) {

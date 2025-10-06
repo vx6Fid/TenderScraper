@@ -10,8 +10,8 @@ func CalculateOptimalWorkers(totalJobs int) int {
 	if workers < 10 {
 		workers = 10
 	}
-	if workers > 150 {
-		workers = 150
+	if workers > 120 {
+		workers = 120
 	}
 	return workers
 }

@@ -11,10 +11,14 @@ import (
 func ExtractPastTenderData(logger *log.Logger) error {
 	runDate := utils.GetRunDate(true)
 	dir := fmt.Sprintf("TenderData/PastLinks/%s", runDate)
-	tenderType := utils.GiveStageName()
+	// tenderType := utils.GiveStageName()
 
-	if err := pastTenders.Run(dir, runDate, tenderType); err != nil {
-		return fmt.Errorf("error running past tenders: %w", err)
+	keys := []string{"2", "3", "4", "5", "6"}
+	for _, key := range keys {
+		fmt.Println("Extracting links for \"" + utils.StageName[key] + "\"")
+		if err := pastTenders.Run(dir, runDate, key); err != nil {
+			return fmt.Errorf("error running past tenders: %w", err)
+		}
 	}
 
 	return nil

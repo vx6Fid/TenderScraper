@@ -1,6 +1,7 @@
 package commands
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/vx6fid/tender-scraper/scraper/nav"
@@ -9,12 +10,16 @@ import (
 
 func ExtractPastTenderLinks(logger *log.Logger) error {
 	runDate := utils.GetRunDate(false)
-	fromStr := "01/01/2024"
+	fromStr := "01/01/2025"
 	toStr := "30/09/2025"
 
-	tenderType := utils.GiveStageName()
+	// tenderType := utils.GiveStageName()
+	blockSize := 7
 	linkExtractor := nav.NewLinkExtractor(runDate)
-	linkExtractor.PastTenders(fromStr, toStr, 7, tenderType)
-
+	keys := []string{"2", "3", "4", "5", "6"}
+	for _, key := range keys {
+		fmt.Println("Extracting links for \"" + utils.StageName[key] + "\"")
+		linkExtractor.PastTenders(fromStr, toStr, blockSize, key)
+	}
 	return nil
 }

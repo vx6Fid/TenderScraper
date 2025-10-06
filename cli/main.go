@@ -20,7 +20,7 @@ func cliPrompt() int {
 	options := []string{
 		"Tender links",
 		"Tender data",
-		"Corrigendum Links",
+		"Corr Links",
 		"Past Tenders Links",
 		"Past Tenders Data",
 		"Document download",

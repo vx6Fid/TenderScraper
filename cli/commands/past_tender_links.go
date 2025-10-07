@@ -16,7 +16,13 @@ func ExtractPastTenderLinks(logger *log.Logger) error {
 	// tenderType := utils.GiveStageName()
 	blockSize := 7
 	linkExtractor := nav.NewLinkExtractor(runDate)
-	keys := []string{"2", "3", "4", "5", "6"}
+	keys := []string{
+		// "2",
+		"3",
+		// "4",
+		// "5",
+		// "6",
+	}
 	for _, key := range keys {
 		fmt.Println("Extracting links for \"" + utils.StageName[key] + "\"")
 		linkExtractor.PastTenders(fromStr, toStr, blockSize, key)

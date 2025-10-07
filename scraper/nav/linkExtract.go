@@ -161,7 +161,7 @@ func (le *LinkExtractor) Corrigendums() {
 			sess := session.NewSession(u.BaseURL, u.State)
 
 			// Acquire slot ONLY for captcha solving
-			fmt.Printf("[%s] Starting Session Establishment\n", u.State)
+			log.Printf("[%s] Starting Session Establishment\n", u.State)
 			sem <- struct{}{}
 			defer func() { <-sem }() // ensure slot is released no matter what
 
@@ -170,7 +170,7 @@ func (le *LinkExtractor) Corrigendums() {
 				failedSessWriter.WriteFailure(u.State, fmt.Sprintf("Session failed: %v", err))
 				return
 			}
-			fmt.Printf("[%s] Session Established\n", u.State)
+			log.Printf("[%s] Session Established\n", u.State)
 
 			scraper := NewCorrScraper(sess, u.Domain, u.State, failedWriter)
 			if err := scraper.ScrapeCorrigendum(); err != nil {

@@ -2,6 +2,7 @@ package commands
 
 import (
 	"encoding/csv"
+	"flag"
 	"fmt"
 	"log"
 	"os"
@@ -21,11 +22,16 @@ type TenderF struct {
 }
 
 func PrepareFinalCSV(logger *log.Logger) error {
-	// runDate := utils.GetRunDate(false)
-	runDate := "01_Oct_2025"
+	runDate := utils.GetRunDate(false)
+	// runDate := "01_Oct_2025"
+
+	var dataDir string
+	flag.StringVar(&dataDir, "data-dir", "TenderData", "Path to TenderData directory")
+	flag.Parse()
 
 	for _, u := range utils.BaseURLs {
-		if err := FinalCSV(runDate, u.State); err != nil {
+		commonDir := filepath.Join(dataDir, "Links", runDate, u.State)
+		if err := FinalCSV(runDate, commonDir); err != nil {
 			logger.Printf("[%s] CSV generation failed: %v", u.State, err)
 		} else {
 			logger.Printf("[%s] CSV file generated successfully", u.State)
@@ -100,19 +106,13 @@ func readSearch(path string) (map[string]TenderF, error) {
 	return data, nil
 }
 
-func FinalCSV(runDate string, state string) error {
-	// Output path
-	commonDir := filepath.Join("/home/achal/Documents/Projects/TenderScraper/TenderData", "Links", runDate, state)
-	if err := os.MkdirAll(commonDir, 0755); err != nil {
-		return err
-	}
-
+func FinalCSV(state, commonDir string) error {
 	// Inputs
 	corrigendumPath := filepath.Join(commonDir, "corrigendums.csv")
 	searchPath := filepath.Join(commonDir, "search.csv")
 	outputPath := filepath.Join(commonDir, "FinalLinks.csv")
 
-	fmt.Println("Paths: ", corrigendumPath, searchPath, outputPath)
+	// fmt.Println("Paths: ", corrigendumPath, searchPath, outputPath)
 	// Check if files exist
 	_, corrErr := os.Stat(corrigendumPath)
 	_, searchErr := os.Stat(searchPath)

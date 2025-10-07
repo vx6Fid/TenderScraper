@@ -156,16 +156,17 @@ func (le *LinkExtractor) Corrigendums() {
 		go func(u types.URLS) {
 			defer wg.Done()
 
-			failedWriter := NewFailedCorrigendumWriter("Sessions")
+			failedWriter := NewFailedCorrigendumWriter(u.State)
 
 			sess := session.NewSession(u.BaseURL, u.State)
 
-			// Acquire slot ONLY for captcha solving
-			log.Printf("[%s] Starting Session Establishment\n", u.State)
+			// Acquire semaphore for session establishment
 			sem <- struct{}{}
-			defer func() { <-sem }() // ensure slot is released no matter what
+			log.Printf("[%s] Starting Session Establishment\n", u.State)
+			err := sess.EstablishSession("CorrigendumTenders")
+			<-sem // release immediately after establishment
 
-			if err := sess.EstablishSession("CorrigendumTenders"); err != nil {
+			if err != nil {
 				log.Printf("[%s] failed to establish session: %v", u.State, err)
 				failedSessWriter.WriteFailure(u.State, fmt.Sprintf("Session failed: %v", err))
 				return

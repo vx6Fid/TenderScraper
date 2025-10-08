@@ -60,6 +60,8 @@ func Run(dir string, runDate string, stage string) error {
 			continue
 		}
 		numWorkers := utils.CalculateOptimalWorkers(totalJobs)
+
+		fmt.Print("\n\n")
 		log.Printf("[%d] workers for state %s", numWorkers, u.State)
 		// Launch workers for this state
 		for i := 0; i < numWorkers; i++ {
@@ -72,8 +74,8 @@ func Run(dir string, runDate string, stage string) error {
 				workerSess := session.NewSession(u.BaseURL, u.State)
 				// One session for this worker
 				sessionLimiter <- struct{}{}
-				start := time.Now()
-				err := workerSess.EstablishTenderStatusSession(stage, "", "")
+				// start := time.Now()
+				err := workerSess.EstablishTenderStatusSession(u.State, stage, "", "")
 				if err != nil {
 					<-sessionLimiter // release slot on failure
 					log.Printf("[Worker-%d][%s] failed to establish worker session: %v", workerID, u.State, err)
@@ -81,7 +83,7 @@ func Run(dir string, runDate string, stage string) error {
 				}
 				<-sessionLimiter
 
-				log.Printf("[Worker-%d][%s] worker session established in %v", workerID, u.State, time.Since(start))
+				// log.Printf("[Worker-%d][%s] worker session established in %v", workerID, u.State, time.Since(start))
 
 				// Process all tenders with this session
 				for record := range recordsCh {

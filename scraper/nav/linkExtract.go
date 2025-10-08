@@ -235,13 +235,11 @@ func (le *LinkExtractor) PastTenders(fromStr, toStr string, chunkSize int, stage
 						fromFormatted := utils.FormatDate(dr[0])
 						toFormatted := utils.FormatDate(dr[1])
 
-						log.Printf("[%s] worker started range %s - %s", u.State, fromFormatted, toFormatted)
-
 						sess := session.NewSession(u.BaseURL, u.State)
 
 						// Acquire slot ONLY for captcha solving
 						sem <- struct{}{}
-						if err := sess.EstablishTenderStatusSession(stage, fromFormatted, toFormatted); err != nil {
+						if err := sess.EstablishTenderStatusSession(u.State, stage, fromFormatted, toFormatted); err != nil {
 							log.Printf("[%s] failed to establish session for range %s-%s: %v",
 								u.State, fromFormatted, toFormatted, err)
 							failedWriter.WriteFailure(fromFormatted, toFormatted, err.Error())
@@ -249,6 +247,8 @@ func (le *LinkExtractor) PastTenders(fromStr, toStr string, chunkSize int, stage
 							continue
 						}
 						<-sem // release slot
+
+						log.Printf("[%s] worker started range %s - %s", u.State, fromFormatted, toFormatted)
 
 						// Past Scraper
 						scraper, err := NewPastScraper(sess, u.Domain, u.State, nil, stateWriter, failedWriter)

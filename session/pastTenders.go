@@ -2,6 +2,7 @@ package session
 
 import (
 	"fmt"
+	"log"
 	"net/url"
 	"strings"
 	"time"
@@ -12,7 +13,8 @@ import (
 )
 
 // EstablishTenderStatusSession performs the tender status captcha flow and waits for session establishment
-func (s *Session) EstablishTenderStatusSession(tenderStatus, fromDate, toDate string) error {
+func (s *Session) EstablishTenderStatusSession(state, tenderStatus, fromDate, toDate string) error {
+	startTime := time.Now()
 	host := HostFromURL(s.BaseURL)
 	s.captchaCollector = s.NewCollector(host) // This automatically shares the cookie jar
 
@@ -56,11 +58,13 @@ func (s *Session) EstablishTenderStatusSession(tenderStatus, fromDate, toDate st
 				if err := s.validateTenderStatusSession(); err != nil {
 					return err
 				}
+				log.Printf("[%s] Tender status session established successfully in %s", state, time.Since(startTime))
 				s.logger.Printf("Tender status session established successfully")
 				return nil
 			}
 		}
 	}
+
 }
 
 // handleTenderStatusForm handles the tender status search form with captcha

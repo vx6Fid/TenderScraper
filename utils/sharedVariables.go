@@ -19,7 +19,7 @@ var BaseURLs = []utils.URLS{
 	{BaseURL: "https://eprocure.gov.in/eprocure/app", State: "eProcurementCentralGovernment", Domain: "eprocure.gov.in"}, // eprocure only for this
 	// {BaseURL: "https://defproc.gov.in/nicgep/app", State: "MinistryOfDefence", Domain: "defproc.gov.in"},
 	// {BaseURL: "https://pmgsytenders.gov.in/nicgep/app", State: "PMGSY", Domain: "pmgsytenders.gov.in"},
-	{BaseURL: "https://etenders.gov.in/eprocure/app", State: "PSU", Domain: "etenders.gov.in"},
+	// {BaseURL: "https://etenders.gov.in/eprocure/app", State: "PSU", Domain: "etenders.gov.in"},
 	// {BaseURL: "https://coalindiatenders.nic.in/nicgep/app", State: "CoalIndia", Domain: "coalindiatenders.nic.in"},
 	// {BaseURL: "https://iocletenders.nic.in/nicgep/app", State: "IOCL", Domain: "iocletenders.nic.in"},
 	// {BaseURL: "https://cpcletenders.nic.in/nicgep/app", State: "CPCL", Domain: "cpcletenders.nic.in"},

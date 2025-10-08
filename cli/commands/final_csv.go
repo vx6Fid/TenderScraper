@@ -101,6 +101,11 @@ func readSearch(path string) (map[string]TenderF, error) {
 			ClosingDate:  row[3],
 			Link:         row[7],
 		}
+		// Proper duplicate check
+		if _, found := data[t.TenderID]; found {
+			fmt.Printf("Duplicate found for TenderID %s:\n", t.TenderID)
+		}
+
 		data[t.TenderID] = t
 	}
 	return data, nil
@@ -139,6 +144,9 @@ func FinalCSV(state, commonDir string) error {
 			panic(err)
 		}
 	}
+	fmt.Println("Paths:", corrigendumPath, searchPath)
+	fmt.Println("Length of Corrigendums:", len(corrData))
+	fmt.Println("Length of Search Results:", len(searchData))
 
 	// Merge with corrigendum taking precedence
 	merged := make(map[string]TenderF)

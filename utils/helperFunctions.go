@@ -137,7 +137,7 @@ func GetRunDate(pastTenders bool) string {
 
 // Extract last [...] as Tender ID from search.csv TenderID field
 func ExtractTenderID(s string) string {
-	re := regexp.MustCompile(`\[(.*?)\]`)
+	re := regexp.MustCompile(`\[(2[^\]]+)\]`)
 	matches := re.FindAllStringSubmatch(s, -1)
 	if len(matches) == 0 {
 		return strings.TrimSpace(s)

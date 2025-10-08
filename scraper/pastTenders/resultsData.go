@@ -1,7 +1,6 @@
 package pastTenders
 
 import (
-	"log"
 	"strconv"
 	"strings"
 
@@ -160,7 +159,7 @@ func (pt *PastTender) extractFinancialEvaluationBids(sel *goquery.Selection, pas
 	// Use more specific selector to find the exact table with id="table_list"
 	table := sel.Find("table#table_list").First()
 	if table.Length() == 0 {
-		log.Println("[SCRAPER] No financial evaluation table found with id 'table_list'")
+		// log.Println("[SCRAPER] No financial evaluation table found with id 'table_list'")
 		return
 	}
 

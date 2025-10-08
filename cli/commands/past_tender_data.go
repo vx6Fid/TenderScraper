@@ -15,7 +15,7 @@ func ExtractPastTenderData(logger *log.Logger) error {
 
 	keys := []string{"2", "3", "4", "5", "6"}
 	for _, key := range keys {
-		fmt.Println("Extracting links for \"" + utils.StageName[key] + "\"")
+		fmt.Println("Extracting links for [" + utils.StageName[key] + "]")
 		if err := pastTenders.Run(dir, runDate, key); err != nil {
 			return fmt.Errorf("error running past tenders: %w", err)
 		}

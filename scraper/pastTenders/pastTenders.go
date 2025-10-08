@@ -60,25 +60,28 @@ func Run(dir string, runDate string, stage string) error {
 			continue
 		}
 		numWorkers := utils.CalculateOptimalWorkers(totalJobs)
+		log.Printf("[%d] workers for state %s", numWorkers, u.State)
 		// Launch workers for this state
 		for i := 0; i < numWorkers; i++ {
 			wg.Add(1)
 			go func(workerID int) {
 				defer wg.Done()
-				log.Printf("[Worker-%d] started for state %s", workerID, u.State)
+				// log.Printf("[Worker-%d] started for state %s", workerID, u.State)
 
 				// One session for this worker
 				workerSess := session.NewSession(u.BaseURL, u.State)
 				// One session for this worker
 				sessionLimiter <- struct{}{}
-				if err := workerSess.EstablishTenderStatusSession(stage, "", ""); err != nil {
+				start := time.Now()
+				err := workerSess.EstablishTenderStatusSession(stage, "", "")
+				if err != nil {
 					<-sessionLimiter // release slot on failure
 					log.Printf("[Worker-%d][%s] failed to establish worker session: %v", workerID, u.State, err)
 					return
 				}
 				<-sessionLimiter
 
-				log.Printf("[Worker-%d][%s] worker session established", workerID, u.State)
+				log.Printf("[Worker-%d][%s] worker session established in %v", workerID, u.State, time.Since(start))
 
 				// Process all tenders with this session
 				for record := range recordsCh {
@@ -100,13 +103,13 @@ func Run(dir string, runDate string, stage string) error {
 						tender.LatestStage = utils.StageName[stage]
 						tender.TenderInfo.UpdatedAt = time.Now()
 						writeCh <- &tender
-						log.Printf("[Worker-%d][%s] tender written for %s", workerID, u.State, urlSnippet)
+						// log.Printf("[Worker-%d][%s] tender written for %s", workerID, u.State, urlSnippet)
 					} else {
 						log.Printf("[Worker-%d][%s] tender validation failed for %s", workerID, u.State, urlSnippet)
 					}
 				}
 
-				log.Printf("[Worker-%d] finished for state %s", workerID, u.State)
+				// log.Printf("[Worker-%d] finished for state %s", workerID, u.State)
 			}(i)
 
 		}
@@ -129,6 +132,8 @@ func Run(dir string, runDate string, stage string) error {
 
 	close(writeCh) // all states finished, stop writer
 	writeWg.Wait() // wait for writer to finish
+	fmt.Println()
+	log.Println("All states finished")
 
 	return nil
 }

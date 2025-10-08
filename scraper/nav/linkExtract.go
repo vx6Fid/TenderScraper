@@ -70,6 +70,7 @@ func (le *LinkExtractor) Run() error {
 
 	// Process each validated session
 	for _, vs := range validSessions {
+		fmt.Print("\n")
 		log.Printf(">>> [%s] Starting extraction", vs.state)
 
 		totalPages, err := utils.FetchTotalPages(vs.sess, vs.sess.BaseURL, vs.domain)
@@ -119,6 +120,7 @@ func (le *LinkExtractor) Run() error {
 		log.Printf("<<< [%s] Extraction completed (Pages=%d, Workers=%d)", vs.state, totalPages, workers)
 	}
 
+	fmt.Print("\n")
 	log.Println("=== Link extraction finished ===")
 	return nil
 }
@@ -162,7 +164,7 @@ func (le *LinkExtractor) Corrigendums() {
 
 			// Acquire semaphore for session establishment
 			sem <- struct{}{}
-			log.Printf("[%s] Starting Session Establishment\n", u.State)
+			// log.Printf("[%s] Starting Session Establishment\n", u.State)
 			err := sess.EstablishSession("CorrigendumTenders")
 			<-sem // release immediately after establishment
 
@@ -182,6 +184,7 @@ func (le *LinkExtractor) Corrigendums() {
 		}(u)
 	}
 	wg.Wait()
+	fmt.Print("\n")
 	log.Println("=== Corrigendum extraction finished ===")
 }
 
@@ -214,7 +217,7 @@ func (le *LinkExtractor) PastTenders(fromStr, toStr string, chunkSize int, stage
 			// One writer per state
 			headers := []string{"S.No", "TenderID", "PageNo", "Title", "Organisation Chain", "Tender Stage", "Link"}
 			stateWriter := NewPastWriter(u.State, headers, utils.StageName[stage])
-			failedWriter := NewFailedWriter(u.State)
+			failedWriter := NewFailedWriter(u.State, utils.StageName[stage])
 			defer stateWriter.Close()
 			defer failedWriter.Close()
 
@@ -223,7 +226,7 @@ func (le *LinkExtractor) PastTenders(fromStr, toStr string, chunkSize int, stage
 			var workers sync.WaitGroup
 
 			// Launch workers
-			numWorkers := utils.CalculateOptimalWorkers(len(dateRanges))
+			numWorkers := utils.CalculateWorkersPastLinks(len(dateRanges))
 			for i := 0; i < numWorkers; i++ {
 				workers.Add(1)
 				go func() {
@@ -272,8 +275,9 @@ func (le *LinkExtractor) PastTenders(fromStr, toStr string, chunkSize int, stage
 			}
 			close(jobs)
 			workers.Wait()
-
-			log.Printf("[%s] all date ranges completed", u.State)
+			fmt.Print("\n")
+			log.Printf("[%s] all date ranges completed for [%s]", u.State, utils.StageName[stage])
+			fmt.Print("\n\n")
 		}(u)
 	}
 

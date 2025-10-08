@@ -11,7 +11,7 @@ func ExtractTenderData(logger *log.Logger) error {
 	runDate := utils.GetRunDate(false)
 
 	for _, u := range utils.BaseURLs {
-		logger.Printf("--- Starting concurrent tender extraction for [%s] ---", u.State)
+		// logger.Printf("--- Starting concurrent tender extraction for [%s] ---", u.State)
 
 		totalJobs, err := utils.EstimateJobCount(u.State, runDate, false, "")
 		if err != nil {

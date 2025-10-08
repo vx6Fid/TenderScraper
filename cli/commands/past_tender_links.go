@@ -17,11 +17,11 @@ func ExtractPastTenderLinks(logger *log.Logger) error {
 	blockSize := 7
 	linkExtractor := nav.NewLinkExtractor(runDate)
 	keys := []string{
-		// "2",
+		"2",
 		"3",
-		// "4",
-		// "5",
-		// "6",
+		"4",
+		"5",
+		"6",
 	}
 	for _, key := range keys {
 		fmt.Println("Extracting links for \"" + utils.StageName[key] + "\"")

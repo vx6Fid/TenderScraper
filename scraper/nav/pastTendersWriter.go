@@ -74,11 +74,11 @@ type FailedWriter struct {
 	filePath string
 }
 
-func NewFailedWriter(state string) *FailedWriter {
+func NewFailedWriter(state, stage string) *FailedWriter {
 	today := time.Now().Format("02_Jan_2006")
 	dir := filepath.Join("TenderData", "Failed", "PastLinks", today)
 	os.MkdirAll(dir, os.ModePerm)
-	filePath := filepath.Join(dir, state+".csv")
+	filePath := filepath.Join(dir, state+"_"+stage+".csv")
 	file, err := os.Create(filePath)
 	if err != nil {
 		log.Fatalf("failed to create Failed CSV: %v", err)

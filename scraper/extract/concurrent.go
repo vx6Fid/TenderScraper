@@ -44,6 +44,7 @@ func NewConcurrentExtractor(baseURL, domain, state, runDate string, maxWorkers i
 }
 
 func (ce *ConcurrentExtractor) ExtractTendersWithMultipleSessions() error {
+	fmt.Print("\n")
 	log.Printf("--- Starting concurrent tender extraction for [%s] with %d workers ---", ce.state, ce.maxWorkers)
 
 	rows, err := ce.loadInputCSV()
@@ -163,12 +164,17 @@ func (ce *ConcurrentExtractor) ExtractTendersWithMultipleSessions() error {
 						return
 					default:
 					}
-
-					if err := sess.EstablishSession("ActiveTenders"); err != nil {
+					start := time.Now()
+					err := sess.EstablishSession("ActiveTenders")
+					if err != nil {
 						lastErr = err
 						log.Printf("[%s] Worker %d session attempt %d failed: %v", ce.state, workerID, r, err)
 						time.Sleep(time.Duration(r) * 5 * time.Second)
 						continue
+					} else {
+						fmt.Print("\n========================================================================\n")
+						log.Printf("[%s] Worker %d session established in %v", ce.state, workerID, time.Since(start))
+						fmt.Print("\n========================================================================\n")
 					}
 					ok = true
 					break
@@ -245,7 +251,7 @@ func (ce *ConcurrentExtractor) workerProcess(
 ) {
 	processed := 0
 	progressInterval := calculateProgressInterval(totalJobs)
-	log.Printf("[%s] Worker %d starting processing", ce.state, ws.WorkerID)
+	// log.Printf("[%s] Worker %d starting processing", ce.state, ws.WorkerID)
 
 	defer func() {
 		if r := recover(); r != nil {
@@ -260,18 +266,18 @@ func (ce *ConcurrentExtractor) workerProcess(
 			return
 		case tenderInput, ok := <-jobs:
 			if !ok {
-				log.Printf("[%s] Worker %d finished processing %d tenders", ce.state, ws.WorkerID, processed)
+				// log.Printf("[%s] Worker %d finished processing %d tenders", ce.state, ws.WorkerID, processed)
 				return
 			}
 			processed++
 			if processed%progressInterval == 0 {
-				log.Printf("[%s] Worker %d processed %d tenders", ce.state, ws.WorkerID, processed)
+				// log.Printf("[%s] Worker %d processed %d tenders", ce.state, ws.WorkerID, processed)
 			}
 
-			start := time.Now()
+			// start := time.Now()
 			tenderData, err := ws.Scraper.ExtractSingleTender(tenderInput)
-			elapsed := time.Since(start)
-			log.Printf("[%s] Worker %d extracted tender %s in %s", ce.state, ws.WorkerID, tenderInput.Serial, elapsed)
+			// elapsed := time.Since(start)
+			// log.Printf("[%s] Worker %d extracted tender %s in %s", ce.state, ws.WorkerID, tenderInput.Serial, elapsed)
 
 			if err != nil {
 				log.Printf("[%s_%s] Worker %d extraction failed: %v", ce.state, tenderInput.Serial, ws.WorkerID, err)

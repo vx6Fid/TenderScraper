@@ -1,7 +1,10 @@
+// Modify this file to include the number of links in search.csv and corrigendum.csv along with FinalLinks.csv
+// Subtract the header row from count, also it is not counting FinalCSV if either search or corrigendum is empty
 package commands
 
 import (
 	"encoding/csv"
+	"flag"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -12,7 +15,10 @@ import (
 
 func CountTotalLinks() error {
 	runDate := utils.GetRunDate(false) // adjust path to your utils
-	root := "/home/achal/Documents/Projects/TenderScraper/TenderData/Links/" + runDate
+	var dataDir string
+	flag.StringVar(&dataDir, "data-dir", "TenderData", "Path to TenderData directory")
+	flag.Parse()
+	root := filepath.Join(dataDir, "Links", runDate)
 	fmt.Println("Scanning:", root)
 
 	entries, err := os.ReadDir(root)
@@ -22,18 +28,27 @@ func CountTotalLinks() error {
 
 	totalLinks := 0
 	w := tabwriter.NewWriter(os.Stdout, 0, 0, 2, ' ', 0)
-	fmt.Fprintln(w, "Folder\tRows")
+	fmt.Fprintln(w, "Folder\tSearch\tCorrigendum\tFinal")
 
 	for _, entry := range entries {
 		if entry.IsDir() {
-			csvPath := filepath.Join(root, entry.Name(), "FinalLinks.csv")
-			count, err := countRows(csvPath)
-			if err != nil {
-				fmt.Fprintf(w, "%s\t%s\n", entry.Name(), "--")
-			} else {
-				fmt.Fprintf(w, "%s\t%d\n", entry.Name(), count)
-				totalLinks += count
+
+			FinalCSVPath := filepath.Join(root, entry.Name(), "FinalLinks.csv")
+			SearchCSVPath := filepath.Join(root, entry.Name(), "search.csv")
+			CorrigendumCSVPath := filepath.Join(root, entry.Name(), "corrigendums.csv")
+
+			countFinal, err1 := countRows(FinalCSVPath)
+			countSearch, err2 := countRows(SearchCSVPath)
+			countCorrigendum, err3 := countRows(CorrigendumCSVPath)
+			if err1 != nil {
+				countSearch = 1
+			} else if err2 != nil {
+				countCorrigendum = 1
+			} else if err3 != nil {
+				countFinal = 1
 			}
+			fmt.Fprintf(w, "%s\t%d\t%d\t%d\n", entry.Name(), max(0, countSearch-1), max(0, countCorrigendum-1), max(0, countFinal-1))
+			totalLinks += max(countFinal, countSearch)
 		}
 	}
 

@@ -2,7 +2,6 @@ package extract
 
 import (
 	"fmt"
-	"log"
 	"strconv"
 	"strings"
 	"time"
@@ -47,11 +46,11 @@ func (ds *DataScraper) ExtractSingleTender(input TenderInput) (*TenderData, erro
 	c := ds.collector.Clone()
 	parser.SetupHandlers(c, tenderData)
 
-	start := time.Now()
+	// start := time.Now()
 	err := c.Visit(input.Link)
 
 	if err == nil && ds.validateTenderData(tenderData) {
-		log.Printf("[%s_%s] Successfully extracted tender in %v", ds.state, input.Serial, time.Since(start))
+		// log.Printf("[%s_%s] Successfully extracted tender in %v", ds.state, input.Serial, time.Since(start))
 		return tenderData, nil
 	}
 

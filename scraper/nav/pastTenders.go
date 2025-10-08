@@ -70,7 +70,7 @@ func (ps *PastScraper) Close() {
 }
 
 func (ps *PastScraper) Run() error {
-	ps.logger.Printf("Starting scraping for state: %s", ps.state)
+	// ps.logger.Printf("Starting scraping for state: %s", ps.state)
 
 	// Clear handlers and setup for tender parsing
 	ps.setupHandlers()
@@ -84,12 +84,12 @@ func (ps *PastScraper) Run() error {
 		return fmt.Errorf("failed to visit initial page: %w", err)
 	}
 
-	ps.logger.Println("Starting pagination process...")
+	// ps.logger.Println("Starting pagination process...")
 	if err := ps.handlePagination(); err != nil {
 		return fmt.Errorf("pagination failed: %w", err)
 	}
 
-	ps.logger.Printf("Scraping completed successfully! Total tenders scraped: %d/%d", ps.scrapedTenders, ps.totalTenders)
+	// ps.logger.Printf("Scraping completed successfully! Total tenders scraped: %d/%d", ps.scrapedTenders, ps.totalTenders)
 	return nil
 }
 
@@ -107,7 +107,7 @@ func (ps *PastScraper) handleError(r *colly.Response, err error) {
 
 // handleTenderTable processes the tender results table (Step 3)
 func (ps *PastScraper) handleTenderTable(e *colly.HTMLElement) {
-	ps.logger.Printf("PAGE %d: Found tender table! Parsing results... (Status: %d)", ps.currentPage, e.Response.StatusCode)
+	// ps.logger.Printf("PAGE %d: Found tender table! Parsing results... (Status: %d)", ps.currentPage, e.Response.StatusCode)
 	ps.parseTenders(e)
 }
 
@@ -121,7 +121,7 @@ func (ps *PastScraper) handleTotalRecords(e *colly.HTMLElement) {
 		if total, err := strconv.Atoi(matches[1]); err == nil {
 			if ps.totalTenders == 0 { // Only set on first page
 				ps.totalTenders = total
-				ps.logger.Printf("Total records found: %d", ps.totalTenders)
+				// ps.logger.Printf("Total records found: %d", ps.totalTenders)
 			}
 		}
 	}
@@ -174,11 +174,11 @@ func (ps *PastScraper) handlePagination() error {
 	for ps.nextButtonURL != "" {
 		// stop if scraped enough tenders
 		if ps.totalTenders > 0 && ps.scrapedTenders >= ps.totalTenders {
-			ps.logger.Printf("All %d tenders scraped, stopping pagination", ps.scrapedTenders)
+			// ps.logger.Printf("All %d tenders scraped, stopping pagination", ps.scrapedTenders)
 			break
 		}
 
-		ps.logger.Printf("PAGE %d: Clicking Next button: %s", ps.currentPage+1, ps.nextButtonURL)
+		// ps.logger.Printf("PAGE %d: Clicking Next button: %s", ps.currentPage+1, ps.nextButtonURL)
 		time.Sleep(500 * time.Millisecond)
 
 		prevScraped := ps.scrapedTenders
@@ -189,21 +189,20 @@ func (ps *PastScraper) handlePagination() error {
 
 		// if tender count didn’t increase, stop
 		if ps.scrapedTenders == prevScraped {
-			ps.logger.Printf("No new tenders found after page %d, stopping.", ps.currentPage)
+			// ps.logger.Printf("No new tenders found after page %d, stopping.", ps.currentPage)
 			break
 		}
 
 		ps.currentPage++
 	}
 
-	ps.logger.Printf("Pagination completed! Processed %d pages, scraped %d tenders",
-		ps.currentPage, ps.scrapedTenders)
+	// ps.logger.Printf("Pagination completed! Processed %d pages, scraped %d tenders", ps.currentPage, ps.scrapedTenders)
 	return nil
 }
 
 // parseTenders parses tender data from HTML element
 func (ps *PastScraper) parseTenders(e *colly.HTMLElement) {
-	ps.logger.Printf("PAGE %d: Parsing tender data from table element...", ps.currentPage)
+	// ps.logger.Printf("PAGE %d: Parsing tender data from table element...", ps.currentPage)
 	var tendersFoundOnPage int
 	// ps.saveFile("debug", fmt.Sprintf("Page_%d.html", ps.currentPage), []byte(e.Response.Body))
 
@@ -263,5 +262,5 @@ func (ps *PastScraper) parseTenders(e *colly.HTMLElement) {
 
 	})
 
-	ps.logger.Printf("PAGE %d: Successfully parsed %d tenders", ps.currentPage, tendersFoundOnPage)
+	// ps.logger.Printf("PAGE %d: Successfully parsed %d tenders", ps.currentPage, tendersFoundOnPage)
 }

@@ -16,6 +16,10 @@ func CalculateOptimalWorkers(totalJobs int) int {
 	return workers
 }
 
+func CalculateWorkersPastLinks(totalJobs int) int {
+	return min(60, totalJobs)
+}
+
 func max(a, b int) int {
 	if a > b {
 		return a

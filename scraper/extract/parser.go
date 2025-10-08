@@ -1,7 +1,6 @@
 package extract
 
 import (
-	"fmt"
 	"html"
 	"log"
 	"regexp"
@@ -685,7 +684,7 @@ func (tp *TenderParser) setupCorrigendumHandler(c *colly.Collector, data *Tender
 
 				absLink := e.Request.AbsoluteURL(rawLink)
 				cleanURL := html.UnescapeString(absLink)
-				fmt.Println("View Link: ", cleanURL)
+				// fmt.Println("View Link: ", cleanURL)
 
 				corr := types.Corrigendum{
 					SerialNo: strings.TrimSpace(tds.Eq(0).Text()),

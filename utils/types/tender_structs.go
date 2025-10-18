@@ -159,7 +159,8 @@ type TenderLinks struct {
 }
 
 type CorrLinks struct {
-	Type string
-	Name string
-	Link string
+	Type      string
+	Name      string
+	Link      string
+	UpdatedAt string
 }

@@ -144,3 +144,11 @@ func ExtractTenderID(s string) string {
 	}
 	return strings.TrimSpace(matches[len(matches)-1][1])
 }
+
+var spaceRe = regexp.MustCompile(`[\s\p{Zs}]+`)
+
+func CleanField(s string) string {
+	s = strings.TrimSpace(s)
+	s = spaceRe.ReplaceAllString(s, " ")
+	return s
+}

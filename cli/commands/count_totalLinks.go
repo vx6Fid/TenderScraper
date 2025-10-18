@@ -41,12 +41,15 @@ func CountTotalLinks() error {
 			countSearch, err2 := countRows(SearchCSVPath)
 			countCorrigendum, err3 := countRows(CorrigendumCSVPath)
 			if err1 != nil {
-				countSearch = 1
-			} else if err2 != nil {
-				countCorrigendum = 1
-			} else if err3 != nil {
-				countFinal = 1
+				countFinal = 0
 			}
+			if err2 != nil {
+				countSearch = 0
+			}
+			if err3 != nil {
+				countCorrigendum = 0
+			}
+
 			fmt.Fprintf(w, "%s\t%d\t%d\t%d\n", entry.Name(), max(0, countSearch-1), max(0, countCorrigendum-1), max(0, countFinal-1))
 			totalLinks += max(countFinal, countSearch)
 		}
@@ -71,6 +74,7 @@ func countRows(path string) (int, error) {
 	for {
 		_, err := reader.Read()
 		if err != nil {
+			fmt.Println("Error reading CSV:", err)
 			if err.Error() == "EOF" {
 				break
 			}

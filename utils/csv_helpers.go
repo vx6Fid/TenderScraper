@@ -9,7 +9,7 @@ import (
 
 // EstimateJobCount reads a CSV and counts valid rows
 func EstimateJobCount(state, runDate string, pastTenders bool, stage string) (int, error) {
-	fileName := "FinalLinks.csv"
+	fileName := "search.csv"
 	filePath := fmt.Sprintf("TenderData/Links/%s/%s", runDate, state)
 	if pastTenders {
 		fileName = fmt.Sprintf("%s_%s.csv", state, stage)

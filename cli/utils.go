@@ -1,11 +1,13 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
 
 	"github.com/joho/godotenv"
 	"github.com/vx6fid/tender-scraper/cli/commands"
+	"github.com/vx6fid/tender-scraper/utils"
 )
 
 var Logger = log.New(os.Stdout, "[TenderScraper] ", log.LstdFlags)
@@ -67,5 +69,12 @@ func runFinalCSV() {
 func runCountTotalLinks() {
 	if err := commands.CountTotalLinks(); err != nil {
 		log.Printf("Total links count failed: %v", err)
+	}
+}
+
+func runPrintSearchTendersURL() {
+	for _, u := range utils.BaseURLs {
+		url := utils.BuildPageURLRaw(u.BaseURL, 2)
+		fmt.Println(url)
 	}
 }

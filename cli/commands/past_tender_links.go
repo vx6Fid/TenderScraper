@@ -10,7 +10,7 @@ import (
 
 func ExtractPastTenderLinks(logger *log.Logger) error {
 	runDate := utils.GetRunDate(false)
-	fromStr := "01/01/2025"
+	fromStr := "01/01/2024"
 	toStr := "30/09/2025"
 
 	// tenderType := utils.GiveStageName()

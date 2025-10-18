@@ -28,7 +28,7 @@ func NewCSVWriter(state string) *CSVWriter {
 	}
 
 	w := csv.NewWriter(file)
-	cw := &CSVWriter{rows: make(chan []string, 2000)}
+	cw := &CSVWriter{rows: make(chan []string, 4000)}
 
 	cw.wg.Add(1)
 	go func() {
@@ -38,7 +38,7 @@ func NewCSVWriter(state string) *CSVWriter {
 
 		// header
 		w.Write([]string{"S.No", "Page No", "e-Published Date", "Closing Date", "Opening Date",
-			"Title", "TenderID", "Link", "Organisation Chain"})
+			"Title", "TenderID", "Link", "Organisation Chain", "Unique Identifier"})
 
 		for row := range cw.rows {
 			if err := w.Write(row); err != nil {

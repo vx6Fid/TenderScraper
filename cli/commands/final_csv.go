@@ -19,6 +19,7 @@ type TenderF struct {
 	Organisation string
 	ClosingDate  string
 	Link         string
+	UniqueID     string
 }
 
 func PrepareFinalCSV(logger *log.Logger) error {
@@ -67,8 +68,9 @@ func readCorrigendum(path string) (map[string]TenderF, error) {
 			Organisation: row[5],
 			ClosingDate:  row[6],
 			Link:         row[7],
+			UniqueID:     row[8],
 		}
-		data[t.TenderID] = t
+		data[t.UniqueID] = t
 	}
 	return data, nil
 }
@@ -100,13 +102,14 @@ func readSearch(path string) (map[string]TenderF, error) {
 			Organisation: row[8],
 			ClosingDate:  row[3],
 			Link:         row[7],
+			UniqueID:     row[9],
 		}
 		// Proper duplicate check
-		if _, found := data[t.TenderID]; found {
-			fmt.Printf("Duplicate found for TenderID %s:\n", t.TenderID)
+		if _, found := data[t.UniqueID]; found {
+			fmt.Printf("Duplicate found for UniqueID %s:\n", t.UniqueID)
 		}
 
-		data[t.TenderID] = t
+		data[t.UniqueID] = t
 	}
 	return data, nil
 }

@@ -97,6 +97,7 @@ func (cs *CorrScraper) ScrapeCorrigendum() error {
 		"Organisation",
 		"Closing Date",
 		"Link",
+		"UniqueIdentifier",
 	})
 
 	cs.csvWriter.Flush()
@@ -283,6 +284,7 @@ func (cs *CorrScraper) parseTenders(e *colly.HTMLElement) error {
 
 		// Extract tender ID
 		cellText := strings.TrimSpace(cells.Eq(4).Text())
+		// cellText = utils.CleanField(cellText)
 		tenderID := utils.ExtractTenderID(cellText)
 
 		// Build full link
@@ -307,6 +309,7 @@ func (cs *CorrScraper) parseTenders(e *colly.HTMLElement) error {
 			organisation,
 			closingDate,
 			fullLink,
+			cellText,
 		}); err != nil {
 			cs.logger.Printf("ERROR: Failed to write CSV row: %v", err)
 			parseFailed = true

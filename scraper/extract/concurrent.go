@@ -66,8 +66,8 @@ func (ce *ConcurrentExtractor) ExtractTendersWithMultipleSessions() error {
 	log.Printf("[%s] Found %d valid tender links to process with %d workers", ce.state, totalJobs, ce.maxWorkers)
 
 	// channels
-	jobs := make(chan TenderInput, min(totalJobs, 100))
-	results := make(chan *TenderData, min(totalJobs, 2500))
+	jobs := make(chan TenderInput, min(totalJobs, ce.maxWorkers*3))
+	results := make(chan *TenderData, min(totalJobs, ce.maxWorkers*50))
 
 	// job counter + cancel context
 	var remainingJobs int32
@@ -210,7 +210,7 @@ func (ce *ConcurrentExtractor) ExtractTendersWithMultipleSessions() error {
 				continue
 			}
 			serial := strings.TrimSpace(row[0])
-			link := strings.TrimSpace(row[6])
+			link := strings.TrimSpace(row[7])
 			if serial == "" || link == "" {
 				continue
 			}
@@ -298,7 +298,7 @@ func (ce *ConcurrentExtractor) workerProcess(
 }
 
 func (ce *ConcurrentExtractor) loadInputCSV() ([][]string, error) {
-	fileName := "FinalLinks.csv"
+	fileName := "search.csv"
 	filePath := fmt.Sprintf("TenderData/Links/%s/%s", ce.runDate, ce.state)
 	inputPath := filepath.Join(filePath, fileName)
 

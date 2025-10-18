@@ -57,6 +57,9 @@ func (s *SearchScraper) Scrape() error {
 			link = u.Scheme + "://" + u.Host + link
 		}
 
+		// raw = utils.CleanField(raw)
+		tenderID := utils.ExtractTenderID(raw)
+
 		row := []string{
 			strings.TrimSuffix(cells[0], "."), // S.No
 			strconv.Itoa(s.currentPage),       // Page No
@@ -64,9 +67,10 @@ func (s *SearchScraper) Scrape() error {
 			cells[2],                          // Closing Date
 			cells[3],                          // Opening Date
 			title,
-			raw,
+			tenderID,
 			link,
 			cells[5], // Organisation Chain
+			raw,      // Unique Identifier
 		}
 
 		if s.rowHandler != nil {
@@ -101,7 +105,6 @@ func (s *SearchScraper) ScrapeWithMutex(mu *sync.Mutex) error {
 		sno := strings.TrimSuffix(cells[0], ".")
 		title := e.ChildText("td:nth-child(5) a")
 		raw := e.ChildText("td:nth-child(5)")
-		leftover := strings.TrimSpace(strings.Replace(raw, title, "", 1))
 
 		link := e.ChildAttr("td:nth-child(5) a", "href")
 		if strings.HasPrefix(link, "/") {
@@ -109,15 +112,19 @@ func (s *SearchScraper) ScrapeWithMutex(mu *sync.Mutex) error {
 			link = u.Scheme + "://" + u.Host + link
 		}
 
+		// raw = utils.CleanField(raw)
+		tenderID := utils.ExtractTenderID(raw)
+
 		row := []string{
 			sno,      // S.No
 			cells[1], // e-Published Date
 			cells[2], // Closing Date
 			cells[3], // Opening Date
 			title,    // Title
-			leftover, // Ref.No./TenderID
+			tenderID, // Ref.No./TenderID
 			link,     // Tender link
 			cells[5], // Organisation Chain
+			raw,      // Unique Identifier
 		}
 
 		if s.rowHandler != nil {

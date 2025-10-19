@@ -3,6 +3,7 @@ package docdownload
 import (
 	"fmt"
 	"log"
+	"os"
 	"strings"
 	"time"
 
@@ -55,6 +56,11 @@ func (d *DocDownloader) Run(tenderID string, tenderURL string, corrigendumLinks 
 		return err
 	}
 
+	bucketName := os.Getenv("S3_BUCKET")
+	if bucketName == "" {
+		return fmt.Errorf("environment variable S3_BUCKET not set")
+	}
+
 	d.logger.Printf("[%s][docDownload] visiting tender page: %s", d.state, tenderURL)
 
 	// Extract document links
@@ -79,7 +85,7 @@ func (d *DocDownloader) Run(tenderID string, tenderURL string, corrigendumLinks 
 		return err
 	}
 
-	if err := d.processAndUploadDocs(tenderID, "tenderbharat"); err != nil {
+	if err := d.processAndUploadDocs(tenderID, bucketName); err != nil {
 		return err
 	}
 

@@ -83,6 +83,7 @@ func (s *SearchScraper) Scrape() error {
 	})
 
 	url := utils.BuildPageURLRaw(s.baseURL, s.currentPage)
+	fmt.Println(url)
 	if err := s.collector.Visit(url); err != nil {
 		return fmt.Errorf("visit failed: %w", err)
 	}

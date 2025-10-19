@@ -81,6 +81,7 @@ func (le *LinkExtractor) Run() error {
 		log.Printf("[%s] Total pages: %d", vs.state, totalPages)
 
 		workers := utils.CalculateOptimalWorkers(totalPages)
+		workers = 1
 		log.Printf("[%s] Worker pool size = %d", vs.state, workers)
 
 		// Writers
@@ -100,18 +101,19 @@ func (le *LinkExtractor) Run() error {
 			wgWorkers.Add(1)
 			go func(workerID int) {
 				defer wgWorkers.Done()
-				for pageNum := range pages {
-					scraper := NewSearchScraper(vs.sess, vs.domain, vs.state, pageNum)
-					scraper.SetRowHandler(func(row []string) {
-						csvWriter.WriteRow(row)
-					})
+				pageNum := 1
+				// for pageNum := range pages {
+				scraper := NewSearchScraper(vs.sess, vs.domain, vs.state, pageNum)
+				scraper.SetRowHandler(func(row []string) {
+					csvWriter.WriteRow(row)
+				})
 
-					lastErr := scraper.Scrape()
-					if lastErr != nil {
-						// Write immediately to failed page file
-						failedWriter.WriteFailure(pageNum, lastErr.Error())
-					}
+				lastErr := scraper.Scrape()
+				if lastErr != nil {
+					// Write immediately to failed page file
+					failedWriter.WriteFailure(pageNum, lastErr.Error())
 				}
+				// }
 				log.Printf("[%s] Worker %d finished all assigned pages.", vs.state, workerID)
 			}(w)
 		}
@@ -125,8 +127,11 @@ func (le *LinkExtractor) Run() error {
 	return nil
 }
 
-func (le *LinkExtractor) ActiveLinks() {
+func (le *LinkExtractor) ActiveLinks() error {
+	sem := make(chan struct{}, utils.MaxSessionParallel)
 	var wg sync.WaitGroup
+
+	failedSessWriter := NewFailedSessWriter()
 
 	for _, u := range utils.BaseURLs {
 		wg.Add(1)
@@ -134,9 +139,20 @@ func (le *LinkExtractor) ActiveLinks() {
 			defer wg.Done()
 
 			sess := session.NewSession(u.BaseURL, u.State)
-			if err := sess.EstablishSession("ActiveTenders"); err != nil {
+
+			// Acquire semaphore for session establishment
+			sem <- struct{}{}
+			// log.Printf("[%s] Starting Session Establishment\n", u.State)
+			err := sess.EstablishSession("ActiveTenders")
+			<-sem // release immediately after establishment
+
+			// fmt.Printf("[%s]", u.State)
+			if err != nil {
 				log.Printf("[%s] failed to establish session: %v", u.State, err)
+				failedSessWriter.WriteFailure(u.State, u.BaseURL, fmt.Sprintf("Session failed: %v", err))
+				return
 			}
+			log.Printf("[%s] Session Established\n", u.State)
 
 			scraper := NewActiveScraper(sess, u.Domain, u.State)
 			if err := scraper.ScrapeActiveTenders(); err != nil {
@@ -145,6 +161,7 @@ func (le *LinkExtractor) ActiveLinks() {
 		}(u)
 	}
 	wg.Wait()
+	return nil
 }
 
 func (le *LinkExtractor) Corrigendums() {
@@ -174,7 +191,7 @@ func (le *LinkExtractor) Corrigendums() {
 				return
 			}
 			log.Printf("[%s] Session Established\n", u.State)
-
+			fmt.Println("Corr URL: ", sess.CorrigendumURL)
 			scraper := NewCorrScraper(sess, u.Domain, u.State, failedWriter)
 			if err := scraper.ScrapeCorrigendum(); err != nil {
 				log.Printf("[%s] scraping failed: %v", u.State, err)

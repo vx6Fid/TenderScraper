@@ -46,6 +46,7 @@ func processTender(config DocumentConfig, logger *log.Logger) error {
 	if exists, err := utils.CheckTenderFolderExists("tenderbharat", config.ID); err != nil {
 		return fmt.Errorf("failed to check if tender folder exists: %w", err)
 	} else if exists {
+		// It it exists then we don't need to go for nit and work docs, and only check
 		logger.Printf("Tender folder already exists for %s", config.ID)
 		return nil
 	}

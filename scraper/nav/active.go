@@ -63,7 +63,7 @@ func (ts *TenderScraper) ScrapeActiveTenders() error {
 	// initialize logger
 	ts.logger = log.New(logFile, "", log.LstdFlags)
 
-	ts.logger.Println("Starting tender scraping process with correct session flow.")
+	// ts.logger.Println("Starting tender scraping process with correct session flow.")
 
 	dateStr := time.Now().Format("02_Jan_2006")
 	dir := filepath.Join("TenderData/Links", dateStr)
@@ -95,7 +95,7 @@ func (ts *TenderScraper) ScrapeActiveTenders() error {
 	}()
 
 	// STEP 1: Click Active Tenders link with established session
-	ts.logger.Printf("STEP 1: Clicking Active Tenders link with session: %s", ts.activeTendersURL)
+	// ts.logger.Printf("STEP 1: Clicking Active Tenders link with session: %s", ts.activeTendersURL)
 
 	// Clear handlers and setup for tender parsing
 	ts.clearHandlers()
@@ -110,12 +110,12 @@ func (ts *TenderScraper) ScrapeActiveTenders() error {
 	}
 
 	// STEP 2: Handle pagination - keep clicking "Next" until no more pages
-	ts.logger.Println("STEP 2: Starting pagination process...")
+	// ts.logger.Println("STEP 2: Starting pagination process...")
 	if err := ts.handlePagination(); err != nil {
 		return fmt.Errorf("pagination failed: %w", err)
 	}
 
-	ts.logger.Printf("Scraping completed successfully! Total tenders scraped: %d/%d", ts.scrapedTenders, ts.totalTenders)
+	// ts.logger.Printf("Scraping completed successfully! Total tenders scraped: %d/%d", ts.scrapedTenders, ts.totalTenders)
 	return nil
 }
 
@@ -128,7 +128,7 @@ func (ts *TenderScraper) handlePagination() error {
 			break
 		}
 
-		ts.logger.Printf("PAGE %d: Clicking Next button: %s", ts.currentPage+1, ts.nextButtonURL)
+		// ts.logger.Printf("PAGE %d: Clicking Next button: %s", ts.currentPage+1, ts.nextButtonURL)
 
 		// Small delay between page requests
 		time.Sleep(500 * time.Millisecond)
@@ -149,7 +149,7 @@ func (ts *TenderScraper) handlePagination() error {
 		}
 	}
 
-	ts.logger.Printf("Pagination completed! Processed %d pages, scraped %d tenders", ts.currentPage, ts.scrapedTenders)
+	// ts.logger.Printf("Pagination completed! Processed %d pages, scraped %d tenders", ts.currentPage, ts.scrapedTenders)
 	return nil
 }
 
@@ -181,7 +181,7 @@ func (ts *TenderScraper) handleError(r *colly.Response, err error) {
 
 // handleTenderTable processes the tender results table (Step 3)
 func (ts *TenderScraper) handleTenderTable(e *colly.HTMLElement) {
-	ts.logger.Printf("PAGE %d: Found tender table! Parsing results... (Status: %d)", ts.currentPage, e.Response.StatusCode)
+	// ts.logger.Printf("PAGE %d: Found tender table! Parsing results... (Status: %d)", ts.currentPage, e.Response.StatusCode)
 	ts.resultsFound = true
 	ts.sessionEstablished = true
 	ts.parseTenders(e)
@@ -192,7 +192,7 @@ func (ts *TenderScraper) handleNextButton(e *colly.HTMLElement) {
 	href := e.Attr("href")
 	if href == "" {
 		ts.nextButtonURL = ""
-		ts.logger.Printf("PAGE %d: No more Next button found - reached last page", ts.currentPage)
+		// ts.logger.Printf("PAGE %d: No more Next button found - reached last page", ts.currentPage)
 		return
 	}
 
@@ -211,7 +211,7 @@ func (ts *TenderScraper) handleNextButton(e *colly.HTMLElement) {
 	}
 
 	ts.nextButtonURL = base.ResolveReference(rel).String()
-	ts.logger.Printf("PAGE %d: Next button found: %s", ts.currentPage, ts.nextButtonURL)
+	// ts.logger.Printf("PAGE %d: Next button found: %s", ts.currentPage, ts.nextButtonURL)
 }
 
 // handleTotalRecords extracts the total records count
@@ -232,7 +232,7 @@ func (ts *TenderScraper) handleTotalRecords(e *colly.HTMLElement) {
 
 // parseTenders parses tender data from HTML element
 func (ts *TenderScraper) parseTenders(e *colly.HTMLElement) {
-	ts.logger.Printf("PAGE %d: Parsing tender data from table element...", ts.currentPage)
+	// ts.logger.Printf("PAGE %d: Parsing tender data from table element...", ts.currentPage)
 	var tendersFoundOnPage int
 	// ts.saveFile("debug", fmt.Sprintf("Page_%d.html", ts.currentPage), []byte(e.Response.Body))
 
@@ -240,13 +240,14 @@ func (ts *TenderScraper) parseTenders(e *colly.HTMLElement) {
 	e.DOM.Find(`tr[id^="informal"]`).Each(func(i int, s *goquery.Selection) {
 		tendersFoundOnPage++
 		ts.scrapedTenders++
+
 		cells := s.Find("td")
 
 		if cells.Length() >= 6 {
 			closingDate := strings.TrimSpace(cells.Eq(2).Text())
 
 			linkTag := cells.Eq(4).Find("a")
-			title := strings.TrimSpace(linkTag.Text())
+			title := cells.Eq(4).Text()
 			href, exists := linkTag.Attr("href")
 			if !exists {
 				href = "" // no link present
@@ -289,7 +290,7 @@ func (ts *TenderScraper) parseTenders(e *colly.HTMLElement) {
 
 	ts.csvWriter.Flush()
 
-	ts.logger.Printf("PAGE %d: Successfully parsed %d tenders", ts.currentPage, tendersFoundOnPage)
+	// ts.logger.Printf("PAGE %d: Successfully parsed %d tenders", ts.currentPage, tendersFoundOnPage)
 }
 
 // saveFile utility function

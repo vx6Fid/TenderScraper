@@ -200,6 +200,12 @@ func (cs *CorrScraper) handleError(r *colly.Response, err error) {
 
 // handleTenderTable processes the tender results table (Step 3)
 func (cs *CorrScraper) handleTenderTable(e *colly.HTMLElement) {
+	// Debug File, save the html content to file
+	filename := fmt.Sprintf("Corrigendum_Page_%d.html", cs.currentPage)
+	if err := cs.saveFile("TenderData/Pages", filename, e.Response.Body); err != nil {
+		cs.logger.Printf("ERROR: Failed to save page HTML: %v", err)
+	}
+
 	cs.logger.Printf("PAGE %d: Found tender table! Parsing results... (Status: %d)", cs.currentPage, e.Response.StatusCode)
 	cs.resultsFound = true
 	cs.sessionEstablished = true

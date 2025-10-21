@@ -35,7 +35,7 @@ func ExtractTitle(raw string) string {
 	return strings.TrimSpace(raw) // fallback if no brackets found
 }
 
-func SaveTendersCSV(state string, tenders []Tender) error {
+func SaveTendersCSVBatch(state string, tenders []Tender, isFirstBatch bool) error {
 	dateStr := time.Now().Format("02_Jan_2006")
 	dir := filepath.Join("TenderData", "Links", dateStr, state)
 	if err := os.MkdirAll(dir, 0755); err != nil {
@@ -43,18 +43,25 @@ func SaveTendersCSV(state string, tenders []Tender) error {
 	}
 
 	filePath := filepath.Join(dir, "active.csv")
-	file, err := os.Create(filePath)
+	file, err := os.OpenFile(filePath, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0644)
 	if err != nil {
-		return fmt.Errorf("failed to create csv file: %w", err)
+		return fmt.Errorf("failed to open csv file: %w", err)
 	}
 	defer file.Close()
 
 	writer := csv.NewWriter(file)
 	defer writer.Flush()
 
-	// write header
-	if err := writer.Write([]string{"Serial", "Title", "Organisation", "e-Published Date", "Closing Date", "Link", "Unique Identifier"}); err != nil {
-		return fmt.Errorf("failed to write header: %w", err)
+	// write header only for the first batch
+	if isFirstBatch {
+		//Clear the file before writing header
+		if err := os.Truncate(filePath, 0); err != nil {
+			return fmt.Errorf("failed to clear file: %w", err)
+		}
+
+		if err := writer.Write([]string{"Serial", "Title", "Organisation", "e-Published Date", "Closing Date", "Link", "Unique Identifier"}); err != nil {
+			return fmt.Errorf("failed to write header: %w", err)
+		}
 	}
 
 	for _, t := range tenders {

@@ -26,10 +26,12 @@ func NewLinkExtractor(runDate string) *LinkExtractor {
 
 func (le *LinkExtractor) ActiveLinksBrowser() error {
 	fmt.Println("Starting browser...")
-	for _, u := range utils.BaseURLs {
-		// 1. Launch browser (headful in dev)
-		b := browser.NewBrowser()
 
+	// 1. Launch browser (headful in dev)
+	b := browser.NewBrowser()
+	defer b.Close()
+
+	for _, u := range utils.BaseURLs {
 		// 2. Establish session
 		page, err := session_browser.EstablishSession(b, u.BaseURL, u.State)
 		if err != nil {
@@ -38,15 +40,29 @@ func (le *LinkExtractor) ActiveLinksBrowser() error {
 
 		page = b.MustPage(u.BaseURL + "?component=%24DirectLink&page=FrontEndTendersByOrganisation&service=direct&session=T")
 		page.MustWaitLoad()
-		page.MustWaitElementsMoreThan("table#table tr", 1)
-		page.MustWaitStable()
+		// page.MustWaitElementsMoreThan("table#table tr", 1)
+		// page.MustWaitStable()
+		var prevCount, currCount int
+		for i := 0; i < 60; i++ { // max 2 minutes
+			val, err := page.Eval(`() => document.getElementById("table").rows.length`)
+			if err != nil {
+				return fmt.Errorf("counting rows failed: %w", err)
+			}
+			currCount = int(val.Value.Int())
+			if currCount == 0 {
+				return fmt.Errorf("table did not populate any rows after polling")
+			}
 
-		rows := page.MustElements("table#table tr")
-		currCount := len(rows)
+			if currCount == prevCount && currCount > 0 {
+				break // stable row count reached
+			}
+			prevCount = currCount
+			time.Sleep(1 * time.Second)
+		}
 		fmt.Printf("Current rows: %d\n", currCount)
 
 		// 3. Continue with scraping logic here
-		if err := active.Run(u.State, page); err != nil {
+		if err := active.Run(u.State, currCount, page); err != nil {
 			return fmt.Errorf("active links extraction failed: %w", err)
 		}
 

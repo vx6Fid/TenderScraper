@@ -2,87 +2,82 @@ package active
 
 import (
 	"log"
-	"net/url"
-	"strings"
 
 	"github.com/go-rod/rod"
 )
 
-func Run(state string, page *rod.Page) error {
-	tenders, err := ExtractTenders(page)
+func Run(state string, totalRows int, page *rod.Page) error {
+	err := ExtractTenders(state, totalRows, page)
 	if err != nil {
-		return err
-	}
-
-	if err := SaveTendersCSV(state, tenders); err != nil {
 		return err
 	}
 
 	return nil
 }
 
-func ExtractTenders(page *rod.Page) ([]Tender, error) {
-	tenders := []Tender{}
-
-	// Wait for the table to load
-	page.MustWaitElementsMoreThan("table#table tr", 1)
-
-	rows := page.MustElements("table#table tr")
+func ExtractTenders(state string, totalRows int, page *rod.Page) error {
+	const batchSize = 100
 	serial := 1
-	base, _ := url.Parse(page.MustInfo().URL)
+	// base, _ := url.Parse(page.MustInfo().URL)
 
-	for i, row := range rows {
-		if i == 0 {
-			continue // skip header row
-		}
-		tender, err := ExtractTenderInfo(row, serial, base)
-		if err != nil {
-			return nil, err
-		}
-		if IsInvalidTender(tender) {
-			continue
-		}
-		tenders = append(tenders, tender)
+	writeHeader := true
+	for i := 1; i < totalRows; i += batchSize { // skip header
+		end := i + batchSize
+		end = min(end, totalRows)
 
-		serial++
+		// evaluate JS to extract batch of rows as plain data
+		batchData := page.MustEval(`
+		(start, end) => {
+			const trs = Array.from(document.getElementById("table").rows).slice(start, end);
+		    return trs.map(tr => {
+		        const tds = Array.from(tr.cells);
+		        let link = "";
+		        const a = tds[4]?.querySelector('a');
+		        if (a) link = a.href;
+		        return {
+		            serial: null, // will assign in Go
+		            title: tds[4]?.innerText || "",
+		            organisation: tds[5]?.innerText || "",
+		            publishedDate: tds[1]?.innerText || "",
+		            closingDate: tds[2]?.innerText || "",
+		            link: link,
+		            uniqueIdentifier: tds[4]?.innerText || ""
+		        }
+		    });
+		}`, i, end)
+
+		batch := []Tender{}
+		for _, row := range batchData.Arr() {
+			obj := row.Map()
+			tender := Tender{
+				Serial:           serial,
+				Title:            obj["title"].Str(),
+				Organisation:     obj["organisation"].Str(),
+				PublishedDate:    obj["publishedDate"].Str(),
+				ClosingDate:      obj["closingDate"].Str(),
+				Link:             obj["link"].Str(),
+				UniqueIdentifier: obj["uniqueIdentifier"].Str(),
+			}
+			if IsInvalidTender(tender) {
+				continue
+			}
+			batch = append(batch, tender)
+			serial++
+		}
+		if len(batch) > 0 {
+			SaveTendersCSVBatch(state, batch, writeHeader)
+			writeHeader = false
+		}
+
 	}
 
-	log.Printf("Extracted %d tenders from page", len(tenders))
-	return tenders, nil
+	log.Printf("Extracted %d tenders from page", serial-1)
+	return nil
 }
 
-func ExtractTenderInfo(row *rod.Element, serial int, base *url.URL) (Tender, error) {
-	tender := Tender{}
-	cells := row.MustElements("td")
-	if len(cells) < 6 {
-		return Tender{}, nil // skip header/empty rows
+func min(a, b int) int {
+	if a < b {
+		return a
 	}
-
-	title := ExtractTitle(cells[4].MustText())
-	organisation := strings.TrimSpace(cells[5].MustText())
-	publishedDate := strings.TrimSpace(cells[1].MustText())
-	closingDate := strings.TrimSpace(cells[2].MustText())
-
-	// get link
-	linkElem, err := cells[4].Element("a") // returns nil + error if not found
-	fullLink := ""
-	if err == nil && linkElem != nil {
-		href, _ := linkElem.Attribute("href")
-		if href != nil {
-			rel, _ := url.Parse(*href)
-			fullLink = base.ResolveReference(rel).String()
-		}
-	}
-
-	tender = Tender{
-		Serial:           serial,
-		Title:            title,
-		Organisation:     organisation,
-		PublishedDate:    publishedDate,
-		ClosingDate:      closingDate,
-		Link:             fullLink,
-		UniqueIdentifier: cells[4].MustText(),
-	}
-
-	return tender, nil
+	return b
 }

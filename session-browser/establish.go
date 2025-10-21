@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"strings"
+	"time"
 
 	"github.com/go-rod/rod"
 	"github.com/vx6fid/tender-scraper/scraper/captcha"
@@ -108,21 +109,49 @@ func handleCaptchaWithRetry(page *rod.Page, state string, maxRetries int) error 
 		// Fill and submit
 		page.MustElement(`input[name="captchaText"]`).MustInput(strings.TrimSpace(code))
 		page.MustElement(`input[type="submit"]`).MustClick()
-		page.MustWaitLoad()
+		time.Sleep(500 * time.Millisecond) // let DOM start updating
 
-		// 1. Check if tender table exists
-		page.MustWaitElementsMoreThan("table#table tr", 1)
+		var success, failure bool
+		var errorMsg string
 
-		// 2. Check if error message exists
-		hasError, _, _ := page.Has("table.message_box")
-		if hasError {
-			log.Printf("[%s] Captcha attempt %d failed, retrying...", state, attempt)
-			continue
-		} else {
+		for range 40 { // up to ~20s
+			// check for table rows > 1
+			val, err := page.Eval(`() => {
+						const t = document.getElementById("table");
+						return t ? t.rows.length : 0;
+					}`)
+			if err == nil && val.Value.Int() > 1 {
+				success = true
+				break
+			}
+
+			// check for error text
+			if ok, _, _ := page.Has(`.error`); ok {
+				if errEl, e := page.Element(`.error`); e == nil {
+					txt, _ := errEl.Text()
+					if strings.Contains(strings.ToLower(txt), "invalid captcha") {
+						errorMsg = strings.TrimSpace(txt)
+						failure = true
+						break
+					}
+				}
+			}
+			time.Sleep(500 * time.Millisecond)
+		}
+
+		if success {
 			log.Printf("[%s] Captcha solved successfully on attempt %d", state, attempt)
 			return nil
 		}
+
+		if failure {
+			log.Printf("[%s] Captcha attempt %d failed: %s", state, attempt, errorMsg)
+			continue
+		}
+
+		log.Printf("[%s] Captcha attempt %d inconclusive — retrying", state, attempt)
+		time.Sleep(1 * time.Second)
 	}
 
-	return fmt.Errorf("[%s] Failed to solve captcha after %d attempts", state, maxRetries)
+	return fmt.Errorf("[%s] failed to solve captcha after %d attempts", state, maxRetries)
 }

@@ -22,6 +22,19 @@ type Tender struct {
 	UniqueIdentifier string
 }
 
+func IsInvalidTender(t Tender) bool {
+	return t.Title == "" || t.Organisation == "" || t.ClosingDate == "" || t.Link == "" || t.UniqueIdentifier == ""
+}
+
+func ExtractTitle(raw string) string {
+	re := regexp.MustCompile(`\[(.*?)\]`) // match anything inside [ ]
+	matches := re.FindStringSubmatch(raw)
+	if len(matches) > 1 {
+		return strings.TrimSpace(matches[1])
+	}
+	return strings.TrimSpace(raw) // fallback if no brackets found
+}
+
 func SaveTendersCSV(state string, tenders []Tender) error {
 	dateStr := time.Now().Format("02_Jan_2006")
 	dir := filepath.Join("TenderData", "Links", dateStr, state)
@@ -60,17 +73,4 @@ func SaveTendersCSV(state string, tenders []Tender) error {
 
 	log.Printf("Saved %d tenders to %s", len(tenders), filePath)
 	return nil
-}
-
-func IsInvalidTender(t Tender) bool {
-	return t.Title == "" || t.Organisation == "" || t.ClosingDate == "" || t.Link == "" || t.UniqueIdentifier == ""
-}
-
-func ExtractTitle(raw string) string {
-	re := regexp.MustCompile(`\[(.*?)\]`) // match anything inside [ ]
-	matches := re.FindStringSubmatch(raw)
-	if len(matches) > 1 {
-		return strings.TrimSpace(matches[1])
-	}
-	return strings.TrimSpace(raw) // fallback if no brackets found
 }

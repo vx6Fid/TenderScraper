@@ -21,7 +21,7 @@ func EstablishSession(b *rod.Browser, baseURL, state string) (*rod.Page, error) 
 	hasCaptcha, _, _ := page.Has("form#LatestActiveTenders")
 	if hasCaptcha {
 		log.Printf("[%s] Captcha form detected", state)
-		if err := handleCaptcha(page, state); err != nil {
+		if err := handleCaptchaWithRetry(page, state, 3); err != nil {
 			return nil, fmt.Errorf("[%s] captcha handling failed: %w", state, err)
 		}
 	} else {
@@ -79,4 +79,50 @@ func handleCaptcha(page *rod.Page, state string) error {
 
 	page.MustWaitLoad()
 	return nil
+}
+
+func handleCaptchaWithRetry(page *rod.Page, state string, maxRetries int) error {
+	for attempt := 1; attempt <= maxRetries; attempt++ {
+		log.Printf("[%s] Attempt %d to solve captcha", state, attempt)
+
+		// Locate captcha image
+		img, err := page.ElementX(`//img[
+			contains(translate(@id, 'CAPTCHA', 'captcha'), 'captcha') or
+			contains(translate(@src, 'CAPTCHA', 'captcha'), 'captcha') or
+			contains(translate(@name, 'CAPTCHA', 'captcha'), 'captcha')
+		]`)
+		if err != nil {
+			return fmt.Errorf("[%s] captcha image not found", state)
+		}
+
+		src, _ := img.Attribute("src")
+		if src == nil {
+			return fmt.Errorf("[%s] captcha image src missing", state)
+		}
+
+		code, err := captcha.LocalCaptchaSolver(*src, log.Default())
+		if err != nil {
+			return fmt.Errorf("[%s] captcha solver failed: %w", state, err)
+		}
+
+		// Fill and submit
+		page.MustElement(`input[name="captchaText"]`).MustInput(strings.TrimSpace(code))
+		page.MustElement(`input[type="submit"]`).MustClick()
+		page.MustWaitLoad()
+
+		// 1. Check if tender table exists
+		page.MustWaitElementsMoreThan("table#table tr", 1)
+
+		// 2. Check if error message exists
+		hasError, _, _ := page.Has("table.message_box")
+		if hasError {
+			log.Printf("[%s] Captcha attempt %d failed, retrying...", state, attempt)
+			continue
+		} else {
+			log.Printf("[%s] Captcha solved successfully on attempt %d", state, attempt)
+			return nil
+		}
+	}
+
+	return fmt.Errorf("[%s] Failed to solve captcha after %d attempts", state, maxRetries)
 }

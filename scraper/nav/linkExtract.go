@@ -6,6 +6,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/go-rod/rod"
 	"github.com/vx6fid/tender-scraper/scraper/nav/active"
 	"github.com/vx6fid/tender-scraper/session"
 	session_browser "github.com/vx6fid/tender-scraper/session-browser"
@@ -167,6 +168,97 @@ func (le *LinkExtractor) ActiveLinks() error {
 	return nil
 }
 
+// func (le *LinkExtractor) TenderByOrg() error {
+// 	sem := make(chan struct{}, utils.MaxSessionParallel)
+// 	var wg sync.WaitGroup
+
+// 	failedSessWriter := NewFailedSessWriter()
+
+// 	for _, u := range utils.BaseURLs {
+// 		wg.Add(1)
+// 		go func(u types.URLS) {
+// 			defer wg.Done()
+
+// 			sess := session.NewSession(u.BaseURL, u.State)
+
+// 			// Acquire semaphore for session establishment
+// 			sem <- struct{}{}
+// 			err := sess.EstablishSession("ActiveTenders")
+// 			<-sem // release immediately
+
+// 			if err != nil {
+// 				log.Printf("[%s] failed to establish session: %v", u.State, err)
+// 				failedSessWriter.WriteFailure(u.State, u.BaseURL, fmt.Sprintf("Session failed: %v", err))
+// 				return
+// 			}
+// 			log.Printf("[%s] Session Established", u.State)
+
+// 			// Colly scraper
+// 			tenderURL := fmt.Sprintf("%s?component=%%24DirectLink&page=FrontEndTendersByOrganisation&service=direct&session=T", u.BaseURL)
+// 			c := sess.NewCollector(u.Domain)
+
+// 			var tenders []Tender
+// 			serial := 1
+
+// 			c.OnHTML("table#table tr", func(e *colly.HTMLElement) {
+// 				// Skip header row
+// 				if e.Index == 0 {
+// 					return
+// 				}
+
+// 				cells := e.DOM.Find("td")
+// 				if cells.Length() < 6 {
+// 					return
+// 				}
+
+// 				titleRaw := strings.TrimSpace(cells.Eq(4).Text())
+// 				title := ExtractTitle(titleRaw)
+// 				organisation := strings.TrimSpace(cells.Eq(5).Text())
+// 				publishedDate := strings.TrimSpace(cells.Eq(1).Text())
+// 				closingDate := strings.TrimSpace(cells.Eq(2).Text())
+
+// 				link, _ := cells.Eq(4).Find("a").Attr("href")
+// 				fullLink := ""
+// 				if link != "" {
+// 					baseURL, _ := url.Parse(tenderURL)
+// 					rel, _ := url.Parse(link)
+// 					fullLink = baseURL.ResolveReference(rel).String()
+// 				}
+
+// 				t := Tender{
+// 					Serial:           serial,
+// 					Title:            title,
+// 					Organisation:     organisation,
+// 					PublishedDate:    publishedDate,
+// 					ClosingDate:      closingDate,
+// 					Link:             fullLink,
+// 					UniqueIdentifier: titleRaw,
+// 				}
+// 				serial++
+// 				tenders = append(tenders, t)
+// 			})
+
+// 			err = c.Visit(tenderURL)
+// 			if err != nil {
+// 				log.Printf("[%s] colly visit failed: %v", u.State, err)
+// 				return
+// 			}
+// 			c.Wait()
+
+// 			// Save CSV
+// 			if err := SaveTendersCSV(u.State, tenders); err != nil {
+// 				log.Printf("[%s] failed to save CSV: %v", u.State, err)
+// 			} else {
+// 				log.Printf("[%s] Extracted %d tenders", u.State, len(tenders))
+// 			}
+
+// 		}(u)
+// 	}
+
+// 	wg.Wait()
+// 	return nil
+// }
+
 func (le *LinkExtractor) ActiveLinksBrowser() error {
 	fmt.Println("Starting browser...")
 	for _, u := range utils.BaseURLs {
@@ -179,13 +271,20 @@ func (le *LinkExtractor) ActiveLinksBrowser() error {
 			return fmt.Errorf("session establishment failed: %w", err)
 		}
 
-		log.Printf("[%s] Session established, page ready: %s", u.State, page.MustInfo().URL)
-		cookies := page.MustCookies()
-		for _, c := range cookies {
-			log.Printf("Cookie: %s=%s; Domain=%s; Path=%s", c.Name, c.Value, c.Domain, c.Path)
-		}
+		// log.Printf("[%s] Session established, page ready: %s", u.State, page.MustInfo().URL)
+		// cookies := page.MustCookies()
+		// for _, c := range cookies {
+		// 	log.Printf("Cookie: %s=%s; Domain=%s; Path=%s", c.Name, c.Value, c.Domain, c.Path)
+		// }
 
-		// page.Reload()
+		page = b.MustPage(u.BaseURL + "?component=%24DirectLink&page=FrontEndTendersByOrganisation&service=direct&session=T")
+		page.MustWaitLoad()
+		page.MustWaitElementsMoreThan("table#table tr", 1)
+		page.MustWaitStable()
+
+		rows := page.MustElements("table#table tr")
+		currCount := len(rows)
+		fmt.Printf("Current rows: %d\n", currCount)
 
 		// 3. Continue with scraping logic here
 		if err := active.Run(u.State, page); err != nil {
@@ -333,4 +432,18 @@ func (le *LinkExtractor) PastTenders(fromStr, toStr string, chunkSize int, stage
 
 	wg.Wait()
 	log.Println("=== Past Tenders extraction finished ===")
+}
+
+func safeScrollToBottom(page *rod.Page) {
+	for i := 0; i < 3; i++ { // retry up to 3 times
+		err := rod.Try(func() {
+			page.Eval(`window.scrollTo(0, document.body.scrollHeight)`)
+		})
+		if err == nil {
+			return
+		}
+		time.Sleep(1 * time.Second)
+		page.MustWaitLoad()
+	}
+	log.Println("[WARN] scrollTo failed after 3 retries; continuing anyway")
 }

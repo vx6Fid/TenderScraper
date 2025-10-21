@@ -6,8 +6,11 @@ import (
 	"sync"
 	"time"
 
+	"github.com/vx6fid/tender-scraper/scraper/nav/active"
 	"github.com/vx6fid/tender-scraper/session"
+	session_browser "github.com/vx6fid/tender-scraper/session-browser"
 	"github.com/vx6fid/tender-scraper/utils"
+	"github.com/vx6fid/tender-scraper/utils/browser"
 	types "github.com/vx6fid/tender-scraper/utils/types"
 )
 
@@ -161,6 +164,36 @@ func (le *LinkExtractor) ActiveLinks() error {
 		}(u)
 	}
 	wg.Wait()
+	return nil
+}
+
+func (le *LinkExtractor) ActiveLinksBrowser() error {
+	fmt.Println("Starting browser...")
+	for _, u := range utils.BaseURLs {
+		// 1. Launch browser (headful in dev)
+		b := browser.NewBrowser()
+
+		// 2. Establish session
+		page, err := session_browser.EstablishSession(b, u.BaseURL, u.State)
+		if err != nil {
+			return fmt.Errorf("session establishment failed: %w", err)
+		}
+
+		log.Printf("[%s] Session established, page ready: %s", u.State, page.MustInfo().URL)
+		cookies := page.MustCookies()
+		for _, c := range cookies {
+			log.Printf("Cookie: %s=%s; Domain=%s; Path=%s", c.Name, c.Value, c.Domain, c.Path)
+		}
+
+		// page.Reload()
+
+		// 3. Continue with scraping logic here
+		if err := active.Run(u.State, page); err != nil {
+			return fmt.Errorf("active links extraction failed: %w", err)
+		}
+
+	}
+
 	return nil
 }
 

@@ -36,12 +36,6 @@ func runTenderData() {
 	}
 }
 
-func runCorrigendumLinks() {
-	if err := commands.ExtractCorrigendumLinks(log.Default()); err != nil {
-		log.Printf("Corrigendum links extraction failed: %v", err)
-	}
-}
-
 func runPastTenderLinks() {
 	if err := commands.ExtractPastTenderLinks(log.Default()); err != nil {
 		log.Printf("Past tender links extraction failed: %v", err)
@@ -57,18 +51,6 @@ func runPastTenderData() {
 func runDocDownload() {
 	if err := commands.DownloadDocuments(log.Default()); err != nil {
 		log.Printf("Document download failed: %v", err)
-	}
-}
-
-func runFinalCSV() {
-	if err := commands.PrepareFinalCSV(log.Default()); err != nil {
-		log.Printf("Final CSV generation failed: %v", err)
-	}
-}
-
-func runCountTotalLinks() {
-	if err := commands.CountTotalLinks(); err != nil {
-		log.Printf("Total links count failed: %v", err)
 	}
 }
 

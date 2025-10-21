@@ -19,14 +19,10 @@ func main() {
 func cliPrompt() int {
 	options := []string{
 		"Tender links",
-		"Corr Links",
-		"Prepare FinalLinks.csv",
 		"Tender data",
 		"Past Tenders Links",
 		"Past Tenders Data",
 		"Document download",
-		"Count Number of Links",
-		"Print Search Tenders URL",
 	}
 
 	for {
@@ -47,14 +43,10 @@ func cliPrompt() int {
 
 var handlers = map[int]func(){
 	1: runTenderLinks,
-	2: runCorrigendumLinks,
-	3: runFinalCSV,
-	4: runTenderData,
-	5: runPastTenderLinks,
-	6: runPastTenderData,
-	7: runDocDownload,
-	8: runCountTotalLinks,
-	9: runPrintSearchTendersURL,
+	2: runTenderData,
+	3: runPastTenderLinks,
+	4: runPastTenderData,
+	5: runDocDownload,
 }
 
 func dispatcher(choice int) {

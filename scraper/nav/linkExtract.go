@@ -6,7 +6,6 @@ import (
 	"sync"
 	"time"
 
-	"github.com/go-rod/rod"
 	"github.com/vx6fid/tender-scraper/scraper/nav/active"
 	"github.com/vx6fid/tender-scraper/session"
 	session_browser "github.com/vx6fid/tender-scraper/session-browser"
@@ -25,240 +24,6 @@ func NewLinkExtractor(runDate string) *LinkExtractor {
 	}
 }
 
-func (le *LinkExtractor) Run() error {
-	log.Println("=== Link extraction started ===")
-
-	type validatedSession struct {
-		state  string
-		domain string
-		sess   *session.Session
-	}
-
-	var validSessions []validatedSession
-	var mu sync.Mutex
-	var wg sync.WaitGroup
-
-	// Writers for failed sessions even if session establishment fails
-	failedSessionsWriter := NewFailedSessWriter()
-	defer failedSessionsWriter.Close()
-
-	sem := make(chan struct{}, utils.MaxSessionParallel)
-
-	for _, u := range utils.BaseURLs {
-		wg.Add(1)
-		go func(u types.URLS) {
-			defer wg.Done()
-
-			sem <- struct{}{}
-			defer func() { <-sem }()
-
-			s := session.NewSession(u.BaseURL, u.State)
-			if err := s.EstablishSession("ActiveTenders"); err != nil {
-				log.Printf("[%s] [ERROR] Failed to establish session: %v", u.State, err)
-				// Write to failed sessions file
-				failedSessionsWriter.WriteFailure(u.State, u.BaseURL, err.Error())
-				return
-			}
-
-			log.Printf("[%s] Session established.", u.State)
-			mu.Lock()
-			validSessions = append(validSessions, validatedSession{state: u.State, sess: s, domain: u.Domain})
-			mu.Unlock()
-		}(u)
-	}
-	wg.Wait()
-
-	if len(validSessions) == 0 {
-		return fmt.Errorf("no sessions could be established for any state")
-	}
-
-	// Process each validated session
-	for _, vs := range validSessions {
-		fmt.Print("\n")
-		log.Printf(">>> [%s] Starting extraction", vs.state)
-
-		totalPages, err := utils.FetchTotalPages(vs.sess, vs.sess.BaseURL, vs.domain)
-		if err != nil {
-			log.Printf("[%s] [ERROR] Failed to fetch total pages: %v", vs.state, err)
-			totalPages = 1
-		}
-		log.Printf("[%s] Total pages: %d", vs.state, totalPages)
-
-		workers := utils.CalculateOptimalWorkers(totalPages)
-		workers = 1
-		log.Printf("[%s] Worker pool size = %d", vs.state, workers)
-
-		// Writers
-		failedWriter := NewFailedSearchWriter(vs.state)
-		csvWriter := NewCSVWriter(vs.state)
-		defer failedWriter.Close()
-		defer csvWriter.Close()
-
-		pages := make(chan int, totalPages)
-		for i := 1; i <= totalPages; i++ {
-			pages <- i
-		}
-		close(pages)
-
-		var wgWorkers sync.WaitGroup
-		for w := 0; w < workers; w++ {
-			wgWorkers.Add(1)
-			go func(workerID int) {
-				defer wgWorkers.Done()
-				pageNum := 1
-				// for pageNum := range pages {
-				scraper := NewSearchScraper(vs.sess, vs.domain, vs.state, pageNum)
-				scraper.SetRowHandler(func(row []string) {
-					csvWriter.WriteRow(row)
-				})
-
-				lastErr := scraper.Scrape()
-				if lastErr != nil {
-					// Write immediately to failed page file
-					failedWriter.WriteFailure(pageNum, lastErr.Error())
-				}
-				// }
-				log.Printf("[%s] Worker %d finished all assigned pages.", vs.state, workerID)
-			}(w)
-		}
-
-		wgWorkers.Wait()
-		log.Printf("<<< [%s] Extraction completed (Pages=%d, Workers=%d)", vs.state, totalPages, workers)
-	}
-
-	fmt.Print("\n")
-	log.Println("=== Link extraction finished ===")
-	return nil
-}
-
-func (le *LinkExtractor) ActiveLinks() error {
-	sem := make(chan struct{}, utils.MaxSessionParallel)
-	var wg sync.WaitGroup
-
-	failedSessWriter := NewFailedSessWriter()
-
-	for _, u := range utils.BaseURLs {
-		wg.Add(1)
-		go func(u types.URLS) {
-			defer wg.Done()
-
-			sess := session.NewSession(u.BaseURL, u.State)
-
-			// Acquire semaphore for session establishment
-			sem <- struct{}{}
-			// log.Printf("[%s] Starting Session Establishment\n", u.State)
-			err := sess.EstablishSession("ActiveTenders")
-			<-sem // release immediately after establishment
-
-			// fmt.Printf("[%s]", u.State)
-			if err != nil {
-				log.Printf("[%s] failed to establish session: %v", u.State, err)
-				failedSessWriter.WriteFailure(u.State, u.BaseURL, fmt.Sprintf("Session failed: %v", err))
-				return
-			}
-			log.Printf("[%s] Session Established\n", u.State)
-
-			scraper := NewActiveScraper(sess, u.Domain, u.State)
-			if err := scraper.ScrapeActiveTenders(); err != nil {
-				log.Printf("[%s] scraping failed: %v", u.State, err)
-			}
-		}(u)
-	}
-	wg.Wait()
-	return nil
-}
-
-// func (le *LinkExtractor) TenderByOrg() error {
-// 	sem := make(chan struct{}, utils.MaxSessionParallel)
-// 	var wg sync.WaitGroup
-
-// 	failedSessWriter := NewFailedSessWriter()
-
-// 	for _, u := range utils.BaseURLs {
-// 		wg.Add(1)
-// 		go func(u types.URLS) {
-// 			defer wg.Done()
-
-// 			sess := session.NewSession(u.BaseURL, u.State)
-
-// 			// Acquire semaphore for session establishment
-// 			sem <- struct{}{}
-// 			err := sess.EstablishSession("ActiveTenders")
-// 			<-sem // release immediately
-
-// 			if err != nil {
-// 				log.Printf("[%s] failed to establish session: %v", u.State, err)
-// 				failedSessWriter.WriteFailure(u.State, u.BaseURL, fmt.Sprintf("Session failed: %v", err))
-// 				return
-// 			}
-// 			log.Printf("[%s] Session Established", u.State)
-
-// 			// Colly scraper
-// 			tenderURL := fmt.Sprintf("%s?component=%%24DirectLink&page=FrontEndTendersByOrganisation&service=direct&session=T", u.BaseURL)
-// 			c := sess.NewCollector(u.Domain)
-
-// 			var tenders []Tender
-// 			serial := 1
-
-// 			c.OnHTML("table#table tr", func(e *colly.HTMLElement) {
-// 				// Skip header row
-// 				if e.Index == 0 {
-// 					return
-// 				}
-
-// 				cells := e.DOM.Find("td")
-// 				if cells.Length() < 6 {
-// 					return
-// 				}
-
-// 				titleRaw := strings.TrimSpace(cells.Eq(4).Text())
-// 				title := ExtractTitle(titleRaw)
-// 				organisation := strings.TrimSpace(cells.Eq(5).Text())
-// 				publishedDate := strings.TrimSpace(cells.Eq(1).Text())
-// 				closingDate := strings.TrimSpace(cells.Eq(2).Text())
-
-// 				link, _ := cells.Eq(4).Find("a").Attr("href")
-// 				fullLink := ""
-// 				if link != "" {
-// 					baseURL, _ := url.Parse(tenderURL)
-// 					rel, _ := url.Parse(link)
-// 					fullLink = baseURL.ResolveReference(rel).String()
-// 				}
-
-// 				t := Tender{
-// 					Serial:           serial,
-// 					Title:            title,
-// 					Organisation:     organisation,
-// 					PublishedDate:    publishedDate,
-// 					ClosingDate:      closingDate,
-// 					Link:             fullLink,
-// 					UniqueIdentifier: titleRaw,
-// 				}
-// 				serial++
-// 				tenders = append(tenders, t)
-// 			})
-
-// 			err = c.Visit(tenderURL)
-// 			if err != nil {
-// 				log.Printf("[%s] colly visit failed: %v", u.State, err)
-// 				return
-// 			}
-// 			c.Wait()
-
-// 			// Save CSV
-// 			if err := SaveTendersCSV(u.State, tenders); err != nil {
-// 				log.Printf("[%s] failed to save CSV: %v", u.State, err)
-// 			} else {
-// 				log.Printf("[%s] Extracted %d tenders", u.State, len(tenders))
-// 			}
-
-// 		}(u)
-// 	}
-
-// 	wg.Wait()
-// 	return nil
-// }
-
 func (le *LinkExtractor) ActiveLinksBrowser() error {
 	fmt.Println("Starting browser...")
 	for _, u := range utils.BaseURLs {
@@ -270,12 +35,6 @@ func (le *LinkExtractor) ActiveLinksBrowser() error {
 		if err != nil {
 			return fmt.Errorf("session establishment failed: %w", err)
 		}
-
-		// log.Printf("[%s] Session established, page ready: %s", u.State, page.MustInfo().URL)
-		// cookies := page.MustCookies()
-		// for _, c := range cookies {
-		// 	log.Printf("Cookie: %s=%s; Domain=%s; Path=%s", c.Name, c.Value, c.Domain, c.Path)
-		// }
 
 		page = b.MustPage(u.BaseURL + "?component=%24DirectLink&page=FrontEndTendersByOrganisation&service=direct&session=T")
 		page.MustWaitLoad()
@@ -294,47 +53,6 @@ func (le *LinkExtractor) ActiveLinksBrowser() error {
 	}
 
 	return nil
-}
-
-func (le *LinkExtractor) Corrigendums() {
-	sem := make(chan struct{}, utils.MaxSessionParallel)
-	var wg sync.WaitGroup
-
-	failedSessWriter := NewFailedCorrigendumWriter("Sessions")
-
-	for _, u := range utils.BaseURLs {
-		wg.Add(1)
-		go func(u types.URLS) {
-			defer wg.Done()
-
-			failedWriter := NewFailedCorrigendumWriter(u.State)
-
-			sess := session.NewSession(u.BaseURL, u.State)
-
-			// Acquire semaphore for session establishment
-			sem <- struct{}{}
-			// log.Printf("[%s] Starting Session Establishment\n", u.State)
-			err := sess.EstablishSession("CorrigendumTenders")
-			<-sem // release immediately after establishment
-
-			if err != nil {
-				log.Printf("[%s] failed to establish session: %v", u.State, err)
-				failedSessWriter.WriteFailure(u.State, fmt.Sprintf("Session failed: %v", err))
-				return
-			}
-			log.Printf("[%s] Session Established\n", u.State)
-			fmt.Println("Corr URL: ", sess.CorrigendumURL)
-			scraper := NewCorrScraper(sess, u.Domain, u.State, failedWriter)
-			if err := scraper.ScrapeCorrigendum(); err != nil {
-				log.Printf("[%s] scraping failed: %v", u.State, err)
-				logMessage := fmt.Sprintf("[%s] scraping failed: %v", u.State, err)
-				failedWriter.WriteFailure(u.State, logMessage)
-			}
-		}(u)
-	}
-	wg.Wait()
-	fmt.Print("\n")
-	log.Println("=== Corrigendum extraction finished ===")
 }
 
 func (le *LinkExtractor) PastTenders(fromStr, toStr string, chunkSize int, stage string) {
@@ -432,18 +150,4 @@ func (le *LinkExtractor) PastTenders(fromStr, toStr string, chunkSize int, stage
 
 	wg.Wait()
 	log.Println("=== Past Tenders extraction finished ===")
-}
-
-func safeScrollToBottom(page *rod.Page) {
-	for i := 0; i < 3; i++ { // retry up to 3 times
-		err := rod.Try(func() {
-			page.Eval(`window.scrollTo(0, document.body.scrollHeight)`)
-		})
-		if err == nil {
-			return
-		}
-		time.Sleep(1 * time.Second)
-		page.MustWaitLoad()
-	}
-	log.Println("[WARN] scrollTo failed after 3 retries; continuing anyway")
 }

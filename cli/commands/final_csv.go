@@ -97,12 +97,12 @@ func readSearch(path string) (map[string]TenderF, error) {
 		tenderID := utils.ExtractTenderID(row[6])
 		t := TenderF{
 			TenderID:     tenderID,
-			Title:        row[5],
-			EPublished:   row[2],
-			Organisation: row[8],
-			ClosingDate:  row[3],
-			Link:         row[7],
-			UniqueID:     row[9],
+			Title:        row[1],
+			EPublished:   row[3],
+			Organisation: row[2],
+			ClosingDate:  row[4],
+			Link:         row[5],
+			UniqueID:     row[6],
 		}
 		// Proper duplicate check
 		if _, found := data[t.UniqueID]; found {
@@ -117,7 +117,7 @@ func readSearch(path string) (map[string]TenderF, error) {
 func FinalCSV(state, commonDir string) error {
 	// Inputs
 	corrigendumPath := filepath.Join(commonDir, "corrigendums.csv")
-	searchPath := filepath.Join(commonDir, "search.csv")
+	searchPath := filepath.Join(commonDir, "active.csv")
 	outputPath := filepath.Join(commonDir, "FinalLinks.csv")
 
 	// fmt.Println("Paths: ", corrigendumPath, searchPath, outputPath)

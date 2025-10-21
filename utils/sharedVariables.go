@@ -59,7 +59,7 @@ var BaseURLs = []utils.URLS{
 	// {BaseURL: "https://sikkimtender.gov.in/nicgep/app", State: "Sikkim", Domain: "sikkimtender.gov.in"},
 	// {BaseURL: "https://tntenders.gov.in/nicgep/app", State: "TamilNadu", Domain: "tntenders.gov.in"},
 	// {BaseURL: "https://tripuratenders.gov.in/nicgep/app", State: "Tripura", Domain: "tripuratenders.gov.in"},
-	// {BaseURL: "https://wbtenders.gov.in/nicgep/app", State: "WestBengal", Domain: "wbtenders.gov.in"},
+	{BaseURL: "https://wbtenders.gov.in/nicgep/app", State: "WestBengal", Domain: "wbtenders.gov.in"},
 	// {BaseURL: "https://uktenders.gov.in/nicgep/app", State: "Uttarakhand", Domain: "uktenders.gov.in"},
-	{BaseURL: "https://etender.up.nic.in/nicgep/app", State: "UttarPradesh", Domain: "etender.up.nic.in"},
+	// {BaseURL: "https://etender.up.nic.in/nicgep/app", State: "UttarPradesh", Domain: "etender.up.nic.in"},
 }

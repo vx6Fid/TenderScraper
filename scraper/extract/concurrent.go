@@ -55,7 +55,10 @@ func (ce *ConcurrentExtractor) ExtractTendersWithMultipleSessions() error {
 	// count jobs
 	totalJobs := 0
 	for i := 1; i < len(rows); i++ {
-		if len(rows[i]) >= 5 {
+		// for _, content := range rows[i] {
+		// 	fmt.Println(content)
+		// }
+		if len(rows[i]) >= 7 {
 			totalJobs++
 		}
 	}
@@ -134,7 +137,7 @@ func (ce *ConcurrentExtractor) ExtractTendersWithMultipleSessions() error {
 
 	// launch workers
 	workerCount := min(totalJobs, ce.maxWorkers) // spin only as many as needed
-	for w := 0; w < workerCount; w++ {
+	for w := range workerCount {
 		wg.Add(1)
 		go func(workerID int) {
 			defer wg.Done()
@@ -206,21 +209,22 @@ func (ce *ConcurrentExtractor) ExtractTendersWithMultipleSessions() error {
 		jobCount := 0
 		for i := 1; i < len(rows); i++ {
 			row := rows[i]
-			if len(row) < 5 {
+			if len(row) < 7 {
 				continue
 			}
 			serial := strings.TrimSpace(row[0])
-			link := strings.TrimSpace(row[7])
+			link := strings.TrimSpace(row[5])
 			if serial == "" || link == "" {
 				continue
 			}
 			atomic.AddInt32(&remainingJobs, 1)
 			jobs <- TenderInput{
-				Serial:       serial,
-				Title:        strings.TrimSpace(row[1]),
-				Organisation: strings.TrimSpace(row[2]),
-				ClosingDate:  strings.TrimSpace(row[3]),
-				Link:         link,
+				Serial:           serial,
+				Title:            strings.TrimSpace(row[1]),
+				Organisation:     strings.TrimSpace(row[2]),
+				ClosingDate:      strings.TrimSpace(row[4]),
+				Link:             link,
+				UniqueIdentifier: row[6],
 			}
 			jobCount++
 		}
@@ -298,7 +302,7 @@ func (ce *ConcurrentExtractor) workerProcess(
 }
 
 func (ce *ConcurrentExtractor) loadInputCSV() ([][]string, error) {
-	fileName := "search.csv"
+	fileName := "active.csv"
 	filePath := fmt.Sprintf("TenderData/Links/%s/%s", ce.runDate, ce.state)
 	inputPath := filepath.Join(filePath, fileName)
 

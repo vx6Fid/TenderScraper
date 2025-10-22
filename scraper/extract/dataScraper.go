@@ -40,6 +40,7 @@ func (ds *DataScraper) ExtractSingleTender(input TenderInput) (*TenderData, erro
 
 	tenderData.Website = ds.baseURL // or ds.session.BaseURL
 	tenderData.TenderURL = input.Link
+	tenderData.UniqueIdentifier = input.UniqueIdentifier
 
 	// Setup parser handlers
 	parser := NewTenderParser()
@@ -95,6 +96,7 @@ func (ds *DataScraper) ConvertToUtilsTender(data *TenderData) types.Tender {
 	tender.BasicDetails.TenderType = data.BasicDetails.TenderType
 	tender.BasicDetails.FormOfContract = data.BasicDetails.FormOfContract
 	tender.BasicDetails.TenderCategory = data.BasicDetails.TenderCategory
+	tender.UniqueIdentifier = data.UniqueIdentifier
 
 	// Map number of covers
 	if n := strings.TrimSpace(data.BasicDetails.NumberOfCovers); n != "" {

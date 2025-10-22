@@ -96,6 +96,7 @@ type WorkDocument struct {
 // TenderData holds all extracted tender information
 type TenderData struct {
 	DetailsURL         string
+	UniqueIdentifier   string
 	BasicDetails       BasicDetails
 	PaymentInstruments struct {
 		Online  []types.PaymentInstrument

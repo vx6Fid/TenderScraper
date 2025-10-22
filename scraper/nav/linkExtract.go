@@ -25,62 +25,83 @@ func NewLinkExtractor(runDate string) *LinkExtractor {
 }
 
 func (le *LinkExtractor) ActiveLinksBrowser() error {
-	fmt.Println("Starting browser...")
-
-	// 1. Launch browser (headful in dev)
 	b := browser.NewBrowser()
 	defer b.Close()
 
-	// Open a new tab
+	// Open main tab
 	b.MustPage("about:blank")
 
+	semaphore := make(chan struct{}, utils.MaxSessionParallel)
+	var wg sync.WaitGroup
+
+	errCh := make(chan error, len(utils.BaseURLs))
+
 	for _, u := range utils.BaseURLs {
-		// 2. Establish session
-		page, err := session_browser.EstablishSession(b, u.BaseURL, u.State)
-		if err != nil {
-			return fmt.Errorf("session establishment failed: %w", err)
-		}
+		wg.Add(1)
+		go func(u types.URLS) {
+			defer wg.Done()
 
-		page = b.MustPage(u.BaseURL + "?component=%24DirectLink&page=FrontEndTendersByOrganisation&service=direct&session=T")
-		page.MustWaitLoad()
-		// page.MustWaitElementsMoreThan("table#table tr", 1)
-		// page.MustWaitStable()
-		var prevCount, currCount int
-		for range 60 { // max 1 minutes
-			val, err := page.Eval(`() => document.getElementById("table").rows.length`)
+			// Acquire semaphore to limit session establishment
+			semaphore <- struct{}{}
+			page, err := session_browser.EstablishSession(b, u.BaseURL, u.State)
+			<-semaphore // release semaphore
+
 			if err != nil {
-				return fmt.Errorf("counting rows failed: %w", err)
+				errCh <- fmt.Errorf("session establishment failed: %w", err)
+				return
 			}
-			currCount = int(val.Value.Int())
-			if currCount == 0 {
-				return fmt.Errorf("table did not populate any rows after polling")
+			log.Printf("[%s] Session established", u.BaseURL)
+
+			// Continue with scraping
+			page = b.MustPage(u.BaseURL + "?component=%24DirectLink&page=FrontEndTendersByOrganisation&service=direct&session=T")
+			page.MustWaitLoad()
+
+			// Poll table
+			var prevCount, currCount int
+			for range 60 {
+				val, err := page.Eval(`() => document.getElementById("table").rows.length`)
+				if err != nil {
+					errCh <- fmt.Errorf("counting rows failed: %w", err)
+					return
+				}
+				currCount = int(val.Value.Int())
+				if currCount == 0 {
+					errCh <- fmt.Errorf("table did not populate any rows after polling")
+					return
+				}
+				if currCount == prevCount && currCount > 0 {
+					break
+				}
+				prevCount = currCount
+				time.Sleep(1 * time.Second)
+			}
+			log.Printf("[%s] Rows: %d\n", u.BaseURL, currCount)
+
+			// Run scraping logic
+			if err := active.Run(u.State, currCount, page); err != nil {
+				errCh <- fmt.Errorf("[%s] active links extraction failed: %w", u.State, err)
+				return
 			}
 
-			if currCount == prevCount && currCount > 0 {
-				break // stable row count reached
-			}
-			prevCount = currCount
-			time.Sleep(1 * time.Second)
-		}
-		fmt.Printf("Current rows: %d\n", currCount)
-
-		// 3. Continue with scraping logic here
-		if err := active.Run(u.State, currCount, page); err != nil {
-			return fmt.Errorf("active links extraction failed: %w", err)
-		}
-		// Close any new tabs opened by active.Run
-		activePages, err := b.Pages()
-		if err != nil {
-			return fmt.Errorf("getting pages failed: %w", err)
-		}
-		// Close the exisiting tabs
-		for _, p := range activePages {
-			url := p.MustInfo().URL
-			if url != "about:blank" { // <-- keep this tab open
-				if err := p.Close(); err != nil {
-					log.Printf("failed to close tab: %v", err)
+			// Close extra tabs
+			activePages, _ := b.Pages()
+			for _, p := range activePages {
+				if p.MustInfo().URL != "about:blank" {
+					if err := p.Close(); err != nil {
+						log.Printf("failed to close tab: %v", err)
+					}
 				}
 			}
+		}(u)
+	}
+
+	wg.Wait()
+	close(errCh)
+
+	// Return first error encountered
+	for err := range errCh {
+		if err != nil {
+			log.Println(err)
 		}
 	}
 
@@ -114,7 +135,7 @@ func (le *LinkExtractor) PastTenders(fromStr, toStr string, chunkSize int, stage
 			defer wg.Done()
 
 			// One writer per state
-			headers := []string{"S.No", "TenderID", "PageNo", "Title", "Organisation Chain", "Tender Stage", "Link"}
+			headers := []string{"S.No", "TenderID", "PageNo", "Title", "Organisation Chain", "Tender Stage", "Link", "Unique Identifier"}
 			stateWriter := NewPastWriter(u.State, headers, utils.StageName[stage])
 			failedWriter := NewFailedWriter(u.State, utils.StageName[stage])
 			defer stateWriter.Close()
@@ -126,7 +147,7 @@ func (le *LinkExtractor) PastTenders(fromStr, toStr string, chunkSize int, stage
 
 			// Launch workers
 			numWorkers := utils.CalculateWorkersPastLinks(len(dateRanges))
-			for i := 0; i < numWorkers; i++ {
+			for range numWorkers {
 				workers.Add(1)
 				go func() {
 					defer workers.Done()

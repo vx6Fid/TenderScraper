@@ -6,11 +6,12 @@ import (
 
 // TenderInput represents the input data from CSV
 type TenderInput struct {
-	Serial       string
-	Title        string
-	Organisation string
-	ClosingDate  string
-	Link         string
+	Serial           string
+	Title            string
+	Organisation     string
+	ClosingDate      string
+	Link             string
+	UniqueIdentifier string
 }
 
 // BasicDetails holds basic tender information
@@ -112,8 +113,9 @@ type TenderData struct {
 	}
 	Covers []types.CoverInformation
 
-	Website   string
-	TenderURL string
+	UniqueIdentifier string
+	Website          string
+	TenderURL        string
 
 	TenderFee               TenderFeeDetails
 	EMDFee                  EMDFeeDetails

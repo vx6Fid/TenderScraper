@@ -50,7 +50,7 @@ func Run(dir string, runDate string, stage string) error {
 		_, _ = reader.Read() // skip header
 
 		// Prepare channel for this state
-		recordsCh := make(chan []string, 400)
+		recordsCh := make(chan []string, 1000)
 
 		var wg sync.WaitGroup
 
@@ -64,7 +64,7 @@ func Run(dir string, runDate string, stage string) error {
 		fmt.Print("\n\n")
 		log.Printf("[%d] workers for state %s", numWorkers, u.State)
 		// Launch workers for this state
-		for i := 0; i < numWorkers; i++ {
+		for i := range numWorkers {
 			wg.Add(1)
 			go func(workerID int) {
 				defer wg.Done()
@@ -92,6 +92,7 @@ func Run(dir string, runDate string, stage string) error {
 					tenderData := &TenderData{}
 					tenderData.Website = u.BaseURL
 					tenderData.TenderURL = urlSnippet
+					tenderData.UniqueIdentifier = record[7]
 
 					pastTenderData := &PastTendersData{}
 					pasTenderExtractor := NewPastTender(workerSess, urlSnippet, u.Domain)
@@ -182,6 +183,7 @@ func (ps *PastTender) ConvertToUtilsTender(data *TenderData, pastTenderData *Pas
 	tender.TenderInfo.BasicDetails.TenderType = data.BasicDetails.TenderType
 	tender.TenderInfo.BasicDetails.FormOfContract = data.BasicDetails.FormOfContract
 	tender.TenderInfo.BasicDetails.TenderCategory = data.BasicDetails.TenderCategory
+	tender.TenderInfo.UniqueIdentifier = data.UniqueIdentifier
 
 	// Map number of covers
 	if n := strings.TrimSpace(data.BasicDetails.NumberOfCovers); n != "" {

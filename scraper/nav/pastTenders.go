@@ -127,48 +127,6 @@ func (ps *PastScraper) handleTotalRecords(e *colly.HTMLElement) {
 	}
 }
 
-// handlePagination processes all pages by clicking Next button
-// func (ps *PastScraper) handlePagination() error {
-// 	for ps.nextButtonURL != "" {
-// 		// stop if scraped enough tenders
-// 		if ps.totalTenders > 0 && ps.scrapedTenders >= ps.totalTenders {
-// 			ps.logger.Printf("All %d tenders scraped, stopping pagination", ps.scrapedTenders)
-// 			break
-// 		}
-
-// 		ps.logger.Printf("PAGE %d: Clicking Next button: %s", ps.currentPage+1, ps.nextButtonURL)
-
-// 		// Small delay between page requests
-// 		time.Sleep(500 * time.Millisecond)
-
-// 		// Visit the next page
-// 		if err := ps.collector.Visit(ps.nextButtonURL); err != nil {
-// 			ps.logger.Printf("failed to visit page: %v", err)
-// 			if ps.failedWriter != nil {
-// 				ps.failedWriter.WriteFailure(ps.fromDate, ps.toDate, err.Error())
-// 			}
-// 			break
-// 		}
-
-// 		if ps.scrapedTenders == 0 {
-// 			ps.logger.Printf("No tenders found on page %d", ps.currentPage)
-// 			break
-// 		}
-
-// 		ps.currentPage++
-
-// 		// Log progress
-// 		if ps.totalTenders > 0 {
-// 			progress := float64(ps.scrapedTenders) / float64(ps.totalTenders) * 100
-// 			ps.logger.Printf("Progress: %d/%d tenders (%.1f%%) - Page %d completed",
-// 				ps.scrapedTenders, ps.totalTenders, progress, ps.currentPage)
-// 		}
-// 	}
-
-// 	ps.logger.Printf("Pagination completed! Processed %d pages, scraped %d tenders", ps.currentPage, ps.scrapedTenders)
-// 	return nil
-// }
-
 // handlePagination
 func (ps *PastScraper) handlePagination() error {
 	for ps.nextButtonURL != "" {
@@ -221,6 +179,7 @@ func (ps *PastScraper) parseTenders(e *colly.HTMLElement) {
 
 			tenderID := cells.Eq(1).Text()
 
+			uniqueIdentifier := cells.Eq(2).Text()
 			titleParts := strings.Split(cells.Eq(2).Text(), "][")
 			title := titleParts[0]
 
@@ -256,6 +215,7 @@ func (ps *PastScraper) parseTenders(e *colly.HTMLElement) {
 				organisation,
 				tenderStage,
 				fullLink,
+				uniqueIdentifier,
 			})
 
 		}

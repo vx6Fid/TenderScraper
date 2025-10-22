@@ -60,9 +60,9 @@ type Tender struct {
 		IsMultiCurrencyAllowedForFee       bool
 		AllowTwoStageBidding               bool
 	}
-
-	Website string
-	Link    string // tender link
+	UniqueIdentifier string
+	Website          string
+	Link             string // tender link
 	// CreatedAt time.Time
 	UpdatedAt time.Time
 

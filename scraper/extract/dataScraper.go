@@ -34,13 +34,14 @@ func NewDataScraper(sess *session.Session, domain, state, runDate string) *DataS
 }
 
 // ExtractSingleTender extracts data from a single tender URL
-func (ds *DataScraper) ExtractSingleTender(input TenderInput) (*TenderData, error) {
+func (ds *DataScraper) ExtractSingleTender(input TenderInput, updatedAt time.Time) (*TenderData, error) {
 	// Fresh TenderData
 	tenderData := &TenderData{}
 
 	tenderData.Website = ds.baseURL // or ds.session.BaseURL
 	tenderData.TenderURL = input.Link
 	tenderData.UniqueIdentifier = input.UniqueIdentifier
+	tenderData.UpdatedAt = updatedAt
 
 	// Setup parser handlers
 	parser := NewTenderParser()
@@ -113,7 +114,7 @@ func (ds *DataScraper) ConvertToUtilsTender(data *TenderData) types.Tender {
 	// Information Section
 	tender.Website = data.Website
 	tender.Link = data.TenderURL
-	tender.UpdatedAt = time.Now()
+	tender.UpdatedAt = data.UpdatedAt
 
 	// Map other sections
 	tender.PaymentInstruments.Online = data.PaymentInstruments.Online

@@ -1,6 +1,8 @@
 package extract
 
 import (
+	"time"
+
 	types "github.com/vx6fid/tender-scraper/utils/types"
 )
 
@@ -116,6 +118,7 @@ type TenderData struct {
 	UniqueIdentifier string
 	Website          string
 	TenderURL        string
+	UpdatedAt        time.Time
 
 	TenderFee               TenderFeeDetails
 	EMDFee                  EMDFeeDetails

@@ -16,12 +16,12 @@ func EstablishSession(b *rod.Browser, baseURL, state string) (*rod.Page, error) 
 	page := b.MustPage(activeTendersURL)
 	page.MustWaitLoad()
 
-	log.Printf("[%s] Page loaded: %s", state, page.MustInfo().URL)
+	// log.Printf("[%s] Page loaded: %s", state, page.MustInfo().URL)
 
 	// 1. Detect if captcha exists
 	hasCaptcha, _, _ := page.Has("form#LatestActiveTenders")
 	if hasCaptcha {
-		log.Printf("[%s] Captcha form detected", state)
+		// log.Printf("[%s] Captcha form detected", state)
 		if err := handleCaptchaWithRetry(page, state, 3); err != nil {
 			return nil, fmt.Errorf("[%s] captcha handling failed: %w", state, err)
 		}
@@ -34,13 +34,13 @@ func EstablishSession(b *rod.Browser, baseURL, state string) (*rod.Page, error) 
 	page.MustWaitLoad()
 	page.MustWaitElementsMoreThan("table#table tr", 1)
 
-	log.Printf("[%s] Tender table detected", state)
+	// log.Printf("[%s] Tender table detected", state)
 	return page, nil
 }
 
 func handleCaptchaWithRetry(page *rod.Page, state string, maxRetries int) error {
 	for attempt := 1; attempt <= maxRetries; attempt++ {
-		log.Printf("[%s] Attempt %d to solve captcha", state, attempt)
+		// log.Printf("[%s] Attempt %d to solve captcha", state, attempt)
 
 		// Locate captcha image
 		img, err := page.ElementX(`//img[
@@ -96,7 +96,7 @@ func handleCaptchaWithRetry(page *rod.Page, state string, maxRetries int) error 
 		}
 
 		if success {
-			log.Printf("[%s] Captcha solved successfully on attempt %d", state, attempt)
+			// log.Printf("[%s] Captcha solved successfully on attempt %d", state, attempt)
 			return nil
 		}
 

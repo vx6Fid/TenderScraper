@@ -9,13 +9,13 @@ import (
 )
 
 func ExtractPastTenderLinks(logger *log.Logger) error {
-	runDate := utils.GetRunDate(false)
+	// runDate := utils.GetRunDate(false)
 	fromStr := "01/01/2024"
 	toStr := "30/09/2025"
 
 	// tenderType := utils.GiveStageName()
 	blockSize := 7
-	linkExtractor := nav.NewLinkExtractor(runDate)
+	linkExtractor := nav.NewLinkExtractor()
 	keys := []string{
 		"2",
 		"3",

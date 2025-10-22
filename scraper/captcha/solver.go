@@ -31,7 +31,7 @@ type solveResponse struct {
 
 // LocalCaptchaSolver sends captcha image to your local FastAPI server and returns the OCR result
 func LocalCaptchaSolver(captchaImageData string, logger *log.Logger) (string, error) {
-	logger.Println("=== LOCAL CAPTCHA SOLVER ===")
+	// logger.Println("=== LOCAL CAPTCHA SOLVER ===")
 
 	// strip prefix if needed
 	base64Data := captchaImageData
@@ -92,7 +92,7 @@ func LocalCaptchaSolver(captchaImageData string, logger *log.Logger) (string, er
 		return "", fmt.Errorf("failed to parse OCR response: %v", err)
 	}
 
-	logger.Printf("Captcha solved in %dms: '%s'\n", sr.Ms, sr.Text)
+	// logger.Printf("Captcha solved in %dms: '%s'\n", sr.Ms, sr.Text)
 	return sr.Text, nil
 }
 

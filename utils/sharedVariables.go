@@ -23,15 +23,10 @@ var BaseURLs = []utils.URLS{
 	// {BaseURL: "https://coalindiatenders.nic.in/nicgep/app", State: "CoalIndia", Domain: "coalindiatenders.nic.in"},
 	// {BaseURL: "https://iocletenders.nic.in/nicgep/app", State: "IOCL", Domain: "iocletenders.nic.in"},
 	// {BaseURL: "https://cpcletenders.nic.in/nicgep/app", State: "CPCL", Domain: "cpcletenders.nic.in"},
-	// {BaseURL: "https://eprocurebel.co.in/nicgep/app", State: "BEL", Domain: "eprocurebel.co.in"},
 	// {BaseURL: "https://eprocurentpc.nic.in/nicgep/app", State: "NTPC", Domain: "eprocurentpc.nic.in"},
-	// {BaseURL: "https://eprocuregsl.nic.in/nicgep/app", State: "GSL", Domain: "eprocuregsl.nic.in"},
-	// {BaseURL: "https://eprocurehsl.nic.in/nicgep/app", State: "HSL", Domain: "eprocurehsl.nic.in"},
-	// {BaseURL: "https://eprocuremdl.nic.in/nicgep/app", State: "MDL", Domain: "eprocuremdl.nic.in"},
-	// {BaseURL: "https://www.eprocuremidhani.nic.in/nicgep/app", State: "Midhani", Domain: "eprocuremidhani.nic.in"},
-	// {BaseURL: "https://eprocuregrse.co.in/nicgep/app", State: "GRSE", Domain: "eprocuregrse.co.in"},
+	{BaseURL: "https://eprocurehsl.nic.in/nicgep/app", State: "HSL", Domain: "eprocurehsl.nic.in"},
 	// {BaseURL: "https://eprocurebhel.co.in/nicgep/app", State: "BHEL", Domain: "eprocurebhel.co.in"},
-	{BaseURL: "https://arunachaltenders.gov.in/nicgep/app", State: "ArunachalPradesh", Domain: "arunachaltenders.gov.in"},
+	// {BaseURL: "https://arunachaltenders.gov.in/nicgep/app", State: "ArunachalPradesh", Domain: "arunachaltenders.gov.in"},
 	// {BaseURL: "https://eprocure.andamannicobar.gov.in/nicgep/app", State: "AndamanNicobar", Domain: "eprocure.andamannicobar.gov.in"},
 	// {BaseURL: "https://assamtenders.gov.in/nicgep/app", State: "Assam", Domain: "assamtenders.gov.in"},
 	// {BaseURL: "https://etenders.chd.nic.in/nicgep/app", State: "Chandigarh", Domain: "etenders.chd.nic.in"},
@@ -59,7 +54,17 @@ var BaseURLs = []utils.URLS{
 	// {BaseURL: "https://sikkimtender.gov.in/nicgep/app", State: "Sikkim", Domain: "sikkimtender.gov.in"},
 	// {BaseURL: "https://tntenders.gov.in/nicgep/app", State: "TamilNadu", Domain: "tntenders.gov.in"},
 	// {BaseURL: "https://tripuratenders.gov.in/nicgep/app", State: "Tripura", Domain: "tripuratenders.gov.in"},
-	// {BaseURL: "https://wbtenders.gov.in/nicgep/app", State: "WestBengal", Domain: "wbtenders.gov.in"},
+	{BaseURL: "https://wbtenders.gov.in/nicgep/app", State: "WestBengal", Domain: "wbtenders.gov.in"},
 	// {BaseURL: "https://uktenders.gov.in/nicgep/app", State: "Uttarakhand", Domain: "uktenders.gov.in"},
 	// {BaseURL: "https://etender.up.nic.in/nicgep/app", State: "UttarPradesh", Domain: "etender.up.nic.in"},
 }
+
+// (Midhani,GRSE,HSL,MDL,BEL,GSL) Sites Have Same Tenders -- Leaving only HSL in the above array
+/*
+ * {BaseURL: "https://eprocuremdl.nic.in/nicgep/app", State: "MDL", Domain: "eprocuremdl.nic.in"},
+ * {BaseURL: "https://www.eprocuremidhani.nic.in/nicgep/app", State: "Midhani", Domain: "eprocuremidhani.nic.in"},
+ * {BaseURL: "https://eprocuregrse.co.in/nicgep/app", State: "GRSE", Domain: "eprocuregrse.co.in"},
+ * {BaseURL: "https://eprocurehsl.co.in/nicgep/app", State: "HSL", Domain: "eprocurehsl.co.in"},
+ * {BaseURL: "https://eprocurebel.co.in/nicgep/app", State: "BEL", Domain: "eprocurebel.co.in"},
+ * {BaseURL: "https://eprocuregsl.co.in/nicgep/app", State: "GSL", Domain: "eprocuregsl.co.in"},
+ */

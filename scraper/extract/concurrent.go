@@ -24,6 +24,7 @@ type ConcurrentExtractor struct {
 	runDate          string
 	maxWorkers       int
 	failedTenderLogs *FailedTenderWriter
+	updatedAt        time.Time
 }
 
 type WorkerSession struct {
@@ -33,13 +34,14 @@ type WorkerSession struct {
 	mu       sync.Mutex
 }
 
-func NewConcurrentExtractor(baseURL, domain, state, runDate string, maxWorkers int) *ConcurrentExtractor {
+func NewConcurrentExtractor(baseURL, domain, state, runDate string, maxWorkers int, updatedAt time.Time) *ConcurrentExtractor {
 	return &ConcurrentExtractor{
 		baseURL:    baseURL,
 		domain:     domain,
 		state:      state,
 		runDate:    runDate,
 		maxWorkers: maxWorkers,
+		updatedAt:  updatedAt,
 	}
 }
 
@@ -277,9 +279,8 @@ func (ce *ConcurrentExtractor) workerProcess(
 			if processed%progressInterval == 0 {
 				// log.Printf("[%s] Worker %d processed %d tenders", ce.state, ws.WorkerID, processed)
 			}
-
 			// start := time.Now()
-			tenderData, err := ws.Scraper.ExtractSingleTender(tenderInput)
+			tenderData, err := ws.Scraper.ExtractSingleTender(tenderInput, ce.updatedAt)
 			// elapsed := time.Since(start)
 			// log.Printf("[%s] Worker %d extracted tender %s in %s", ce.state, ws.WorkerID, tenderInput.Serial, elapsed)
 

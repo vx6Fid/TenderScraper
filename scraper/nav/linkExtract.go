@@ -8,104 +8,61 @@ import (
 
 	"github.com/vx6fid/tender-scraper/scraper/nav/active"
 	"github.com/vx6fid/tender-scraper/session"
-	session_browser "github.com/vx6fid/tender-scraper/session-browser"
 	"github.com/vx6fid/tender-scraper/utils"
 	"github.com/vx6fid/tender-scraper/utils/browser"
 	types "github.com/vx6fid/tender-scraper/utils/types"
 )
 
 type LinkExtractor struct {
-	runDate string
+	// runDate string
 }
 
-func NewLinkExtractor(runDate string) *LinkExtractor {
+func NewLinkExtractor() *LinkExtractor {
 	return &LinkExtractor{
-		runDate: runDate,
+		// runDate: runDate,
 	}
 }
 
 func (le *LinkExtractor) ActiveLinksBrowser() error {
-	b := browser.NewBrowser()
-	defer b.Close()
-
-	// Open main tab
-	b.MustPage("about:blank")
-
-	semaphore := make(chan struct{}, utils.MaxSessionParallel)
+	urlCh := make(chan types.URLS)
+	errCh := make(chan error, len(utils.BaseURLs))
 	var wg sync.WaitGroup
 
-	errCh := make(chan error, len(utils.BaseURLs))
-
-	for _, u := range utils.BaseURLs {
+	// --- Start bounded worker pool ---
+	for i := 0; i < utils.MaxSessionParallel; i++ {
 		wg.Add(1)
-		go func(u types.URLS) {
+		go func() {
 			defer wg.Done()
-
-			// Acquire semaphore to limit session establishment
-			semaphore <- struct{}{}
-			page, err := session_browser.EstablishSession(b, u.BaseURL, u.State)
-			<-semaphore // release semaphore
-
-			if err != nil {
-				errCh <- fmt.Errorf("session establishment failed: %w", err)
-				return
-			}
-			log.Printf("[%s] Session established", u.BaseURL)
-
-			// Continue with scraping
-			page = b.MustPage(u.BaseURL + "?component=%24DirectLink&page=FrontEndTendersByOrganisation&service=direct&session=T")
-			page.MustWaitLoad()
-
-			// Poll table
-			var prevCount, currCount int
-			for range 60 {
-				val, err := page.Eval(`() => document.getElementById("table").rows.length`)
-				if err != nil {
-					errCh <- fmt.Errorf("counting rows failed: %w", err)
-					return
-				}
-				currCount = int(val.Value.Int())
-				if currCount == 0 {
-					errCh <- fmt.Errorf("table did not populate any rows after polling")
-					return
-				}
-				if currCount == prevCount && currCount > 0 {
-					break
-				}
-				prevCount = currCount
-				time.Sleep(1 * time.Second)
-			}
-			log.Printf("[%s] Rows: %d\n", u.BaseURL, currCount)
-
-			// Run scraping logic
-			if err := active.Run(u.State, currCount, page); err != nil {
-				errCh <- fmt.Errorf("[%s] active links extraction failed: %w", u.State, err)
-				return
-			}
-
-			// Close extra tabs
-			activePages, _ := b.Pages()
-			for _, p := range activePages {
-				if p.MustInfo().URL != "about:blank" {
-					if err := p.Close(); err != nil {
-						log.Printf("failed to close tab: %v", err)
-					}
+			for u := range urlCh {
+				b := browser.NewBrowser()
+				defer b.Close()
+				if err := active.Run(b, u); err != nil {
+					errCh <- err
 				}
 			}
-		}(u)
+		}()
 	}
+
+	// Feed URLs to workers
+	for _, u := range utils.BaseURLs {
+		urlCh <- u
+	}
+	close(urlCh)
 
 	wg.Wait()
 	close(errCh)
 
-	// Return first error encountered
+	// Log and return first error if any
+	var firstErr error
 	for err := range errCh {
 		if err != nil {
 			log.Println(err)
+			if firstErr == nil {
+				firstErr = err
+			}
 		}
 	}
-
-	return nil
+	return firstErr
 }
 
 func (le *LinkExtractor) PastTenders(fromStr, toStr string, chunkSize int, stage string) {

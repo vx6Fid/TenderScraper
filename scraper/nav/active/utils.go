@@ -3,7 +3,6 @@ package active
 import (
 	"encoding/csv"
 	"fmt"
-	"log"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -78,6 +77,6 @@ func SaveTendersCSVBatch(state string, tenders []Tender, isFirstBatch bool) erro
 		}
 	}
 
-	log.Printf("Saved %d tenders to %s", len(tenders), filePath)
+	// log.Printf("Saved %d tenders to %s", len(tenders), filePath)
 	return nil
 }

@@ -31,6 +31,9 @@ func (le *LinkExtractor) ActiveLinksBrowser() error {
 	b := browser.NewBrowser()
 	defer b.Close()
 
+	// Open a new tab
+	b.MustPage("about:blank")
+
 	for _, u := range utils.BaseURLs {
 		// 2. Establish session
 		page, err := session_browser.EstablishSession(b, u.BaseURL, u.State)
@@ -43,7 +46,7 @@ func (le *LinkExtractor) ActiveLinksBrowser() error {
 		// page.MustWaitElementsMoreThan("table#table tr", 1)
 		// page.MustWaitStable()
 		var prevCount, currCount int
-		for i := 0; i < 60; i++ { // max 2 minutes
+		for range 60 { // max 1 minutes
 			val, err := page.Eval(`() => document.getElementById("table").rows.length`)
 			if err != nil {
 				return fmt.Errorf("counting rows failed: %w", err)
@@ -65,7 +68,20 @@ func (le *LinkExtractor) ActiveLinksBrowser() error {
 		if err := active.Run(u.State, currCount, page); err != nil {
 			return fmt.Errorf("active links extraction failed: %w", err)
 		}
-
+		// Close any new tabs opened by active.Run
+		activePages, err := b.Pages()
+		if err != nil {
+			return fmt.Errorf("getting pages failed: %w", err)
+		}
+		// Close the exisiting tabs
+		for _, p := range activePages {
+			url := p.MustInfo().URL
+			if url != "about:blank" { // <-- keep this tab open
+				if err := p.Close(); err != nil {
+					log.Printf("failed to close tab: %v", err)
+				}
+			}
+		}
 	}
 
 	return nil

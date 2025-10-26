@@ -79,6 +79,15 @@ func ConvertDocxToPDF(docxPath string) (string, error) {
 	return pdfPath, nil
 }
 
+func ConvertXlsToPDF(xlsPath string) (string, error) {
+	pdfPath := strings.TrimSuffix(xlsPath, filepath.Ext(xlsPath)) + ".pdf"
+	cmd := exec.Command("libreoffice", "--headless", "--convert-to", "pdf", xlsPath, "--outdir", filepath.Dir(xlsPath))
+	if err := cmd.Run(); err != nil {
+		return "", fmt.Errorf("failed to convert %s to PDF: %w", xlsPath, err)
+	}
+	return pdfPath, nil
+}
+
 // PreprocessFile takes an input file, expands/converts if needed, and returns a list of final files ready to upload.
 func PreprocessFile(inputPath, workDir string) ([]string, error) {
 	ext := strings.ToLower(filepath.Ext(inputPath))
@@ -103,6 +112,13 @@ func PreprocessFile(inputPath, workDir string) ([]string, error) {
 	case ".docx":
 		// Convert DOCX → PDF
 		pdfFile, err := ConvertDocxToPDF(inputPath)
+		if err != nil {
+			return nil, err
+		}
+		return []string{pdfFile}, nil
+	case ".xls", ".xlsx":
+		// Convert XLS → PDF
+		pdfFile, err := ConvertXlsToPDF(inputPath)
 		if err != nil {
 			return nil, err
 		}
@@ -144,41 +160,37 @@ func (d *DocDownloader) downloadFiles(tenderID string) error {
 		return fmt.Errorf("failed to create folder %s: %w", baseDir, err)
 	}
 
+	// helper to handle download and log skipped files
+	downloadAndLog := func(docURL, filePath, docType string) {
+		d.logger.Printf("[%s][docDownload] downloading %s: %s", d.state, docType, filePath)
+		err := DownloadFile(docURL, filePath, d.sess.Jar)
+		if err != nil {
+			if strings.Contains(err.Error(), "skipping download, file too large") {
+				d.logger.Printf("[%s][docDownload] %s skipped (too large): %s", d.state, docType, filePath)
+				return
+			}
+			d.logger.Printf("[%s][docDownload] %s download failed: %v", d.state, docType, err)
+		} else {
+			d.logger.Printf("[%s][docDownload] successfully downloaded %s", d.state, filePath)
+		}
+	}
+
 	// Download NIT documents
 	for i, doc := range d.NITDocs {
 		filePath := filepath.Join(baseDir, doc.DocumentName)
-		d.logger.Printf("[%s][docDownload] downloading NIT doc %d/%d: %s",
-			d.state, i+1, len(d.NITDocs), filePath)
-
-		if err := DownloadFile(doc.URL, filePath, d.sess.Jar); err != nil {
-			d.logger.Printf("[%s][docDownload] NIT doc download failed: %v", d.state, err)
-		} else {
-			d.logger.Printf("[%s][docDownload] successfully downloaded: %s", d.state, filePath)
-		}
+		downloadAndLog(doc.URL, filePath, fmt.Sprintf("NIT doc %d/%d", i+1, len(d.NITDocs)))
 	}
 
 	// Download corrigendum documents
 	for i, doc := range d.CorrigendumDocs {
 		filePath := filepath.Join(baseDir, doc.DocumentName)
-		d.logger.Printf("[%s][docDownload] downloading corrigendum doc %d/%d: %s",
-			d.state, i+1, len(d.CorrigendumDocs), filePath)
-
-		if err := DownloadFile(doc.URL, filePath, d.sess.Jar); err != nil {
-			d.logger.Printf("[%s][docDownload] corrigendum doc download failed: %v", d.state, err)
-		} else {
-			d.logger.Printf("[%s][docDownload] successfully downloaded: %s", d.state, filePath)
-		}
+		downloadAndLog(doc.URL, filePath, fmt.Sprintf("Corrigendum doc %d/%d", i+1, len(d.CorrigendumDocs)))
 	}
 
-	// Download zip file (if exists)
+	// Download work item ZIP
 	if d.WorkItemZip.URL != "" {
 		filePath := filepath.Join(baseDir, d.WorkItemZip.DocumentName)
-		d.logger.Printf("[%s][docDownload] downloading zip file: %s", d.state, filePath)
-		if err := DownloadFile(d.WorkItemZip.URL, filePath, d.sess.Jar); err != nil {
-			d.logger.Printf("[%s][docDownload] zip download failed: %v", d.state, err)
-		} else {
-			d.logger.Printf("[%s][docDownload] successfully downloaded: %s", d.state, filePath)
-		}
+		downloadAndLog(d.WorkItemZip.URL, filePath, "WorkItem ZIP")
 	}
 
 	return nil

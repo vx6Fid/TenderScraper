@@ -27,14 +27,23 @@ type DocumentConfig struct {
 }
 
 func DownloadDocuments(logger *log.Logger) error {
-	// configs := getDocumentDownloadConfig()
-	configs, err := getTendersWithCorrigendums("", 0)
+	configs, err := getTendersWithCorrigendums(500000000)
+
 	if err != nil {
 		return err
 	}
+
+	// Only one tender
+	// configs := []DocumentConfig{{
+	// 	ID:               "68f9fe8aa4079a540f3dc219",
+	// 	TenderURL:        "https://eprocure.gov.in/eprocure/app?component=%24DirectLink&page=FrontEndViewTender&service=direct&session=T&sp=SII%2BHiXeg39s2eAa%2FdOs4Rg%3D%3D",
+	// 	UpdatedAt:        time.Now(),
+	// 	CorrigendumLinks: []types.CorrLinks{},
+	// }}
+
 	for _, config := range configs {
 		if err := processTender(config, logger); err != nil {
-			logger.Printf("Failed to process tender %s: %v", config.ID, err)
+			logger.Printf("[%s]: %v", config.ID, err)
 		}
 	}
 	return nil
@@ -43,12 +52,13 @@ func DownloadDocuments(logger *log.Logger) error {
 // ---------------------- PROCESS FUNCTION ----------------------
 
 func processTender(config DocumentConfig, logger *log.Logger) error {
-	if exists, err := utils.CheckTenderFolderExists("tenderbharat", config.ID); err != nil {
-		return fmt.Errorf("failed to check if tender folder exists: %w", err)
+	skipWorkNit := false
+	if exists, err := utils.CheckTenderFolderExists("tenderbharat-ap-south-1", config.ID); err != nil {
+		return err
 	} else if exists {
 		// It it exists then we don't need to go for nit and work docs, and only check
-		logger.Printf("Tender folder already exists for %s", config.ID)
-		return nil
+		logger.Printf("Work Item and NIT Docs of %s already exists", config.ID)
+		skipWorkNit = true
 	}
 
 	logger.Printf("Starting Tender Docs Download for %s", config.ID)
@@ -67,7 +77,7 @@ func processTender(config DocumentConfig, logger *log.Logger) error {
 		return fmt.Errorf("[%s] failed to establish tender session: %w", state, err)
 	}
 
-	downloader := docdownload.NewDocDownloader(sess, state, logger)
+	downloader := docdownload.NewDocDownloader(sess, state, logger, skipWorkNit)
 	if err := downloader.Run(config.ID, config.TenderURL, config.CorrigendumLinks); err != nil {
 		return fmt.Errorf("[%s] doc download failed: %w", state, err)
 	}
@@ -81,7 +91,7 @@ func processTender(config DocumentConfig, logger *log.Logger) error {
 
 // ------------------- Helper Functions ---------------------
 
-func getTendersWithCorrigendums(dateStr string, tenderValue int) ([]DocumentConfig, error) {
+func getTendersWithCorrigendums(tenderValue int) ([]DocumentConfig, error) {
 	MongoURI := os.Getenv("MONGO_CONN_STRING")
 	DBName := os.Getenv("DB_NAME")
 	CollectionName := os.Getenv("COLLECTION_NAME")
@@ -103,27 +113,8 @@ func getTendersWithCorrigendums(dateStr string, tenderValue int) ([]DocumentConf
 	db := client.Database(DBName)
 	collection := db.Collection(CollectionName)
 
-	if tenderValue == 0 {
-		tenderValue = 0
-	}
-
-	var filterDate time.Time
-	if dateStr == "" {
-		// Default: one year before today
-		now := time.Now()
-		oneYearAgo := now.AddDate(-1, 0, 0) // subtract 1 year
-		filterDate = time.Date(oneYearAgo.Year(), oneYearAgo.Month(), oneYearAgo.Day(),
-			0, 0, 0, 0, time.UTC) // start of that day in UTC
-	} else {
-		filterDate, err = time.Parse("02012006", dateStr) // ddmmyyyy
-		if err != nil {
-			return nil, fmt.Errorf("invalid date format (expected ddmmyyyy): %w", err)
-		}
-	}
-
 	filter := bson.M{
-		"tender_value": bson.M{"$gt": tenderValue},
-		"updated_at":   bson.M{"$gte": filterDate},
+		"tender_value": bson.M{"$gte": tenderValue},
 	}
 
 	projection := bson.M{"_id": 1, "corrigendums": 1, "link": 1, "updated_at": 1}

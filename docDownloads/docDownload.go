@@ -21,6 +21,7 @@ type DocDownloader struct {
 	NITDocs         []NITDocument
 	WorkItemZip     WorkItemDocument
 	CorrigendumDocs []CorrigendumDocument
+	skipWorkNit     bool
 }
 
 // Config holds configurable parameters
@@ -38,14 +39,15 @@ func DefaultConfig() Config {
 }
 
 // NewDocDownloader creates a new downloader with a single collector
-func NewDocDownloader(sess *session.Session, state string, logger *log.Logger) *DocDownloader {
+func NewDocDownloader(sess *session.Session, state string, logger *log.Logger, skipWorkNit bool) *DocDownloader {
 	collector := sess.NewCollector(session.HostFromURL(sess.BaseURL))
 
 	return &DocDownloader{
-		sess:      sess,
-		state:     state,
-		logger:    logger,
-		collector: collector,
+		sess:        sess,
+		state:       state,
+		logger:      logger,
+		collector:   collector,
+		skipWorkNit: skipWorkNit,
 	}
 }
 
@@ -178,6 +180,11 @@ func (d *DocDownloader) setupLinkExtractionHandlers(documentLinks *[]DocumentLin
 			return
 		}
 
+		// If skipWorkNit is true, skip Work Documents and NIT Documents
+		// if d.skipWorkNit {
+		// 	return
+		// }
+
 		// Determine document type
 		docType := "NITDocuments"
 		img := e.DOM.Find("img")
@@ -215,7 +222,6 @@ func (d *DocDownloader) setupLinkExtractionHandlers(documentLinks *[]DocumentLin
 
 }
 
-// Example usage in SolveDocCaptcha
 func (d *DocDownloader) SolveDocCaptcha() error {
 	docCaptchaURL := fmt.Sprintf("%s?component=docDownoad&page=FrontEndTenderDetails&service=direct&session=T",
 		d.sess.BaseURL)
@@ -233,7 +239,6 @@ func (d *DocDownloader) SolveDocCaptcha() error {
 	return d.waitForCaptchaSession(DefaultConfig())
 }
 
-// Example usage in extractDocumentLinks
 func (d *DocDownloader) extractDocumentLinks(tenderURL string) ([]DocumentLink, []string) {
 	d.logger.Printf("[%s][docDownload] extracting document links from: %s", d.state, tenderURL)
 

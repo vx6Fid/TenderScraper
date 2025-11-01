@@ -53,7 +53,6 @@ func NewDocDownloader(sess *session.Session, state string, logger *log.Logger, s
 
 // RunTender downloads documents for a given tender URL
 func (d *DocDownloader) Run(tenderID string, tenderURL string, corrigendumLinks []types.CorrLinks) error {
-	d.logger.Printf("[%s][docDownload] solving doc captcha", d.state)
 	if err := d.SolveDocCaptcha(); err != nil {
 		return err
 	}
@@ -62,8 +61,6 @@ func (d *DocDownloader) Run(tenderID string, tenderURL string, corrigendumLinks 
 	if bucketName == "" {
 		return fmt.Errorf("environment variable S3_BUCKET not set")
 	}
-
-	d.logger.Printf("[%s][docDownload] visiting tender page: %s", d.state, tenderURL)
 
 	// Extract document links
 	documentLinks, viewLinks := d.extractDocumentLinks(tenderURL)
@@ -97,25 +94,11 @@ func (d *DocDownloader) Run(tenderID string, tenderURL string, corrigendumLinks 
 // visitViewLinks visits each View Link page sequentially and optionally saves HTML for debugging
 func (d *DocDownloader) visitViewLinks(viewLinks []string) {
 	for _, url := range viewLinks {
-		d.logger.Printf("[%s][docDownload] visiting View Link page: %s", d.state, url)
-
 		c := d.collector.Clone()
 		cookies := d.collector.Cookies(d.sess.BaseURL)
 		if len(cookies) > 0 {
 			c.SetCookies(d.sess.BaseURL, cookies)
 		}
-
-		// c.OnResponse(func(r *colly.Response) {
-		// 	if strings.Contains(strings.ToLower(r.Request.URL.String()), "directlink") &&
-		// 		strings.Contains(strings.ToLower(r.Request.URL.String()), "page=frontendtenderdetails") {
-		// 		filename := fmt.Sprintf("viewlink_debug_%d.html", time.Now().UnixNano())
-		// 		if err := os.WriteFile(filename, r.Body, 0644); err != nil {
-		// 			d.logger.Printf("[%s][docDownload] failed to save debug HTML: %v", d.state, err)
-		// 		} else {
-		// 			d.logger.Printf("[%s][docDownload] saved debug HTML to %s", d.state, filename)
-		// 		}
-		// 	}
-		// })
 
 		if err := c.Visit(url); err != nil {
 			d.logger.Printf("[%s][docDownload] failed to visit View Link: %v", d.state, err)
@@ -163,15 +146,7 @@ func (d *DocDownloader) setupLinkExtractionHandlers(documentLinks *[]DocumentLin
 			return
 		}
 		if strings.Contains(strings.ToLower(title), "view corrigendum") {
-			d.logger.Printf("[%s][docDownload] found View Link: %s", d.state, absURL)
 			*viewLinks = append(*viewLinks, absURL)
-
-			// Visit the View Link to enable corrigendum downloads
-			// err := d.collector.Visit(absURL)
-			// if err != nil {
-			// 	d.logger.Printf("[%s][docDownload] failed to visit View Link: %v", d.state, err)
-			// }
-
 			return // skip further processing for View Links
 		}
 
@@ -179,11 +154,6 @@ func (d *DocDownloader) setupLinkExtractionHandlers(documentLinks *[]DocumentLin
 		if strings.Contains(strings.ToLower(e.Text), "back") {
 			return
 		}
-
-		// If skipWorkNit is true, skip Work Documents and NIT Documents
-		// if d.skipWorkNit {
-		// 	return
-		// }
 
 		// Determine document type
 		docType := "NITDocuments"
@@ -203,29 +173,18 @@ func (d *DocDownloader) setupLinkExtractionHandlers(documentLinks *[]DocumentLin
 			Text: strings.TrimSpace(e.Text),
 			Type: docType,
 		})
-
-		// if docType == "NITDocuments" {
-		// 	d.logger.Printf("[%s][docDownload] attributes for NIT link (%s):", d.state, absURL)
-
-		// 	if len(e.DOM.Nodes) > 0 {
-		// 		for _, attr := range e.DOM.Nodes[0].Attr {
-		// 			fmt.Printf("  %s = %s\n", attr.Key, attr.Val)
-		// 		}
-		// 	}
-		// }
-
 	})
 
-	d.collector.OnResponse(func(r *colly.Response) {
-		d.logger.Printf("[%s][docDownload] visited %s, status: %d", d.state, r.Request.URL, r.StatusCode)
-	})
+	// d.collector.OnResponse(func(r *colly.Response) {
+	// d.logger.Printf("[%s][docDownload] visited %s, status: %d", d.state, r.Request.URL, r.StatusCode)
+	// })
 
 }
 
 func (d *DocDownloader) SolveDocCaptcha() error {
 	docCaptchaURL := fmt.Sprintf("%s?component=docDownoad&page=FrontEndTenderDetails&service=direct&session=T",
 		d.sess.BaseURL)
-	d.logger.Printf("[%s][docCaptcha] visiting captcha URL: %s", d.state, docCaptchaURL)
+	// d.logger.Printf("[%s][docCaptcha] visiting captcha URL: %s", d.state, docCaptchaURL)
 
 	// config := DefaultConfig()
 
@@ -240,7 +199,7 @@ func (d *DocDownloader) SolveDocCaptcha() error {
 }
 
 func (d *DocDownloader) extractDocumentLinks(tenderURL string) ([]DocumentLink, []string) {
-	d.logger.Printf("[%s][docDownload] extracting document links from: %s", d.state, tenderURL)
+	// d.logger.Printf("[%s][docDownload] extracting document links from: %s", d.state, tenderURL)
 
 	var documentLinks []DocumentLink
 	var viewLinks []string
@@ -259,7 +218,7 @@ func (d *DocDownloader) extractDocumentLinks(tenderURL string) ([]DocumentLink, 
 func (d *DocDownloader) hasDirectLinks(documentLinks []DocumentLink) bool {
 	for _, link := range documentLinks {
 		if link.Type == "NITDocuments" && strings.Contains(link.URL, "DirectLink") {
-			d.logger.Printf("[%s][docDownload] found DirectLink: %s", d.state, link.URL)
+			// d.logger.Printf("[%s][docDownload] found DirectLink: %s", d.state, link.URL)
 			return true
 		}
 	}
@@ -280,13 +239,13 @@ func (d *DocDownloader) processDirectLinks(documentLinks []DocumentLink, corrige
 				doc.DocumentName = fmt.Sprintf("document_%d.pdf", time.Now().Unix())
 			}
 			d.NITDocs = append(d.NITDocs, doc)
-			d.logger.Printf("[%s][docDownload] added NIT doc: %s", d.state, doc.DocumentName)
+			// d.logger.Printf("[%s][docDownload] added NIT doc: %s", d.state, doc.DocumentName)
 		case "WorkDocumentsZip":
 			d.WorkItemZip = WorkItemDocument{
 				DocumentName: "WorkItemDocs.zip", // or derive from link.Text
 				URL:          link.URL,
 			}
-			d.logger.Printf("[%s][docDownload] added WorkItem zip: %s", d.state, link.URL)
+			// d.logger.Printf("[%s][docDownload] added WorkItem zip: %s", d.state, link.URL)
 		}
 	}
 	for _, corrLink := range corrigendumLinks {
@@ -295,7 +254,7 @@ func (d *DocDownloader) processDirectLinks(documentLinks []DocumentLink, corrige
 			Type:         corrLink.Type,
 			URL:          corrLink.Link,
 		})
-		d.logger.Printf("[%s][docDownload] added Corrigendum doc: %s", d.state, corrLink.Name)
+		// d.logger.Printf("[%s][docDownload] added Corrigendum doc: %s", d.state, corrLink.Name)
 
 	}
 }
@@ -312,7 +271,7 @@ func (d *DocDownloader) waitForCaptchaSession(config Config) error {
 			return fmt.Errorf("timeout waiting for doc captcha solve")
 		case <-tick.C:
 			if d.sess.DocSessionEstablished() {
-				d.logger.Printf("[%s][docDownload] captcha solved, session established", d.state)
+				// d.logger.Printf("[%s][docDownload] captcha solved, session established", d.state)
 				return nil
 			}
 		}

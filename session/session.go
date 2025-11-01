@@ -74,12 +74,12 @@ func (s *Session) NewCollector(allowedDomains ...string) *colly.Collector {
 			r.Headers.Set("Origin", "https://"+r.URL.Host)
 			r.Headers.Set("Referer", "https://"+r.URL.Host+"/nicgep/app?page=FrontEndLatestActiveTenders&service=page")
 		}
-		s.logger.Printf("[request] %s %s", r.Method, r.URL.String())
+		// s.logger.Printf("[request] %s %s", r.Method, r.URL.String())
 	})
 
-	c.OnResponse(func(r *colly.Response) {
-		s.logger.Printf("[response] %s | %d | %d bytes", r.Request.URL.String(), r.StatusCode, len(r.Body))
-	})
+	// c.OnResponse(func(r *colly.Response) {
+	// 	s.logger.Printf("[response] %s | %d | %d bytes", r.Request.URL.String(), r.StatusCode, len(r.Body))
+	// })
 
 	c.OnError(func(r *colly.Response, err error) {
 		if r != nil && r.Request != nil {
@@ -132,12 +132,12 @@ func (s *Session) EstablishSession(sessionType string) error {
 
 	switch sessionType {
 	case "ActiveTenders":
-		s.logger.Printf("STEP 1: Starting captcha/session flow: %s", s.ActiveTendersURL)
+		// s.logger.Printf("STEP 1: Starting captcha/session flow: %s", s.ActiveTendersURL)
 		if err := s.captchaCollector.Visit(s.ActiveTendersURL); err != nil {
 			return fmt.Errorf("failed to visit active tenders page for captcha: %w", err)
 		}
 	case "CorrigendumTenders":
-		s.logger.Printf("STEP 1: Starting captcha/session flow: %s", s.CorrigendumURL)
+		// s.logger.Printf("STEP 1: Starting captcha/session flow: %s", s.CorrigendumURL)
 		if err := s.captchaCollector.Visit(s.CorrigendumURL); err != nil {
 			return fmt.Errorf("failed to visit corrigendum tenders page for captcha: %w", err)
 		}
@@ -195,24 +195,24 @@ func (s *Session) handleCaptchaForm(e *colly.HTMLElement) {
 	// 	s.logger.Println("[captcha] already solved, skipping")
 	// 	return
 	// }
-	s.logger.Printf("[captcha] found form (status %d) at %s", e.Response.StatusCode, e.Request.URL.String())
+	// s.logger.Printf("[captcha] found form (status %d) at %s", e.Response.StatusCode, e.Request.URL.String())
 
 	// Skip captcha if the main tender table exists
 	doc, err := goquery.NewDocumentFromReader(strings.NewReader(string(e.Response.Body)))
 	if err != nil {
-		s.logger.Printf("[captcha] parse error: %v", err)
+		// s.logger.Printf("[captcha] parse error: %v", err)
 		return
 	}
 
 	s.logger.Printf("[captcha] find table in document")
 	if doc.Find("table#table").Length() > 0 {
-		s.logger.Println("[captcha] tender list table found, skipping captcha")
+		// s.logger.Println("[captcha] tender list table found, skipping captcha")
 		s.sessionEstablished = true // mark session ready
 		return
 	}
 
 	// Otherwise, solve captcha
-	s.logger.Printf("[captcha] found form (status %d) at %s", e.Response.StatusCode, e.Request.URL.String())
+	// s.logger.Printf("[captcha] found form (status %d) at %s", e.Response.StatusCode, e.Request.URL.String())
 	s.captchaSolved = true
 
 	// find captcha image (try multiple selectors)
@@ -224,11 +224,11 @@ func (s *Session) handleCaptchaForm(e *colly.HTMLElement) {
 		captchaSrc = e.DOM.Parent().Find("img#captchaImage, img[id*='captcha']").AttrOr("src", "")
 	}
 	if captchaSrc == "" {
-		s.logger.Println("[captcha] no captcha image found")
+		// s.logger.Println("[captcha] no captcha image found")
 		return
 	}
 
-	s.logger.Printf("[captcha] image found!")
+	// s.logger.Printf("[captcha] image found!")
 
 	// call your local solver (blocks until you provide solution)
 	sol, err := captcha.LocalCaptchaSolver(captchaSrc, s.logger)
@@ -238,7 +238,7 @@ func (s *Session) handleCaptchaForm(e *colly.HTMLElement) {
 		return
 	}
 
-	s.logger.Printf("[captcha] solved: %s", sol)
+	// s.logger.Printf("[captcha] solved: %s", sol)
 	s.submitCaptchaForm(e, sol)
 }
 
@@ -277,14 +277,14 @@ func (s *Session) submitCaptchaForm(e *colly.HTMLElement, captchaSolution string
 	formData["captchaText"] = captchaSolution
 	formData["Submit"] = "Search"
 
-	s.logger.Printf("[captcha] submitting form with %d fields", len(formData))
+	// s.logger.Printf("[captcha] submitting form with %d fields", len(formData))
 	if err := e.Request.Post(s.BaseURL, formData); err != nil {
 		s.logger.Printf("[captcha] post failed: %v", err)
 	}
 }
 
 func (s *Session) handleCaptchaResponse(r *colly.Response) {
-	s.logger.Printf("[captcha] response handler: %s | %s | %d", r.Request.Method, r.Request.URL.String(), r.StatusCode)
+	// s.logger.Printf("[captcha] response handler: %s | %s | %d", r.Request.Method, r.Request.URL.String(), r.StatusCode)
 	if s.captchaSolved || r.Request.Method != "POST" {
 		return
 	}
@@ -311,12 +311,12 @@ func (s *Session) handleCaptchaResponse(r *colly.Response) {
 	// check cookies in jar for BaseURL
 	u, _ := url.Parse(s.BaseURL)
 	if cookies := s.Jar.Cookies(u); len(cookies) > 0 {
-		s.logger.Printf("[captcha] session cookies received: %d", len(cookies))
+		// s.logger.Printf("[captcha] session cookies received: %d", len(cookies))
 		for _, c := range cookies {
 			s.logger.Printf("  cookie: %s = %s", c.Name, c.Value)
 		}
 	} else {
-		s.logger.Printf("[captcha] no cookies found even though captcha looked successful")
+		// s.logger.Printf("[captcha] no cookies found even though captcha looked successful")
 	}
 	s.sessionEstablished = true
 }

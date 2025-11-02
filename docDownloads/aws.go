@@ -15,33 +15,6 @@ import (
 	s3types "github.com/aws/aws-sdk-go-v2/service/s3/types"
 )
 
-// uploadFileToS3 uploads a local file to S3 under a specific key
-// func uploadFileToS3(bucket, key, filePath string) error {
-// 	cfg, err := config.LoadDefaultConfig(context.TODO())
-// 	if err != nil {
-// 		return fmt.Errorf("unable to load AWS config: %w", err)
-// 	}
-
-// 	client := s3.NewFromConfig(cfg)
-
-// 	file, err := os.Open(filePath)
-// 	if err != nil {
-// 		return fmt.Errorf("unable to open file %s: %w", filePath, err)
-// 	}
-// 	defer file.Close()
-
-// 	_, err = client.PutObject(context.TODO(), &s3.PutObjectInput{
-// 		Bucket: aws.String(bucket),
-// 		Key:    aws.String(key),
-// 		Body:   file,
-// 	})
-// 	if err != nil {
-// 		return fmt.Errorf("failed to upload %s to S3: %w", filePath, err)
-// 	}
-
-// 	return nil
-// }
-
 func uploadFileToS3(bucket, key, filePath string) error {
 	cfg, err := config.LoadDefaultConfig(context.TODO())
 	if err != nil {
@@ -82,98 +55,6 @@ func uploadFileToS3(bucket, key, filePath string) error {
 	}
 	return nil
 }
-
-// processAndUploadDocs preprocesses and uploads all tender documents to S3
-// func (d *DocDownloader) processAndUploadDocs(tenderID string, bucket string) error {
-// 	baseDir := "TenderDocs/" + tenderID
-
-// 	// Common helper: preprocess + upload
-// 	uploadWithFolder := func(localFile, folder, prefix string) {
-// 		if _, err := os.Stat(localFile); os.IsNotExist(err) {
-// 			d.logger.Printf("[%s][docUpload] skipping missing file (probably >1GB): %s", d.state, localFile)
-// 			return
-// 		}
-
-// 		files, err := PreprocessFile(localFile, baseDir)
-// 		if err != nil {
-// 			d.logger.Printf("[%s][docUpload] preprocess failed for %s: %v", d.state, localFile, err)
-// 			return
-// 		}
-// 		for _, f := range files {
-// 			flatName := FlattenPath(filepath.Base(f))
-// 			key := fmt.Sprintf("tender-documents/%s/%s/%s%s", tenderID, folder, prefix, flatName)
-// 			if err := uploadFileToS3(bucket, key, f); err != nil {
-// 				d.logger.Printf("[%s][docUpload]: %v", d.state, err)
-// 			} else {
-// 				d.logger.Printf("[%s][docUpload] uploaded %s", d.state, key)
-// 			}
-// 		}
-// 	}
-
-// 	// --- NIT Docs ---
-// 	for _, doc := range d.NITDocs {
-// 		localFile := filepath.Join(baseDir, doc.DocumentName)
-// 		uploadWithFolder(localFile, "nit-documents", "")
-// 	}
-
-// 	// --- WorkItem ZIP (or rar) ---
-// 	if d.WorkItemZip.URL != "" {
-// 		localFile := filepath.Join(baseDir, d.WorkItemZip.DocumentName)
-// 		uploadWithFolder(localFile, "work-item-documents", "")
-// 		// optional cleanup
-// 		os.Remove(localFile)
-// 	}
-
-// 	// --- Corrigendum Docs ---
-// 	for _, doc := range d.CorrigendumDocs {
-// 		localFile := filepath.Join(baseDir, doc.DocumentName)
-// 		// Corrigendum gets type prefix before filename
-// 		uploadWithFolder(localFile, "latest-corrigendum-list", doc.Type+"_")
-// 	}
-
-// 	// Ensure baseDir exists
-// 	if err := os.MkdirAll(baseDir, 0755); err != nil {
-// 		return fmt.Errorf("failed to create baseDir: %w", err)
-// 	}
-
-// 	// Collect relative paths for NIT + WorkItem docs
-// 	filesToZip := []string{}
-// 	for _, doc := range d.NITDocs {
-// 		filesToZip = append(filesToZip, doc.DocumentName)
-// 	}
-// 	if d.WorkItemZip.URL != "" {
-// 		filesToZip = append(filesToZip, d.WorkItemZip.DocumentName)
-// 	}
-
-// 	zipPath := filepath.Join(baseDir, "TenderDocs.zip")
-
-// 	// Only attempt ZIP if files exist
-// 	if len(filesToZip) > 0 {
-// 		args := append([]string{"-r", zipPath}, filesToZip...)
-// 		cmd := exec.Command("zip", args...)
-// 		cmd.Dir = baseDir
-
-// 		if output, err := cmd.CombinedOutput(); err != nil {
-// 			d.logger.Printf("[%s][docUpload] zip creation failed: %v, output: %s", d.state, err, string(output))
-// 		} else {
-// 			key := fmt.Sprintf("tender-documents/%s/TenderDocs.zip", tenderID)
-// 			if err := uploadFileToS3(bucket, key, zipPath); err != nil {
-// 				d.logger.Printf("[%s][docUpload] zip upload failed: %v", d.state, err)
-// 			} else {
-// 				d.logger.Printf("[%s][docUpload] uploaded TenderDocs.zip to S3", d.state)
-// 			}
-// 		}
-// 	}
-
-// 	// --- Delete local folder ---
-// 	if err := os.RemoveAll(baseDir); err != nil {
-// 		d.logger.Printf("[%s][docUpload] cleanup failed: %v", d.state, err)
-// 	} else {
-// 		d.logger.Printf("[%s][docUpload] cleaned up %s", d.state, baseDir)
-// 	}
-
-// 	return nil
-// }
 
 func (d *DocDownloader) processAndUploadDocs(tenderID string, bucket string) error {
 	baseDir := "TenderDocs/" + tenderID

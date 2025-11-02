@@ -28,18 +28,18 @@ type DocumentConfig struct {
 }
 
 func DownloadDocuments(logger *log.Logger) error {
-	configs, err := getTendersWithCorrigendums(500000000)
-	if err != nil {
-		return err
-	}
+	// configs, err := getTendersWithCorrigendums(500000000)
+	// if err != nil {
+	// 	return err
+	// }
 
 	// Only one tender
-	// configs := []DocumentConfig{{
-	// 	ID:               "68f9fe8aa4079a540f3dc219",
-	// 	TenderURL:        "https://eprocure.gov.in/eprocure/app?component=%24DirectLink&page=FrontEndViewTender&service=direct&session=T&sp=SII%2BHiXeg39s2eAa%2FdOs4Rg%3D%3D",
-	// 	UpdatedAt:        time.Now(),
-	// 	CorrigendumLinks: []types.CorrLinks{},
-	// }}
+	configs := []DocumentConfig{{
+		ID:               "68f9fe8aa4079a540f3dc219",
+		TenderURL:        "https://eprocure.gov.in/eprocure/app?component=%24DirectLink&page=FrontEndViewTender&service=direct&session=T&sp=SII%2BHiXeg39s2eAa%2FdOs4Rg%3D%3D",
+		UpdatedAt:        time.Now(),
+		CorrigendumLinks: []types.CorrLinks{},
+	}}
 
 	sem := make(chan struct{}, utils.MaxDownloadWorkers)
 	var wg sync.WaitGroup
@@ -68,6 +68,7 @@ func DownloadDocuments(logger *log.Logger) error {
 // ---------------------- PROCESS FUNCTION ----------------------
 
 func processTender(config DocumentConfig, logger *log.Logger) error {
+	logger.Printf("Starting Tender Docs Download for %s", config.ID)
 	skipWorkNit := false
 	if exists, err := utils.CheckTenderFolderExists("tenderbharat-ap-south-1", config.ID); err != nil {
 		return err
@@ -76,8 +77,6 @@ func processTender(config DocumentConfig, logger *log.Logger) error {
 		logger.Printf("Work Item and NIT Docs of %s already exists", config.ID)
 		skipWorkNit = true
 	}
-
-	logger.Printf("Starting Tender Docs Download for %s", config.ID)
 
 	normalizeLinks(&config)
 

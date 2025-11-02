@@ -74,6 +74,15 @@ func (d *DocDownloader) Run(tenderID string, tenderURL string, corrigendumLinks 
 		return fmt.Errorf("[%s][docDownload] unexpected: no DirectLinks found even after captcha", d.state)
 	}
 
+	if d.skipWorkNit {
+		documentLinks = []DocumentLink{}
+	}
+
+	if len(documentLinks) == 0 && len(corrigendumLinks) == 0 {
+		d.logger.Printf("[%s][docDownload] Nothing to download", d.state)
+		return nil
+	}
+
 	d.processDirectLinks(documentLinks, corrigendumLinks)
 
 	// now handle corrigendum view links

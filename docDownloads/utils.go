@@ -119,13 +119,13 @@ func PreprocessFile(inputPath, workDir string) ([]string, error) {
 			return nil, err
 		}
 		return []string{pdfFile}, nil
-	case ".xls", ".xlsx":
-		// Convert XLS → PDF
-		pdfFile, err := ConvertXlsToPDF(inputPath)
-		if err != nil {
-			return nil, err
-		}
-		return []string{pdfFile}, nil
+	// case ".xls", ".xlsx":
+	// 	// Convert XLS → PDF
+	// 	pdfFile, err := ConvertXlsToPDF(inputPath)
+	// 	if err != nil {
+	// 		return nil, err
+	// 	}
+	// 	return []string{pdfFile}, nil
 
 	default:
 		// Already a final file

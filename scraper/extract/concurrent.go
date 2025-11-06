@@ -47,7 +47,7 @@ func NewConcurrentExtractor(baseURL, domain, state, runDate string, maxWorkers i
 
 func (ce *ConcurrentExtractor) ExtractTendersWithMultipleSessions() error {
 	fmt.Print("\n")
-	log.Printf("--- Starting concurrent tender extraction for [%s] with %d workers ---", ce.state, ce.maxWorkers)
+	// log.Printf("--- Starting concurrent tender extraction for [%s] with %d workers ---", ce.state, ce.maxWorkers)
 
 	rows, err := ce.loadInputCSV()
 	if err != nil {
@@ -124,7 +124,7 @@ func (ce *ConcurrentExtractor) ExtractTendersWithMultipleSessions() error {
 			log.Printf("[%s] Failed to sync file at end: %v", ce.state, err)
 		}
 
-		log.Printf("[%s] Writer finished, wrote %d tenders", ce.state, written)
+		// log.Printf("[%s] Writer finished, wrote %d tenders", ce.state, written)
 	}()
 
 	// failed tender logger
@@ -147,7 +147,7 @@ func (ce *ConcurrentExtractor) ExtractTendersWithMultipleSessions() error {
 			// abort early if no jobs
 			select {
 			case <-ctx.Done():
-				log.Printf("[%s] Worker %d skipped initialization: no tenders left", ce.state, workerID)
+				// log.Printf("[%s] Worker %d skipped initialization: no tenders left", ce.state, workerID)
 				return
 			default:
 			}
@@ -158,28 +158,27 @@ func (ce *ConcurrentExtractor) ExtractTendersWithMultipleSessions() error {
 				sess := session.NewSession(ce.baseURL, ce.state)
 
 				maxRetries := 3
-				var lastErr error
+				// var lastErr error
 				ok := false
 				for r := 1; r <= maxRetries; r++ {
 					// check cancel before heavy work
 					select {
 					case <-ctx.Done():
 						<-initLimiter
-						log.Printf("[%s] Worker %d aborted during session retry", ce.state, workerID)
+						// log.Printf("[%s] Worker %d aborted during session retry", ce.state, workerID)
 						return
 					default:
 					}
-					start := time.Now()
 					err := sess.EstablishSession("ActiveTenders")
 					if err != nil {
-						lastErr = err
-						log.Printf("[%s] Worker %d session attempt %d failed: %v", ce.state, workerID, r, err)
+						// lastErr = err
+						// log.Printf("[%s] Worker %d session attempt %d failed: %v", ce.state, workerID, r, err)
 						time.Sleep(time.Duration(r) * 5 * time.Second)
 						continue
 					} else {
-						fmt.Print("\n========================================================================\n")
-						log.Printf("[%s] Worker %d session established in %v", ce.state, workerID, time.Since(start))
-						fmt.Print("\n========================================================================\n")
+						// fmt.Print("\n========================================================================\n")
+						// log.Printf("[%s] Worker %d session established in %v", ce.state, workerID, time.Since(start))
+						// fmt.Print("\n========================================================================\n")
 					}
 					ok = true
 					break
@@ -189,7 +188,7 @@ func (ce *ConcurrentExtractor) ExtractTendersWithMultipleSessions() error {
 				if ok {
 					// still jobs left?
 					if atomic.LoadInt32(&remainingJobs) == 0 {
-						log.Printf("[%s] Worker %d skipping start: no jobs remaining", ce.state, workerID)
+						// log.Printf("[%s] Worker %d skipping start: no jobs remaining", ce.state, workerID)
 						return
 					}
 					scraper := NewDataScraper(sess, ce.domain, ce.state, ce.runDate)
@@ -198,8 +197,8 @@ func (ce *ConcurrentExtractor) ExtractTendersWithMultipleSessions() error {
 					return
 				}
 
-				log.Printf("[%s] Worker %d failed to establish session (attempt %d/%d): %v",
-					ce.state, workerID, attempt, maxWorkerAttempts, lastErr)
+				// log.Printf("[%s] Worker %d failed to establish session (attempt %d/%d): %v",
+				// 	ce.state, workerID, attempt, maxWorkerAttempts, lastErr)
 			}
 			log.Printf("[%s] Worker %d giving up after failed attempts", ce.state, workerID)
 		}(w)
@@ -230,7 +229,7 @@ func (ce *ConcurrentExtractor) ExtractTendersWithMultipleSessions() error {
 			}
 			jobCount++
 		}
-		log.Printf("[%s] Finished enqueuing %d jobs", ce.state, jobCount)
+		// log.Printf("[%s] Finished enqueuing %d jobs", ce.state, jobCount)
 		if jobCount == 0 {
 			cancel()
 		}
@@ -242,7 +241,7 @@ func (ce *ConcurrentExtractor) ExtractTendersWithMultipleSessions() error {
 	close(results)
 	writerWg.Wait()
 
-	log.Printf("--- Completed concurrent extraction for [%s] ---", ce.state)
+	// log.Printf("--- Completed concurrent extraction for [%s] ---", ce.state)
 	return nil
 }
 
@@ -261,14 +260,14 @@ func (ce *ConcurrentExtractor) workerProcess(
 
 	defer func() {
 		if r := recover(); r != nil {
-			log.Printf("[%s] Worker %d recovered from panic: %v", ce.state, ws.WorkerID, r)
+			// log.Printf("[%s] Worker %d recovered from panic: %v", ce.state, ws.WorkerID, r)
 		}
 	}()
 
 	for {
 		select {
 		case <-ctx.Done():
-			log.Printf("[%s] Worker %d stopping: context canceled", ce.state, ws.WorkerID)
+			// log.Printf("[%s] Worker %d stopping: context canceled", ce.state, ws.WorkerID)
 			return
 		case tenderInput, ok := <-jobs:
 			if !ok {
@@ -295,7 +294,7 @@ func (ce *ConcurrentExtractor) workerProcess(
 
 			// decrement remaining
 			if atomic.AddInt32(remainingJobs, -1) == 0 {
-				log.Printf("[%s] All jobs completed, canceling workers...", ce.state)
+				// log.Printf("[%s] All jobs completed, canceling workers...", ce.state)
 				cancel()
 			}
 		}

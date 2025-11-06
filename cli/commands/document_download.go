@@ -15,7 +15,7 @@ import (
 	types "github.com/vx6fid/tender-scraper/utils/types"
 
 	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
+	primitive "go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -28,18 +28,18 @@ type DocumentConfig struct {
 }
 
 func DownloadDocuments(logger *log.Logger) error {
-	// configs, err := getTendersWithCorrigendums(500000000)
-	// if err != nil {
-	// 	return err
-	// }
+	configs, err := getTendersWithCorrigendums(500000000)
+	if err != nil {
+		return err
+	}
 
 	// Only one tender
-	configs := []DocumentConfig{{
-		ID:               "68f9fe8aa4079a540f3dc219",
-		TenderURL:        "https://eprocure.gov.in/eprocure/app?component=%24DirectLink&page=FrontEndViewTender&service=direct&session=T&sp=SII%2BHiXeg39s2eAa%2FdOs4Rg%3D%3D",
-		UpdatedAt:        time.Now(),
-		CorrigendumLinks: []types.CorrLinks{},
-	}}
+	// configs := []DocumentConfig{{
+	// 	ID:               "68f9fe8aa4079a540f3dc219",
+	// 	TenderURL:        "https://eprocure.gov.in/eprocure/app?component=%24DirectLink&page=FrontEndViewTender&service=direct&session=T&sp=SII%2BHiXeg39s2eAa%2FdOs4Rg%3D%3D",
+	// 	UpdatedAt:        time.Now(),
+	// 	CorrigendumLinks: []types.CorrLinks{},
+	// }}
 
 	sem := make(chan struct{}, utils.MaxDownloadWorkers)
 	var wg sync.WaitGroup
@@ -131,8 +131,15 @@ func getTendersWithCorrigendums(tenderValue int) ([]DocumentConfig, error) {
 	filter := bson.M{
 		"tender_value": bson.M{"$gte": tenderValue},
 	}
+	// id, err := primitive.ObjectIDFromHex("6907a9d8dbd1f721dcd87a9f")
+	if err != nil {
+		log.Fatal(err)
+	}
+	// fmt.Println("Starting Filters")
 
-	projection := bson.M{"_id": 1, "corrigendums": 1, "link": 1, "updated_at": 1}
+	// filter := bson.M{"_id": id}
+
+	projection := bson.M{"_id": 1, "location": 1, "corrigendums": 1, "link": 1, "updated_at": 1}
 
 	cur, err := collection.Find(ctx, filter, options.Find().SetProjection(projection))
 	if err != nil {
@@ -142,12 +149,13 @@ func getTendersWithCorrigendums(tenderValue int) ([]DocumentConfig, error) {
 
 	var results []DocumentConfig
 
-	if !cur.Next(ctx) {
-		fmt.Println("No documents found")
-		return nil, nil
-	}
+	// if !cur.Next(ctx) {
+	// 	fmt.Println("No documents found")
+	// 	return nil, nil
+	// }
 
 	for cur.Next(ctx) {
+		// fmt.Println("Processing Document")
 		var doc struct {
 			ID           any       `bson:"_id"`
 			Corrigendums []bson.M  `bson:"corrigendums"`
@@ -194,6 +202,7 @@ func getTendersWithCorrigendums(tenderValue int) ([]DocumentConfig, error) {
 				}
 			}
 		}
+
 		results = append(results, DocumentConfig{
 			ID:               tenderID,
 			TenderURL:        tenderURL,

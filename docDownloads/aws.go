@@ -82,7 +82,7 @@ func (d *DocDownloader) processAndUploadDocs(tenderID string, bucket string) err
 			if err := uploadFileToS3(bucket, key, f); err != nil {
 				d.logger.Printf("[%s][docUpload]: %v", d.state, err)
 			} else {
-				d.logger.Printf("[%s][docUpload] uploaded %s", d.state, key)
+				// d.logger.Printf("[%s][docUpload] uploaded %s", d.state, key)
 			}
 		}
 	}
@@ -103,7 +103,7 @@ func (d *DocDownloader) processAndUploadDocs(tenderID string, bucket string) err
 	}
 
 	if d.skipWorkNit {
-		d.logger.Printf("[%s][docUpload][DEBUG] skipping TenderDocs ZIP", d.state)
+		// d.logger.Printf("[%s][docUpload][DEBUG] skipping TenderDocs ZIP", d.state)
 	}
 
 	// --- Create ZIP of NIT + WorkItem docs ---
@@ -111,29 +111,29 @@ func (d *DocDownloader) processAndUploadDocs(tenderID string, bucket string) err
 		zipPath := "TenderDocs.zip"
 
 		// Debug: print baseDir, zipPath
-		d.logger.Printf("[%s][docUpload][DEBUG] baseDir = %s", d.state, baseDir)
-		d.logger.Printf("[%s][docUpload][DEBUG] zipPath = %s", d.state, zipPath)
+		// d.logger.Printf("[%s][docUpload][DEBUG] baseDir = %s", d.state, baseDir)
+		// d.logger.Printf("[%s][docUpload][DEBUG] zipPath = %s", d.state, zipPath)
 
 		// Debug: print each file to be zipped and check existence
-		for _, f := range filesToZip {
-			fpath := filepath.Join(baseDir, f)
-			if info, err := os.Stat(fpath); err != nil {
-				d.logger.Printf("[%s][docUpload][DEBUG] file missing: %s (err=%v)", d.state, fpath, err)
-			} else {
-				d.logger.Printf("[%s][docUpload][DEBUG] file exists: %s (size=%d)", d.state, fpath, info.Size())
-			}
-		}
+		// for _, f := range filesToZip {
+		// 	fpath := filepath.Join(baseDir, f)
+		// 	if info, err := os.Stat(fpath); err != nil {
+		// 		d.logger.Printf("[%s][docUpload][DEBUG] file missing: %s (err=%v)", d.state, fpath, err)
+		// 	} else {
+		// 		d.logger.Printf("[%s][docUpload][DEBUG] file exists: %s (size=%d)", d.state, fpath, info.Size())
+		// 	}
+		// }
 
 		// Debug: print working directory
-		if cwd, err := os.Getwd(); err == nil {
-			d.logger.Printf("[%s][docUpload][DEBUG] current working dir = %s", d.state, cwd)
+		if _, err := os.Getwd(); err == nil {
+			// d.logger.Printf("[%s][docUpload][DEBUG] current working dir = %s", d.state, cwd)
 		} else {
 			d.logger.Printf("[%s][docUpload][DEBUG] could not get current working dir: %v", d.state, err)
 		}
 
 		// Print the command to be executed
 		args := append([]string{"-r", zipPath}, filesToZip...)
-		d.logger.Printf("[%s][docUpload][DEBUG] zip command: zip %v", d.state, args)
+		// d.logger.Printf("[%s][docUpload][DEBUG] zip command: zip %v", d.state, args)
 
 		cmd := exec.Command("zip", args...)
 		cmd.Dir = baseDir
@@ -145,7 +145,7 @@ func (d *DocDownloader) processAndUploadDocs(tenderID string, bucket string) err
 			if err := uploadFileToS3(bucket, key, filepath.Join(baseDir, "TenderDocs.zip")); err != nil {
 				d.logger.Printf("[%s][docUpload] zip upload failed: %v", d.state, err)
 			} else {
-				d.logger.Printf("[%s][docUpload] uploaded TenderDocs.zip to S3", d.state)
+				// d.logger.Printf("[%s][docUpload] uploaded TenderDocs.zip to S3", d.state)
 			}
 		}
 	}

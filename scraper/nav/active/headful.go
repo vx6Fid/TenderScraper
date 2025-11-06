@@ -11,11 +11,11 @@ import (
 )
 
 func Run(b *rod.Browser, u types.URLS) error {
-	page, err := session_browser.EstablishSession(b, u.BaseURL, u.State)
-	if err != nil {
-		return fmt.Errorf("[%s] session establishment failed: %w", u.State, err)
-	}
-	log.Printf("[%s] Session established", u.State)
+	page, _ := session_browser.EstablishSession(b, u.BaseURL, u.State)
+	// if err != nil {
+	// 	return fmt.Errorf("[%s] session establishment failed: %w", u.State, err)
+	// }
+	// log.Printf("[%s] Session established", u.State)
 
 	page = b.MustPage(u.BaseURL + "?component=%24DirectLink&page=FrontEndTendersByOrganisation&service=direct&session=T")
 	page.MustWaitLoad()
@@ -42,7 +42,7 @@ func Run(b *rod.Browser, u types.URLS) error {
 	if currCount == 0 {
 		return fmt.Errorf("[%s] table did not populate any rows", u.State)
 	}
-	log.Printf("[%s] Rows: %d", u.State, currCount)
+	// log.Printf("[%s] Rows: %d", u.State, currCount)
 
 	if err := ExtractTenders(u.State, currCount, page); err != nil {
 		return fmt.Errorf("[%s] active links extraction failed: %w", u.State, err)

@@ -68,7 +68,7 @@ func handleCaptchaWithRetry(page *rod.Page, state string, maxRetries int) error 
 		time.Sleep(500 * time.Millisecond) // let DOM start updating
 
 		var success, failure bool
-		var errorMsg string
+		// var errorMsg string
 
 		for range 40 { // up to ~20s
 			// check for table rows > 1
@@ -86,7 +86,7 @@ func handleCaptchaWithRetry(page *rod.Page, state string, maxRetries int) error 
 				if errEl, e := page.Element(`.error`); e == nil {
 					txt, _ := errEl.Text()
 					if strings.Contains(strings.ToLower(txt), "invalid captcha") {
-						errorMsg = strings.TrimSpace(txt)
+						// errorMsg = strings.TrimSpace(txt)
 						failure = true
 						break
 					}
@@ -101,11 +101,11 @@ func handleCaptchaWithRetry(page *rod.Page, state string, maxRetries int) error 
 		}
 
 		if failure {
-			log.Printf("[%s] Captcha attempt %d failed: %s", state, attempt, errorMsg)
+			// log.Printf("[%s] Captcha attempt %d failed: %s", state, attempt, errorMsg)
 			continue
 		}
 
-		log.Printf("[%s] Captcha attempt %d inconclusive — retrying", state, attempt)
+		// log.Printf("[%s] Captcha attempt %d inconclusive — retrying", state, attempt)
 		time.Sleep(1 * time.Second)
 	}
 

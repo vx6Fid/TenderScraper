@@ -21,23 +21,35 @@ func uploadFileToS3(bucket, key, filePath string) error {
 		return fmt.Errorf("unable to load AWS config: %w", err)
 	}
 
+	if cfg.Region == "" {
+		return fmt.Errorf("AWS region missing in configuration")
+	}
+
 	client := s3.NewFromConfig(cfg)
 
+	if client == nil {
+		return fmt.Errorf("S3 client is nil (AWS config likely invalid)")
+	}
+
 	// --- Skip if file already exists ---
-	_, err = client.HeadObject(context.TODO(), &s3.HeadObjectInput{
+	exists := false
+	_, headErr := client.HeadObject(context.TODO(), &s3.HeadObjectInput{
 		Bucket: aws.String(bucket),
 		Key:    aws.String(key),
 	})
-	if err == nil {
-		// Object exists, skip upload
-		return fmt.Errorf("[S3] Skipping existing file: %s\n", key)
-	}
-	var nsk *s3types.NotFound
-	if !errors.As(err, &nsk) && !strings.Contains(err.Error(), "NotFound") {
-		// HeadObject failed for another reason
-		return fmt.Errorf("failed checking S3 object: %w", err)
+	if headErr == nil {
+		exists = true
+	} else {
+		var nsk *s3types.NotFound
+		if !errors.As(headErr, &nsk) && !strings.Contains(headErr.Error(), "NotFound") {
+			return fmt.Errorf("failed checking S3 object %s: %w", key, headErr)
+		}
 	}
 
+	if exists {
+		// Object already in S3 — skip quietly
+		return nil
+	}
 	// --- Upload file if not found ---
 	file, err := os.Open(filePath)
 	if err != nil {
@@ -67,7 +79,7 @@ func (d *DocDownloader) processAndUploadDocs(tenderID string, bucket string) err
 	// Helper: preprocess + upload a file to a folder in S3
 	uploadWithFolder := func(localFile, folder, prefix string) {
 		if _, err := os.Stat(localFile); os.IsNotExist(err) {
-			d.logger.Printf("[%s][docUpload] skipping missing file (probably >1GB): %s", d.state, localFile)
+			// d.logger.Printf("[%s][docUpload] skipping missing file (probably >1GB): %s", d.state, localFile)
 			return
 		}
 
@@ -110,20 +122,6 @@ func (d *DocDownloader) processAndUploadDocs(tenderID string, bucket string) err
 	if len(filesToZip) > 0 && !d.skipWorkNit {
 		zipPath := "TenderDocs.zip"
 
-		// Debug: print baseDir, zipPath
-		// d.logger.Printf("[%s][docUpload][DEBUG] baseDir = %s", d.state, baseDir)
-		// d.logger.Printf("[%s][docUpload][DEBUG] zipPath = %s", d.state, zipPath)
-
-		// Debug: print each file to be zipped and check existence
-		// for _, f := range filesToZip {
-		// 	fpath := filepath.Join(baseDir, f)
-		// 	if info, err := os.Stat(fpath); err != nil {
-		// 		d.logger.Printf("[%s][docUpload][DEBUG] file missing: %s (err=%v)", d.state, fpath, err)
-		// 	} else {
-		// 		d.logger.Printf("[%s][docUpload][DEBUG] file exists: %s (size=%d)", d.state, fpath, info.Size())
-		// 	}
-		// }
-
 		// Debug: print working directory
 		if _, err := os.Getwd(); err == nil {
 			// d.logger.Printf("[%s][docUpload][DEBUG] current working dir = %s", d.state, cwd)
@@ -133,7 +131,6 @@ func (d *DocDownloader) processAndUploadDocs(tenderID string, bucket string) err
 
 		// Print the command to be executed
 		args := append([]string{"-r", zipPath}, filesToZip...)
-		// d.logger.Printf("[%s][docUpload][DEBUG] zip command: zip %v", d.state, args)
 
 		cmd := exec.Command("zip", args...)
 		cmd.Dir = baseDir
@@ -144,8 +141,6 @@ func (d *DocDownloader) processAndUploadDocs(tenderID string, bucket string) err
 			key := fmt.Sprintf("tender-documents/%s/TenderDocs.zip", tenderID)
 			if err := uploadFileToS3(bucket, key, filepath.Join(baseDir, "TenderDocs.zip")); err != nil {
 				d.logger.Printf("[%s][docUpload] zip upload failed: %v", d.state, err)
-			} else {
-				// d.logger.Printf("[%s][docUpload] uploaded TenderDocs.zip to S3", d.state)
 			}
 		}
 	}
@@ -170,9 +165,9 @@ func (d *DocDownloader) processAndUploadDocs(tenderID string, bucket string) err
 
 	// --- Cleanup ---
 	if err := os.RemoveAll(baseDir); err != nil {
-		d.logger.Printf("[%s][docUpload] cleanup failed: %v", d.state, err)
+		// d.logger.Printf("[%s][docUpload] cleanup failed: %v", d.state, err)
 	} else {
-		d.logger.Printf("[%s][docUpload] cleaned up %s", d.state, baseDir)
+		// d.logger.Printf("[%s][docUpload] cleaned up %s", d.state, baseDir)
 	}
 
 	return nil

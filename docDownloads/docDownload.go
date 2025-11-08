@@ -79,7 +79,7 @@ func (d *DocDownloader) Run(tenderID string, tenderURL string, corrigendumLinks 
 	}
 
 	if len(documentLinks) == 0 && len(corrigendumLinks) == 0 {
-		d.logger.Printf("[%s][docDownload] Nothing to download", d.state)
+		// d.logger.Printf("[%s][docDownload] Nothing to download", d.state)
 		return nil
 	}
 

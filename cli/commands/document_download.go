@@ -7,6 +7,7 @@ import (
 	"os"
 	"strings"
 	"sync"
+	"sync/atomic"
 	"time"
 
 	docdownload "github.com/vx6fid/tender-scraper/docDownloads"
@@ -27,54 +28,79 @@ type DocumentConfig struct {
 	CorrigendumLinks []types.CorrLinks
 }
 
+// --- Stats structs (keep these in a common package/file) ---
+type DownloadStats struct {
+	TenderID string
+	State    string
+	Existing bool
+	Total    int
+	Success  int
+	Skipped  int
+	Failed   int
+}
+
+type BatchStats struct {
+	Total   int64
+	Success int64
+	Skipped int64
+	Failed  int64
+}
+
+func (b *BatchStats) Add(ds DownloadStats) {
+	atomic.AddInt64(&b.Total, int64(ds.Total))
+	atomic.AddInt64(&b.Success, int64(ds.Success))
+	atomic.AddInt64(&b.Skipped, int64(ds.Skipped))
+	atomic.AddInt64(&b.Failed, int64(ds.Failed))
+}
+
+// --- Entry point (concurrent worker pool) ---
 func DownloadDocuments(logger *log.Logger) error {
 	configs, err := getTendersWithCorrigendums(500000000)
 	if err != nil {
 		return err
 	}
 
-	// Only one tender
-	// configs := []DocumentConfig{{
-	// 	ID:               "68f9fe8aa4079a540f3dc219",
-	// 	TenderURL:        "https://eprocure.gov.in/eprocure/app?component=%24DirectLink&page=FrontEndViewTender&service=direct&session=T&sp=SII%2BHiXeg39s2eAa%2FdOs4Rg%3D%3D",
-	// 	UpdatedAt:        time.Now(),
-	// 	CorrigendumLinks: []types.CorrLinks{},
-	// }}
-
 	sem := make(chan struct{}, utils.MaxDownloadWorkers)
 	var wg sync.WaitGroup
 
+	batch := &BatchStats{}
+
 	for _, config := range configs {
-		cfg := config // capture loop variable
+		cfg := config
 		sem <- struct{}{}
 		wg.Add(1)
 
 		go func() {
-			defer func() {
-				<-sem
-				wg.Done()
-			}()
-
-			if err := processTender(cfg, logger); err != nil {
-				logger.Printf("[%s]: %v", cfg.ID, err)
+			defer func() { <-sem; wg.Done() }()
+			ds, err := processTender(cfg, logger)
+			if err != nil {
+				// keep error reporting but still aggregate the stats
+				logger.Printf("[%s] error: %v", cfg.ID, err)
 			}
+			batch.Add(ds)
 		}()
 	}
 
 	wg.Wait()
+
+	logger.Printf("Batch Summary: [Docs: total=%d, success=%d, skipped=%d, failed=%d]",
+		batch.Total, batch.Success, batch.Skipped, batch.Failed)
+
 	return nil
 }
 
 // ---------------------- PROCESS FUNCTION ----------------------
 
-func processTender(config DocumentConfig, logger *log.Logger) error {
-	logger.Printf("Starting Tender Docs Download for %s", config.ID)
+// processTender returns per-tender DownloadStats and an error (if any)
+func processTender(config DocumentConfig, logger *log.Logger) (DownloadStats, error) {
+	// Determine if folder exists -> skipWorkNit
 	skipWorkNit := false
-	if exists, err := utils.CheckTenderFolderExists("tenderbharat-ap-south-1", config.ID); err != nil {
-		return err
-	} else if exists {
-		// It it exists then we don't need to go for nit and work docs, and only check
-		logger.Printf("Work Item and NIT Docs of %s already exists", config.ID)
+	exists, err := utils.CheckTenderFolderExists("tenderbharat-ap-south-1", config.ID)
+	if err != nil {
+		return DownloadStats{}, fmt.Errorf("failed to check tender folder: %w", err)
+	}
+	if exists {
+		// logger.Printf("Work Item and NIT Docs of %s already exists", config.ID)
 		skipWorkNit = true
 	}
 
@@ -82,25 +108,115 @@ func processTender(config DocumentConfig, logger *log.Logger) error {
 
 	baseURL, state, err := utils.GetBaseURLAndState(config.TenderURL)
 	if err != nil {
-		return fmt.Errorf("failed to get base URL and state: %w", err)
+		return DownloadStats{}, fmt.Errorf("failed to get base URL and state: %w", err)
 	}
-
-	// logger.Printf("BaseURL: %s, State: %s\n", baseURL, state)
 
 	sess := session.NewSession(baseURL, state)
 	if err := sess.EstablishSession("ActiveTenders"); err != nil {
-		return fmt.Errorf("[%s] failed to establish tender session: %w", state, err)
+		return DownloadStats{}, fmt.Errorf("[%s] failed to establish tender session: %w", state, err)
 	}
 
 	downloader := docdownload.NewDocDownloader(sess, state, logger, skipWorkNit)
 	if err := downloader.Run(config.ID, config.TenderURL, config.CorrigendumLinks); err != nil {
-		return fmt.Errorf("[%s] doc download failed: %w", state, err)
+		// On Run error we will compute counts from whatever was populated and mark as failed per your rule.
+		// Don't return early — create stats to log & aggregate, but return the error as well.
+		nitCount := len(downloader.NITDocs)
+		// corrCount := len(downloader.CorrigendumDocs)
+		zipCount := 0
+		if downloader.WorkItemZip.URL != "" {
+			zipCount = 1
+		}
+		totalDocs := nitCount + len(config.CorrigendumLinks) + zipCount
+
+		stats := DownloadStats{
+			TenderID: config.ID,
+			State:    state,
+			Existing: skipWorkNit,
+			Total:    totalDocs,
+			Failed:   totalDocs, // per rule: mark all as failed when Run errors
+		}
+
+		// reset downloader if lock/cleanup needed (assumes Reset exists)
+		if r := tryDownloaderReset(downloader); r != nil {
+			logger.Printf("[%s] downloader reset failed: %v", state, r)
+		}
+
+		// Log the per-tender line
+		existingStr := "N"
+		if stats.Existing {
+			existingStr = "Y"
+		}
+		logger.Printf("[%s|%s][Existing=%s] [Docs: total=%d, success=%d, skipped=%d, failed=%d]",
+			stats.State, stats.TenderID,
+			existingStr,
+			stats.Total, stats.Success, stats.Skipped, stats.Failed)
+
+		return stats, fmt.Errorf("[%s] doc download failed: %w", state, err)
 	}
 
-	nitDocs, zipFiles := downloader.GetResults()
-	logger.Printf("Extracted %d NIT documents and %s zip files", len(nitDocs), zipFiles.DocumentName)
+	// If Run succeeded, compute counts deterministically from downloader fields
+	nitCount := len(downloader.NITDocs)
+	corrCount := len(downloader.CorrigendumDocs)
+	zipCount := 0
+	if downloader.WorkItemZip.URL != "" {
+		zipCount = 1
+	}
+	totalDocs := nitCount + len(config.CorrigendumLinks) + zipCount
+	successCount := nitCount + corrCount + zipCount
 
-	downloader.Reset()
+	var stats DownloadStats
+	if skipWorkNit {
+		// NIT + WorkItem are skipped, Corrigenda are processed freshly.
+		skippedCount := nitCount + zipCount
+		successCount = corrCount
+
+		stats = DownloadStats{
+			TenderID: config.ID,
+			State:    state,
+			Existing: true,
+			Total:    totalDocs,
+			Success:  successCount,
+			Skipped:  skippedCount,
+		}
+	} else {
+		stats = DownloadStats{
+			TenderID: config.ID,
+			State:    state,
+			Existing: false,
+			Total:    totalDocs,
+			Success:  successCount,
+		}
+	}
+
+	// Reset downloader internal state if needed
+	if r := tryDownloaderReset(downloader); r != nil {
+		logger.Printf("[%s] downloader reset failed: %v", state, r)
+	}
+
+	// Log concise per-tender line
+	existingStr := "N"
+	if stats.Existing {
+		existingStr = "Y"
+	}
+	logger.Printf("[%s|%s][Existing=%s] [Docs: total=%d, success=%d, skipped=%d, failed=%d]",
+		stats.State, stats.TenderID,
+		existingStr,
+		stats.Total, stats.Success, stats.Skipped, stats.Failed)
+
+	return stats, nil
+}
+
+// Helper to reset downloader if method exists; returns nil on success or an error
+func tryDownloaderReset(d *docdownload.DocDownloader) error {
+	// if Reset exists, call it; otherwise return nil.
+	// Replace with the actual reset call if different.
+	type resetter interface {
+		Reset()
+	}
+	if r, ok := any(d).(resetter); ok {
+		r.Reset()
+		return nil
+	}
 	return nil
 }
 

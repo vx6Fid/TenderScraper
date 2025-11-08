@@ -153,7 +153,7 @@ func collectAndProcessFiles(dir, workDir string) ([]string, error) {
 // downloadFiles downloads all collected NIT documents and zip files
 func (d *DocDownloader) downloadFiles(tenderID string) error {
 	if len(d.NITDocs) == 0 && len(d.CorrigendumDocs) == 0 && d.WorkItemZip.URL == "" {
-		d.logger.Printf("[%s][docDownload] no documents found to download", d.state)
+		// d.logger.Printf("[%s][docDownload] no documents found to download", d.state)
 		return nil
 	}
 
@@ -209,67 +209,19 @@ func (d *DocDownloader) downloadFiles(tenderID string) error {
 			err := DownloadFile(task.url, task.filePath, d.sess.Jar)
 			if err != nil {
 				if strings.Contains(err.Error(), "skipping download, file too large") {
-					d.logger.Printf("[%s][docDownload] %s skipped (too large): %s", d.state, task.docType, task.filePath)
+					// d.logger.Printf("[%s][docDownload] %s skipped (too large): %s", d.state, task.docType, task.filePath)
 					return
 				}
-				d.logger.Printf("[%s][docDownload] %s download failed: %v", d.state, task.docType, err)
+				// d.logger.Printf("[%s][docDownload] %s download failed: %v", d.state, task.docType, err)
 				return
 			}
-			d.logger.Printf("[%s][docDownload] successfully downloaded %s", d.state, task.filePath)
+			// d.logger.Printf("[%s][docDownload] successfully downloaded %s", d.state, task.filePath)
 		}()
 	}
 
 	wg.Wait()
 	return nil
 }
-
-// func (d *DocDownloader) downloadFiles(tenderID string) error {
-// 	if len(d.NITDocs) == 0 && d.WorkItemZip.URL == "" {
-// 		d.logger.Printf("[%s][docDownload] no documents found to download", d.state)
-// 		return nil
-// 	}
-
-// 	// Ensure TenderDocs folder exists
-// 	baseDir := "TenderDocs" + string(filepath.Separator) + tenderID
-// 	if err := os.MkdirAll(baseDir, os.ModePerm); err != nil {
-// 		return fmt.Errorf("failed to create folder %s: %w", baseDir, err)
-// 	}
-
-// 	// helper to handle download and log skipped files
-// 	downloadAndLog := func(docURL, filePath, docType string) {
-// 		// d.logger.Printf("[%s][docDownload] downloading %s: %s", d.state, docType, filePath)
-// 		err := DownloadFile(docURL, filePath, d.sess.Jar)
-// 		if err != nil {
-// 			if strings.Contains(err.Error(), "skipping download, file too large") {
-// 				d.logger.Printf("[%s][docDownload] %s skipped (too large): %s", d.state, docType, filePath)
-// 				return
-// 			}
-// 			d.logger.Printf("[%s][docDownload] %s download failed: %v", d.state, docType, err)
-// 		} else {
-// 			d.logger.Printf("[%s][docDownload] successfully downloaded %s", d.state, filePath)
-// 		}
-// 	}
-
-// 	// Download NIT documents
-// 	for i, doc := range d.NITDocs {
-// 		filePath := filepath.Join(baseDir, doc.DocumentName)
-// 		downloadAndLog(doc.URL, filePath, fmt.Sprintf("NIT doc %d/%d", i+1, len(d.NITDocs)))
-// 	}
-
-// 	// Download corrigendum documents
-// 	for i, doc := range d.CorrigendumDocs {
-// 		filePath := filepath.Join(baseDir, doc.DocumentName)
-// 		downloadAndLog(doc.URL, filePath, fmt.Sprintf("Corrigendum doc %d/%d", i+1, len(d.CorrigendumDocs)))
-// 	}
-
-// 	// Download work item ZIP
-// 	if d.WorkItemZip.URL != "" {
-// 		filePath := filepath.Join(baseDir, d.WorkItemZip.DocumentName)
-// 		downloadAndLog(d.WorkItemZip.URL, filePath, "WorkItem ZIP")
-// 	}
-
-// 	return nil
-// }
 
 // GetResults returns the extracted documents and links
 func (d *DocDownloader) GetResults() ([]NITDocument, WorkItemDocument) {
@@ -281,7 +233,7 @@ func (d *DocDownloader) Reset() {
 	d.NITDocs = nil
 	d.WorkItemZip = WorkItemDocument{}
 	d.CorrigendumDocs = nil
-	d.logger.Printf("[%s][docDownload] reset completed", d.state)
+	// d.logger.Printf("[%s][docDownload] reset completed", d.state)
 }
 
 // Close cleans up the collector resources

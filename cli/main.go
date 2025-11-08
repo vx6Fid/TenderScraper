@@ -13,7 +13,7 @@ func main() {
 	choice := cliPrompt()
 	dispatcher(choice)
 
-	fmt.Println("Scraping completed successfully")
+	// fmt.Println("Scraping completed successfully")
 }
 
 func cliPrompt() int {

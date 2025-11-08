@@ -5,8 +5,8 @@ import (
 )
 
 var MaxSessionParallel int = 6
-var MaxDownloadWorkers = 1
-var MaxParallelDownloads = 1
+var MaxDownloadWorkers = 5
+var MaxParallelDownloads = 5
 
 var StageName = map[string]string{
 	"1": "To Be Opened Tenders",

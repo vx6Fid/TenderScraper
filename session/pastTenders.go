@@ -2,7 +2,6 @@ package session
 
 import (
 	"fmt"
-	"log"
 	"net/url"
 	"strings"
 	"time"
@@ -14,7 +13,7 @@ import (
 
 // EstablishTenderStatusSession performs the tender status captcha flow and waits for session establishment
 func (s *Session) EstablishTenderStatusSession(state, tenderStatus, fromDate, toDate string) error {
-	startTime := time.Now()
+	// startTime := time.Now()
 	host := HostFromURL(s.BaseURL)
 	s.captchaCollector = s.NewCollector(host) // This automatically shares the cookie jar
 
@@ -39,7 +38,7 @@ func (s *Session) EstablishTenderStatusSession(state, tenderStatus, fromDate, to
 	})
 
 	// Start the flow
-	s.logger.Printf("STEP 1: Starting tender status captcha/session flow: %s", s.ResultsURL)
+	// s.logger.Printf("STEP 1: Starting tender status captcha/session flow: %s", s.ResultsURL)
 	if err := s.captchaCollector.Visit(s.ResultsURL); err != nil {
 		return fmt.Errorf("failed to visit tender status page for captcha: %w", err)
 	}
@@ -58,8 +57,8 @@ func (s *Session) EstablishTenderStatusSession(state, tenderStatus, fromDate, to
 				if err := s.validateTenderStatusSession(); err != nil {
 					return err
 				}
-				log.Printf("[%s] Tender status session established successfully in %s", state, time.Since(startTime))
-				s.logger.Printf("Tender status session established successfully")
+				// log.Printf("[%s] Tender status session established successfully in %s", state, time.Since(startTime))
+				// s.logger.Printf("Tender status session established successfully")
 				return nil
 			}
 		}
@@ -69,7 +68,7 @@ func (s *Session) EstablishTenderStatusSession(state, tenderStatus, fromDate, to
 
 // handleTenderStatusForm handles the tender status search form with captcha
 func (s *Session) handleTenderStatusForm(e *colly.HTMLElement, searchParams map[string]string) {
-	s.logger.Printf("[tender-status] found form at %s", e.Request.URL.String())
+	// s.logger.Printf("[tender-status] found form at %s", e.Request.URL.String())
 
 	// Check if results table already exists (session might already be valid)
 	doc, err := goquery.NewDocumentFromReader(strings.NewReader(string(e.Response.Body)))
@@ -80,13 +79,13 @@ func (s *Session) handleTenderStatusForm(e *colly.HTMLElement, searchParams map[
 
 	// Check for results table first
 	if s.hasResultsTable(doc) {
-		s.logger.Println("[tender-status] results table found, session already established")
+		// s.logger.Println("[tender-status] results table found, session already established")
 		s.sessionEstablished = true
 		return
 	}
 
 	// Need to solve captcha and submit form
-	s.logger.Printf("[tender-status] no results table found, proceeding with captcha")
+	// s.logger.Printf("[tender-status] no results table found, proceeding with captcha")
 
 	// Extract form data
 	formData, err := s.extractTenderStatusFormData(doc)
@@ -108,7 +107,7 @@ func (s *Session) handleTenderStatusForm(e *colly.HTMLElement, searchParams map[
 		return
 	}
 
-	s.logger.Printf("[tender-status] solving captcha...")
+	// s.logger.Printf("[tender-status] solving captcha...")
 	solution, err := captcha.LocalCaptchaSolver(captchaSrc, s.logger)
 	if err != nil {
 		s.logger.Printf("[tender-status] captcha solver error: %v", err)
@@ -119,7 +118,7 @@ func (s *Session) handleTenderStatusForm(e *colly.HTMLElement, searchParams map[
 	formData["captchaText"] = solution
 
 	// Submit form
-	s.logger.Printf("[tender-status] submitting form with %d fields", len(formData))
+	// s.logger.Printf("[tender-status] submitting form with %d fields", len(formData))
 	if err := e.Request.Post(s.BaseURL, formData); err != nil {
 		s.logger.Printf("[tender-status] form submission failed: %v", err)
 	}

@@ -125,7 +125,7 @@ func (le *LinkExtractor) PastTenders(fromStr, toStr string, chunkSize int, stage
 						}
 						<-sem // release slot
 
-						log.Printf("[%s] worker started range %s - %s", u.State, fromFormatted, toFormatted)
+						// log.Printf("[%s] worker started range %s - %s", u.State, fromFormatted, toFormatted)
 
 						// Past Scraper
 						scraper, err := NewPastScraper(sess, u.Domain, u.State, nil, stateWriter, failedWriter)
@@ -141,7 +141,7 @@ func (le *LinkExtractor) PastTenders(fromStr, toStr string, chunkSize int, stage
 							failedWriter.WriteFailure(fromFormatted, toFormatted, err.Error())
 						}
 
-						log.Printf("[%s] worker finished range %s - %s", u.State, fromFormatted, toFormatted)
+						// log.Printf("[%s] worker finished range %s - %s", u.State, fromFormatted, toFormatted)
 					}
 				}()
 			}
@@ -152,12 +152,12 @@ func (le *LinkExtractor) PastTenders(fromStr, toStr string, chunkSize int, stage
 			}
 			close(jobs)
 			workers.Wait()
-			fmt.Print("\n")
 			log.Printf("[%s] all date ranges completed for [%s]", u.State, utils.StageName[stage])
-			fmt.Print("\n\n")
 		}(u)
 	}
 
 	wg.Wait()
-	log.Println("=== Past Tenders extraction finished ===")
+	fmt.Println()
+	log.Println("=== Past Tenders Stage finished ===")
+	fmt.Println()
 }

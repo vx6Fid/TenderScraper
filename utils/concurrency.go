@@ -3,15 +3,15 @@ package utils
 // CalculateOptimalWorkers determines concurrency based on job count
 func CalculateOptimalWorkers(totalJobs int) int {
 	if totalJobs < 100 {
-		return max(1, totalJobs/10)
+		return max(2, totalJobs/5)
 	}
 
 	workers := totalJobs / 10
 	if workers < 10 {
 		workers = 10
 	}
-	if workers > 120 {
-		workers = 120
+	if workers > 600 {
+		workers = 600
 	}
 	return workers
 }

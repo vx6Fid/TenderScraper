@@ -34,6 +34,7 @@ func Run(dir string, runDate string, stage string) error {
 
 	// Loop over states
 	for _, u := range utils.BaseURLs {
+		written := 0
 		fileName := fmt.Sprintf("%s_%s.csv", u.State, utils.StageName[stage])
 		filePath := fmt.Sprintf("%s/%s", dir, fileName)
 		if _, err := os.Stat(filePath); os.IsNotExist(err) {
@@ -56,13 +57,15 @@ func Run(dir string, runDate string, stage string) error {
 
 		totalJobs, err := utils.EstimateJobCount(u.State, runDate, true, utils.StageName[stage])
 		if totalJobs < 1 {
+			fmt.Println()
 			log.Printf("No jobs found for state %s", u.State)
 			continue
 		}
 		numWorkers := utils.CalculateOptimalWorkers(totalJobs)
 
-		fmt.Print("\n\n")
-		log.Printf("[%d] workers for state %s", numWorkers, u.State)
+		fmt.Print("\n")
+		// log.Printf("[%d] workers for state %s", numWorkers, u.State)
+		log.Printf("[%s] Found %d valid tender links to process with %d workers", u.State, totalJobs, numWorkers)
 		// Launch workers for this state
 		for i := range numWorkers {
 			wg.Add(1)
@@ -106,6 +109,10 @@ func Run(dir string, runDate string, stage string) error {
 						tender.LatestStage = utils.StageName[stage]
 						tender.TenderInfo.UpdatedAt = time.Now()
 						writeCh <- &tender
+						written++
+						if written%100 == 0 || written == totalJobs {
+							log.Printf("[%s] %d/%d tenders written", u.State, written, totalJobs)
+						}
 						// log.Printf("[Worker-%d][%s] tender written for %s", workerID, u.State, urlSnippet)
 					} else {
 						log.Printf("[Worker-%d][%s] tender validation failed for %s", workerID, u.State, urlSnippet)

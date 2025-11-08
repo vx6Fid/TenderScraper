@@ -63,6 +63,8 @@ func DownloadDocuments(logger *log.Logger) error {
 	sem := make(chan struct{}, utils.MaxDownloadWorkers)
 	var wg sync.WaitGroup
 
+	var completed int64
+	total := int64(len(configs))
 	batch := &BatchStats{}
 
 	for _, config := range configs {
@@ -78,6 +80,13 @@ func DownloadDocuments(logger *log.Logger) error {
 				logger.Printf("[%s] error: %v", cfg.ID, err)
 			}
 			batch.Add(ds)
+
+			count := atomic.AddInt64(&completed, 1)
+			if count%10 == 0 || count == total {
+				fmt.Println()
+				logger.Printf("[Progress] : %d/%d\n", count, total)
+				fmt.Println()
+			}
 		}()
 	}
 

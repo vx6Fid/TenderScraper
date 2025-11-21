@@ -44,7 +44,10 @@ type JobPayload struct {
 // CREATE JOB + OUTBOX ENTRY
 // -------------------------------
 func createJobAndEnqueue(ctx context.Context, payload JobPayload) (string, error) {
-	payloadBytes, _ := json.Marshal(payload)
+	payloadBytes, err := json.Marshal(payload)
+	if err != nil {
+		return "", err
+	}
 
 	tx, err := db.Begin(ctx)
 	if err != nil {
@@ -69,7 +72,10 @@ func createJobAndEnqueue(ctx context.Context, payload JobPayload) (string, error
 		"job_id":     jobID,
 		"created_at": time.Now(),
 	}
-	outBytes, _ := json.Marshal(outboxPayload)
+	outBytes, err := json.Marshal(outboxPayload)
+	if err != nil {
+		return "", err
+	}
 
 	_, err = tx.Exec(ctx,
 		`INSERT INTO outbox (job_id, destination, payload)
@@ -180,6 +186,18 @@ func main() {
 		log.Fatalf("failed to connect to DB: %v", err)
 	}
 	defer db.Close()
+
+	// --- 1.1 RESET STALE RUNNING JOBS ---
+	// If the process crashed previously while a job was in `running_go`,
+	// it would otherwise remain stuck forever. Reset them back to `pending`.
+	_, err := db.Exec(ctx, `
+    UPDATE jobs
+    SET status='pending', updated_at=now()
+    WHERE status='running_go'
+    `)
+	if err != nil {
+		log.Fatalf("failed to reset stale jobs: %v", err)
+	}
 
 	// --- 2. INIT RABBITMQ PUBLISHER ---
 	rabbitURL := os.Getenv("RABBITMQ_URL")

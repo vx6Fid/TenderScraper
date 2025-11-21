@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"database/sql"
 	"encoding/json"
 	"errors"
 	"log"
@@ -119,6 +118,7 @@ func startGoWorkerConsumer(ctx context.Context, rabbitURL string) error {
 	}()
 
 	// Feed deliveries channel
+feedLoop:
 	for d := range msgs {
 		select {
 		case deliveries <- d:
@@ -126,7 +126,7 @@ func startGoWorkerConsumer(ctx context.Context, rabbitURL string) error {
 		case <-ctx.Done():
 			// cancel: reject the message so it can be requeued
 			_ = d.Nack(false, true)
-			break
+			break feedLoop
 		}
 	}
 
@@ -203,7 +203,7 @@ func processGoMessage(ctx context.Context, jobID string) error {
 		RETURNING payload, attempts
 	`, jobID).Scan(&payloadBytes, &curAttempts)
 	if err != nil {
-		if errors.Is(err, pgx.ErrNoRows) || err == sql.ErrNoRows {
+		if errors.Is(err, pgx.ErrNoRows) {
 			// Not pending -> nothing to do (maybe already claimed)
 			return nil
 		}
@@ -290,7 +290,7 @@ func processGoMessage(ctx context.Context, jobID string) error {
 		_ = tx.Rollback(ctx)
 		return e
 	}
-	outPayload := map[string]interface{}{"job_id": jobID}
+	outPayload := map[string]any{"job_id": jobID}
 	outB, _ := json.Marshal(outPayload)
 	_, e = tx.Exec(ctx, `INSERT INTO outbox (job_id, destination, payload) VALUES ($1, 'jobs.python', $2)`, jobID, outB)
 	if e != nil {

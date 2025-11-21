@@ -10,8 +10,8 @@ import (
 )
 
 // CheckTenderFolderExists checks if a folder exists in S3
-func CheckTenderFolderExists(bucket, tenderID string) (bool, error) {
-	cfg, err := config.LoadDefaultConfig(context.TODO())
+func CheckTenderFolderExists(ctx context.Context, bucket, tenderID string) (bool, error) {
+	cfg, err := config.LoadDefaultConfig(ctx)
 
 	if err != nil {
 		return false, fmt.Errorf("unable to load AWS config: %w", err)
@@ -20,7 +20,7 @@ func CheckTenderFolderExists(bucket, tenderID string) (bool, error) {
 	client := s3.NewFromConfig(cfg)
 	prefix := fmt.Sprintf("tender-documents/%s/", tenderID)
 
-	resp, err := client.ListObjectsV2(context.TODO(), &s3.ListObjectsV2Input{
+	resp, err := client.ListObjectsV2(ctx, &s3.ListObjectsV2Input{
 		Bucket:  aws.String(bucket),
 		Prefix:  aws.String(prefix),
 		MaxKeys: aws.Int32(1),

@@ -1,6 +1,7 @@
 package docdownload
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"os"
@@ -51,8 +52,8 @@ func NewDocDownloader(sess *session.Session, state string, logger *log.Logger, s
 	}
 }
 
-// RunTender downloads documents for a given tender URL
-func (d *DocDownloader) Run(tenderID string, tenderURL string, corrigendumLinks []types.CorrLinks) error {
+// Run downloads documents for a given tender URL
+func (d *DocDownloader) Run(ctx context.Context, tenderID string, tenderURL string, corrigendumLinks []types.CorrLinks) error {
 	if err := d.SolveDocCaptcha(); err != nil {
 		return err
 	}

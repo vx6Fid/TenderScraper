@@ -74,7 +74,8 @@ func DownloadDocuments(logger *log.Logger) error {
 
 		go func() {
 			defer func() { <-sem; wg.Done() }()
-			ds, err := processTender(cfg, logger)
+			ctx := context.Background()
+			ds, err := ProcessTender(ctx, cfg, logger)
 			if err != nil {
 				// keep error reporting but still aggregate the stats
 				logger.Printf("[%s] error: %v", cfg.ID, err)
@@ -101,10 +102,10 @@ func DownloadDocuments(logger *log.Logger) error {
 // ---------------------- PROCESS FUNCTION ----------------------
 
 // processTender returns per-tender DownloadStats and an error (if any)
-func processTender(config DocumentConfig, logger *log.Logger) (DownloadStats, error) {
+func ProcessTender(context context.Context, config DocumentConfig, logger *log.Logger) (DownloadStats, error) {
 	// Determine if folder exists -> skipWorkNit
 	skipWorkNit := false
-	exists, err := utils.CheckTenderFolderExists("tenderbharat-ap-south-1", config.ID)
+	exists, err := utils.CheckTenderFolderExists(context, "tenderbharat-ap-south-1", config.ID)
 	if err != nil {
 		return DownloadStats{}, fmt.Errorf("failed to check tender folder: %w", err)
 	}
@@ -121,12 +122,12 @@ func processTender(config DocumentConfig, logger *log.Logger) (DownloadStats, er
 	}
 
 	sess := session.NewSession(baseURL, state)
-	if err := sess.EstablishSession("ActiveTenders"); err != nil {
+	if err := sess.EstablishSession(context, "ActiveTenders"); err != nil {
 		return DownloadStats{}, fmt.Errorf("[%s] failed to establish tender session: %w", state, err)
 	}
 
 	downloader := docdownload.NewDocDownloader(sess, state, logger, skipWorkNit)
-	if err := downloader.Run(config.ID, config.TenderURL, config.CorrigendumLinks); err != nil {
+	if err := downloader.Run(context, config.ID, config.TenderURL, config.CorrigendumLinks); err != nil {
 		// On Run error we will compute counts from whatever was populated and mark as failed per your rule.
 		// Don't return early — create stats to log & aggregate, but return the error as well.
 		nitCount := len(downloader.NITDocs)

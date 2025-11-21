@@ -1,53 +1,41 @@
 package main
 
 import (
+	"context"
 	"log"
-	"strings"
 	"sync"
+	"time"
 
 	"github.com/joho/godotenv"
-	docdownload "github.com/vx6fid/tender-scraper/docDownloads"
-	"github.com/vx6fid/tender-scraper/session"
-	"github.com/vx6fid/tender-scraper/utils"
+	"github.com/vx6fid/tender-scraper/cli/commands"
 	types "github.com/vx6fid/tender-scraper/utils/types"
 )
 
-type TaskStatus string
+// --------------------
+// Task Status Tracking
+// --------------------
 
-const (
-	StatusProcessing TaskStatus = "processing"
-	StatusCompleted  TaskStatus = "completed"
-	StatusFailed     TaskStatus = "failed"
-)
-
-type Task struct {
-	TenderID string
-	Status   TaskStatus
-	Message  string
+type TaskStatus struct {
+	ID     string `json:"id"`
+	Status string `json:"status"`
+	Error  string `json:"error,omitempty"`
 }
 
 var (
-	jobQueue = make(chan func(), 100) // max 100 queued jobs
-)
-
-func worker(id int) {
-	for job := range jobQueue {
-		log.Printf("Worker %d starting job", id)
-		job()
-		log.Printf("Worker %d finished job", id)
-	}
-}
-
-func StartWorkerPool(n int) {
-	for i := 0; i < n; i++ {
-		go worker(i + 1)
-	}
-}
-
-var (
-	taskStore = make(map[string]*Task)
+	taskStore = make(map[string]TaskStatus)
 	mu        sync.RWMutex
 )
+
+const (
+	StatusQueued    = "queued"
+	StatusRunning   = "running"
+	StatusFailed    = "failed"
+	StatusCompleted = "completed"
+)
+
+// --------------------
+// Environment Loader
+// --------------------
 
 func LoadEnvOrFatal() {
 	if err := godotenv.Load(); err != nil {
@@ -55,81 +43,97 @@ func LoadEnvOrFatal() {
 	}
 }
 
-func runTenderDownload(tenderID, tenderURL string, corrigendumLinks []types.CorrLinks, baseURLs []types.URLS) {
+// --------------------
+// Status Helpers
+// --------------------
+
+func setStatus(id, s string, errMsg ...string) {
 	mu.Lock()
-	taskStore[tenderID] = &Task{TenderID: tenderID, Status: StatusProcessing}
-	mu.Unlock()
+	defer mu.Unlock()
 
-	defer func() {
-		// Clean up or update final status on panic
-		if r := recover(); r != nil {
-			mu.Lock()
-			taskStore[tenderID].Status = StatusFailed
-			taskStore[tenderID].Message = "Panic occurred"
-			mu.Unlock()
-		}
-	}()
-
-	// Check if folder exists
-	if exists, err := utils.CheckTenderFolderExists("tenderbharat", tenderID); err != nil {
-		mu.Lock()
-		taskStore[tenderID].Status = StatusFailed
-		taskStore[tenderID].Message = err.Error()
-		mu.Unlock()
-		return
-	} else if exists {
-		mu.Lock()
-		taskStore[tenderID].Status = StatusCompleted
-		taskStore[tenderID].Message = "Folder already exists"
-		mu.Unlock()
-		return
+	ts := taskStore[id]
+	ts.ID = id
+	ts.Status = s
+	if len(errMsg) > 0 {
+		ts.Error = errMsg[0]
 	}
+	taskStore[id] = ts
+}
 
-	log.Printf("Starting Tender Docs Download for %s", tenderID)
+// --------------------
+// Worker Pool
+// --------------------
 
-	// Fix links
-	for i := range corrigendumLinks {
-		corrigendumLinks[i].Link = strings.ReplaceAll(corrigendumLinks[i].Link, "\\u0026", "&")
+var (
+	jobQueue chan func()
+	wg       sync.WaitGroup
+	stopCh   chan struct{}
+)
+
+func StartWorkerPool(n int) {
+	jobQueue = make(chan func(), 1000)
+	stopCh = make(chan struct{})
+
+	for i := range n {
+		wg.Add(1)
+		go func(workerID int) {
+			defer wg.Done()
+			for {
+				select {
+				case job, ok := <-jobQueue:
+					if !ok {
+						return
+					}
+					// recover from panics in job
+					func() {
+						defer func() {
+							if r := recover(); r != nil {
+								log.Printf("worker %d: panic recovered: %v", workerID, r)
+							}
+						}()
+						job()
+					}()
+				case <-stopCh:
+					return
+				}
+			}
+		}(i)
 	}
-	tenderURL = strings.ReplaceAll(tenderURL, "\\u0026", "&")
+}
 
-	baseURL, state, err := utils.GetBaseURLAndState(tenderURL)
+// Call during shutdown
+func StopWorkerPool() {
+	close(stopCh)
+	// Closes jobQueue --> stop accepting jobs
+	close(jobQueue)
+	wg.Wait()
+}
+
+// --------------------
+// Tender Download Worker
+// --------------------
+
+func runTenderDownload(ctx context.Context, id, url string, corrLinks []types.CorrLinks) {
+	setStatus(id, StatusRunning)
+	// create a child context with timeout
+	ctx, cancel := context.WithTimeout(ctx, 10*time.Minute)
+	defer cancel()
+
+	_, err := commands.ProcessTender(
+		ctx,
+		commands.DocumentConfig{
+			ID:               id,
+			TenderURL:        url,
+			CorrigendumLinks: corrLinks,
+			UpdatedAt:        time.Now(),
+		},
+		log.Default(),
+	)
+
 	if err != nil {
-		mu.Lock()
-		taskStore[tenderID].Status = StatusFailed
-		taskStore[tenderID].Message = err.Error()
-		mu.Unlock()
+		setStatus(id, StatusFailed, err.Error())
 		return
 	}
 
-	// Create session
-	sess := session.NewSession(baseURL, state)
-
-	if err := sess.EstablishSession("ActiveTenders"); err != nil {
-		mu.Lock()
-		taskStore[tenderID].Status = StatusFailed
-		taskStore[tenderID].Message = err.Error()
-		mu.Unlock()
-		return
-	}
-
-	// Download docs
-	downloader := docdownload.NewDocDownloader(sess, state, log.Default())
-	if err := downloader.Run(tenderID, tenderURL, corrigendumLinks); err != nil {
-		mu.Lock()
-		taskStore[tenderID].Status = StatusFailed
-		taskStore[tenderID].Message = err.Error()
-		mu.Unlock()
-		return
-	}
-
-	nitDocs, zipFiles := downloader.GetResults()
-	log.Printf("Extracted %d NIT documents and %s zip files", len(nitDocs), zipFiles.DocumentName)
-
-	downloader.Reset()
-
-	mu.Lock()
-	taskStore[tenderID].Status = StatusCompleted
-	taskStore[tenderID].Message = "AWS upload complete"
-	mu.Unlock()
+	setStatus(id, StatusCompleted)
 }

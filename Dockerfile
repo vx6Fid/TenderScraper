@@ -1,38 +1,27 @@
-# ---- Build Stage ----
-FROM golang:1.25 AS builder
+# Stage 1 — build
+FROM golang:1.25.4 AS builder
 
 WORKDIR /app
 
-# Copy go.mod and go.sum first for caching dependencies
+# Copy only go.mod first for caching
 COPY go.mod go.sum ./
 RUN go mod download
 
-# Copy necessary source code
-COPY http ./http
-COPY utils ./utils
-COPY docDownloads ./docDownloads
-COPY scraper/captcha ./scraper/captcha
-COPY session ./session
+# Copy the rest (excluding TenderDocs via .dockerignore)
+COPY . .
 
-# Build the Go server
-RUN go build -o tender-server ./http
+# Build the HTTP service
+RUN CGO_ENABLED=0 GOOS=linux go build -o server ./http
 
-# ---- Final Stage ----
-FROM debian:bookworm-slim
+# Stage 2 — run
+FROM alpine:3.20
 
 WORKDIR /app
 
-# Install CA certificates
-RUN apt-get update && \
-    apt-get install -y ca-certificates && \
-    update-ca-certificates && \
-    rm -rf /var/lib/apt/lists/*
+COPY --from=builder /app/server .
 
-# Copy the built binary from builder
-COPY --from=builder /app/tender-server .
+# adjust if needed
+EXPOSE 8080  
 
-# Expose the port
-EXPOSE 8080
+CMD ["./server"]
 
-# Run the binary
-ENTRYPOINT ["./tender-server"]

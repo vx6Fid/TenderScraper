@@ -1,5 +1,5 @@
 # Ignore local directories and files
-#TenderData/
+TenderDocs/
 *.log
 *.csv
 *.txt

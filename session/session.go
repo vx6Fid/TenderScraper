@@ -1,6 +1,7 @@
 package session
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"net/http"
@@ -102,7 +103,7 @@ func (s *Session) NewCollector(allowedDomains ...string) *colly.Collector {
 // EstablishSession performs the captcha flow using an internal collector
 // and populates the session's cookie jar. It waits (with timeout) for the
 // captcha flow to confirm the session.
-func (s *Session) EstablishSession(sessionType string) error {
+func (s *Session) EstablishSession(ctx context.Context, sessionType string) error {
 	// build captcha collector bound to host
 	host := HostFromURL(s.BaseURL)
 	s.captchaCollector = s.NewCollector(host)

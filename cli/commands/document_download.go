@@ -6,7 +6,6 @@ import (
 	"log"
 	"os"
 	"strings"
-	"sync"
 	"sync/atomic"
 	"time"
 
@@ -60,41 +59,40 @@ func DownloadDocuments(logger *log.Logger) error {
 		return err
 	}
 
-	sem := make(chan struct{}, utils.MaxDownloadWorkers)
-	var wg sync.WaitGroup
+	const maxBatches = 3
 
-	var completed int64
-	total := int64(len(configs))
-	batch := &BatchStats{}
+	current := configs
+	batchFailures := []BatchFailure{}
 
-	for _, config := range configs {
-		cfg := config
-		sem <- struct{}{}
-		wg.Add(1)
+	for batch := 1; batch <= maxBatches; batch++ {
 
-		go func() {
-			defer func() { <-sem; wg.Done() }()
-			ctx := context.Background()
-			ds, err := ProcessTender(ctx, cfg, logger)
-			if err != nil {
-				// keep error reporting but still aggregate the stats
-				logger.Printf("[%s] error: %v", cfg.ID, err)
-			}
-			batch.Add(ds)
+		logger.Printf("Starting batch %d with %d configs", batch, len(current))
 
-			count := atomic.AddInt64(&completed, 1)
-			if count%10 == 0 || count == total {
-				fmt.Println()
-				logger.Printf("[Progress] : %d/%d\n", count, total)
-				fmt.Println()
-			}
-		}()
+		var failed []DocumentConfig
+
+		failed, err = RunBatch(current, logger)
+
+		if err != nil {
+			return err
+		}
+
+		batchFailures = append(batchFailures, BatchFailure{
+			Batch:  batch,
+			Failed: failed,
+		})
+
+		logger.Printf("Batch %d finished: %d configs failed", batch, len(failed))
+
+		if len(failed) == 0 {
+			break
+		}
+
+		current = failed
 	}
 
-	wg.Wait()
-
-	logger.Printf("Batch Summary: [Docs: total=%d, success=%d, skipped=%d, failed=%d]",
-		batch.Total, batch.Success, batch.Skipped, batch.Failed)
+	// Final summary
+	last := batchFailures[len(batchFailures)-1].Failed
+	logger.Printf("Final: %d configs failed after %d batches", len(last), len(batchFailures))
 
 	return nil
 }

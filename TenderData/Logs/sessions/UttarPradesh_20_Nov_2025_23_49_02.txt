@@ -1,2 +1,0 @@
-2025/11/20 23:49:03 [captcha] find table in document
-2025/11/20 23:49:03 [captcha] solver error: failed to send request to OCR server: Post "http://127.0.0.1:8000/solve": dial tcp 127.0.0.1:8000: connect: connection refused

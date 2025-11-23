@@ -1,4 +1,0 @@
-2025/11/21 18:26:08 [captcha] find table in document
-2025/11/21 18:26:11 [error] https://eprocure.gov.in/eprocure/app | 0 | Post "https://eprocure.gov.in/eprocure/app": EOF
-2025/11/21 18:26:11 [session error] url=https://eprocure.gov.in/eprocure/app status=0 err=Post "https://eprocure.gov.in/eprocure/app": EOF
-2025/11/21 18:26:11 [captcha] post failed: Post "https://eprocure.gov.in/eprocure/app": EOF

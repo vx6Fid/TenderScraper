@@ -4,8 +4,8 @@ import (
 	utils "github.com/vx6fid/tender-scraper/utils/types"
 )
 
-var MaxSessionParallel int = 32
-var MaxDownloadWorkers = 32
+var MaxSessionParallel int = 4
+var MaxDownloadWorkers = 4
 var MaxParallelDownloads = 5
 
 var StageName = map[string]string{

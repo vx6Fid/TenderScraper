@@ -90,13 +90,15 @@ func (d *DocDownloader) Run(ctx context.Context, tenderID string, tenderURL stri
 	d.visitViewLinks(viewLinks)
 
 	// Download files locally
-	if err := d.downloadFiles(tenderID); err != nil {
+	if err := d.downloadFiles(ctx, tenderID); err != nil {
 		return err
 	}
 
-	if err := d.processAndUploadDocs(tenderID, bucketName); err != nil {
+	if err := d.processAndUploadDocs(ctx, tenderID, bucketName); err != nil {
 		return err
 	}
+
+	d.Reset()
 
 	return nil
 }

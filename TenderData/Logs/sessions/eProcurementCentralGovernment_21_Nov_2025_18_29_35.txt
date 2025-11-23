@@ -1,3 +1,0 @@
-2025/11/21 18:29:38 [captcha] find table in document
-2025/11/21 18:29:43 [captcha] find table in document
-2025/11/21 18:29:43 Session established: 1 cookies

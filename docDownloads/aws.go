@@ -5,9 +5,9 @@ import (
 	"errors"
 	"fmt"
 	"os"
-	"os/exec"
 	"path/filepath"
 	"strings"
+	"time"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/config"
@@ -68,7 +68,7 @@ func uploadFileToS3(bucket, key, filePath string) error {
 	return nil
 }
 
-func (d *DocDownloader) processAndUploadDocs(tenderID string, bucket string) error {
+func (d *DocDownloader) processAndUploadDocs(ctx context.Context, tenderID string, bucket string) error {
 	baseDir := "TenderDocs/" + tenderID
 
 	// Ensure baseDir exists
@@ -77,27 +77,54 @@ func (d *DocDownloader) processAndUploadDocs(tenderID string, bucket string) err
 	}
 
 	// Helper: preprocess + upload a file to a folder in S3
-	uploadWithFolder := func(localFile, folder, prefix string) {
+	uploadWithFolder := func(localFile, folder, prefix string) error {
+		select {
+		case <-ctx.Done():
+			return ctx.Err()
+		default:
+		}
+
 		if _, err := os.Stat(localFile); os.IsNotExist(err) {
-			// d.logger.Printf("[%s][docUpload] skipping missing file (probably >1GB): %s", d.state, localFile)
-			return
+			// missing file — if it's the large-file case it was skipped earlier; treat as non-fatal but log
+			d.logger.Printf("[%s][docUpload] missing (skipped or not downloaded): %s", d.state, localFile)
+			return nil
+		} else if err != nil {
+			return fmt.Errorf("stat failed for %s: %w", localFile, err)
 		}
 
 		files, err := PreprocessFile(localFile, baseDir)
 		if err != nil {
-			d.logger.Printf("[%s][docUpload] preprocess failed for %s: %v", d.state, localFile, err)
-			return
+			return fmt.Errorf("[%s][docUpload] preprocess failed for %s: %v", d.state, localFile, err)
 		}
+
+		// per-upload retry
+		const attempts = 3
+		const baseDelay = 500 * time.Millisecond
+
 		for _, f := range files {
+			select {
+			case <-ctx.Done():
+				return ctx.Err()
+			default:
+			}
+
 			flatName := FlattenPath(filepath.Base(f))
 			key := fmt.Sprintf("tender-documents/%s/%s/%s%s", tenderID, folder, prefix, flatName)
-			if err := uploadFileToS3(bucket, key, f); err != nil {
-				d.logger.Printf("[%s][docUpload]: %v", d.state, err)
-			} else {
-				// d.logger.Printf("[%s][docUpload] uploaded %s", d.state, key)
+			uploadFn := func() error {
+				return uploadFileToS3(bucket, key, f)
+			}
+
+			if err := Do(attempts, baseDelay, uploadFn); err != nil {
+				// return the first hard upload error
+				return fmt.Errorf("upload failed for %s -> %s: %w", f, key, err)
 			}
 		}
+
+		return nil
 	}
+
+	// collect errors
+	var errs []string
 
 	// --- Collect files for ZIP (NIT + WorkItem) ---
 	filesToZip := []string{}
@@ -114,60 +141,53 @@ func (d *DocDownloader) processAndUploadDocs(tenderID string, bucket string) err
 		}
 	}
 
-	if d.skipWorkNit {
-		// d.logger.Printf("[%s][docUpload][DEBUG] skipping TenderDocs ZIP", d.state)
-	}
-
-	// --- Create ZIP of NIT + WorkItem docs ---
+	// --- Create zip if needed and upload
 	if len(filesToZip) > 0 && !d.skipWorkNit {
-		zipPath := "TenderDocs.zip"
-
-		// Debug: print working directory
-		if _, err := os.Getwd(); err == nil {
-			// d.logger.Printf("[%s][docUpload][DEBUG] current working dir = %s", d.state, cwd)
-		} else {
-			d.logger.Printf("[%s][docUpload][DEBUG] could not get current working dir: %v", d.state, err)
-		}
-
-		// Print the command to be executed
-		args := append([]string{"-r", zipPath}, filesToZip...)
-
-		cmd := exec.Command("zip", args...)
-		cmd.Dir = baseDir
-
-		if output, err := cmd.CombinedOutput(); err != nil {
-			d.logger.Printf("[%s][docUpload] zip creation failed: %v, output: %s", d.state, err, string(output))
+		zipPath := filepath.Join(baseDir, "TenderDocs.zip")
+		if err := createZip(zipPath, baseDir, filesToZip); err != nil {
+			errs = append(errs, fmt.Sprintf("zip creation failed: %v", err))
 		} else {
 			key := fmt.Sprintf("tender-documents/%s/TenderDocs.zip", tenderID)
-			if err := uploadFileToS3(bucket, key, filepath.Join(baseDir, "TenderDocs.zip")); err != nil {
-				d.logger.Printf("[%s][docUpload] zip upload failed: %v", d.state, err)
+			if err := Do(3, 500*time.Millisecond, func() error {
+				return uploadFileToS3(bucket, key, zipPath)
+			}); err != nil {
+				errs = append(errs, fmt.Sprintf("zip upload failed: %v", err))
 			}
 		}
 	}
 
-	// --- Upload individual NIT docs ---
+	// Upload NIT docs
 	for _, doc := range d.NITDocs {
 		localFile := filepath.Join(baseDir, doc.DocumentName)
-		uploadWithFolder(localFile, "nit-documents", "")
+		if err := uploadWithFolder(localFile, "nit-documents", ""); err != nil {
+			errs = append(errs, err.Error())
+		}
 	}
 
-	// --- Upload WorkItem ZIP ---
+	// Upload WorkItem ZIP
 	if d.WorkItemZip.URL != "" {
 		localFile := filepath.Join(baseDir, d.WorkItemZip.DocumentName)
-		uploadWithFolder(localFile, "work-item-documents", "")
+		if err := uploadWithFolder(localFile, "work-item-documents", ""); err != nil {
+			errs = append(errs, err.Error())
+		}
 	}
 
-	// --- Upload Corrigendum docs ---
+	// Upload Corrigendum docs
 	for _, doc := range d.CorrigendumDocs {
 		localFile := filepath.Join(baseDir, doc.DocumentName)
-		uploadWithFolder(localFile, "latest-corrigendum-list", doc.Type+"_")
+		if err := uploadWithFolder(localFile, "latest-corrigendum-list", doc.Type+"_"); err != nil {
+			errs = append(errs, err.Error())
+		}
 	}
 
 	// --- Cleanup ---
 	if err := os.RemoveAll(baseDir); err != nil {
-		// d.logger.Printf("[%s][docUpload] cleanup failed: %v", d.state, err)
-	} else {
-		// d.logger.Printf("[%s][docUpload] cleaned up %s", d.state, baseDir)
+		// not fatal, so only logging
+		d.logger.Printf("[%s][docUpload] cleanup failed: %v", d.state, err)
+	}
+
+	if len(errs) > 0 {
+		return fmt.Errorf("processAndUploadDocs errors: %s", strings.Join(errs, "; "))
 	}
 
 	return nil

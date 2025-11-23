@@ -2,6 +2,7 @@ package docdownload
 
 import (
 	"archive/zip"
+	"context"
 	"fmt"
 	"io"
 	"os"
@@ -9,6 +10,8 @@ import (
 	"path/filepath"
 	"strings"
 	"sync"
+	"sync/atomic"
+	"time"
 
 	"github.com/vx6fid/tender-scraper/utils"
 )
@@ -151,9 +154,79 @@ func collectAndProcessFiles(dir, workDir string) ([]string, error) {
 }
 
 // downloadFiles downloads all collected NIT documents and zip files
-func (d *DocDownloader) downloadFiles(tenderID string) error {
+// func (d *DocDownloader) downloadFiles(tenderID string) error {
+// 	if len(d.NITDocs) == 0 && len(d.CorrigendumDocs) == 0 && d.WorkItemZip.URL == "" {
+// 		// d.logger.Printf("[%s][docDownload] no documents found to download", d.state)
+// 		return nil
+// 	}
+
+// 	baseDir := filepath.Join("TenderDocs", tenderID)
+// 	if err := os.MkdirAll(baseDir, os.ModePerm); err != nil {
+// 		return fmt.Errorf("failed to create folder %s: %w", baseDir, err)
+// 	}
+
+// 	type downloadTask struct {
+// 		url      string
+// 		filePath string
+// 		docType  string
+// 	}
+
+// 	var tasks []downloadTask
+
+// 	for i, doc := range d.NITDocs {
+// 		tasks = append(tasks, downloadTask{
+// 			url:      doc.URL,
+// 			filePath: filepath.Join(baseDir, doc.DocumentName),
+// 			docType:  fmt.Sprintf("NIT doc %d/%d", i+1, len(d.NITDocs)),
+// 		})
+// 	}
+// 	for i, doc := range d.CorrigendumDocs {
+// 		tasks = append(tasks, downloadTask{
+// 			url:      doc.URL,
+// 			filePath: filepath.Join(baseDir, doc.DocumentName),
+// 			docType:  fmt.Sprintf("Corrigendum doc %d/%d", i+1, len(d.CorrigendumDocs)),
+// 		})
+// 	}
+// 	if d.WorkItemZip.URL != "" {
+// 		tasks = append(tasks, downloadTask{
+// 			url:      d.WorkItemZip.URL,
+// 			filePath: filepath.Join(baseDir, d.WorkItemZip.DocumentName),
+// 			docType:  "WorkItem ZIP",
+// 		})
+// 	}
+
+// 	sem := make(chan struct{}, utils.MaxParallelDownloads)
+// 	var wg sync.WaitGroup
+
+// 	for _, t := range tasks {
+// 		task := t
+// 		sem <- struct{}{}
+// 		wg.Add(1)
+
+// 		go func() {
+// 			defer func() {
+// 				<-sem
+// 				wg.Done()
+// 			}()
+
+// 			err := DownloadFile(task.url, task.filePath, d.sess.Jar)
+// 			if err != nil {
+// 				if strings.Contains(err.Error(), "skipping download, file too large") {
+// 					// d.logger.Printf("[%s][docDownload] %s skipped (too large): %s", d.state, task.docType, task.filePath)
+// 					return
+// 				}
+// 				// d.logger.Printf("[%s][docDownload] %s download failed: %v", d.state, task.docType, err)
+// 				return
+// 			}
+// 			// d.logger.Printf("[%s][docDownload] successfully downloaded %s", d.state, task.filePath)
+// 		}()
+// 	}
+
+//		wg.Wait()
+//		return nil
+//	}
+func (d *DocDownloader) downloadFiles(ctx context.Context, tenderID string) error {
 	if len(d.NITDocs) == 0 && len(d.CorrigendumDocs) == 0 && d.WorkItemZip.URL == "" {
-		// d.logger.Printf("[%s][docDownload] no documents found to download", d.state)
 		return nil
 	}
 
@@ -169,7 +242,6 @@ func (d *DocDownloader) downloadFiles(tenderID string) error {
 	}
 
 	var tasks []downloadTask
-
 	for i, doc := range d.NITDocs {
 		tasks = append(tasks, downloadTask{
 			url:      doc.URL,
@@ -195,31 +267,119 @@ func (d *DocDownloader) downloadFiles(tenderID string) error {
 	sem := make(chan struct{}, utils.MaxParallelDownloads)
 	var wg sync.WaitGroup
 
+	// error collection
+	errCh := make(chan error, len(tasks))
+	skippedCount := int64(0) // for large-file skips, if you want to report
+
+	// Configurable retry params
+	const attempts = 3
+	const baseDelay = 500 * time.Millisecond
+
 	for _, t := range tasks {
 		task := t
 		sem <- struct{}{}
 		wg.Add(1)
 
 		go func() {
-			defer func() {
-				<-sem
-				wg.Done()
-			}()
+			defer func() { <-sem; wg.Done() }()
 
-			err := DownloadFile(task.url, task.filePath, d.sess.Jar)
-			if err != nil {
-				if strings.Contains(err.Error(), "skipping download, file too large") {
-					// d.logger.Printf("[%s][docDownload] %s skipped (too large): %s", d.state, task.docType, task.filePath)
-					return
+			// If ctx is done, avoid extra work
+			select {
+			case <-ctx.Done():
+				errCh <- ctx.Err()
+				return
+			default:
+			}
+
+			// Retryable wrapper for this file
+			downloadFn := func() error {
+				// We assume DownloadFile does not accept context; if it does, pass ctx through.
+				err := DownloadFile(task.url, task.filePath, d.sess.Jar)
+				if err != nil {
+					// Keep the exact string check you already used
+					if strings.Contains(err.Error(), "skipping download, file too large") {
+						// count as skipped (not fatal)
+						atomic.AddInt64(&skippedCount, 1)
+						return nil // treat as success for retry.Do so we don't retry
+					}
+					return err
 				}
-				// d.logger.Printf("[%s][docDownload] %s download failed: %v", d.state, task.docType, err)
+				return nil
+			}
+
+			if err := Do(attempts, baseDelay, downloadFn); err != nil {
+				// record hard failure
+				errCh <- fmt.Errorf("%s download failed (%s): %w", task.docType, task.filePath, err)
 				return
 			}
-			// d.logger.Printf("[%s][docDownload] successfully downloaded %s", d.state, task.filePath)
+
+			// success: no message to errCh
 		}()
 	}
 
 	wg.Wait()
+	close(errCh)
+
+	// Aggregate errors
+	var aggErrs []string
+	for e := range errCh {
+		if e != nil {
+			aggErrs = append(aggErrs, e.Error())
+		}
+	}
+
+	if len(aggErrs) > 0 {
+		return fmt.Errorf("downloadFiles: %d errors: %s", len(aggErrs), strings.Join(aggErrs, "; "))
+	}
+
+	// Optionally return info on skippedCount (but not an error)
+	if skippedCount > 0 {
+		d.logger.Printf("[%s][docDownload] skipped %d files due to size", d.state, skippedCount)
+	}
+
+	return nil
+}
+
+func createZip(dstZip string, baseDir string, files []string) error {
+	zipFile, err := os.Create(dstZip)
+	if err != nil {
+		return err
+	}
+	defer zipFile.Close()
+
+	w := zip.NewWriter(zipFile)
+	defer w.Close()
+
+	for _, fname := range files {
+		full := filepath.Join(baseDir, fname)
+		fi, err := os.Stat(full)
+		if err != nil {
+			return err
+		}
+		if fi.IsDir() {
+			continue
+		}
+		f, err := os.Open(full)
+		if err != nil {
+			return err
+		}
+		defer f.Close()
+
+		fh, err := zip.FileInfoHeader(fi)
+		if err != nil {
+			return err
+		}
+		fh.Name = filepath.Base(fname)
+		fh.Method = zip.Deflate
+
+		wr, err := w.CreateHeader(fh)
+		if err != nil {
+			return err
+		}
+		if _, err := io.Copy(wr, f); err != nil {
+			return err
+		}
+	}
 	return nil
 }
 

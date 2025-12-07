@@ -117,7 +117,7 @@ func (d *DocDownloader) HandleDocDownloadCaptchaResponse(r *colly.Response) {
 		return
 	}
 	if stillHasCaptcha {
-		d.logger.Printf("[docDownload][captcha] server still showing captcha after submit (status %d)", r.StatusCode)
+		// d.logger.Printf("[docDownload][captcha] server still showing captcha after submit (status %d)", r.StatusCode)
 		return
 	}
 

@@ -302,7 +302,7 @@ func (s *Session) handleCaptchaResponse(r *colly.Response) {
 		return
 	}
 	if stillHasCaptcha {
-		s.logger.Printf("[captcha] server still showing captcha after submit (status %d)", r.StatusCode)
+		// s.logger.Printf("[captcha] server still showing captcha after submit (status %d)", r.StatusCode)
 		return
 	}
 

@@ -34,13 +34,20 @@ type Session struct {
 func NewSession(baseURL string, state string) *Session {
 	jar, _ := cookiejar.New(nil)
 
-	logFileName := fmt.Sprintf("TenderData/Logs/sessions/%s_%s.txt", state, time.Now().Format("02_Jan_2006_15_04_05"))
-	logFile, err := os.Create(logFileName)
-	if err != nil {
-		log.Fatalf("failed to create session log file: %v", err)
-	}
+	logDir := "TenderData/Logs/sessions"
+	logFileName := fmt.Sprintf("%s/%s_%s.txt", logDir, state, time.Now().Format("02_Jan_2006_15_04_05"))
 
-	logger := log.New(logFile, "", log.LstdFlags)
+	var logger *log.Logger
+	if err := os.MkdirAll(logDir, 0755); err != nil {
+		// Don't kill the process over a log file — fall back to stderr.
+		log.Printf("failed to create session log dir, logging to stderr: %v", err)
+		logger = log.New(os.Stderr, "", log.LstdFlags)
+	} else if logFile, err := os.Create(logFileName); err != nil {
+		log.Printf("failed to create session log file, logging to stderr: %v", err)
+		logger = log.New(os.Stderr, "", log.LstdFlags)
+	} else {
+		logger = log.New(logFile, "", log.LstdFlags)
+	}
 
 	return &Session{
 		Jar:              jar,
@@ -191,6 +198,16 @@ func (s *Session) MarkDocSessionEstablished()  { s.docSessionEstablished = true 
 
 /* ----- internal handlers ----- */
 
+// solveCaptcha routes to a captcha solver based on the CAPTCHA_MODE env var:
+//   - "manual": prompt on stdin and fill by hand (for local testing)
+//   - anything else / unset: the local OCR solver (default, unchanged behavior)
+func solveCaptcha(captchaSrc string, logger *log.Logger) (string, error) {
+	if strings.EqualFold(os.Getenv("CAPTCHA_MODE"), "manual") {
+		return captcha.ManualStdinCaptchaSolver(captchaSrc, logger)
+	}
+	return captcha.LocalCaptchaSolver(captchaSrc, logger)
+}
+
 func (s *Session) handleCaptchaForm(e *colly.HTMLElement) {
 	// if s.captchaSolved {
 	// 	s.logger.Println("[captcha] already solved, skipping")
@@ -231,8 +248,8 @@ func (s *Session) handleCaptchaForm(e *colly.HTMLElement) {
 
 	// s.logger.Printf("[captcha] image found!")
 
-	// call your local solver (blocks until you provide solution)
-	sol, err := captcha.LocalCaptchaSolver(captchaSrc, s.logger)
+	// pick solver based on CAPTCHA_MODE (defaults to the local OCR solver)
+	sol, err := solveCaptcha(captchaSrc, s.logger)
 	if err != nil {
 		s.logger.Printf("[captcha] solver error: %v", err)
 		s.captchaSolved = false

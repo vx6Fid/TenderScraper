@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"log"
+	"os"
 	"sync"
 	"time"
 
@@ -38,8 +39,13 @@ const (
 // --------------------
 
 func LoadEnvOrFatal() {
+	// In containers, env vars are injected directly (docker compose env_file),
+	// so a missing .env file is fine as long as the required vars are present.
 	if err := godotenv.Load(); err != nil {
-		log.Fatalf("Error loading .env file: %v", err)
+		if os.Getenv("POSTGRES_CONN_STRING") == "" || os.Getenv("RABBITMQ_URL") == "" {
+			log.Fatalf("no .env file and required env vars missing: %v", err)
+		}
+		// Logger isn't initialized yet here; main logs this after slog.Init().
 	}
 }
 

@@ -1,6 +1,7 @@
 package captcha
 
 import (
+	"bufio"
 	"bytes"
 	"encoding/base64"
 	"encoding/json"
@@ -98,7 +99,65 @@ func LocalCaptchaSolver(captchaImageData string, logger *log.Logger) (string, er
 
 var (
 	captchaLock sync.Mutex
+	// stdinLock serializes manual prompts so concurrent workers don't interleave
+	// their prompts and read each other's typed input.
+	stdinLock sync.Mutex
 )
+
+// ManualStdinCaptchaSolver saves the captcha image to a temp file, attempts to
+// open it in the system image viewer, and blocks reading the answer from stdin.
+// Use this for local testing when you want to fill captchas by hand instead of
+// paying for / running an automated solver.
+func ManualStdinCaptchaSolver(captchaImageData string, logger *log.Logger) (string, error) {
+	base64Data := captchaImageData
+	if strings.HasPrefix(captchaImageData, "data:image/") {
+		parts := strings.Split(captchaImageData, ",")
+		if len(parts) > 1 {
+			base64Data = parts[1]
+		}
+	}
+
+	imageData, err := base64.StdEncoding.DecodeString(base64Data)
+	if err != nil {
+		return "", fmt.Errorf("failed to decode base64 image: %v", err)
+	}
+
+	// Write to CAPTCHA_DIR if set (mount this to the host so you can view the
+	// image without docker cp), otherwise fall back to the OS temp dir.
+	outDir := os.Getenv("CAPTCHA_DIR")
+	if outDir == "" {
+		outDir = os.TempDir()
+	}
+	if err := os.MkdirAll(outDir, 0755); err != nil {
+		return "", fmt.Errorf("failed to create captcha dir %q: %v", outDir, err)
+	}
+	imagePath := filepath.Join(outDir, fmt.Sprintf("captcha_%d.png", time.Now().UnixNano()))
+	if err := os.WriteFile(imagePath, imageData, 0644); err != nil {
+		return "", fmt.Errorf("failed to write captcha image: %v", err)
+	}
+	defer os.Remove(imagePath)
+
+	// Only one worker prompts at a time.
+	stdinLock.Lock()
+	defer stdinLock.Unlock()
+
+	if err := openImage(imagePath); err != nil {
+		logger.Printf("[captcha] could not auto-open image (view it at %s): %v", imagePath, err)
+	}
+	fmt.Printf("\n[captcha] image saved to: %s\n", imagePath)
+	fmt.Print("[captcha] enter the text you see, then press Enter: ")
+
+	reader := bufio.NewReader(os.Stdin)
+	input, err := reader.ReadString('\n')
+	if err != nil {
+		return "", fmt.Errorf("failed to read captcha input: %v", err)
+	}
+	solution := strings.TrimSpace(input)
+	if solution == "" {
+		return "", fmt.Errorf("empty captcha solution provided")
+	}
+	return solution, nil
+}
 
 // ManualCaptchaSolver displays the captcha image to the user and prompts for input
 func ManualCaptchaSolver(captchaImageData string, logger *log.Logger) (string, error) {
@@ -160,9 +219,9 @@ func ManualCaptchaSolver(captchaImageData string, logger *log.Logger) (string, e
 	// 	return "", fmt.Errorf("failed to read user input: %v", err)
 	// }
 
-	APIKey := os.Getenv("CAPTCHA_API_KEY")
+	APIKey := os.Getenv("APIKEY_2CAPTCHA")
 	if APIKey == "" {
-		return "", fmt.Errorf("CAPTCHA_API_KEY environment variable not set")
+		return "", fmt.Errorf("APIKEY_2CAPTCHA environment variable not set")
 	}
 
 	client := api2captcha.NewClient(APIKey)

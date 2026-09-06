@@ -1,4 +1,49 @@
 services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: tender
+      POSTGRES_PASSWORD: tender
+      POSTGRES_DB: tender
+    ports:
+      # Host 5433 → container 5432 (host 5432 is often taken by a local Postgres).
+      - "5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U tender -d tender"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  rabbitmq:
+    image: rabbitmq:3.13-management-alpine
+    ports:
+      - "5672:5672"   # AMQP
+      - "15672:15672" # management UI (guest/guest)
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  localstack:
+    image: localstack/localstack:3
+    ports:
+      - "4566:4566" # single edge port for all AWS services
+    environment:
+      SERVICES: s3
+      DEBUG: "0"
+      S3_BUCKET: tenderbharat-ap-south-1
+    volumes:
+      # Init hook: LocalStack runs scripts in ready.d/ once it's ready.
+      - ./localstack/init/ready.d:/etc/localstack/init/ready.d
+    healthcheck:
+      test: ["CMD-SHELL", "awslocal s3 ls s3://tenderbharat-ap-south-1 || exit 1"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
   tender-scraper:
     build: .
     image: tender-scraper:latest
@@ -6,5 +51,20 @@ services:
       - "8080:8080"
     env_file:
       - .env
+    # Keep stdin open + allocate a TTY so manual captcha entry (CAPTCHA_MODE=manual)
+    # can read what you type. Run with `docker compose run --service-ports` or
+    # `docker compose up` then `docker attach` to interact.
+    stdin_open: true
+    tty: true
     volumes:
       - ./TenderData:/app/TenderData
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      localstack:
+        condition: service_healthy
+
+volumes:
+  pgdata:

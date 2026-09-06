@@ -1,2 +1,15 @@
 .env
 .ssh
+
+# Runtime output (logs, captchas, downloaded docs, scraped data)
+TenderData/
+TenderDocs/
+
+# Build artifacts
+server
+bin/
+*.exe
+*.out
+
+# Personal notes / interview write-ups (not part of the project)
+PROJECT_OVERVIEW.md

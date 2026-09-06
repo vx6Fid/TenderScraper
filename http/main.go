@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	_ "embed"
 	"encoding/json"
 	"log"
 	"net/http"
@@ -12,11 +13,24 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/jackc/pgx/v5/pgxpool"
+	"github.com/vx6fid/tender-scraper/utils/logging"
 	types "github.com/vx6fid/tender-scraper/utils/types"
 )
 
 // GLOBAL DB CONNECTION
 var db *pgxpool.Pool
+
+// schemaSQL is embedded at build time and applied on startup so the
+// required tables (jobs, outbox) always exist. It is idempotent.
+//
+//go:embed schema.sql
+var schemaSQL string
+
+// initSchema applies the embedded schema. Safe to run on every startup.
+func initSchema(ctx context.Context) error {
+	_, err := db.Exec(ctx, schemaSQL)
+	return err
+}
 
 // -------------------------------
 // DB INITIALIZATION
@@ -177,6 +191,11 @@ func healthHandler(w http.ResponseWriter, r *http.Request) {
 func main() {
 	LoadEnvOrFatal()
 
+	// Structured logging (set LOG_FORMAT=json for ingestion pipelines).
+	logger := logging.Init()
+	logger.Info("starting tender-scraper http service",
+		"log_format", os.Getenv("LOG_FORMAT"), "log_level", os.Getenv("LOG_LEVEL"))
+
 	// GLOBAL root context
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
@@ -186,6 +205,11 @@ func main() {
 		log.Fatalf("failed to connect to DB: %v", err)
 	}
 	defer db.Close()
+
+	// --- 1.05 APPLY SCHEMA (idempotent) ---
+	if err := initSchema(ctx); err != nil {
+		log.Fatalf("failed to apply schema: %v", err)
+	}
 
 	// --- 1.1 RESET STALE RUNNING JOBS ---
 	// If the process crashed previously while a job was in `running_go`,

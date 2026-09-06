@@ -8,7 +8,6 @@ import (
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/gocolly/colly/v2"
-	"github.com/vx6fid/tender-scraper/scraper/captcha"
 )
 
 // EstablishTenderStatusSession performs the tender status captcha flow and waits for session establishment
@@ -108,7 +107,7 @@ func (s *Session) handleTenderStatusForm(e *colly.HTMLElement, searchParams map[
 	}
 
 	// s.logger.Printf("[tender-status] solving captcha...")
-	solution, err := captcha.LocalCaptchaSolver(captchaSrc, s.logger)
+	solution, err := solveCaptcha(captchaSrc, s.logger)
 	if err != nil {
 		s.logger.Printf("[tender-status] captcha solver error: %v", err)
 		return

@@ -4,8 +4,9 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"os"
 	"strconv"
+
+	"github.com/vx6fid/tender-scraper/utils"
 )
 
 const maxFileSize = 1 << 30 // 1 GB
@@ -41,7 +42,7 @@ func DownloadFile(url, filePath string, jar http.CookieJar) error {
 	}
 	defer resp.Body.Close()
 
-	out, err := os.Create(filePath)
+	out, err := utils.CreateFile(filePath)
 	if err != nil {
 		return fmt.Errorf("file create failed: %w", err)
 	}

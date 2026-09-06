@@ -10,22 +10,16 @@ import (
 	"time"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
-	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 	s3types "github.com/aws/aws-sdk-go-v2/service/s3/types"
+	"github.com/vx6fid/tender-scraper/utils"
 )
 
 func uploadFileToS3(bucket, key, filePath string) error {
-	cfg, err := config.LoadDefaultConfig(context.TODO())
+	client, err := utils.NewS3Client(context.TODO())
 	if err != nil {
-		return fmt.Errorf("unable to load AWS config: %w", err)
+		return err
 	}
-
-	if cfg.Region == "" {
-		return fmt.Errorf("AWS region missing in configuration")
-	}
-
-	client := s3.NewFromConfig(cfg)
 
 	if client == nil {
 		return fmt.Errorf("S3 client is nil (AWS config likely invalid)")
